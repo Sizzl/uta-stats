@@ -1,0 +1,43 @@
+UTStats 4.2.28uta
+
+Copyright (C) 2004/2005 azazel, )°DoE°(-AnthraX and toa
+Additional copyrights held (C) 2005/2006/2007 Cratos, Timo, brajan
+
+This program is free software; you can redistribute and/or modify
+it under the terms of the Open Unreal Mod License.
+See license.txt for more information.
+
+========
+Contents
+========
+
+1. Additional information for 4.2.28uta Release
+
+
+===============================================
+1. Additional information for 4.2.28uta Release
+===============================================
+
+Copy to your UTServer\System folder the following files:
+
+	UTStatsBeta4_2a.u
+	SmartAS-Message.u
+	SmartAS_101.u
+
+Remove any previous entries for UTStats and UTSAccuBeta from [Engine.GameEngine]
+
+Add to [Engine.GameEngine] the following lines:
+
+	ServerActors=UTStatsBeta4_2a.UTStatsSA
+
+For servers running assault, additionally add to [Engine.GameEngine] the following lines:
+
+	ServerActors=SmartAS-Message.SmartASMessage
+	ServerActors=SmartAS_101.SmartAS_SA
+	ServerPackages=SmartAS-Message
+
+Under the [Engine.GameInfo] check for:
+bLocalLog=True or bLocalLog=False
+
+This line HAS to be:
+bLocalLog=False
