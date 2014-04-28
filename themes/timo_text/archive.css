@@ -1,0 +1,24 @@
+BODY { BACKGROUND: #eeeeee }
+BODY { FONT: 11px verdana, arial, sans-serif }
+LI { FONT: 11px verdana, arial, sans-serif }
+TD { FONT: 11px verdana, arial, sans-serif }
+DIV { FONT: 11px verdana, arial, sans-serif }
+UL { LIST-STYLE-TYPE: none }
+LI { FONT-SIZE: 10pt }
+I { COLOR: silver }
+P.largefont { FONT-WEIGHT: bold }
+DIV.pagebody { BORDER-RIGHT: silver 1px solid; PADDING-RIGHT: 16px; BORDER-TOP: silver 1px solid; PADDING-LEFT: 16px; BACKGROUND: white; PADDING-BOTTOM: 16px; BORDER-LEFT: silver 1px solid; PADDING-TOP: 16px; BORDER-BOTTOM: silver 1px solid }
+DIV.pda { BORDER-RIGHT: silver 1px solid; PADDING-RIGHT: 4px; PADDING-LEFT: 4px; BACKGROUND: #f9f9f9; FLOAT: right; PADDING-BOTTOM: 4px; BORDER-LEFT: silver 1px solid; PADDING-TOP: 4px; BORDER-BOTTOM: silver 1px solid }
+DIV.post { BORDER-RIGHT: silver 1px solid; PADDING-RIGHT: 1px; BORDER-TOP: silver 1px solid; PADDING-LEFT: 1px; MARGIN-BOTTOM: 16px; PADDING-BOTTOM: 1px; BORDER-LEFT: silver 1px solid; PADDING-TOP: 1px; BORDER-BOTTOM: silver 1px solid }
+DIV.posttop { PADDING-RIGHT: 4px; PADDING-LEFT: 4px; BACKGROUND: #eeeeee; PADDING-BOTTOM: 4px; PADDING-TOP: 4px }
+DIV.username { FONT-WEIGHT: bold; FLOAT: left; WIDTH: auto }
+DIV.date { WIDTH: auto; TEXT-ALIGN: right }
+DIV.posttext { PADDING-RIGHT: 4px; PADDING-LEFT: 4px; BACKGROUND: #f9f9f9; PADDING-BOTTOM: 4px; PADDING-TOP: 4px }
+DIV.highlight { PADDING-RIGHT: 4px; PADDING-LEFT: 4px; BACKGROUND: #ffffcc; PADDING-BOTTOM: 4px; PADDING-TOP: 4px }
+SPAN.small { FONT-SIZE: 10px }
+#content { BORDER-RIGHT: silver 1px solid; PADDING-RIGHT: 4px; BORDER-TOP: silver 1px solid; PADDING-LEFT: 24px; MARGIN-BOTTOM: 8px; PADDING-BOTTOM: 4px; BORDER-LEFT: silver 1px solid; PADDING-TOP: 4px; BORDER-BOTTOM: silver 1px solid }
+#navbar { BORDER-RIGHT: silver 1px solid; PADDING-RIGHT: 4px; BORDER-TOP: silver 1px solid; PADDING-LEFT: 4px; BACKGROUND: #f9f9f9; PADDING-BOTTOM: 4px; BORDER-LEFT: silver 1px solid; PADDING-TOP: 4px; BORDER-BOTTOM: silver 1px solid }
+#pagenumbers { MARGIN-BOTTOM: 4px; TEXT-ALIGN: center }
+#copyright { TEXT-ALIGN: center }
+HR { DISPLAY: none; VISIBILITY: hidden }
+

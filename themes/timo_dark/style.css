@@ -1,0 +1,148 @@
+BODY {BACKGROUND: #000000 url(images/mainbg.gif); COLOR: White;  margin : 0 0 0 0; SCROLLBAR-FACE-COLOR: #1f1f1f; SCROLLBAR-HIGHLIGHT-COLOR: #1f1f1f; SCROLLBAR-SHADOW-COLOR: #000000; SCROLLBAR-3DLIGHT-COLOR: #6a6a6a; SCROLLBAR-ARROW-COLOR: #eeeeee; SCROLLBAR-TRACK-COLOR: #4d4d4d; SCROLLBAR-DARKSHADOW-COLOR: #000000;}
+TABLE.main {background : url(images/sb_bg-full.gif) repeat-y;  height : 100%;  width : 100%;  color : White;   }
+PRE {color : #99CCCC;}
+LI {color : #EEFFCC;}
+TD.topbar {background : url(images/topbg.jpg) repeat-x;}
+TD.greybar {background : #4e4f58 repeat; font-size : 1px; height : 2px; width : 100%; }
+TD.isb_l {background : #2a2b46 url(images/isb_left.gif) repeat-y;  margin-left : 10px;  padding-left : 10px;  }
+TD.isb_r {background : url(images/isb_right.gif) repeat-y;}
+TD.isb_t {background : url(images/isb_top.gif) repeat-x;}
+TD.isb_b {background : url(images/isb_bottom.gif) repeat-x;}
+a {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 10pt; COLOR: #ffcc66; TEXT-DECORATION: none}
+a:hover {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 10pt; COLOR: #ffffff; TEXT-DECORATION: none}
+.text {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 10pt; COLOR: #efefef}
+.text2 {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 7pt; COLOR: #efefef}
+.txtbigtitle {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 18pt; COLOR: #eaeaea; FONT-WEIGHT: bold}
+.txttitle {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 14pt; COLOR: #eaeaea; FONT-WEIGHT: bold}
+.rangtext {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 7pt; COLOR: #808080}
+
+.box {border: 1px #4d4d56 solid}
+.darkbox {border: 1px #2C323A solid}
+.heading {FONT-FAMILY: Arial, Helvetica, Sans-serif; FONT-SIZE: 12pt; COLOR: #ffffcc; background: #2a2b46; FONT-WEIGHT: bold}
+a.heading {FONT-FAMILY: Arial, Helvetica, Sans-serif; FONT-SIZE: 12pt; COLOR: #ffee66; background: #2a2b46; FONT-WEIGHT: bold}
+a.heading:hover {FONT-FAMILY: Arial, Helvetica, Sans-serif; FONT-SIZE: 12pt; COLOR: #ffffff; background: #2a2b46; FONT-WEIGHT: bold}
+.medheading {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #f7fbff; background: #2a2b46; FONT-WEIGHT: bold}
+.hlheading {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #dfedff; background: #2a2b46; FONT-WEIGHT: bold}
+.smheading {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #f7fbff; background: #2a2b46; FONT-WEIGHT: bold; TEXT-DECORATION: none}
+a.smheading:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #fdd932; BACKGROUND: #2a2b46; FONT-WEIGHT: bold; TEXT-DECORATION: none}
+.smheadingx {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 7pt; COLOR: #f7fbff; background: #2a2b46; FONT-WEIGHT: bold; TEXT-DECORATION: none}
+.blank {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #243954; background: #243954; FONT-WEIGHT: normal}
+
+.lggrey {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #dfedff; background: #485464; FONT-WEIGHT: bold}
+a.lggrey {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #dfedff; background: #485464; FONT-WEIGHT: bold}
+a.lggrey:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #485464; FONT-WEIGHT: bold}
+
+.dark {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #dfdfdf; background: #2E3038; FONT-WEIGHT: normal}
+a.dark {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #dfdfdf; background: #2E3038; FONT-WEIGHT: normal}
+a.dark:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #2E3038; FONT-WEIGHT: normal}
+
+.grey {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #6c6c6c; FONT-WEIGHT: normal}
+a.grey {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #f4d01e; background: #6c6c6c; FONT-WEIGHT: normal}
+a.grey:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #6c6c6c; FONT-WEIGHT: normal}
+
+.grey2 {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #606060; FONT-WEIGHT: normal}
+a.grey2 {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #f4d01e; background: #606060; FONT-WEIGHT: normal}
+a.grey2:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #606060; FONT-WEIGHT: normal}
+
+.darkgrey2 {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #000000; background: #747474; FONT-WEIGHT: normal}
+a.dakgrey2 {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #f4d01e; background: #747474; FONT-WEIGHT: normal}
+a.darkgrey2:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #747474; FONT-WEIGHT: normal}
+
+
+.darkgrey {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #000000; background: #808080; FONT-WEIGHT: normal}
+.warn {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #880000; background: #aeaeae; FONT-WEIGHT: bold}
+.gselog {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #0f5465; background: #aeaeae; FONT-WEIGHT: bold}
+.tclog {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #4d2821; background: #aeaeae; FONT-WEIGHT: bold}
+.opnote {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #af3020; FONT-WEIGHT: bold}
+
+.chatlink {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #ffffff; background: #303441; FONT-WEIGHT: bold}
+a.chatlink {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #ffff00; background: #303441; FONT-WEIGHT: bold}
+a.chatlink:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #ffffff; background: #303441; FONT-WEIGHT: bold}
+
+.chat {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #000000; background: #cccccc; FONT-WEIGHT: bold}
+.chatred {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #800000; background: #cccccc; FONT-WEIGHT: bold}
+.chatblue {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #000080; background: #cccccc; FONT-WEIGHT: bold}
+.chatsys {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #408040; background: #cccccc; FONT-WEIGHT: bold}
+.chatkill {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #A4A21C; background: #cccccc; FONT-WEIGHT: bold}
+.blueteamscore {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #0066FF; background: #cccccc; FONT-WEIGHT: bold}
+.redteamscore {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #FF0033; background: #cccccc; FONT-WEIGHT: bold}
+
+.connect {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #6c6c6c; FONT-WEIGHT: normal}
+.disconnect {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #880000; background: #9f9f9f; FONT-WEIGHT: bold}
+
+.greyhuman {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #e4bf12; background: #6c6c6c; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+a.greyhuman {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #e4bf12; background: #6c6c6c; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+a.greyhuman:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #6c6c6c; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+.darkhuman {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #fdd932; background: #2E3038; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+a.darkhuman {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #fdd932; background: #2E3038; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+a.darkhuman:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #2E3038; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+
+.darkbot {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #0575dd; BACKGROUND: #2E3038; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+a.darkbot {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #0575dd; BACKGROUND: #2E3038; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+a.darkbot:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; BACKGROUND: #2E3038; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+
+.darkid {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #dfdfdf; background: #2E3038; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+a.darkid {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #dfdfdf; background: #2E3038; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+a.darkid:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; background: #2E3038; FONT-WEIGHT: normal; TEXT-DECORATION: none}
+
+.sidebar {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 8pt;  FONT-WEIGHT: bold}
+a.sidebar {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 8pt;COLOR: #CCCCCC;  FONT-WEIGHT: bold; TEXT-DECORATION: none}
+a.sidebar:hover {FONT-FAMILY: Arial, Helvetica, sans-serif; FONT-SIZE: 8pt; COLOR: #ffffff; FONT-WEIGHT: bold; TEXT-DECORATION: none}
+
+.pages {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #bdbd8c; FONT-WEIGHT: bold}
+a.pages {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #eeeebb; FONT-WEIGHT: bold; TEXT-DECORATION: none}
+a.pages:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; FONT-WEIGHT: bold; TEXT-DECORATION: none}
+
+.blueteam {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #000000; background: #0196FF; FONT-WEIGHT: bold}
+.redteam {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #000000; background: #FF8787; FONT-WEIGHT: bold}
+.greenteam {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #000000; background: #90FF87; FONT-WEIGHT: bold}
+.goldteam {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #000000; background: #FEFF91; FONT-WEIGHT: bold}
+
+.lglheading {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #fdd30d; background: #2a2b46; FONT-WEIGHT: bold}
+a.lglheading {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #f7fbff; background: #2a2b46; FONT-WEIGHT: bold}
+a.lglheading:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #ffffff; background: #2a2b46; FONT-WEIGHT: bold}
+
+.status {FONT-FAMILY: Verdana,Helvetica; FONT-SIZE: 12px; border: 1px #666666 solid}
+.statustitle {FONT-FAMILY: Verdana,Helvetica; FONT-SIZE: 12px; COLOR: #ffffcc; BACKGROUND: #303441}
+
+.searchform {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; FONT-WEIGHT: normal;  color : #FFFFCC; }
+.searchformb {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; FONT-WEIGHT: bold;   color : #003366; }
+SELECT.searchform {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; FONT-WEIGHT: normal;  color : #000000; }
+INPUT.searchform {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; FONT-WEIGHT: normal;  color : #000000; }
+
+.titlemsg {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #efefef; FONT-WEIGHT: bold}
+.mainbody {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #efefef; FONT-WEIGHT: bold}
+a.mainbody {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #f4d01e; FONT-WEIGHT: bold}
+a.mainbody:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 10pt; COLOR: #ffffff; FONT-WEIGHT: bold}
+.epicinfo {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #efefef; FONT-WEIGHT: bold}
+a.epicinfo {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #caad20; FONT-WEIGHT: bold; TEXT-DECORATION: none}
+a.epicinfo:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR: #ffffff; FONT-WEIGHT: bold; TEXT-DECORATION: none}
+
+#interface1 {
+	z-index:1;
+}
+#loader_container {text-align:center;position:absolute;top:40%;width:100%}  
+#loader {
+	font-family:Tahoma, Helvetica, sans;
+	font-size:11px;
+	color:#000000;
+	background-color:#FFFFFF;
+	padding:10px 0 16px 0;
+	margin:0 auto;
+	display:block;
+	width:130px;
+	border:1px solid #6A6A6A;
+	text-align:left;
+	z-index:2;
+}
+#progress {
+	height:5px;
+	font-size:1px;
+	width:1px;
+	position:relative;
+	top:1px;
+	left:0px;
+	background-color:#9D9D94
+}
+#loader_bg {background-color:#EBEBE4;position:relative;top:8px;left:8px;h  eight:7px;width:113px;font-size:1px}
+img#pic { border-size: 3px; border-color: #000000; border-style:double; }
