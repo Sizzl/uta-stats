@@ -1,0 +1,48 @@
+# Configs
+*_config.php
+config.php
+
+# Web config
+web.config
+.htaccess
+sitemap.xml
+sitemap.xml.gz
+
+# Logs / temp
+*.log
+*.tmp
+*.cache
+*.bak
+.DS_Store
+Thumbs.db
+thumbs.db
+ftptimestamp.php
+.*~
+*.*~
+*.~*
+~*.*
+*.user
+pma/
+
+
+# Archives
+*.gz
+*.bz2
+*.o
+*.lo
+*.la
+
+# Misc
+*.class
+cvs
+CVS
+.cvs
+.CVS
+debug
+Debug
+ignore
+Ignore
+bin
+Bin
+obj
+Obj
