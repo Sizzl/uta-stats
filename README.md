@@ -9,7 +9,6 @@ This program is free software; you can redistribute and/or modify
 it under the terms of the Open Unreal Mod License.
 See license.txt for more information.
 
-========
 Contents
 ========
 
@@ -17,9 +16,9 @@ Contents
 
 2. Original UTStats information
 
-===============================================
-1. Additional information for 4.2.28uta Release
-===============================================
+
+# 1. Additional information for 4.2.28uta Release
+
 
 Copy to your UTServer\System folder the following files:
 
@@ -45,9 +44,9 @@ bLocalLog=True or bLocalLog=False
 This line HAS to be:
 bLocalLog=False
 
-===============================================
-2. Original UTStats information
-===============================================
+
+# 2. Original UTStats information
+
 
 
 What Is It
