@@ -1,4 +1,4 @@
-<?
+<?php 
 // Date in the past
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
@@ -67,7 +67,7 @@ echo'
 							  </TR>
 							  <TR> 
 								<TD height="54" bgcolor="#2B3455" align="center" width="100%">
-				<p align="center"><font size="5" face="Verdana">Welcome to the #assault Pug Stats '.(isset($a_test) ? " (archived ".$a_test." season) " : "").'</font><br />
+				<p align="center"><font size="5" face="Verdana">Welcome to PUG Stats '.(isset($a_test) ? " (archived ".$a_test." season) " : "").'- <a class="txtbigtitle" href="irc://bacon.utassault.net/utapug" target="_blank"></a>#utapug</font><br />
 				<span class="rangtext">[Stats last updated : '.strftime("%d/%m/%Y @ %H:%M:%S",$lastupdate).']</span></p>
 
 </TD>

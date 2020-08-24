@@ -1,5 +1,5 @@
-<?
-//Return if no variables are set (exit)
+<?php 
+// Return if no variables are set (exit)
 if (isset($_GET['serverip']) != 1) return;
 
 // Get server IP info

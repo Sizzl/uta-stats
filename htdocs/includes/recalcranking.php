@@ -1,4 +1,4 @@
-<?
+<?php 
 if (empty($import_adminkey) or isset($_REQUEST['import_adminkey']) or $import_adminkey != $adminkey) die('Wrong key!');
 	
 $options['title'] = 'Recalculate Rankings';

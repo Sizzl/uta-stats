@@ -1,6 +1,6 @@
-<?
+<?php 
 
-// include ("includes/uta_functions.php");
+// include_once ("includes/uta_functions.php");
 
 // Firstly we need to work out First Last Next Prev pages
 $where = ' ';

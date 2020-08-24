@@ -1,6 +1,6 @@
 <?php
 
-if ($_GET["debug"])
+if (isset($_GET["debug"]))
 	$_SESSION['debug'] = true;
 
 // --// brajan / timo - 10/03/08
@@ -19,7 +19,7 @@ function checkLoadavg()
 	if (file_exists("/proc/loadavg"))
 	{
 		$load = file_get_contents("/proc/loadavg");
-		list($load5, $load10, $load15) = split(" ", $load, 3);
+		list($load5, $load10, $load15) = explode(" ", $load, 3);
 		if (round($load5)>=2) {
 			echo "<!-- Server Load: ".$load5." -->\r\n";
 			return true;

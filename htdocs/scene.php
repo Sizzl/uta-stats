@@ -1,4 +1,4 @@
-<?
+<?php
 require ("includes/config.php");
 require ("includes/config_pic.php");
 require ("includes/functions.php");

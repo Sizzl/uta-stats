@@ -1,6 +1,6 @@
-<?
-error_reporting(E_ALL^E_NOTICE);
-include('includes/teamstats.php');
+<?php 
+// error_reporting(E_ALL^E_NOTICE);
+include_once('includes/teamstats.php');
 // include('includes/uta_functions.php');
 $matchcode = $_GET['matchcode'];
 global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
@@ -10,7 +10,11 @@ $score1 ='0';
 		$sql_matchsummary = "SELECT * FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE matchmode = 1 AND matchcode='".$matchcode."' ORDER BY mapsequence";	  
 		$q_matchsummary = mysql_query($sql_matchsummary) or die(mysql_error());
 		$total_time = 0;
+		$starttime = $endtime = 0;
 			while ($r_matchsummary = mysql_fetch_array($q_matchsummary)) {
+				if ($starttime == 0)
+					$starttime = $r_matchsummary[time];
+				$endtime = $r_matchsummary[time];
 				$total_time = $total_time + $r_matchsummary[gametime];
 			 	$score0 = $r_matchsummary[score0];
 			  	$score1 = $r_matchsummary[score1];
@@ -31,7 +35,9 @@ $score1 ='0';
 	  <tr><td align="center"><a href="unreal://'.$serverip.'">'. $servername.' - '.$serverip.'</a></td></tr>
 	  <tr><td align="center" class="grey">'.$gameinfo.'</td></tr>
 	  <tr><td align="center" class="heading"><strong> '.$team0.' '.$score0.' - '.$score1.'  '.$team1.' </strong></td></tr>
-	  <tr><td align="center" class="grey">Total playing time: '. GetMinutes($total_time).' minutes</td></tr>
+	  <tr><td align="center" class="grey"><p>'.mdate($starttime).' - '.mdate($endtime).'</p>
+          <p>Total playing time: '. GetMinutes($total_time).' minutes</p>
+          </td></tr>
 	</tbody></table>';
 	// SERVER INFO - END
 	

@@ -1,7 +1,7 @@
-<?
-include ("includes/uta_functions.php");
-include ("includes/functions.php");
-include ("includes/config.php");
+<?php 
+include_once ("includes/config.php");
+include_once ("includes/uta_functions.php");
+include_once ("includes/functions.php");
 if (!isset($_GET['noheader']))
 {
 	if ($_SESSION["themelocation"]) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
@@ -34,6 +34,7 @@ switch ($pagehandler)
 	case "utarecordzone": utarecordzone(); break;	// UTA Recordzone
 	case "utateam": utateam(); break;		// UTA Team viewer
 	case "utateams": utateam(); break;		// UTA Team viewer
+	case "utapinfo": utapinfo(); break;		// UTA Player info
 	
 	case "match": match(); break;		// Single Match stats
 	case "matchp": matchp(); break;		// Player stats for single match
@@ -69,6 +70,11 @@ function utapugrecent()
 function utapugsummary()
 {
 	include("pages/uta_pug_sum.php");
+}
+
+function utapinfo()
+{
+	include("pages/uta_players_info.php");
 }
 
 function page()

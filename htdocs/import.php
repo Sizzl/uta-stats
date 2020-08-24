@@ -1,15 +1,13 @@
-<?
+<?php 
 function add_info($name, $value) {
 	if ($value == '' or $value === NULL) return('');
 	return(htmlentities($name) ." ". htmlentities($value) ."<br />");
 }
 
-?>
-<?
 @ignore_user_abort(true);
 @set_time_limit(0);
 if (isset($_REQUEST['rememberkey'])) setcookie('uts_importkey', $_REQUEST['key'], time()+60*60*24*30*365);
-if (isset($_COOKIE['uts_importkey'])) $adminkey = $_REQUEST['uts_importkey'];
+if (isset($_COOKIE['uts_importkey'])) $adminkey = $_COOKIE['uts_importkey'];
 require ("includes/uta_functions.php");
 require ("includes/functions.php");
 require ("includes/config.php");
@@ -198,7 +196,7 @@ while (false !== ($filename = readdir($logdir)))
 		KEY `part1` (`col1` (20),`col2` (20)),
 		KEY `part2` (`col0` (20),`col1` (20),`col2` (20)),
 		KEY `full` (`col0` (20),`col1` (20),`col2` (20),`col3` (20),`col4` (20),`col5` (20))
-		) TYPE=". ($import_use_heap_tables ? 'HEAP' : 'MyISAM') .";";
+		) ENGINE=". ($import_use_heap_tables ? 'HEAP' : 'MyISAM') .";";
 
 		$result = mysql_query($sql);
 		if ($result) break;
@@ -209,7 +207,7 @@ while (false !== ($filename = readdir($logdir)))
 			$import_use_temporary_tables = false;
 			continue;
 		}
-		die("<br><strong>Unable to create the temporary table - are you allowed to create tables in this database?<br><br></strong>");
+		die("<br><strong>Unable to create the temporary table - are you allowed to create tables in this database?<br><br></strong><pre>".$sql."</pre>");
 	}
 	$id = 0;
 
@@ -348,16 +346,16 @@ while (false !== ($filename = readdir($logdir)))
 	}
 	// Check if anything happened, if it didnt stop everything now
 	
-	IF ($qm_kills[kills] == 0 && $qm_deaths[deaths] == 0 && $s_suicides == -5)  {  // CRATOS
+	if ($qm_kills[kills] == 0 && $qm_deaths[deaths] == 0 && $s_suicides == -5)  {  // CRATOS
 		echo "No (Empty Match)\n";
 		if ($html) echo '</td></tr>';
-	} elseIF ($qm_playercount < 2)  {
+	} elseif ($qm_playercount < 2)  {
 		echo "No (Not Enough Players)\n";
 		if ($html) echo '</td></tr>';
-	} elseIF ($log_incompatible)  {
+	} elseif ($log_incompatible)  {
 		echo "No (Logfile incompatible [created by UTStats $actor_version])\n";
 		if ($html) echo '</td></tr>';
-	} elseIF ($import_ignore_if_gametime_less_than != 0 and ceil(($qm_gameend[col0] - $qm_gamestart[col0]) / 60) < $import_ignore_if_gametime_less_than)  {
+	} elseif ($import_ignore_if_gametime_less_than != 0 and ceil(($qm_gameend[col0] - $qm_gamestart[col0]) / 60) < $import_ignore_if_gametime_less_than)  {
 		echo "No (game too short [". ceil(($qm_gameend[col0] - $qm_gamestart[col0]) / 60) ." &lt; $import_ignore_if_gametime_less_than minutes])\n";
 		if ($html) echo '</td></tr>';
 	} else {
@@ -402,7 +400,10 @@ while (false !== ($filename = readdir($logdir)))
 		// CRATOS: Fix Servername
 		// ************************************************************************************
 		$q_sname = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'ass_servername'");
-		if ($q_sname!=NULL) $servername = trim($q_sname[col2]);	
+		if ($q_sname!=NULL) {
+			$servername = trim($q_sname[col2]);	
+			$servername = addslashes($servername); // --// Timo 2020-08-23 (Yes, still fixing sh!t 15 years later)
+		}
 		else
 		{		
 			// try to get existing servername by ip/port
@@ -419,6 +420,7 @@ while (false !== ($filename = readdir($logdir)))
 				$servername = str_replace("[LOCKED - PRIVATE]","",$servername);
 				$servername = str_replace("[OPEN - PUBLIC]","",$servername);
 				$servername = trim($servername);
+				$servername = addslashes($servername); // --// Timo 2020-08-23 (Yes, still fixing sh!t 15 years later)
 			}			
 		}		
 		// $servername = str_replace("$servername","'","''"); // quick fix ' in server name --pinny

@@ -1,4 +1,4 @@
-<?
+<?php 
 function row($name = NULL, $amount = 0, $multiplier = 0, $extra_multiplier = true, $amount_rated = -1) {
 	static $i = 0;
 	if (empty($name)) {

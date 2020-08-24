@@ -1,4 +1,4 @@
-<?
+<?php 
 global $t_rank, $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
 $outerlimit = 25; // Added adjustable record limit --// Timo 20/07/05
 
@@ -74,8 +74,9 @@ echo'
 	  </tr>
 	 </tbody>
 	</table>
-<?
+<?php 
 };
+global $htmlcp;
 echo '
 <table class="box" border="0" cellpadding="1" cellspacing="1">
   <tbody>
@@ -83,7 +84,7 @@ echo '
 	<td class="heading" colspan="4" align="center">'.$gamename.' Ranking Players</td>
   </tr>
   <tr>
-	<td class="smheading" align="center" width="75">N°</td>
+	<td class="smheading" align="center" width="75">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>
 	<td class="smheading" align="center" width="150">Player Name</td>
 	<td class="smheading" align="center" width="75">Rank</td>
 	<td class="smheadingx" align="center" width="75">Matches</td>
@@ -112,7 +113,7 @@ echo '
 			echo '&cfilter='.$r_rplayer[country];
 		echo '">'.FlagImage($r_rplayer[country]).'</a>';
 
-		echo ' <a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer['pid'].'">'.htmlspecialchars($r_rplayer[name]) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']) .'</a></td>';
+		echo ' <a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer['pid'].'">'.htmlentities($r_rplayer[name],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']) .'</a></td>';
 		// End Modifications to rank by country -->
 		echo '
 		<td class="dark" align="center">'.get_dp($r_rplayer[rank]).'</td>

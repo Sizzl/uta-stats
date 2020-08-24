@@ -1,9 +1,9 @@
-<?
+<?php 
 $r_info = small_query("SELECT teamgame, t0score, t1score, t2score, t3score FROM uts_match WHERE id = '$mid'");
 if (!$r_info) die("Match not found");
 $teamgame = ($r_info['teamgame'] == 'True') ? true : false;
 
-include("pages/match_info_server.php");
+include_once ("pages/match_info_server.php");
 
 $GLOBALS['gid'] = $gid;
 $_GLOBALS['gid'] = $gid;

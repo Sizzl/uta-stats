@@ -1,4 +1,4 @@
-<?
+<?php 
 if (empty($import_adminkey) or isset($_REQUEST['import_adminkey']) or $import_adminkey != $adminkey) die('bla');
 
 // Graph width
@@ -18,7 +18,7 @@ $tot_size = 0;
 $tot_rows = 0;
 $max_size = 0;
 while ($r_dbsize = mysql_fetch_array($q_dbsize)) {
-	if (substr($r_dbsize['Name'], 0, 4) != 'uts_') continue;
+	if (substr($r_dbsize['Name'], 0, 3) != 'uts') continue;
 	$size = $r_dbsize['Data_length'] + $r_dbsize['Index_length'];
 	$rows = $r_dbsize['Rows'];
 	$tables[] = array	(
@@ -73,6 +73,8 @@ echo '
 		echo '<br>';
 		echo '<li><a href="admin.php?key='. urlencode($adminkey) .'&amp;action=pinfo&list=hide">Extended Player Info</a> &nbsp; (<a href="admin.php?key='. urlencode($adminkey) .'&amp;action=pinfo">Show player list</a>)</li>';
 		echo '<li><a href="admin.php?key='. urlencode($adminkey) .'&amp;action=ipsearch">Search IP</a></li>';
+		echo '<br>';
+		echo '<li><a href="admin.php?key='. urlencode($adminkey) .'&amp;action=uta_pautomerge">Suggest auto-merge of duplicate players</a></li>';
 		if ($import_utdc_download_enable) {
 			echo '<li><a href="admin.php?key='. urlencode($adminkey) .'&amp;action=utdclog">View UTDC logs</a></li>';
 		}

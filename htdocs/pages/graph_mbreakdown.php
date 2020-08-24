@@ -1,4 +1,4 @@
-<?
+<?php 
 $max_height = 100;;
 
 // Hourly Breakdown

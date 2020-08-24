@@ -1,4 +1,4 @@
-<?
+<?php 
 // Firstly we need to work out First Last Next Prev pages
 
 $scount = small_count("SELECT servername, serverip FROM uts_match GROUP BY servername, serverip");
@@ -51,7 +51,7 @@ echo'
   </tr>';
 
 $sql_servers = "SELECT servername, serverip, COUNT(*) AS matchcount, SUM(frags) AS frags, SUM(t0score+t1score+t2score+t3score) AS matchscore, SUM(gametime) AS gametime
-FROM uts_match GROUP BY servername, serverip ORDER BY servername ASC LIMIT $qpage,25";
+FROM uts_match GROUP BY servername, serverip ORDER BY gametime DESC LIMIT $qpage,25";
 $q_servers = mysql_query($sql_servers) or die(mysql_error());
 while ($r_servers = mysql_fetch_array($q_servers)) {
 

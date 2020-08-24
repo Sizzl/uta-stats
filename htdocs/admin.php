@@ -1,6 +1,6 @@
-<?
+<?php 
 if (isset($_REQUEST['rememberkey'])) setcookie('uts_adminkey', $_REQUEST['key'], time()+60*60*24*30*365);
-if (isset($_COOKIE['uts_adminkey'])) $adminkey = $_REQUEST['uts_adminkey'];
+if (isset($_COOKIE['uts_adminkey'])) $adminkey = $_COOKIE['uts_adminkey'];
 if (isset($adminkey)) setcookie('uta_uts_Admin', 'utaTrue', time()+60*60*24*30*365);
 
 include ("includes/functions.php");
@@ -62,8 +62,10 @@ echo'</table>
 
 $action = str_replace(array('.', '/', '<', ':'), array(), $action);
 $fn = "pages/admin/$action.php";
-if (!file_exists($fn) or !is_file($fn)) die('bla');
-require($fn);
+if (!file_exists($fn) or !is_file($fn))
+	echo('Administrative page does not exist.<p>&nbsp;</p>(<a href="javascript:window.history.back();">Go back</a>)');
+else
+	require($fn);
 if ($_SESSION["themelocation"]) // Themed footer --// 19/07/05 Timo: Added customisable footer
 {
         if (file_exists($_SESSION["themelocation"]."footer.php"))

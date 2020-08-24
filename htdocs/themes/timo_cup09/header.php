@@ -1,4 +1,4 @@
-<?
+<?php 
 // Date in the past
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 
@@ -64,7 +64,7 @@ echo'
 				<td width="19" valign="top"><img src="'.$theme.'images/spacer.gif" width="19" height="1" alt=" " /></td>
 				<td width="103" valign="top"><img src="'.$theme.'images/spacer.gif" width="103" height="30" border="0" /></td>
 				<td class="txtbigtitle" valign="middle">
-				'.$theme_header.'
+				<p align="center">&nbsp; &nbsp; Welcome to PUG Stats - <a href="irc://bacon.utassault.net/utapug" target="_blank"></a>#utapug<br />
 				<span class="rangtext">[Stats last updated : '.strftime("%d/%m/%Y @ %H:%M:%S",$lastupdate).']</span></p>
 				</td>
 			</tr>

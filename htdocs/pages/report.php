@@ -1,4 +1,4 @@
-<?
+<?php 
 $id = $_GET["id"];
 $wid = $_GET["wid"];
 $stage = $_GET["stage"];
@@ -7,14 +7,14 @@ $oururl = str_replace("index.php", "", $oururl);
 $rtype = $_GET["rtype"];
 
 IF ($rtype == "clanbase") {
-	include("pages/report_cb.php");
+	include_once("pages/report_cb.php");
 }
 
 IF ($rtype == "bbcode") {
-	include("pages/report/bbcode.php");
+	include_once("pages/report/bbcode.php");
 }
 
 IF ($rtype == "clanbase" && $stage == "generate") {
-	include("pages/report/clanbase.php");
+	include_once("pages/report/clanbase.php");
 }
 ?>

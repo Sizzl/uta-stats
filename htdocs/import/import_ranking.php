@@ -1,4 +1,4 @@
-<?
+<?php 
 //ini_set('memory_limit','100M');
 	if ($playerbanned) return;
 		if (strpos($gamename, 'Assault') !== false)

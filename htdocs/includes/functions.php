@@ -1,4 +1,4 @@
-<?
+<?php 
 error_reporting(E_ALL & ~E_NOTICE);
 @ini_set('track_errors', '1');
 
@@ -153,7 +153,7 @@ function zero_out($data) {
 }
 
 function get_dp($number) {
-	$dp = number_format($number, 2, '.', '');
+	$dp = number_format((float)$number, 2, '.', '');
 	return ($dp);
 }
 
@@ -381,7 +381,7 @@ function RankImageOrText($pid, $name, $rank, $gid, $gamename, $mini = true, $for
 
 function FormatPlayerName($country, $pid, $name, $gid = NULL, $gamename = NULL, $mini = true, $rankchange = NULL) {
 	static $cache = array();
-
+	global $htmlcp;
 	if (isset($cache[$pid])) return($cache[$pid]);
 
 	$ranktext = false;
@@ -390,7 +390,8 @@ function FormatPlayerName($country, $pid, $name, $gid = NULL, $gamename = NULL, 
 	}
 	$ret = '';
 	if (!empty($country)) $ret .= FlagImage($country, $mini) ." ";
-	$ret .= htmlentities($name);
+	$ret .= htmlentities($name,ENT_SUBSTITUTE,$htmlcp); // updated for new PHP
+	// $ret .= $name;
 	if ($ranktext) $ret .= " " . $ranktext;
 	$cache[$pid] = $ret;
 	return($ret);

@@ -1,5 +1,5 @@
 <!-- <div style="color:red; font-weight:bold" class="heading">EXPERIMENTAL</div><br><br> -->
-<?
+<?php 
 global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
 // include ("includes/uta_functions.php");
 

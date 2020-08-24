@@ -1,7 +1,7 @@
 <?php 
 
-include ("includes/config.php");
-// include ("includes/uta_functions.php");
+include_once ("includes/config.php");
+// include_once ("includes/uta_functions.php");
 global $t_match, $t_pinfo, $t_player, $t_games, $t_smartass_objs, $t_smartass_objstats; // fetch table globals.
 
 function InvertSort($curr_field, $filter, $sort) {
@@ -23,7 +23,7 @@ $mapsperpage=100;
 $filter = my_addslashes($_GET[filter]);
 $sort = my_addslashes($_GET[sort]);
 
-include("uta_recordzone_filters.php");
+include_once("uta_recordzone_filters.php");
 
 if (empty($filter)) {
 	$filter = "mapfile";

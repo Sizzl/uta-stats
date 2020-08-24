@@ -1,5 +1,9 @@
-<?
-$serverip = $_GET[serverip];
+<?php 
+if (isset($_GET["serverip"])) {
+	$serverip = $_GET["serverip"];
+} else {
+	$serverip = 0;
+}
 
 // Firstly we need to work out First Last Next Prev pages
 $scount = small_count("SELECT id FROM uts_match WHERE serverip = '$serverip'");
@@ -14,9 +18,11 @@ IF($ecount > $ecount2) {
 $fpage = 0;
 IF($ecount < 1) { $lpage = 0; }
 else { $lpage = $ecount2-1; }
-
-$cpage = $_GET["page"];
-IF ($cpage == "") { $cpage = "0"; }
+if (isset($_GET["page"])) {
+	$cpage = $_GET["page"];
+} else {
+	$cpage = 0;
+}
 $qpage = $cpage*25;
 
 $tfpage = $cpage+1;
@@ -24,17 +30,17 @@ $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
 $ppageurl = "<a class=\"pages\" href=\"./?p=sinfo&amp;serverip=$serverip&amp;page=$ppage\">[Previous]</a>";
-IF ($ppage < "0") { $ppageurl = "[Previous]"; }
+if ($ppage < "0") { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
 $npageurl = "<a class=\"pages\" href=\"./?p=sinfo&amp;serverip=$serverip&amp;page=$npage\">[Next]</a>";
-IF ($npage >= "$ecount") { $npageurl = "[Next]"; }
+if ($npage >= "$ecount") { $npageurl = "[Next]"; }
 
 $fpageurl = "<a class=\"pages\" href=\"./?p=sinfo&amp;serverip=$serverip&amp;page=$fpage\">[First]</a>";
-IF ($cpage == "0") { $fpageurl = "[First]"; }
+if ($cpage == "0") { $fpageurl = "[First]"; }
 
 $lpageurl = "<a class=\"pages\" href=\"./?p=sinfo&amp;serverip=$serverip&amp;page=$lpage\">[Last]</a>";
-IF ($cpage == "$lpage") { $lpageurl = "[Last]"; }
+if ($cpage == "$lpage") { $lpageurl = "[Last]"; }
 
 
 // Get the last match entry for this server
@@ -66,7 +72,7 @@ echo'
 
 // Do graph stuff
 $bgwhere = "serverip = '$serverip'";
-include("pages/graph_mbreakdown.php");
+include_once("pages/graph_mbreakdown.php");
 
 echo'<div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>
 <table class="box" border="0" cellpadding="1" cellspacing="1">

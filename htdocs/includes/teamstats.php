@@ -1,4 +1,4 @@
-<?
+<?php 
 function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'gamescore DESC', $firstblood = 0) {
 	global $gamename, $gid, $winclass; // added Win class for team colouring
 	global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.

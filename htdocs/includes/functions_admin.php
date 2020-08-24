@@ -1,4 +1,4 @@
-<?
+<?php 
 
 /*
 $options['title'] = 'Test';
@@ -127,11 +127,11 @@ function adminselect(&$options) {
 						break;
 					case 'server':
 						$r_server = small_query("SELECT servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '". $values[$var['name']] ."'");
-						echo htmlentities($r_server['servername']) .' ('. $r_server['serverip'] .')';
+						echo htmlentities($r_server['servername'],ENT_SUBSTITUTE,"cp1252") .' ('. $r_server['serverip'] .')';
 						break;
 					case 'player':
 						$r_player = small_query("SELECT name FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." WHERE id = '". $values[$var['name']] ."'");
-						echo htmlentities($r_player['name']);
+						echo htmlentities($r_player['name'],ENT_SUBSTITUTE,"cp1252");
 						break;
 					case 'match':
 						$r_match = small_query("SELECT id, time, serverip, mapfile FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '". $values[$var['name']] ."'");
@@ -186,7 +186,7 @@ function adminselect(&$options) {
 					while ($r_server = mysql_fetch_array($q_server)) {
 						if (isset($var['exclude']) and $r_server['id'] == $values[$var['exclude']]) continue;
 						$selected = (isset($values[$var['name']]) and $r_server['id'] == $values[$var['name']]) ? 'selected' : '';
-						echo '<option '.$selected.' value="'.$r_server['id'].'">'. htmlentities($r_server['servername'] .' ('. $r_server['serverip'] .')').'</option>';
+						echo '<option '.$selected.' value="'.$r_server['id'].'">'. htmlentities($r_server['servername'] .' ('. $r_server['serverip'] .')',ENT_SUBSTITUTE,"cp1252").'</option>';
 					}
 					echo '</select>';
 					break;
@@ -225,7 +225,7 @@ function adminselect(&$options) {
 						while ($r_player = mysql_fetch_array($q_player)) {
 							if (isset($var['exclude']) and $r_player['id'] == $values[$var['exclude']]) continue;
 							$selected = (isset($values[$var['name']]) and $r_player['id'] == $values[$var['name']]) ? 'selected' : '';
-							echo '<option '.$selected.' value="'.$r_player['id'].'">'. htmlentities($r_player['name']) .'</option>';
+							echo '<option '.$selected.' value="'.$r_player['id'].'">'. htmlentities($r_player['name'],ENT_SUBSTITUTE,"cp1252") .'</option>';
 						}
 						echo '</select>';
 						echo '&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -260,7 +260,7 @@ function adminselect(&$options) {
 					while ($r_match = mysql_fetch_array($q_match)) {
 						if (isset($var['exclude']) and $r_match['id'] == $values[$var['exclude']]) continue;
 						$selected = (isset($values[$var['name']]) and $r_match['id'] == $values[$var['name']]) ? 'selected' : '';
-						echo '<option '.$selected.' value="'.$r_match['id'].'">'. htmlentities($r_match['id'].': '.mdate2($r_match['time']).' ('.un_ut($r_match['mapfile']).' on '.$r_match['serverip'].')').'</option>';
+						echo '<option '.$selected.' value="'.$r_match['id'].'">'. htmlentities($r_match['id'].': '.mdate2($r_match['time']).' ('.un_ut($r_match['mapfile']).' on '.$r_match['serverip'].')',ENT_SUBSTITUTE,"cp1252").'</option>';
 					}
 					echo '</select>';
 					break;

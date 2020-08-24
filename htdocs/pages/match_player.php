@@ -1,11 +1,11 @@
-<?
+<?php 
 $mid = $_GET[mid];
 $pid = $_GET[pid];
 $r_infos = small_query("SELECT p.playerid, p.country, pi.name, pi.banned, p.gid, g.name AS gamename FROM uts_player p, uts_pinfo pi, uts_games g WHERE p.gid = g.id AND p.pid = pi.id AND p.pid = '$pid'  AND matchid = '$mid' LIMIT 0,1;");
 
 if (!$r_infos) {
 	echo "Unable to retrieve data!";
-	include("includes/footer.php");
+	include_once("includes/footer.php");
 	exit;
 }
 if ($r_infos['banned'] == 'Y') {
@@ -13,7 +13,7 @@ if ($r_infos['banned'] == 'Y') {
 		echo "Warning: Banned player - Admin override<br>";
 	} else {
 		echo "Sorry, this player has been banned!";
-		include("includes/footer.php");
+		include_once("includes/footer.php");
 		exit;
 	}
 }
@@ -196,6 +196,6 @@ IF ($sql_firstblood[firstblood] == $pid) {
   </tbody></table>
 <br>';
 
-include('includes/weaponstats.php');
+include_once('includes/weaponstats.php');
 weaponstats($mid, $pid);
 ?>

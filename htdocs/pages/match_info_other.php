@@ -1,7 +1,7 @@
-<?
-include('pages/match_info_killsmatrix.php');
+<?php 
+include_once('pages/match_info_killsmatrix.php');
 
-include('includes/weaponstats.php');
+include_once('includes/weaponstats.php');
 weaponstats($mid, NULL);
 
 echo'<br>

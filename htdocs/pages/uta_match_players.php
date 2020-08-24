@@ -1,4 +1,4 @@
-<?
+<?php 
 error_reporting(E_ALL);
 $matchcode = $_GET['matchcode'];
 $match_ids = array();

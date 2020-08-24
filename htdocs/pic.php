@@ -1,4 +1,4 @@
-<?
+<?php 
 require ("includes/config.php");
 require ("includes/config_pic.php");
 require ("includes/functions.php");
@@ -201,14 +201,6 @@ function get_values($date_from, $date_to, $pid, $gid, $prefix, &$searchrepl) {
 		$searchrepl["%${prefix}_${name}%"] = $value;
 	}
 }
-
-
-
-
-?>
-<?
-
-
 
 if (!function_exists("gd_info")) {
 	if (!check_extension('gd2')) pic_error('err_no_gd');

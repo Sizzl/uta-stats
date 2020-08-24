@@ -1,4 +1,4 @@
-<?
+<?php 
 if(empty($_SERVER['SSH_CONNECTION'])){ exit; } // run this script from SSH only!
 
 if(!function_exists('adminselect')){

@@ -1,4 +1,4 @@
-<?
+<?php 
 /* brajan
 18-10-2007 # let's cache this bitch :/
 */
@@ -9,8 +9,8 @@ $lease = 1800; // cache file expire time
 global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
 if ( ( !file_exists($home_plik)) OR (time() > (int)filemtime($home_plik) + (int)$lease ) ){
 	
-include('includes/teamstats.php');
-// include('includes/uta_functions.php');
+include_once('includes/teamstats.php');
+// include_once('includes/uta_functions.php');
 $matchcode = $_GET['matchcode'];
 // FINAL SCORE brajan 26082005
 
@@ -81,7 +81,7 @@ $i = 0;
 	while ($p_sql = mysql_fetch_assoc($q_sql)) 
 	{	
 		if(substr($p_sql[pname], -1) != '®'){ continue; }
-		$tr_color = ($i % 2)? "#AFAFAF" : "";
+		$tr_color = ($i % 2)? "#8F8F8F" : "";
 	
 		$out .=  '<tr class="grey" style="background-color:'.$tr_color.'; height:20px; vertical-align:middle">';
 		$out .=  '<td nowrap align="left"><b>'.FormatPlayerName($p_sql[pcountry], $p_sql[pid], $p_sql[pname]).'</b></td>';
@@ -116,7 +116,7 @@ $i = 0;
 $i = 0;
 	$q_sql = mysql_query($sql) or die(mysql_error());
 	while ($p_sql = mysql_fetch_assoc($q_sql)) {
-	$tr_color = ($i % 2)? "#AFAFAF" : "";
+	$tr_color = ($i % 2)? "#8F8F8F" : "";
 	$team = ($p_sql[team] == '1') ? "Red" : "Blue";
 		$out .=  '<tr class="grey" style="background-color:'.$tr_color.'; height:20px; vertical-align:middle">
 							<td nowrap align="left"><b>'.$team.'</b></td>

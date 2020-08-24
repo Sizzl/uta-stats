@@ -1,4 +1,4 @@
-<?
+<?php 
 
 // include ("includes/uta_functions.php");
 

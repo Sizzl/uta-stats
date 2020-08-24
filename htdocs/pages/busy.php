@@ -1,4 +1,4 @@
-<?
+<?php 
 echo'
 <div class="text" align="center">
 <p><span class="txttitle">Sorry!</span></p>

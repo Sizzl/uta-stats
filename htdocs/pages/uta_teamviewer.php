@@ -1,7 +1,7 @@
 <?php
-include ("includes/config.php");
-// include ("includes/uta_functions.php");
-include ("uta_recordzone_filters.php");
+include_once ("includes/config.php");
+// include_once ("includes/uta_functions.php");
+include_once ("uta_recordzone_filters.php");
 
 if ($_GET['team'])
 	$teamname = addslashes($_GET['team']);
@@ -194,6 +194,7 @@ uta_rz_FilterFormMini(); // Show Filter form
 				$thismonth_start = date("Ym")."01000000";
 				$thismonth_end   = date("Ymt")."235959";
 				$i = 0;
+				global $htmlcp;
 				while ($player = mysql_fetch_object($players_query))
 				{
 					$playerid = $player->id;
@@ -204,7 +205,7 @@ uta_rz_FilterFormMini(); // Show Filter form
 					$spclass = "searchform";
 					echo '		<tr>
 						<td class="'.$plclass.'" align="center" width="30">'.FlagImage($player->country,false).'</td>
-						<td class="'.$plclass.'" align="center" width="150"><a class="'.$plclass.'" href="?p=pinfo&pid='.$player->pid.'">'.htmlspecialchars($player->name).'</a></td>';
+						<td class="'.$plclass.'" align="center" width="150"><a class="'.$plclass.'" href="?p=pinfo&pid='.$player->pid.'">'.htmlentities($player->name,ENT_SUBSTITUTE,$htmlcp).'</a></td>';
 $sql_plist = "SELECT SUM(p.gamescore) AS gamescore, SUM(p.frags) AS frags,
 SUM(p.kills) AS kills, SUM(p.deaths) AS deaths,
 SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, SUM(p.kills+p.deaths+p.suicides+p.teamkills) AS sumeff,

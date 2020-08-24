@@ -1,4 +1,4 @@
-<?
+<?php 
 function InvertSort($curr_field, $filter, $sort) {
 	if ($curr_field != $filter) return(($curr_field == "name") ? "ASC" : "DESC");
 	if ($sort == 'ASC') return('DESC');
@@ -94,7 +94,7 @@ echo'
 	  </tr>
 	 </tbody>
 	</table>
-<?
+<?php 
 }
 echo '
 <table class="box" border="0" cellpadding="1" cellspacing="1">

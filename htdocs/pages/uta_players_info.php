@@ -167,6 +167,11 @@ $ttl = GetMinutes($r_sumplist[ttl]);
 </tbody></table>';
 
 // BRAJAN 13-01-2006
+ $sql_cdatot = zero_out(small_query("SELECT SUM(flag_taken) AS flag_taken,
+ SUM(flag_pickedup) AS flag_pickedup, SUM(flag_dropped) AS flag_dropped, SUM(flag_assist) AS flag_assist, SUM(flag_cover) AS flag_cover,
+ SUM(flag_seal) AS flag_seal, SUM(flag_capture) AS flag_capture, SUM(flag_kill)as flag_kill,
+ SUM(flag_return) AS flag_return FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = '$pid'"));
+if (isset($sql_cdatot[flag_taken]) && strlen($sql_cdatot[flag_taken]) > 0) {
 echo'
 <br>
 <table border="0" cellpadding="1" cellspacing="2" width="600">
@@ -184,12 +189,6 @@ echo'
     <td class="dark" align="center">Flag Kills</td>
     <td class="dark" align="center">Flag Returns</td>
   </tr>';
-
- $sql_cdatot = zero_out(small_query("SELECT SUM(flag_taken) AS flag_taken,
- SUM(flag_pickedup) AS flag_pickedup, SUM(flag_dropped) AS flag_dropped, SUM(flag_assist) AS flag_assist, SUM(flag_cover) AS flag_cover,
- SUM(flag_seal) AS flag_seal, SUM(flag_capture) AS flag_capture, SUM(flag_kill)as flag_kill,
- SUM(flag_return) AS flag_return FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = '$pid'"));
-
   echo'
   <tr>
     <td class="grey" align="center">'.$sql_cdatot[flag_taken].'</td>
@@ -203,7 +202,7 @@ echo'
     <td class="grey" align="center">'.$sql_cdatot[flag_return].'</td>
   </tr>
 </tbody></table>';
-
+}
 //CRATOS
 echo '<br>
 <table border="0" cellpadding="1" cellspacing="2" width="600">
@@ -332,7 +331,7 @@ echo '<br>';
 
 // Do graph stuff
 $bgwhere = "pid = '$pid'";
-include_once("pages/graph_pbreakdown.php");
+include_once("pages/graph_utapbreakdown.php");
 
 
 // Player's ranks
@@ -392,10 +391,10 @@ echo '
 
 echo'<br><table class="box" border="0" cellpadding="2" cellspacing="1">
   <tbody><tr>
-    <td class="heading" colspan="6" align="center">Last 50 Games</td>
+    <td class="heading" colspan="6" align="center">Last 50 Maps played</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="70">Match ID</td>
+    <td class="smheading" align="center" width="70">Game ID</td>
     <td class="smheading" align="center" width="190">Date/Time</td>  
     <td class="smheading" align="center" width="100">Match Type</td>
     <td class="smheading" align="center" width="150">Map</td>

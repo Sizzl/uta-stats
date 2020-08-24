@@ -1,4 +1,4 @@
-<?
+<?php 
 	// Get the unique ID of this player.
 	// Create a new one if he has none yet.
 	$r_pid = small_query("SELECT id, country, banned FROM uts_pinfo WHERE name = '$playername'");

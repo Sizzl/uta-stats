@@ -26,7 +26,28 @@ while ($r_gmonths = mysql_fetch_array($q_gmonths)) {
 		$month_sum += $r_gmonths['res_count'];
 }
 
-
+// Yearly Breakdown
+$sql_gyears = "SELECT YEAR(m.time) AS res_year, COUNT(p.id) AS res_count
+FROM uts_match m, uts_player p WHERE $bgwhere AND m.id = p.matchid GROUP by res_year ORDER BY res_year";
+$q_gyears = mysql_query($sql_gyears) or die(mysql_error());
+$year_max = 0;
+$year_sum = 0;
+$year_first = 0;
+$year_last = 0;
+while ($r_gyears = mysql_fetch_array($q_gyears)) {
+		$year_last = $r_gyears['res_year'];
+		if ($year_first == 0)
+			$year_first = $year_last;
+		$gb_year[$r_gyears['res_year']] = $r_gyears['res_count'];
+		if ($r_gyears['res_count'] > $year_max) $year_max = $r_gyears['res_count'];
+		$year_sum += $r_years['res_count'];
+}
+if (strlen($gtitle)==0) {
+	if ($year_first == $year_last)
+		$gtitle = "(".$year_last.")";
+	else
+		$gtitle = "(".$year_first." - ".$year_last.")";
+}
 echo'<table border="0" cellpadding="0" cellspacing="0">
   <tbody>
   <tr>

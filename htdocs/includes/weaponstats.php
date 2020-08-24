@@ -1,4 +1,4 @@
-<?
+<?php 
 function weaponstats($_mid, $_pid, $title = 'Weapons Summary') {
 	global $gamename, $gid;
 

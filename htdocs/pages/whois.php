@@ -1,3 +1,7 @@
+<?php
+  if (isset($_GET['q']))
+    $q = $_GET['q'];
+?>
 <html>
 <head>
 <title>whois info (brajan)</title>
@@ -10,7 +14,7 @@ function m(el) {
 </head>
 
 <body bgcolor="#FFFFFF">
-<?
+<?php 
 $ntarget = "";
 function message($msg){
 echo "<font face=\"verdana,arial\" size=2>$msg</font>";
@@ -18,6 +22,7 @@ flush();
 }
 
 function arin($q){
+$msg = "";
 $server = "whois.arin.net";
 message("<p><b>Results of IP Whois:</b><blockquote>");
 if (!$q = gethostbyname($q))
@@ -30,21 +35,25 @@ else{
     }
   else{
     fputs($sock, "$q\n");
-    while (!feof($sock))
-      $buffer .= fgets($sock, 10240); 
+    while (!feof($sock)){
+      if (isset($buffer))
+        $buffer .= fgets($sock, 10240); 
+      else
+        $buffer = fgets($sock, 10240); 
+    }
     fclose($sock);
     }
-   if (eregi("RIPE.NET", $buffer))
+   if (preg_match('/RIPE\.NET/i', $buffer))
      $nextServer = "whois.ripe.net";
-   else if (eregi("whois.apnic.net", $buffer))
+   else if (preg_match('/whois\.apnic\.net/i', $buffer))
      $nextServer = "whois.apnic.net";
-   else if (eregi("nic.ad.jp", $buffer)){
+   else if (preg_match('/nic\.ad\.jp/i', $buffer)){
      $nextServer = "whois.nic.ad.jp";
      $extra = "/e";
      }
-   else if (eregi("whois.registro.br", $buffer))
+   else if (preg_match('/whois\.registro\.br/i', $buffer))
      $nextServer = "whois.registro.br";
-   if($nextServer){
+   if(isset($nextServer)){
      $buffer = "";
      message("Searching for the proper WHOIS server: $nextServer...<br><br>");
      if(! $sock = fsockopen($nextServer, 43, $num, $error, 10)){

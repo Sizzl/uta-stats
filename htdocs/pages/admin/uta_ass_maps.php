@@ -1,4 +1,4 @@
-<?	// Cratos: Merge Players
+<?php 	// Cratos: Merge Players
 
 
 // Update Objective stats Tables

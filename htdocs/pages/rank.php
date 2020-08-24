@@ -1,4 +1,4 @@
-<?php
+<?php 
  // 2006-09-07 brajan 
  // if country filter selected display
  // a link to switch back to all countries
@@ -11,9 +11,10 @@
 	  </tr>
 	 </tbody>
 	</table>
-<?
+<?php 
 }
-global $t_rank, $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
+global $t_rank, $t_match, $t_pinfo, $t_player, $t_games;// fetch table globals.
+global $htmlcp;
 
 $sql_rgame = "SELECT DISTINCT(p.gid), g.name FROM ".(isset($t_player) ? $t_player : "uts_player")." AS p, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE p.gid = g.id ORDER BY g.name ASC";
 $q_rgame = mysql_query($sql_rgame) or die(mysql_error());
@@ -26,7 +27,7 @@ while ($r_rgame = mysql_fetch_array($q_rgame)) {
 		<td class="heading" colspan="4" align="center">Top 10 '.$r_rgame['name'].' Players</td>
 	  </tr>
 	  <tr>
-		<td class="smheading" align="center" width="75">N°</td>
+		<td class="smheading" align="center" width="75">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>
 		<td class="smheading" align="center" width="150">Player Name</td>
 		<td class="smheading" align="center" width="75">Rank</td>
 		<td class="smheadingx" align="center" width="75">Matches</td>
@@ -61,7 +62,7 @@ while ($r_rgame = mysql_fetch_array($q_rgame)) {
 		echo '&cfilter='.$r_rplayer[country];
 		echo '">'.FlagImage($r_rplayer[country]).'</a> &nbsp; ';
 		echo '<a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer[pid].'">';
-		echo htmlspecialchars($r_rplayer[name]) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']).'</a></td>';
+		echo htmlentities($r_rplayer[name],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']).'</a></td>';
 		// end modifications -->
 		echo '
 			<td class="dark" align="center">'.get_dp($r_rplayer[rank]).'</td>

@@ -1,4 +1,4 @@
-<?
+<?php 
 
 // include ("includes/uta_functions.php");
 global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
