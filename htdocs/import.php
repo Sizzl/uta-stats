@@ -294,7 +294,7 @@ while (false !== ($filename = readdir($logdir)))
 		}
 	}
 	// --// Timo @ 2009/02/19 - Filter out all non-league matches if toggle enabled
-	if ($ftp_matchesonly==true)
+	if (isset($ftp_matchesonly) && $ftp_matchesonly==true)
 	{
 		$qm_matchmode = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'ass_matchmode'");
 		if ($qm_matchmode['col2'] != "True")

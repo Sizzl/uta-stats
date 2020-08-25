@@ -2,7 +2,7 @@
 // Server Timezone Offset from GMT
 $timezoneoffset = 1;
 $ftp_add_tz = true; // Add per-ftp offsets to log files
-$ftp_matchesonly = true; // Only log league matches
+$ftp_matchesonly = true; // Only log league matches (LeagueAS only)
 $home_gamesummary = false; // Enable / disable the game summary page.
 
 // Database connection details
@@ -21,7 +21,7 @@ $dbconnect2 = mysql_select_db($dbname);
 $showAllTables = true;
 $allowEmptyDB = false;
 
-// Globally ignored players (doesn't affect ®egistered players)
+// Globally ignored players (doesn't affect ï¿½egistered players)
 $ignored = array('127.0.0.1','192.168.0.1');
 
 // Assault game class list & parameters --// 25/07/05 Timo: Added $asclasses array for record zone filtering (+more).
