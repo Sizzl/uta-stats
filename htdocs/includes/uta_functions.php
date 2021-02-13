@@ -76,7 +76,7 @@ function uta_ass_objectiveinfo($mid, $att_teamname) {
 global $t_smartass_objs, $t_smartass_objstats, $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
 
 	echo'
-	<table border="0" cellpadding="0" cellspacing="2" width="600">
+	<table border="0" cellpadding="0" cellspacing="2" width="620">
 	<tbody><tr>
 		<td class="heading" colspan="3" align="center">Assault Objectives - '.$att_teamname.' Team Attacking</td>
 	</tr>

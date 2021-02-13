@@ -1,6 +1,6 @@
 # uta-stats by utassault.net
 
-UTStats 4.2.28uta
+UTStats 4.2.29uta
 
 Copyright (C) 2004/2005 azazel, )°DoE°(-AnthraX and toa
 Additional copyrights held (C) 2005/2006/2007 Cratos, Timo, brajan
@@ -12,12 +12,12 @@ See license.txt for more information.
 Contents
 ========
 
-1. Additional information for 4.2.28uta Release
+1. Additional information for 4.2.29uta Release
 
 2. Original UTStats information
 
 
-# 1. Additional information for 4.2.28uta Release
+# 1. Additional information for 4.2.29uta Release
 
 
 Copy to your UTServer\System folder the following files:

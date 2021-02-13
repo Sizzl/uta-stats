@@ -209,6 +209,10 @@ function ftpupdate()
 					continue;
 				}
 				foreach ($filelist as $filename) {
+					if (stristr($filename, 'Unreal.ngLog') === FALSE) {
+						tablerow('','Ignoring '.$filename.' - not Unreal.ngLog format');
+						continue;
+					}
 					if ((substr($filename, strlen($filename) - strlen($import_log_extension)) == $import_log_extension)
 					or ($import_utdc_download_enable and substr($filename, strlen($filename) - strlen($import_utdc_log_extension)) == $import_utdc_log_extension)) {
 					} else {

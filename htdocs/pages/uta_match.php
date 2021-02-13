@@ -113,7 +113,10 @@ $score1 ='0';
 		echo '<td nowrap align="center">'.$p_sql[ass_r_launch].'</td>';
 		echo '<td nowrap align="center">'.$p_sql[ass_r_launched].'</td>';
 		echo '<td nowrap align="center">'.$p_sql[ass_h_jump].'</td>';
-		$effi = (!empty($p_sql[kills])) ? (float) $p_sql[kills] / ($p_sql[kills] + $p_sql[deaths]) * 100 : '0'; // match effi // brajan 2007-05-28
+		if ($p_sql[kills]+$p_sql[deaths]==0)
+			$effi = '0';
+		else
+			$effi = (!empty($p_sql[kills])) ? (float) $p_sql[kills] / ($p_sql[kills] + $p_sql[deaths]) * 100 : '0'; // match effi // brajan 2007-05-28
 		echo '<td nowrap align="center" title="'.$p_sql[pname].'\'s average eff: '.round($effi, 2).'%">'.$p_sql[kills].'</td>';
 		echo '<td nowrap align="center" title="'.$p_sql[pname].'\'s average eff: '.round($effi, 2).'%">'.$p_sql[deaths].'</td>';
 		echo '<td nowrap align="center">'.intval($p_sql[maps] / 2).'</td>';
@@ -183,7 +186,7 @@ global $winclass; // Added winclass for team colours. --// Timo 25/07/05
 
 while ($p_assault = mysql_fetch_assoc($q_assault)) {
 	$bcg = ($i % 2) ? ' class="blank"' : ' class="lggrey"';
-	$warmup = ($i == 0) ? '&nbsp; &nbsp; <span class="redteamscore" style="background: none; font-weight:bold"> [Warm-up] </span>' : '';
+	$warmup = ($i == 0 && $p_assault[mapsleft] > $p_assault[matchlength]) ? '&nbsp; &nbsp; <span class="redteamscore" style="background: none; font-weight:bold"> [Warm-up] </span>' : '';
 	$mid = $p_assault[id];
 	$ass_id = $p_assault[assaultid];
 	$gametime = $p_assault[gametime];

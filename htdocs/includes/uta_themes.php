@@ -103,7 +103,7 @@ $footertext = 	  "		  <tr>
 		  </tr>
 		  <tr>
 			<td class=\"smheading\" align=\"center\">
-			UTStats Beta 4.2.28uta modifications by Cratos, brajan and Timo (2005-2007)</td>
+			UTStats Beta 4.2.29uta modifications by Cratos, brajan and Timo (2005-2007, 2020-2021)</td>
 		  </tr>
 		  </table>";
 

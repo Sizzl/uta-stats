@@ -12,7 +12,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 	$teamscore[3] = $r_info['t3score'];
 
 
-	$cols = 9;
+	$cols = 10;
 	if ($teams) $cols++;
 	if ($extra) $cols++;
 
@@ -20,13 +20,13 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 
 
 	echo'
-	<table border="0" cellpadding="0" cellspacing="2" width="600">
+	<table border="0" cellpadding="0" cellspacing="2" width="620">
 	<tbody><tr>
 		<td class="heading" colspan="'.$cols.'" align="center">'.htmlentities($title).'</td>
 	</tr>';
 
 
-	$sql_players = "SELECT  pi.name, pi.banned, p.pid, p.team, p.country, p.gamescore, p.frags, p.deaths, p.suicides, p.teamkills, p.eff, p.accuracy, p.ttl, p.rank".(($extra) ? ', p.'.$extra.' AS '.$extra  : '')."
+	$sql_players = "SELECT  pi.name, pi.banned, p.pid, p.lowping, p.highping, p.avgping, p.team, p.country, p.gamescore, p.frags, p.deaths, p.suicides, p.teamkills, p.eff, p.accuracy, p.ttl, p.rank".(($extra) ? ', p.'.$extra.' AS '.$extra  : '')."
 	FROM ".(isset($t_player) ? $t_player : "uts_player")." AS p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE p.pid = pi.id AND matchid = $mid
 	ORDER BY".(($teams) ? ' team ASC,' : '')." $order";
 	$q_players = mysql_query($sql_players) or die(mysql_error());
@@ -65,12 +65,14 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 				<td class="smheading" align="center" width="55" '.OverlibPrintHint('EFF').'>Eff.</td>
 				<td class="smheading" align="center" width="55" '.OverlibPrintHint('ACC').'>Acc.</td>
 				<td class="smheading" align="center" width="50" '.OverlibPrintHint('TTL').'>Avg TTL</td>
+				<td class="smheading" align="center" width="60" nowrap="nowrap">Avg Ping</td>
 			</tr>';
 		}
 
 		$eff = get_dp($r_players['eff']);
 		$acc = get_dp($r_players['accuracy']);
 		$ttl = GetMinutes($r_players['ttl']);
+		$ping = $r_players['avgping'];
 		$kills = $r_players['frags'] + $r_players['suicides'];
 		$pname = $r_players['name'];
 
@@ -84,6 +86,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 		$totals['eff'] += $r_players['eff'];
 		$totals['acc'] += $r_players['accuracy'];
 		$totals['ttl'] += $r_players['ttl'];
+                $totals['ping'] += $r_players['avgping'];
 		$num++;
 		
 		if ($r_players['banned'] == 'Y') {
@@ -121,6 +124,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 		echo '<td class="'.$class.'" align="center">'.$eff.'</td>';
 		echo '<td class="'.$class.'" align="center">'.$acc.'</td>';
 		echo '<td class="'.$class.'" align="center">'.$ttl.'</td>';
+		echo '<td class="'.$class.'" align="center">'.$ping.'</td>';
 		echo '</tr>';
 	}
 	teamstats_team_totals($totals, $num, $teams, $extra, $teamscore[$oldteam]);
@@ -139,6 +143,7 @@ function teamstats_init_totals(&$totals, &$num) {
 	$totals['eff'] = 0;
 	$totals['acc'] = 0;
 	$totals['ttl'] = 0;
+        $totals['ping'] = 0;
 	$num = 0;
 }
 
@@ -147,7 +152,7 @@ function teamstats_team_totals(&$totals, $num, $teams, $extra, $teamscore) {
 	$eff = get_dp($totals['eff'] / $num);
 	$acc = get_dp($totals['acc'] / $num);
 	$ttl = GetMinutes($totals['ttl'] / $num);
-
+        $ping = ceil($totals['ping']/$num);
 
 	echo '<tr>';
 	echo '<td nowrap class="dark" align="center">Totals</td>';
@@ -168,6 +173,7 @@ function teamstats_team_totals(&$totals, $num, $teams, $extra, $teamscore) {
 	echo '<td class="darkgrey" align="center">'.$eff.'</td>';
 	echo '<td class="darkgrey" align="center">'.$acc.'</td>';
 	echo '<td class="darkgrey" align="center">'.$ttl.'</td>';
+	echo '<td class="darkgrey" align="center">'.$ping.'</td>';
 	echo '</tr>';
 }
 ?>

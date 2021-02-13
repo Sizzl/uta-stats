@@ -24,12 +24,12 @@
 	if ($vcode > 0 && $authuser!="")
 	{
 		// Authuser: Add an '®' at end of playername
-		$playername = $authuser . "®";	
+		$playername = $authuser . chr(174);	
 	}
 	else
 	{ 
 		// NO Authuser: don't allow '®' at end of playername (replace with 'R')
-		if (substr($playername,-1) == "®") $playername = substr($playername,0,-1) . "R"; 
+		if (substr($playername,-1) == chr(174)) $playername = substr($playername,0,-1) . "R"; 
 	}																
 	
 ?>

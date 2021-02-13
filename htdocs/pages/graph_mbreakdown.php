@@ -1,5 +1,5 @@
 <?php 
-$max_height = 100;;
+$max_height = 100;
 
 // Hourly Breakdown
 $sql_ghours = "SELECT HOUR(time) AS res_hour, COUNT(*) AS res_count
@@ -24,6 +24,24 @@ while ($r_gmonths = mysql_fetch_array($q_gmonths)) {
 		$gb_month[$r_gmonths['res_month']] = $r_gmonths['res_count'];
 		if ($r_gmonths['res_count'] > $month_max) $month_max = $r_gmonths['res_count'];
 		$month_sum += $r_gmonths['res_count'];
+}
+
+// Yearly Breakdown
+$sql_gyears = "SELECT YEAR(time) AS res_year, COUNT(DISTINCT matchcode) AS res_count
+FROM uts_match WHERE $bgwhere GROUP by res_year ORDER BY res_year";
+$q_gyears = mysql_query($sql_gyears) or die(mysql_error());
+$year_max = 0;
+$year_sum = 0;
+$year_first = 0;
+$year_last = 0;
+while ($r_gyears = mysql_fetch_array($q_gyears)) {
+	$year_last = $r_gyears['res_year'];
+	if ($year_first == 0)
+		$year_first = $year_last;
+	$gb_year[$r_gyears['res_year']] = $r_gyears['res_count'];
+	if ($r_gyears['res_count'] > $year_max)
+		$year_max = $r_gyears['res_count'];
+	$year_sum += $r_gyears['res_count'];
 }
 
 
@@ -97,4 +115,39 @@ echo'</tr><tr>
 </tr>
 </tbody></table>
 <br>';
+
+$total_years = intval(($year_last)-($year_first));
+echo'<table border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+  <tr>
+    <td class="heading" align="center" colspan="'.intval(3+$total_years).'">Yearly Activity '.$gtitle.'</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center" colspan="'.intval(3+$total_years).'" height="10"></td>
+  </tr>
+  <tr>
+	<td class="dark" align="center" width="15"></td>';
+// Yearly
+for ($i = $year_first; $i <= $year_last; $i++) {
+	if (!isset($gb_year[$i])) $gb_year[$i] = 0;
+	$title = $gb_year[$i] .' ('. get_dp($gb_year[$i] / $year_sum * 100) .' %)';
+	echo '<td class="dark" align="center" valign="bottom" width="25"><img border="0" src="images/bars/v_bar'. (($i + 8) % 16 + 1) .'.png" width="30" height="'.(int)($gb_year[$i] / $year_max * $max_height).'" alt="'. $title .'" title="'. $title .'"></td>';
+}
+echo '
+	<td class="dark" align="center" width="15"></td>
+   </tr>
+   <tr>
+	<td class="grey" align="center" width="25"></td>';
+for ($i = $year_first; $i <= $year_last; $i++) {
+	echo '
+	<td class="grey" align="center">'.$i.'</td>
+';
+}
+echo'
+	<td class="grey" align="center" width="15"></td>
+  </tr>
+ </tbody>
+</table><br />';
+
+
 ?>

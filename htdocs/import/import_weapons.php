@@ -122,7 +122,7 @@ foreach($weapons as $playerid => $weapon) {
 			$s_weapons[$weaponid]['weap_shotcount'] += $infos['weap_shotcount'];
 			$s_weapons[$weaponid]['weap_hitcount'] += $infos['weap_hitcount'];
 			$s_weapons[$weaponid]['weap_damagegiven'] += $infos['weap_damagegiven'];
-			$s_weapons[$weaponid]['weap_accuracy'] = ($s_weapons[$weaponid]['weap_accuracy'] + $infos['weap_accuracy']) / 2;
+			$s_weapons[$weaponid]['weap_accuracy'] = ($s_weapons[$weaponid]['weap_accuracy'] + $infos['weap_accuracy']) / 2; // may need tweaking, doesn't look right
 		}
 	}
 }
@@ -153,6 +153,9 @@ foreach($weapons as $playerid => $weapon) {
 											acc = '". round($infos['weap_accuracy'], 2) ."';") or die(mysql_error());
 		// Yes -> update 
 		} else {
+			// Get match count for acc
+			// $r_accstat = small_query("SELECT COUNT(pid) FROM uts_weaponstats WHERE matchid <> '0' AND pid = '$playerid' AND weapon = '$weaponid'");
+			/*
 			mysql_query("	UPDATE	uts_weaponstats
 								SET		weapon = '$weaponid',
 											kills = kills + '${infos['weap_kills']}',
@@ -160,6 +163,16 @@ foreach($weapons as $playerid => $weapon) {
 											hits = hits + '${infos['weap_hitcount']}',
 											damage = damage + '${infos['weap_damagegiven']}',
 											acc = (acc + '". round($infos['weap_accuracy'], 2) ."') / 2
+								WHERE		matchid = '0'
+									AND	pid = '$playerid'
+									AND	weapon = '$weaponid';") or die(mysql_error()); */
+			mysql_query("	UPDATE	uts_weaponstats
+								SET		weapon = '$weaponid',
+											kills = kills + '${infos['weap_kills']}',
+											shots = shots + '${infos['weap_shotcount']}',
+											hits = hits + '${infos['weap_hitcount']}',
+											damage = damage + '${infos['weap_damagegiven']}',
+											acc = ((100/(shots + '${infos['weap_shotcount']}'))*(hits + '${infos['weap_hitcount']}'))
 								WHERE		matchid = '0'
 									AND	pid = '$playerid'
 									AND	weapon = '$weaponid';") or die(mysql_error());
