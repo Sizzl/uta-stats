@@ -42,7 +42,7 @@ if (strpos($gamename, 'Assault') !== false)
 
 	$ass_att = $r_cnt['ass_att']; 
 	$ass_def = $r_cnt['ass_def'];
-	$ratio_att = intval($ass_att * 100 / ($ass_att + $ass_def));	
+	$ratio_att = intval($ass_att * 100 / ($ass_att + $ass_def)); // add checks
 	$ratio_def = 100 - $ratio_att;
 										
 	// Fragging Events
@@ -57,7 +57,7 @@ if (strpos($gamename, 'Assault') !== false)
 	$frags_sum = $rank_fpos - $rank_fneg;
 	if ($ratio_def > 50)
 	{
-		$penaltyfactor = ($ass_att + $ass_def) / (2 * $ass_def) - 1; 
+		$penaltyfactor = ($ass_att + $ass_def) / (2 * $ass_def) - 1; // add checks
 		if ($penaltyfactor <= 0)
 			$frags_sum += $frags_sum * get_dp($penaltyfactor);	
 	}
@@ -119,7 +119,7 @@ else
 			SUM(spree_kill*1) AS spree_kill, SUM(spree_rampage*1) AS spree_rampage, SUM(spree_dom*1.5) AS spree_dom, SUM(spree_uns*2) AS spree_uns, SUM(spree_god*3) AS spree_god,
 			SUM(gametime) AS gametime		
 			FROM uts_player p inner join uts_match m on p.matchid = m.id
-			FROM uts_player WHERE p.pid = '$pid' AND p.gid = '$gid' AND p.matchid <= '$matchid' AND m.time >= '$rank_time_start' AND m.time <= '$rank_time_end'";
+			FROM uts_player WHERE p.pid = '$pid' AND p.gid = '$gid' AND p.matchid <= '$matchid' AND m.time >= '$rank_time_start' AND m.time <= '$rank_time_end'");
 	
 	// Work out per game ranking amounts
 	$rank_ctf = $r_cnt[flag_taken]+$r_cnt[flag_pickedup]+$r_cnt[flag_return]+$r_cnt[flag_capture]+$r_cnt[flag_cover]+$r_cnt[flag_seal]+$r_cnt[flag_assist]+$r_cnt[flag_kill];
@@ -148,7 +148,7 @@ else
 if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 	$s_debug = $s_debug."--\r\n".$matchid."-2d-rank:\r\n New Rank = (Rank/GameTime)*600 = (".$rank_nrank." / ".$r_gametime.") * 600 = ".(($rank_nrank/$r_gametime)*600)."\r\n\r\n";
 
-$rank_nrank = ($rank_nrank/$r_gametime) * 600;
+$rank_nrank = ($rank_nrank/$r_gametime) * 600; // add checks
 		
 if ($dbg) echo "Nrank: $rank_nrank ";
 		

@@ -14,7 +14,6 @@ require ("includes/config.php");
 
 $compatible_actor_versions = array('beta 4.0', 'beta 4.1', 'beta 4.2', '0.4.0', '0.4.1', '0.4.2', '0.4.2a');
 
-
 // Get key from web browser
 if (isset($_REQUEST['key'])) $adminkey = $_REQUEST['key'];
 if (!isset($adminkey)) $adminkey = '';
@@ -26,7 +25,8 @@ $debug = isset($_REQUEST['debug']) ? $_REQUEST['debug'] : false;
 $html = isset($_REQUEST['html']) ? $_REQUEST['html'] : true;
 
 // Were running from the command line (cron-jobs)
-if (php_sapi_name() == 'cli' or !isset($_SERVER['SERVER_PORT']) or !$_SERVER['SERVER_PORT'])  {
+if (php_sapi_name() == 'cli' or !isset($_SERVER['SERVER_PORT']) or !$_SERVER['SERVER_PORT'])
+{
 	// No password needed when in cli mode.
 	$adminkey = $import_adminkey;
 	// There is no time limit when running the cli. And no page to reload :)
@@ -55,7 +55,8 @@ if ($html) {
 $pagehandler = mks($_GET["p"]);
 
 
-if ($html) {
+if ($html)
+{
 	echo'<table border="0" cellpadding="1" cellspacing="2" width="720">
 	<tr>
 		<td class="heading" align="center" colspan="2">Importing Latest Log Files</td>
@@ -63,7 +64,8 @@ if ($html) {
 }
 
 
-IF (empty($import_adminkey)) {
+if (empty($import_adminkey))
+{
 	if ($html) echo'<tr><td class="smheading" align="left" width="150">Error:</td><td class="grey" align="left">';
 	echo "\$import_adminkey not set in config.php!\n";
 	if ($html) {
@@ -73,14 +75,16 @@ IF (empty($import_adminkey)) {
 	return;
 }
 
-IF (!empty($adminkey) and $adminkey != $import_adminkey) {
+if (!empty($adminkey) and $adminkey != $import_adminkey)
+{
 	if ($html) echo'<tr><td class="smheading" align="left" width="150">Error:</td><td class="grey" align="left">';
 	echo "Keys do not match\n";
 	$adminkey = '';
 	if (!$html) return;
 }
 
-IF (empty($adminkey)) {
+if (empty($adminkey))
+{
 	if (!$html) die('Please provide the adminkey' ."\n");
 	echo'<tr>
 		  <td class="smheading" align="left" width="150">Enter Admin key:</td>
@@ -95,7 +99,8 @@ IF (empty($adminkey)) {
 }
 
 
-IF (!@is_dir('logs')) {
+if (!@is_dir('logs'))
+{
 	if ($html) echo'<tr><td class="smheading" align="left" width="150">Error:</td><td class="grey" align="left">';
 	echo "Can't find the logs directory!\n";
 	if ($html) echo "<br>";
@@ -118,7 +123,8 @@ $start_time = time();
 $files = isset($_REQUEST['files']) ? $_REQUEST['files'] : 0;
 $elapsed = isset($_REQUEST['elapsed']) ? $_REQUEST['elapsed'] : 0;
 
-if ($ftp_use and !isset($_GET['no_ftp'])) {
+if ($ftp_use and !isset($_GET['no_ftp']))
+{
 	include("includes/ftp.php");
 	$elapsed = $elapsed - (time() - $start_time);
 }
@@ -129,7 +135,8 @@ $logdir = opendir('logs');
 while (false !== ($filename = readdir($logdir)))
 {
 // Our (self set) timelimit exceeded => reload the page to prevent srcipt abort
-	if (!empty($import_reload_after) and $start_time + $import_reload_after <= time()) {
+	if (!empty($import_reload_after) and $start_time + $import_reload_after <= time())
+	{
 		if (!$html) die('Time limit exceeded - unable to reload page (no HTML output)' ."\n");
 
 		$elapsed = $elapsed + time() - $start_time;
@@ -151,27 +158,31 @@ while (false !== ($filename = readdir($logdir)))
 	$backupfilename = 'logs/backup/' . $oldfilename;
 
 	// UTDC log: Move to logs/utdc/
-	if		($import_utdc_download_enable
+	if ($import_utdc_download_enable
 		and substr($filename, strlen($filename) - strlen($import_utdc_log_extension)) == $import_utdc_log_extension
-		and substr($oldfilename, 0, strlen($import_utdc_log_start)) == $import_utdc_log_start) {
-			if ($import_utdc_log_compress == 'no') $import_utdc_log_compress = 'yes';
-			if ($html) {
-				echo'<table class="box" border="0" cellpadding="1" cellspacing="2">
+		and substr($oldfilename, 0, strlen($import_utdc_log_start)) == $import_utdc_log_start)
+	{
+		if ($import_utdc_log_compress == 'no') $import_utdc_log_compress = 'yes';
+		if ($html)
+		{
+			echo'<table class="box" border="0" cellpadding="1" cellspacing="2">
 				<tr>
 					<td class="smheading" align="center" height="25" width="550" colspan="2">UTDC log: '.$oldfilename.'</td>
 				</tr>
 				<tr>
 					<td class="smheading" align="left" width="350">';
-			} else {
-				echo "UTDC log: $oldfilename:\n";
-			}
-			echo 'Moving to logs/utdc/: ';
-			if ($html) echo '</td><td class="grey" align="left" width="200">';
-			echo backup_logfile($import_utdc_log_compress, $filename, 'logs/utdc/'.$oldfilename, true) . "\n";
-			if ($html) echo '</td></tr></table><br />';
-			echo "\n\n";
-			unlink($filename);
-			continue;
+		}
+		else
+		{
+			echo "UTDC log: $oldfilename:\n";
+		}
+		echo 'Moving to logs/utdc/: ';
+		if ($html) echo '</td><td class="grey" align="left" width="200">';
+		echo backup_logfile($import_utdc_log_compress, $filename, 'logs/utdc/'.$oldfilename, true) . "\n";
+		if ($html) echo '</td></tr></table><br />';
+		echo "\n\n";
+		unlink($filename);
+		continue;
 	}
 
 	if(substr($filename, strlen($filename) - strlen($import_log_extension)) != $import_log_extension) 	continue;
@@ -184,7 +195,8 @@ while (false !== ($filename = readdir($logdir)))
 
 	// Create our temp Table
 
-	for (;;) {
+	for (;;)
+	{
 		$sql = "CREATE ". ($import_use_temporary_tables ? 'TEMPORARY ' : '') ."TABLE `uts_temp_$uid` (
 		`id` mediumint(5) NOT NULL,
 		`col0` char(20) NOT NULL default '',
@@ -201,7 +213,8 @@ while (false !== ($filename = readdir($logdir)))
 		$result = mysql_query($sql);
 		if ($result) break;
 
-		if (mysql_errno() == 1044 and $import_use_temporary_tables) {
+		if (mysql_errno() == 1044 and $import_use_temporary_tables)
+		{
 			echo "<br><strong>WARNING: Unable to create temporary table (". mysql_error() .")<br>";
 			echo "I'll retry without using MySQL's temporary table feature (see \$import_use_temporary_tables in config.php for details).<br><br></strong>";
 			$import_use_temporary_tables = false;
@@ -211,14 +224,17 @@ while (false !== ($filename = readdir($logdir)))
 	}
 	$id = 0;
 
-	if ($html) {
+	if ($html)
+	{
 		echo'<table class="box" border="0" cellpadding="1" cellspacing="2">
 		<tr>
 			<td class="smheading" align="center" height="25" width="550" colspan="2">Importing '.$oldfilename.'</td>
 		</tr>
 		<tr>
 			<td class="smheading" align="left" width="350">';
-	} else {
+	}
+	else
+	{
 		echo "Importing $oldfilename:\n";
 	}
 	echo 'Creating Temp MySQL Table: ';
@@ -239,7 +255,8 @@ while (false !== ($filename = readdir($logdir)))
 	$row = 1;
 	$handle = fopen("$filename", "r");
 
-	while (($data = my_fgets($handle, 5000)) !== FALSE) {
+	while (($data = my_fgets($handle, 5000)) !== FALSE)
+	{
 		if ($debug) debug_output('Raw input         ', $data);
 		$data = preg_replace('/[\x00]/', '', $data);
 		if ($debug) debug_output('After preg_replace', $data);
@@ -247,7 +264,8 @@ while (false !== ($filename = readdir($logdir)))
 
 		$num = count($data);
 		$row++;
-		for ($c=0; $c < 1; $c++) {
+		for ($c=0; $c < 1; $c++)
+		{
 
 			$col0 = addslashes($data[0]);
 			$col1 = addslashes($data[1]);
@@ -265,7 +283,7 @@ while (false !== ($filename = readdir($logdir)))
 
 			$id++;
 			mysql_query("INSERT INTO uts_temp_$uid VALUES ($id, '$col0', '$col1', '$col2', '$col3', '$col4', '$col5');") or die(mysql_error());
-	   }
+		}
 	}
 	fclose($handle);
 	$files++;
@@ -273,23 +291,26 @@ while (false !== ($filename = readdir($logdir)))
 	if ($html) echo'<td class="grey" align="left" width="200">';
 	echo "Yes\n";
 
-
-
 	$log_incompatible = false;
 	$actor_version = 'unknown';
 	$qm_logtype = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Log_Standard'");
-	if ($qm_logtype['col3'] == 'UTStats') {
+	if ($qm_logtype['col3'] == 'UTStats')
+	{
 		$qm_logversion = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Log_Version'");
 		$actor_version = $qm_logversion['col3'];
 	}
 
-	if (!in_array($actor_version, $compatible_actor_versions)) {
-		if ($import_incompatible_logs) {
+	if (!in_array($actor_version, $compatible_actor_versions))
+	{
+		if ($import_incompatible_logs)
+		{
 			if ($html) echo '</td></tr><tr><td class="smheading" align="left" width="350" style="background-color: red;">';
 			echo "WARNING: ";
 			if ($html) echo '</td><td class="grey" align="left" width="200" style="background-color: red;">';
 			echo "This logfile was created using an incompatible UTStats server actor version ($actor_version). You may experience strange results and/or bugs!\n";
-		} else {
+		}
+		else
+		{
 			$log_incompatible = true;
 		}
 	}
@@ -337,32 +358,45 @@ while (false !== ($filename = readdir($logdir)))
 	$s_deaths = $qm_deaths[deaths];
 
 	// Add teamkills only if its a team game, else add them to kills total
-	IF ($qm_teamgame[col3] == "True") {
+	if ($qm_teamgame[col3] == "True")
+	{
 		$s_kills = $qm_kills[kills];
 		$s_teamkills = $qm_teamkills[teamkills];
-	} else {
+	}
+	else
+	{
 		$s_kills = $qm_kills[kills]+$qm_teamkills[teamkills];
 		$s_teamkills = 0;
 	}
 	// Check if anything happened, if it didnt stop everything now
 	
-	if ($qm_kills[kills] == 0 && $qm_deaths[deaths] == 0 && $s_suicides == -5)  {  // CRATOS
+	if ($qm_kills[kills] == 0 && $qm_deaths[deaths] == 0 && $s_suicides == -5)
+	{  // CRATOS
 		echo "No (Empty Match)\n";
 		if ($html) echo '</td></tr>';
-	} elseif ($qm_playercount < 2)  {
+	}
+	elseif ($qm_playercount < 2)
+	{
 		echo "No (Not Enough Players)\n";
 		if ($html) echo '</td></tr>';
-	} elseif ($log_incompatible)  {
+	}
+	elseif ($log_incompatible)
+	{
 		echo "No (Logfile incompatible [created by UTStats $actor_version])\n";
 		if ($html) echo '</td></tr>';
-	} elseif ($import_ignore_if_gametime_less_than != 0 and ceil(($qm_gameend[col0] - $qm_gamestart[col0]) / 60) < $import_ignore_if_gametime_less_than)  {
+	}
+	elseif ($import_ignore_if_gametime_less_than != 0 and ceil(($qm_gameend[col0] - $qm_gamestart[col0]) / 60) < $import_ignore_if_gametime_less_than)
+	{
 		echo "No (game too short [". ceil(($qm_gameend[col0] - $qm_gamestart[col0]) / 60) ." &lt; $import_ignore_if_gametime_less_than minutes])\n";
 		if ($html) echo '</td></tr>';
-	} else {
+	}
+	else
+	{
 
 		$sql_mutators = "SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GoodMutator'";
 		$q_mutators = mysql_query($sql_mutators);
-		while ($r_mutators = mysql_fetch_array($q_mutators)) {
+		while ($r_mutators = mysql_fetch_array($q_mutators))
+		{
 			$qm_mutators .= "".$r_mutators[col3].", ";
 		}
 
@@ -400,7 +434,8 @@ while (false !== ($filename = readdir($logdir)))
 		// CRATOS: Fix Servername
 		// ************************************************************************************
 		$q_sname = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'ass_servername'");
-		if ($q_sname!=NULL) {
+		if ($q_sname!=NULL)
+		{
 			$servername = trim($q_sname[col2]);	
 			$servername = addslashes($servername); // --// Timo 2020-08-23 (Yes, still fixing sh!t 15 years later)
 		}
@@ -488,24 +523,26 @@ while (false !== ($filename = readdir($logdir)))
 		// Lazy Hack for unknown gametypes
 		$unknowngt = substr("$mapfile", 0, 3);	// Gets first 3 characters
 
-		IF ($unknowngt == "JB-") {
+		if ($unknowngt == "JB-")
+		{
 			$gamename = "JailBreak";
 			$teamgame = 'True';
 		}
 
 		// Append insta to game if it was an insta game
 		$gameinsta = 0;
-		IF ($qm_insta[col3] == "True") { $gameinsta = 1; $gamename = "$gamename (insta)"; } else { $gameinsta = 0; }
+		if ($qm_insta[col3] == "True") { $gameinsta = 1; $gamename = "$gamename (insta)"; } else { $gameinsta = 0; }
 		
 		// CRATOS: Check for PRO matches
-		IF (intval($qm_gameinfoff[col3]) != 0) { $gamename = "$gamename (pro)"; }		
+		if (intval($qm_gameinfoff[col3]) != 0) { $gamename = "$gamename (pro)"; }		
 
 		// Get the unique ID of this gametype.
 		// Create a new one if it has none yet.
 		$r_gid = small_query("SELECT id FROM uts_games WHERE gamename = '$gamename'");
-		if ($r_gid) {
+		if ($r_gid)
 			$gid = $r_gid['id'];
-		} else {
+		else
+		{
 			mysql_query("INSERT INTO uts_games SET gamename = '$gamename', name = '$gamename'") or die(mysql_error());
 			$gid = mysql_insert_id();
 		}
@@ -516,11 +553,13 @@ while (false !== ($filename = readdir($logdir)))
 		// combine DM and TDM rankings or ...)
 
 		// Read all rules
-		if (!isset($overriderules)) {
+		if (!isset($overriderules))
+		{
 			$overriderules = array();
 			$sql_overriderules = "SELECT id, serverip, gamename, mutator, gid FROM uts_gamestype ORDER BY id ASC;";
 			$q_overriderules = mysql_query($sql_overriderules);
-			while ($r_overriderules = mysql_fetch_array($q_overriderules)) {
+			while ($r_overriderules = mysql_fetch_array($q_overriderules))
+			{
 				$overriderules[$r_overriderules['id']]['serverip'] = $r_overriderules['serverip'];
 				$overriderules[$r_overriderules['id']]['gamename'] = $r_overriderules['gamename'];
 				$overriderules[$r_overriderules['id']]['mutator'] = $r_overriderules['mutator'];
@@ -529,7 +568,8 @@ while (false !== ($filename = readdir($logdir)))
 		}
 
 		// Check if one of our overriderules applies to this match
-		foreach($overriderules as $rule) {
+		foreach($overriderules as $rule)
+		{
 			if ($rule['serverip'] != '*' and $rule['serverip'] != "$serverip:$serverport") continue;
 			if ($rule['gamename'] != '*' and $rule['gamename'] != $gamename) continue;
 			if ($rule['mutator'] != '*' and stristr($qm_mutators, $rule['mutator']) === false) continue;
@@ -597,7 +637,8 @@ while (false !== ($filename = readdir($logdir)))
 		$t2score = 0;
 		$t3score = 0;
 
-		while ($r_tscore = mysql_fetch_array($q_tscore)) {
+		while ($r_tscore = mysql_fetch_array($q_tscore))
+		{
 			if ($r_tscore['team'] == "0") $t0score = $r_tscore['score'];
 			if ($r_tscore['team'] == "1") $t1score = $r_tscore['score'];
 			if ($r_tscore['team'] == "2") $t2score = $r_tscore['score'];
@@ -636,7 +677,7 @@ while (false !== ($filename = readdir($logdir)))
 		// ************************************************************************************
 		// Cratos: Get Gametype specific match stuff done
 		// ************************************************************************************
-		IF (substr($gamename,0,7) == "Assault")	
+		if (substr($gamename,0,7) == "Assault")	
 		{
 			include("import/uta_import_ass_match.php"); 
 		}
@@ -654,7 +695,8 @@ while (false !== ($filename = readdir($logdir)))
 		// Get List of Player IDs and Process What They Have Done
 		$sql_player = "SELECT DISTINCT col4 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'rename' AND col4 <> ''";
 		$q_player = mysql_query($sql_player) or die(mysql_error());
-		while ($r_player = mysql_fetch_array($q_player)) {
+		while ($r_player = mysql_fetch_array($q_player))
+		{
 			$playerid = $r_player[col4];
 
 			// Get players last name used
@@ -686,14 +728,15 @@ while (false !== ($filename = readdir($logdir)))
 			$qc_objs = small_query("SELECT count(id) AS assobjcount FROM uts_temp_$uid WHERE col1 = 'assault_obj' AND col2 = $playerid");
 			
 			// Player had no kills, deaths or teamkills, or objectives! => ignore 
-			//
+			// 
 			// CRATOS: only ignore him if his TimeOnServer is < 30sec
-			//
+			// 
 			$qc_time = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = $playerid LIMIT 0,1");
 			if ($qc_time != NULL) $timeonserver = intval($qc_time[col4]);
 			else $timeonserver = 0; 
 	
-			IF ($qc_kills[col4] == 0 && $qc_deaths[col4] == 0 && $qc_teamkills[col4] == 0 && $qc_objs[assobjcount] <= 0 && $timeonserver < 30) {
+			if ($qc_kills[col4] == 0 && $qc_deaths[col4] == 0 && $qc_teamkills[col4] == 0 && $qc_objs[assobjcount] <= 0 && $timeonserver < 30)
+			{
 				if ($timeonserver < 10 || $servergametime > 60) 	
 				{			
 					$ignored_players[] = $playername;
@@ -705,20 +748,22 @@ while (false !== ($filename = readdir($logdir)))
 			// ************************************************************************************
 			// Cratos: Get Authusers
 			// ************************************************************************************
-			//IF (substr($gamename,0,7) == "Assault")	
-			//{ 
+			// IF (substr($gamename,0,7) == "Assault")	
+			// { 
 				include("import/uta_import_ass_authplayer.php"); // CRATOS
-			//}
+			// }
 			
 
 			// Process all the other player information
 			include("import/import_playerstuff.php");
 
-			if ($playerbanned) {
+			if ($playerbanned)
+			{
 				// Banned players don't have a rank.
 				mysql_query("DELETE FROM uts_rank WHERE pid = '$pid'");
 
-				if ($import_ban_type == 2) {
+				if ($import_ban_type == 2)
+				{
 					// We do not want to know who killed and who was killed by this banned player
 					$ignored_players[] = $playername;
 					mysql_query("DELETE FROM uts_temp_$uid WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '$playerid' OR col4 = '$playerid');") or die(mysql_error());
@@ -732,21 +777,25 @@ while (false !== ($filename = readdir($logdir)))
 			// ************************************************************************************
 			// Cratos: Get Gametype specific stuff done
 			// ************************************************************************************
-			IF (substr($gamename,0,7) == "Assault")	
+			if (substr($gamename,0,7) == "Assault")	
 			{ 
 				include("import/import_ass.php"); 				
 				include("import/uta_import_ass_player.php");
 			}
 			
-			IF ($gamename == "Capture the Flag" || $gamename == "Capture the Flag (insta)") { include("import/import_ctf.php"); }
-			IF ($gamename == "Domination" || $gamename == "Domination (insta)") { include("import/import_dom.php"); }
-			IF ($gamename == "Tournament Team Game" || $gamename == "Tournament Team Game (insta)") { include("import/import_tdm.php"); }
-			IF ($gamename == "JailBreak" || $gamename == "JailBreak (insta)") { include("import/import_jailbreak.php"); }
+			if ($gamename == "Capture the Flag" || $gamename == "Capture the Flag (insta)") { include("import/import_ctf.php"); }
+			if ($gamename == "Domination" || $gamename == "Domination (insta)") { include("import/import_dom.php"); }
+			if ($gamename == "Tournament Team Game" || $gamename == "Tournament Team Game (insta)") { include("import/import_tdm.php"); }
+			if ($gamename == "JailBreak" || $gamename == "JailBreak (insta)") { include("import/import_jailbreak.php"); }
 
 			// Do the rankings
+			unset($rank_year); // all time ranking
 			include("import/import_ranking.php");
+			$rank_year = intval(substr($gametime,4));
+			include("import/import_ranking.php"); // repeat just for this year
 
-			if ($playerbanned) {
+			if ($playerbanned)
+			{
 					if ($html) echo "<span style='font-style: italic;'>";
 					echo "Banned:";
 			}
@@ -758,7 +807,8 @@ while (false !== ($filename = readdir($logdir)))
 		// Check if theres any players left, if none or one delete the match (its possible ...)
 		$final_pcount = small_count("SELECT id FROM uts_player WHERE matchid = $matchid");
 
-		IF ($final_pcount == NULL || $final_pcount == 1) {
+		if ($final_pcount == NULL || $final_pcount == 1)
+		{
 			echo'<tr>
 				<td class="smheading" align="left" width="350">Deleting Match:</td>
 				<td class="grey" align="left" width="200">0 or 1 Player Entries Left</td>
@@ -790,7 +840,9 @@ while (false !== ($filename = readdir($logdir)))
 			// CRATOS
 			$rem_objstats = "DELETE FROM uts_smartass_objstats WHERE matchid = $matchid";
 			mysql_query($rem_objstats);
-		} else {
+		}
+		else
+		{
 			// Make our weapons statistics
 			echo "\n";
 			if ($html) echo '<tr><td class="smheading" align="left" width="350">';
@@ -903,7 +955,8 @@ if ($html) echo '<br />';
 echo "\n";
 
 // Import stats
-if ($files != 0) {
+if ($files != 0)
+{
 	$elapsed = $elapsed + time() - $start_time;
 	if ($html) echo '<p class="pages">';
 	echo "Processed $files ". ($files == 1 ? 'file' : 'files') ." in $elapsed ". ($elapsed == 1 ? 'second' : 'seconds') ." ";
@@ -913,7 +966,8 @@ if ($files != 0) {
 
 
 // Optimise database
-if (rand(0, 5) == 0) {
+if (rand(0, 5) == 0)
+{
 	if ($html) echo '<p class="pages">';
 	echo "Optimizing tables... ";
 	mysql_query("OPTIMIZE TABLE uts_match, uts_player, uts_rank, uts_killsmatrix, uts_weaponstats, uts_pinfo;") or die(mysql_error());
@@ -922,7 +976,8 @@ if (rand(0, 5) == 0) {
 }
 
 // Analyze Key distribution
-if (rand(0, 10) == 0) {
+if (rand(0, 10) == 0)
+{
 	if ($html) echo '<p class="pages">';
 	echo "Analyzing tables... ";
 	mysql_query("ANALYZE TABLE uts_match, uts_player, uts_rank, uts_killsmatrix, uts_weaponstats, uts_pinfo;") or die(mysql_error());
@@ -932,15 +987,18 @@ if (rand(0, 10) == 0) {
 
 
 // Purge old logs
-if ($purged = (purge_backups('logs/backup', $import_log_backups_purge_after))) {
+if ($purged = (purge_backups('logs/backup', $import_log_backups_purge_after)))
+{
 	if ($html) echo '<p class="pages">';
 	echo "Purged $purged old logfiles\n";
 	if ($html) echo '</p>';
 }
 
 // Purge old utdc logs
-if ($import_utdc_download_enable) {
-	if ($purged = (purge_backups('logs/utdc', $import_utdc_log_purge_after))) {
+if ($import_utdc_download_enable)
+{
+	if ($purged = (purge_backups('logs/utdc', $import_utdc_log_purge_after)))
+	{
 		if ($html) echo '<p class="pages">';
 		echo "Purged $purged old UTDC logfiles\n";
 		if ($html) echo '</p>';
@@ -952,5 +1010,16 @@ if ($html) echo '<br /><table border="0" cellpadding="1" cellspacing="2" width="
 echo "Import Script Completed\n";
 if ($html) echo '</td></tr></table>';
 
-if ($html) include("includes/footer.php");
+if ($html)
+{
+	if ($_SESSION["themelocation"]) // Themed footer --// 19/07/05 Timo: Added customisable footer
+	{
+	        if (file_exists($_SESSION["themelocation"]."footer.php"))
+	                include($_SESSION["themelocation"]."footer.php");
+	        else
+	                include("includes/footer.php");
+	}
+	else
+	        include("includes/footer.php");
+}
 ?>
