@@ -1,4 +1,6 @@
 <?php 
+include_once ("includes/config.php");
+include_once ("includes/uta_functions.php");
 function row($name = NULL, $amount = 0, $multiplier = 0, $extra_multiplier = true, $amount_rated = -1) {
 	static $i = 0;
 	if (empty($name)) {
@@ -40,7 +42,7 @@ function rowtotal($title, $sum) {
 
 
 global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
-
+global $admin_ip, $pic_enable, $htmlcp;
 $pid = isset($pid) ? addslashes($pid) : addslashes($_GET['pid']);
 $gid = isset($gid) ? addslashes($gid) : addslashes($_GET['gid']);
 
