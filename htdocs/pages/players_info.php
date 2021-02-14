@@ -2,7 +2,7 @@
 include_once ("includes/config.php");
 include_once ("includes/uta_functions.php");
 global $t_rank, $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
-global $pic_enable, $htmlcp;
+global $admin_ip, $pic_enable, $htmlcp;
 $pid = isset($pid) ? addslashes($pid) : addslashes($_GET['pid']);
 
 $r_info = small_query("SELECT name, country, banned FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." WHERE id = '$pid'");
@@ -199,7 +199,7 @@ echo'
   </tr>
 </tbody></table>';
 
-//CRATOS
+// CRATOS
 echo '<br>
 <table border="0" cellpadding="1" cellspacing="2" width="600">
   <tbody><tr>
@@ -423,8 +423,8 @@ while ($r_recent = mysql_fetch_array($q_recent)) {
 echo'
 </tbody></table>
 ';
-///////// IP & NICK CHECKING - START (brajan 20050801)
-	if ((isset($is_admin) and $is_admin) || (in_array($_SERVER['REMOTE_ADDR'], $admin_ip)) ){
+// IP & NICK CHECKING - START (brajan 20050801)
+	if ((isset($is_admin) and $is_admin) || (isset($admin_ip) && in_array($_SERVER['REMOTE_ADDR'], $admin_ip)) ){
 		if(isset($_POST[v_pid]))
 			$pid = $_POST[v_pid];
 		elseif(isset($_GET[pid]))

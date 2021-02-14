@@ -51,17 +51,17 @@ $tfpage = $cpage+1;
 $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
-$ppageurl = "<a class=\"pages\" href=\"./?p=ext_rank&amp;gid=$gid&amp;page=$ppage\">[Previous]</a>";
+$ppageurl = "<a class=\"pages\" href=\"./?p=ext_rank&amp;gid=".$gid."&amp;page=".$ppage.($rank_year > 0 ? "&amp;year=".$rank_year : "")."\">[Previous]</a>";
 if ($ppage < "0") { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
-$npageurl = "<a class=\"pages\" href=\"./?p=ext_rank&amp;gid=$gid&amp;page=$npage\">[Next]</a>";
+$npageurl = "<a class=\"pages\" href=\"./?p=ext_rank&amp;gid=".$gid."&amp;page=".$npage.($rank_year > 0 ? "&amp;year=".$rank_year : "")."\">[Next]</a>";
 if ($npage >= "$ecount") { $npageurl = "[Next]"; }
 
-$fpageurl = "<a class=\"pages\" href=\"./?p=ext_rank&amp;gid=$gid&amp;page=$fpage\">[First]</a>";
+$fpageurl = "<a class=\"pages\" href=\"./?p=ext_rank&amp;gid=".$gid."&amp;page=".$fpage.($rank_year > 0 ? "&amp;year=".$rank_year : "")."\">[First]</a>";
 if ($cpage == "0") { $fpageurl = "[First]"; }
 
-$lpageurl = "<a class=\"pages\" href=\"./?p=ext_rank&amp;gid=$gid&amp;page=$lpage\">[Last]</a>";
+$lpageurl = "<a class=\"pages\" href=\"./?p=ext_rank&amp;gid=".$gid."&amp;page=".$lpage.($rank_year > 0 ? "&amp;year=".$rank_year : "")."\">[Last]</a>";
 if ($cpage == "$lpage") { $lpageurl = "[Last]"; }
 
 if ($_GET['cfilter'] && strlen($_GET['cfilter'])==2)
@@ -97,7 +97,7 @@ echo '
 <table class="box" border="0" cellpadding="1" cellspacing="1">
   <tbody>
   <tr>
-	<td class="heading" colspan="4" align="center">'.$gamename.' - Ranking Players ['.($rank_year == 0 ? "Of All Time" : $rank_year).']</td>
+	<td class="heading" colspan="4" align="center">'.$gamename.' - Ranking Players'.($rank_year == 0 ? "" : " [".$rank_year."]").'</td>
   </tr>
   <tr>
 	<td class="smheading" align="center" width="75">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>

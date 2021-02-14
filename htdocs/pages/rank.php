@@ -28,8 +28,29 @@ else
 	// Work out what game types were played in the year provided; this is quite a slow query, need to work out a better way to do this... Perhaps ignore uts_player?
 	$rank_time_start = $rank_year."0101000000";
 	$rank_time_end   = $rank_year."1231235959"; 
-	$sql_rgame = "SELECT DISTINCT(p.gid), ".(isset($t_games) ? $t_games : "uts_games").".name FROM ".(isset($t_match) ? $t_match : "uts_match")." as m INNER JOIN ".(isset($t_player) ? $t_player : "uts_player")." AS p ON p.matchid = m.id, ".(isset($t_games) ? $t_games : "uts_games")." WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' AND ".(isset($t_games) ? $t_games : "uts_games").".id = p.gid ORDER BY p.gid"; // slow, need to fix this
+ 	$sql_rgame = "SELECT DISTINCT(p.gid), ".(isset($t_games) ? $t_games : "uts_games").".name FROM ".(isset($t_match) ? $t_match : "uts_match")." as m INNER JOIN ".(isset($t_player) ? $t_player : "uts_player")." AS p ON p.matchid = m.id, ".(isset($t_games) ? $t_games : "uts_games")." WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' AND ".(isset($t_games) ? $t_games : "uts_games").".id = p.gid ORDER BY p.gid"; // slow, need to fix this
+// 	$sql_rgame = "SELECT DISTINCT(p.gid), LEFT(m.time,4) AS year, ".(isset($t_games) ? $t_games : "uts_games").".name FROM ".(isset($t_match) ? $t_match : "uts_match")." as m INNER JOIN ".(isset($t_player) ? $t_player : "uts_player")." AS p ON p.matchid = m.id, ".(isset($t_games) ? $t_games : "uts_games")." WHERE year = '".$rank_year."' AND ".(isset($t_games) ? $t_games : "uts_games").".id = p.gid ORDER BY p.gid"; // slow, need to fix this
 }
+
+// $q_ryears = mysql_query("SELECT LEFT(time,4) AS year FROM `".(isset($t_match) ? $t_match : "uts_match")."` GROUP BY year;") or die (mysql_error());
+$q_ryears = mysql_query("SELECT year FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE year > '0' GROUP BY year ORDER BY year ASC;") or die(mysql_error());
+echo "<div class=\"pages\"><b>Filter Rank:<br />[<a class=\"pages\" href=\"?p=rank&amp\">All-Time</a>";
+$i = 1;
+while ($r_ryear = mysql_Fetch_array($q_ryears))
+{
+	$i++;
+	if ($i==5)
+	{
+		echo "]<br />[";
+		echo "<a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
+		$i = 0;
+	}
+	else
+		echo " / <a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
+}
+echo "]</b></div><br>";
+
+
 $q_rgame = mysql_query($sql_rgame) or die(mysql_error());
 while ($r_rgame = mysql_fetch_array($q_rgame))
 {
@@ -38,13 +59,14 @@ while ($r_rgame = mysql_fetch_array($q_rgame))
 	  <table class="box" border="0" cellpadding="1" cellspacing="1">
 	  <tbody>
 	  <tr>
-		<td class="heading" colspan="4" align="center">Top 10 '.$r_rgame['name'].' Players - '.($rank_year == 0 ? "Of All Time" : $rank_year).'</td>
+		<td class="heading" colspan="4" align="center">Top 10 '.$r_rgame['name'].' Players'.($rank_year == 0 ? "" : " [".$rank_year."]").'</td>
 	  </tr>
 	  <tr>
 		<td class="smheading" align="center" width="75">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>
 		<td class="smheading" align="center" width="150">Player Name</td>
 		<td class="smheading" align="center" width="75">Rank</td>
-		<td class="smheadingx" align="center" width="75">Matches</td>
+		<td class="smheadingx" align="center" width="75">Maps/Rounds</td>
+		<!-- <td class="smheadingx" align="center" width="75">Matches</td> -->
 	  </tr>
 	  ';
 
@@ -80,6 +102,7 @@ while ($r_rgame = mysql_fetch_array($q_rgame))
 	echo '
 			<td class="dark" align="center">'.get_dp($r_rplayer[rank]).'</td>
 			<td class="grey" align="center">'.$r_rplayer[matches].'</td>
+			<!-- <td class="grey" align="center">'.$r_rplayer[matches].'</td> -->
 		  </tr>';
 		ob_flush();
 	}
