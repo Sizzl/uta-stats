@@ -791,7 +791,7 @@ while (false !== ($filename = readdir($logdir)))
 			// Do the rankings
 			unset($rank_year); // all time ranking
 			include("import/import_ranking.php");
-			$rank_year = intval(substr($gametime,4));
+			$rank_year = intval(substr($gametime,0,4));
 			include("import/import_ranking.php"); // repeat just for this year
 
 			if ($playerbanned)
