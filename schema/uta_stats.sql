@@ -310,6 +310,7 @@ CREATE TABLE IF NOT EXISTS `uts_rank` (
   `rank` float NOT NULL default '0',
   `prevrank` float NOT NULL default '0',
   `matches` mediumint(5) NOT NULL default '0',
+  `year` smallint(4) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `name` (`pid`,`gid`),
   KEY `rank` (`rank`),

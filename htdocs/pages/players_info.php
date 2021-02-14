@@ -1,9 +1,4 @@
 <?php 
-//////////////// UTA ADMIN IP's
-$admin_ip = array(
-"88.156.161.113",  // brajan home
-"194.208.224.34", // Cratos  
-);
 include_once ("includes/config.php");
 include_once ("includes/uta_functions.php");
 global $t_rank, $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
@@ -335,10 +330,10 @@ $bgwhere = "pid = '$pid'";
 include_once("pages/graph_pbreakdown.php");
 
 
-// Player's ranks
+// Player's all-time ranks --// Timo 13/02/2021 - Added filter to all-time (year=0) for now; may consider adding other ranking tables / columns in future
 echo'<table border="0" cellpadding="1" cellspacing="1">
   <tbody><tr>
-    <td class="heading" colspan="6" align="center">Ranking</td>
+    <td class="heading" colspan="6" align="center">All Time Ranking</td>
   </tr>
   <tr>
     <td class="smheading" align="center" width="50">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>
@@ -349,10 +344,10 @@ echo'<table border="0" cellpadding="1" cellspacing="1">
 	 if ($pic_enable and basename($_SERVER['PATH_TRANSLATED']) != 'admin.php') echo '<td class="smheading" align="center" width="50">Pics</td>';
 echo '</tr>';
 
-$sql_rank = "SELECT g.name AS gamename, r.rank, r.prevrank, r.matches, r.gid, r.pid FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE r.gid = g.id AND r.pid = '$pid';";
+$sql_rank = "SELECT g.name AS gamename, r.rank, r.prevrank, r.matches, r.gid, r.pid FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE r.gid = g.id AND r.pid = '$pid' AND r.year = '0';";
 $q_rank = mysql_query($sql_rank) or die(mysql_error());
 while ($r_rank = mysql_fetch_array($q_rank)) {
-	$r_no = small_query("SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE gid= '${r_rank['gid']}' and rank > ". get_dp($r_rank['rank']) ."9");
+	$r_no = small_query("SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE year = '0' AND gid= '${r_rank['gid']}' and rank > ". get_dp($r_rank['rank']) ."9");
 	echo'<tr>
 				<td class="grey" align="center">'.RankImageOrText($r_rank['pid'], $name, $r_no['no'], $r_rank['gid'], $r_rank['gamename'], false, '%IT%').'</td>
 		<td class="grey" align="center">'.$r_rank['gamename'].'</td>

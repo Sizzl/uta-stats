@@ -16,15 +16,29 @@
 global $t_rank, $t_match, $t_pinfo, $t_player, $t_games;// fetch table globals.
 global $htmlcp;
 
-$sql_rgame = "SELECT DISTINCT(p.gid), g.name FROM ".(isset($t_player) ? $t_player : "uts_player")." AS p, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE p.gid = g.id ORDER BY g.name ASC";
-$q_rgame = mysql_query($sql_rgame) or die(mysql_error());
-while ($r_rgame = mysql_fetch_array($q_rgame)) {
+// Adding year filters --// Timo 13/02/21
+$rank_year = 0;
+if (isset($_GET['year']) && strlen($_GET['year'])==4 && is_numeric($_GET['year']))
+	$rank_year = intval(my_addslashes($_GET['year']));
 
-	  echo'
+if ($rank_year == 0)
+	$sql_rgame = "SELECT DISTINCT(p.gid), g.name FROM ".(isset($t_player) ? $t_player : "uts_player")." AS p, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE p.gid = g.id ORDER BY g.name ASC"; // -- original unfiltered by year
+else
+{
+	// Work out what game types were played in the year provided; this is quite a slow query, need to work out a better way to do this... Perhaps ignore uts_player?
+	$rank_time_start = $rank_year."0101000000";
+	$rank_time_end   = $rank_year."1231235959"; 
+	$sql_rgame = "SELECT DISTINCT(p.gid), ".(isset($t_games) ? $t_games : "uts_games").".name FROM ".(isset($t_match) ? $t_match : "uts_match")." as m INNER JOIN ".(isset($t_player) ? $t_player : "uts_player")." AS p ON p.matchid = m.id, ".(isset($t_games) ? $t_games : "uts_games")." WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' AND ".(isset($t_games) ? $t_games : "uts_games").".id = p.gid ORDER BY p.gid"; // slow, need to fix this
+}
+$q_rgame = mysql_query($sql_rgame) or die(mysql_error());
+while ($r_rgame = mysql_fetch_array($q_rgame))
+{
+
+	echo'
 	  <table class="box" border="0" cellpadding="1" cellspacing="1">
 	  <tbody>
 	  <tr>
-		<td class="heading" colspan="4" align="center">Top 10 '.$r_rgame['name'].' Players</td>
+		<td class="heading" colspan="4" align="center">Top 10 '.$r_rgame['name'].' Players - '.($rank_year == 0 ? "Of All Time" : $rank_year).'</td>
 	  </tr>
 	  <tr>
 		<td class="smheading" align="center" width="75">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>
@@ -34,45 +48,44 @@ while ($r_rgame = mysql_fetch_array($q_rgame)) {
 	  </tr>
 	  ';
 
-		$ranking = 0;
+	$ranking = 0;
+	// Modifications to rank by country --// Idea by brajan  20/07/05 : Timo. <--
+	if (isset($_GET['cfilter']))
+	{
+		if (strlen($_GET['cfilter'])==2)
+		  	$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.year = '".$rank_year."' AND r.pid = pi.id AND r.gid =  '$r_rgame[gid]' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
+	}
+	else	
+		$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.year = '".$rank_year."' AND r.pid = pi.id AND r.gid =  '$r_rgame[gid]' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
+	// end modifications -->
 
-		// Modifications to rank by country --// Idea by brajan  20/07/05 : Timo. <--
-		if ($_GET['cfilter'])
-		{
-			if (strlen($_GET['cfilter'])==2)
-			  	$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.pid = pi.id AND r.gid =  '$r_rgame[gid]' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
-		}
-		else	
-		  	$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.pid = pi.id AND r.gid =  '$r_rgame[gid]' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
-		// end modifications -->
-		$q_rplayer = mysql_query($sql_rplayer) or die(mysql_error());
-		while ($r_rplayer = mysql_fetch_array($q_rplayer)) {
-
-			$ranking++;
-			$myurl = urlencode($r_rplayer[name]);
-
-		  echo'
+	$q_rplayer = mysql_query($sql_rplayer) or die(mysql_error());
+	while ($r_rplayer = mysql_fetch_array($q_rplayer))
+	{
+		$ranking++;
+		$myurl = urlencode($r_rplayer[name]);
+	  echo'
 		  <tr>
 			<td class="grey" align="center">'.$ranking.'</td>
 			<td nowrap class="dark" align="left">';
-		// Modifications to rank by country --// Idea by brajan  20/07/05 : Timo.
-		// hmm this wasn't working :/
-		// now it is :) // brajan 2006-09-07
-		echo '<a class="darkhuman" href="./?p='.$_GET['p'];
-		echo '&cfilter='.$r_rplayer[country];
-		echo '">'.FlagImage($r_rplayer[country]).'</a> &nbsp; ';
-		echo '<a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer[pid].'">';
-		echo htmlentities($r_rplayer[name],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']).'</a></td>';
-		// end modifications -->
-		echo '
+	// Modifications to rank by country --// Idea by brajan  20/07/05 : Timo.
+	// hmm this wasn't working :/
+	// now it is :) // brajan 2006-09-07
+	echo '<a class="darkhuman" href="./?p='.$_GET['p'];
+	echo '&cfilter='.$r_rplayer[country];
+	echo '">'.FlagImage($r_rplayer[country]).'</a> &nbsp; ';
+	echo '<a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer[pid].'">';
+	echo htmlentities($r_rplayer[name],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']).'</a></td>';
+	// end modifications -->
+	echo '
 			<td class="dark" align="center">'.get_dp($r_rplayer[rank]).'</td>
 			<td class="grey" align="center">'.$r_rplayer[matches].'</td>
 		  </tr>';
-ob_flush();
+		ob_flush();
 	}
 	echo'
 	  <tr>
-		<td class="smheading" align="center" colspan="4"><a href="./?p=ext_rank&amp;gid='.$r_rgame[gid].'&cfilter='.addslashes($_GET['cfilter']).'">Click Here To See All The Rankings<a/></td>
+		<td class="smheading" align="center" colspan="4"><a href="./?p=ext_rank&amp;gid='.$r_rgame[gid].(isset($_GET['cfilter']) ? '&cfilter='.addslashes($_GET['cfilter']) : '').($rank_year == 0 ? '' : '&year='.$rank_year).'">Click Here To See All The Rankings<a/></td>
 	  </tr>
 	  </tbody></table><br>';
 }
