@@ -144,9 +144,9 @@ if (strpos($real_gamename, 'Assault') !== false) {
 		
 	// Assault Events
 	$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 3);
-	$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 1);
+	$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0.5);
 	$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 3);
-	$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 1);
+	$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0.5);
 	row();
 	
 	// Penalty Assault Attacking events
