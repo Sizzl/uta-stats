@@ -254,24 +254,8 @@ while ($r_pid = mysql_fetch_array($q_pids)) {
 		$t_points += rcalc(get_dp($t_points), -0.15, false); // < 300 mins
 	}
 
-
-	if (strpos($gamename, 'Assault') !== false)
-		$rank_nrank = $assault_sum + $frags_sum;	
-	else
-	{
-		// TO DO
-
-		if ($gamename == "Capture the Flag" || $gamename == "Capture the Flag (insta)")
-			$rank_nrank = $rank_ctf+$rank_fpos-$rank_fneg;
-		elseif ($gamename == "Domination" || $gamename == "Domination (insta)")
-			$rank_nrank = $rank_dom+$rank_fpos-$rank_fneg;
-		elseif ($gamename == "JailBreak" || $gamename == "JailBreak (insta)")
-			$rank_nrank = $rank_jb+$rank_fpos-$rank_fneg;
-		else
-			$rank_nrank = $rank_fpos-$rank_fneg;
-	}
-
-
+	$rank_nrank = $t_points; 
+	
 	$rank_gametime = $gametime;
 	$rank_matches = $r_cnt['matches'];
 
