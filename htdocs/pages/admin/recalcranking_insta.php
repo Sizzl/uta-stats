@@ -126,7 +126,7 @@ else
 echo'</tr>';
 
 
-foreach ($rank_year as &$rank_years) {
+foreach ($rank_years as $rank_year) {
 	if ($rank_year == 0)
 	{
 		$rank_time_start = "0";
@@ -176,7 +176,7 @@ foreach ($rank_year as &$rank_years) {
 				SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
 				SUM(p.gametime) AS gametime, COUNT(m.id) AS matches
 				FROM ".(isset($t_player) ? $t_player : "uts_player")." p inner join ".(isset($t_match) ? $t_match : "uts_match")." m on p.matchid = m.id
-				WHERE p.pid = '".$pid."' and p.gid = '".$gid."';");
+				WHERE p.pid = '".$pid."' and p.gid = '".$gid."' AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."';");
 		
 				
 			$ass_att = $r_cnt['ass_att']; 
@@ -192,6 +192,7 @@ foreach ($rank_year as &$rank_years) {
 				INNER JOIN ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." o ON stats.objid = o.id
 				WHERE p.id = $pid 
 				and m.gid = $gid
+				AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
 				and stats.def_teamsize >= 2 
 				and stats.att_teamsize >= 2
 				group by def_teamsize, att_teamsize Order by def_teamsize DESC, att_teamsize DESC";
