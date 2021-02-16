@@ -93,17 +93,23 @@ if (isset($results['year']))
 	}
 }
 
-if($results['reset'] == 'Yes'){ // truncate table ONLY if selected
 echo'<tr>
 	<td class="smheading" align="left" width="200">Deleting rankings</td>';
+
+if($results['reset'] == 'Yes'){ // truncate table ONLY if selected
+
+	
 	if ($calc_rank_year == -1)
 		mysql_query("TRUNCATE uts_rank;") or die(mysql_error());	
 	else
 		mysql_query("DELETE FROM uts_rank WHERE year = '".$calc_rank_year."';") or die(mysql_error());	
 
-}
 	echo'<td class="grey" align="left" width="400">Done</td>';
-
+}
+else
+{
+	echo'<td class="grey" align="left" width="400">Skipped</td>';
+}
 echo'</tr>
 <tr>
 	<td class="smheading" align="left">Recalculating Rankings:</td>';

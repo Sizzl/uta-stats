@@ -83,6 +83,7 @@ echo '
 		echo '<li><a href="admin.php?key='. urlencode($adminkey) .'&amp;action=editgames">Add/Edit Game Names</a></li>';
 		echo '<li><a href="admin.php?key='. urlencode($adminkey) .'&amp;action=editgamestype">Add/Edit Game Types</a></li>';
 		echo '<li><a href="admin.php?key='. urlencode($adminkey) .'&amp;action=recalcranking">Recalculate Rankings</a> &nbsp; (<a href="admin.php?key='. urlencode($adminkey) .'&amp;action=recalcranking&amp;piddebug=true">Player debugging</a>)</li>';
+		echo '<li><a href="admin.php?key='. urlencode($adminkey) .'&amp;action=recalcranking_insta">Instant Re-ranking</a> &nbsp; (<a href="admin.php?key='. urlencode($adminkey) .'&amp;action=recalcranking_insta&amp;piddebug=true">Player debugging</a>)</li>';
 		echo '<br>';
 		echo '<li><a href="admin.php?key='. urlencode($adminkey) .'&amp;action=emptydb">Empty the database</a></li>';
 		echo '<li><a href="./import.php?'.str_rand().'='.str_rand().'">Import Logs</a></li>';
