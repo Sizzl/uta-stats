@@ -9,6 +9,8 @@ sitemap.xml
 sitemap.xml.gz
 
 # Logs / temp
+htdocs/pages/home.php
+htdocs/pages/totals.php
 *.log
 *.tmp
 *.cache
