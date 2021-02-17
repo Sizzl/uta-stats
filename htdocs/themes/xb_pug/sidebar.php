@@ -7,9 +7,10 @@ echo '
                   <ul id="css3menu">
                     <li class="topfirst"><a href="./?&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Summary">Summary</a></li>
                     <li class="topitem"><a href="./?p=utapugrecent&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="PUG Matches"><span>PUG Matches</span></a></li>
-                    <li class="topitem"><a href="./?p=utapugsummary&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="PUG Totals"><span>PUG Totals</span></a></li>
+                    <!-- <li class="topitem"><a href="./?p=utapugsummary&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="PUG Totals"><span>PUG Totals</span></a></li> -->
                     <li class="topitem"><a href="./?p=utarecordzone&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Assault Records"><span>Assault Records</span></a></li>
-                    <li class="topitem"><a href="./?p=rank&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Player Rankings"><span>Rankings</span></a></li>
+                    <li class="topitem"><a href="./?p=rank&amp;year='.date("Y").'&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Player Rankings"><span>Rankings ('.date("Y").')</span></a></li>
+                    <li class="topitem"><a href="./?p=rank&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Player Rankings"><span>Rankings (All)</span></a></li>
                     <li class="topitem"><a href="./?p=servers&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Servers"><span>Servers</span></a></li>
                     <li class="topitem"><a href="./?p=maps&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Map Statistics"><span>Map Stats</span></a></li>
                     <li class="topitem"><a href="./?p=totals&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Totals"><span>Totals</span></a></li>
