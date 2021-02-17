@@ -32,25 +32,6 @@ else
 // 	$sql_rgame = "SELECT DISTINCT(p.gid), LEFT(m.time,4) AS year, ".(isset($t_games) ? $t_games : "uts_games").".name FROM ".(isset($t_match) ? $t_match : "uts_match")." as m INNER JOIN ".(isset($t_player) ? $t_player : "uts_player")." AS p ON p.matchid = m.id, ".(isset($t_games) ? $t_games : "uts_games")." WHERE year = '".$rank_year."' AND ".(isset($t_games) ? $t_games : "uts_games").".id = p.gid ORDER BY p.gid"; // slow, need to fix this
 }
 
-// $q_ryears = mysql_query("SELECT LEFT(time,4) AS year FROM `".(isset($t_match) ? $t_match : "uts_match")."` GROUP BY year;") or die (mysql_error());
-$q_ryears = mysql_query("SELECT year FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE year > '0' GROUP BY year ORDER BY year ASC;") or die(mysql_error());
-echo "<div class=\"pages\"><b>Filter Rank:<br />[<a class=\"pages\" href=\"?p=rank&amp\">All-Time</a>";
-$i = 1;
-while ($r_ryear = mysql_Fetch_array($q_ryears))
-{
-	$i++;
-	if ($i==5)
-	{
-		echo "]<br />[";
-		echo "<a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
-		$i = 0;
-	}
-	else
-		echo " / <a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
-}
-echo "]</b></div><br>";
-
-
 $q_rgame = mysql_query($sql_rgame) or die(mysql_error());
 while ($r_rgame = mysql_fetch_array($q_rgame))
 {
@@ -112,4 +93,22 @@ while ($r_rgame = mysql_fetch_array($q_rgame))
 	  </tr>
 	  </tbody></table><br>';
 }
+// $q_ryears = mysql_query("SELECT LEFT(time,4) AS year FROM `".(isset($t_match) ? $t_match : "uts_match")."` GROUP BY year;") or die (mysql_error());
+$q_ryears = mysql_query("SELECT year FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE year > '0' GROUP BY year ORDER BY year ASC;") or die(mysql_error());
+echo "<div class=\"pages\"><b>Filter Rankings:<br /><br />[<a class=\"pages\" href=\"?p=rank&amp\">All-Time</a>";
+$i = 0;
+while ($r_ryear = mysql_Fetch_array($q_ryears))
+{
+	$i++;
+	if ($i==6)
+	{
+		echo "]<br />[";
+		echo "<a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
+		$i = 0;
+	}
+	else
+		echo " / <a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
+}
+echo "]</b></div><br />";
+
 ?>
