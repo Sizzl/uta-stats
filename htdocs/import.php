@@ -8,6 +8,7 @@ function add_info($name, $value) {
 @set_time_limit(0);
 if (isset($_REQUEST['rememberkey'])) setcookie('uts_importkey', $_REQUEST['key'], time()+60*60*24*30*365);
 if (isset($_COOKIE['uts_importkey'])) $adminkey = $_COOKIE['uts_importkey'];
+global $rank_year;
 require ("includes/uta_functions.php");
 require ("includes/functions.php");
 require ("includes/config.php");
@@ -500,10 +501,10 @@ while (false !== ($filename = readdir($logdir)))
 		else
 			$gametime = utdate($gametime);
 
-		$duplicate = small_count("SELECT id FROM uts_match WHERE serverip='$serverip:$serverport' AND time='$gametime' AND mapfile='$mapfile'");	
-		if ($duplicate > 0)	
+		$duplicate = small_count("SELECT id FROM uts_match WHERE serverip='$serverip:$serverport' AND time='$gametime' AND mapfile='$mapfile'");
+		if ($duplicate > 0 && !isset($processdupes))	
 		{			
-			echo "ERROR: DUBLICATE LOGFILE \nServer: $servername\nGame: $gametime \nIgnoring...";
+			echo "ERROR: DUPLICATE LOGFILE \nServer: $servername\nGame: $gametime \nIgnoring...";
 			if ($html) echo '</td></tr>';							
 			// Delete Temp MySQL Table
 			$droptable = "DROP TABLE uts_temp_$uid";
@@ -518,7 +519,11 @@ while (false !== ($filename = readdir($logdir)))
 			unlink($filename);
 			continue;
 		}
-
+		elseif ($duplicate > 0 && isset($processdupes))
+		{
+			$dupe_m = small_query("SELECT id FROM uts_match WHERE serverip='$serverip:$serverport' AND time='$gametime' AND mapfile='$mapfile'");
+			$matchid = $dupe_m["id"];	
+		}
 
 		// Lazy Hack for unknown gametypes
 		$unknowngt = substr("$mapfile", 0, 3);	// Gets first 3 characters
@@ -646,18 +651,24 @@ while (false !== ($filename = readdir($logdir)))
 		}
 							
 			
+		if ($duplicate > 0 && isset($processdupes))
+		{
+			echo "Forced dupe processing (ID: $matchid)\n";
+		}
+		else
+		{
 		
-		// Insert Server Info Into Database
-		$sql_serverinfo = "INSERT INTO uts_match (id, time, servername, serverip, gamename, gid, gametime, mutators, insta, tournament,	teamgame, mapname, mapfile, serverinfo, gameinfo, frags, kills, suicides, teamkills, deaths,
-		t0, t1, t2, t3, t0score, t1score, t2score, t3score)
-		VALUES ('', '$gametime', '$servername', '$serverip:$serverport', '$gamename', '$gid', '$servergametime', '$mutators', '$gameinsta', '$tournament',
-		'$teamgame', '$mapname', '$mapfile', '$serverinfo', '$gameinfo', '$s_frags', '$s_kills', '$s_suicides', '$s_teamkills', '$s_deaths',
-		$t0info, $t1info, $t2info, $t3info, $t0score, $t1score, $t2score, $t3score);";
+			// Insert Server Info Into Database
+			$sql_serverinfo = "INSERT INTO uts_match (id, time, servername, serverip, gamename, gid, gametime, mutators, insta, tournament,	teamgame, mapname, mapfile, serverinfo, gameinfo, frags, kills, suicides, teamkills, deaths,
+				t0, t1, t2, t3, t0score, t1score, t2score, t3score)
+				VALUES ('', '$gametime', '$servername', '$serverip:$serverport', '$gamename', '$gid', '$servergametime', '$mutators', '$gameinsta', '$tournament',
+				'$teamgame', '$mapname', '$mapfile', '$serverinfo', '$gameinfo', '$s_frags', '$s_kills', '$s_suicides', '$s_teamkills', '$s_deaths',
+				$t0info, $t1info, $t2info, $t3info, $t0score, $t1score, $t2score, $t3score);";
 
-		$q_serverinfo = mysql_query($sql_serverinfo) or die(mysql_error());
-		$matchid = mysql_insert_id();			// Get our Match ID
-
-		echo "Yes (ID: $matchid)\n";
+			$q_serverinfo = mysql_query($sql_serverinfo) or die(mysql_error());
+			$matchid = mysql_insert_id();			// Get our Match ID
+			echo "Yes (ID: $matchid)\n";
+		}
 		if ($html) echo '</td></tr>';
 		
 		
@@ -790,8 +801,10 @@ while (false !== ($filename = readdir($logdir)))
 
 			// Do the rankings
 			unset($rank_year); // all time ranking
+			echo "(R: All";
 			include("import/import_ranking.php");
 			$rank_year = intval(substr($gametime,0,4));
+			echo "; ".$rank_year.") ";
 			include("import/import_ranking.php"); // repeat just for this year
 
 			if ($playerbanned)
@@ -1006,6 +1019,13 @@ if ($import_utdc_download_enable)
 }
 
 echo "\n\n";
+
+// Debugging output
+//  Use $results['debugpid'] to define a player ID to debug output for
+if ($html) echo '<pre>';
+echo $s_debug;
+if ($html) echo '</pre>';
+
 if ($html) echo '<br /><table border="0" cellpadding="1" cellspacing="2" width="720"><tr><td class="heading" align="center" colspan="2">';
 echo "Import Script Completed\n";
 if ($html) echo '</td></tr></table>';

@@ -35,7 +35,7 @@ $i++;
 
 $options['vars'][$i]['name'] = 'year';
 $options['vars'][$i]['type'] = 'static';
-$options['vars'][$i]['options'] = 'All + Annual|All-time only|'.join("|",range(date("Y"),2005));
+$options['vars'][$i]['options'] = 'All + Annual|All-time only|Annual only|'.join("|",range(date("Y"),2005));
 $options['vars'][$i]['prompt'] = 'Select Year to Recalculate';
 $options['vars'][$i]['caption'] = 'Ranking Year:';
 $i++;
@@ -95,6 +95,11 @@ if (isset($results['year']))
 			array_push($rank_years,0);
 		}
 	}
+	elseif (substr($results['year'],0,3)=="Ann")
+	{
+		$calc_rank_year = -2;
+		$rank_years = range(2005,date("Y"));
+	}
 	else
 	{
 		$rank_years = array($results['year']);
@@ -114,6 +119,8 @@ echo'<tr>
 if($results['reset'] == 'Yes'){ // truncate table ONLY if selected
 	if ($calc_rank_year == -1)
 		mysql_query("TRUNCATE uts_rank;") or die(mysql_error());	
+	elseif ($calc_rank_year == -2)
+		mysql_query("DELETE FROM uts_rank WHERE year > '0';") or die(mysql_error());	
 	else
 		mysql_query("DELETE FROM uts_rank WHERE year = '".$calc_rank_year."';") or die(mysql_error());	
 

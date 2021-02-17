@@ -1,6 +1,4 @@
 <?php 
-//ini_set('memory_limit','100M');
-
 if (!isset($gamename))
 	die("This shouldn't be run outside of existing code.");
 
@@ -86,6 +84,7 @@ if (strpos($gamename, 'Assault') !== false)
 			and m.gid = $gid
 			and stats.def_teamsize >= 2 
 			and stats.att_teamsize >= 2
+			m.time >= '$rank_time_start' AND m.time <= '$rank_time_end'
 			group by def_teamsize, att_teamsize";			
 
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
