@@ -45,6 +45,10 @@ global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
 global $admin_ip, $pic_enable, $htmlcp;
 $pid = isset($pid) ? addslashes($pid) : addslashes($_GET['pid']);
 $gid = isset($gid) ? addslashes($gid) : addslashes($_GET['gid']);
+$rank_year = 0;
+
+if (isset($_GET['year']) && strlen($_GET['year'])==4 && is_numeric($_GET['year']))
+	$rank_year = intval(my_addslashes($_GET['year']));
 
 $r_info = small_query("SELECT name, country, banned FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." WHERE id = '$pid'");
 if (!$r_info) {
@@ -86,7 +90,7 @@ $r_cnt = small_query("SELECT
 		SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
 		SUM(p.gametime) AS gametime 
 		FROM ".(isset($t_player) ? $t_player : "uts_player")." p inner join ".(isset($t_match) ? $t_match : "uts_match")." m on p.matchid = m.id
-		WHERE p.pid = $pid and p.gid = $gid");
+		WHERE ".($rank_year > 0 ? "m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959' AND" : "")." p.pid = $pid and p.gid = $gid");
 
 echo'
 <table border="0" cellpadding="1" cellspacing="2" width="720">
@@ -118,8 +122,14 @@ if (strpos($real_gamename, 'Assault') !== false) {
 	
 	$ass_att = $r_cnt['ass_att']; 
 	$ass_def = $r_cnt['ass_def'];
-	$ratio_att = intval($ass_att * 100 / ($ass_att + $ass_def));	
-	$ratio_def = 100 - $ratio_att;
+	$ratio_def = $ratio_att = 0;
+
+	if ($ass_att > 0 || $ass_def > 0)
+	{
+		$ratio_att = intval($ass_att * 100 / ($ass_att + $ass_def));	
+		$ratio_def = 100 - $ratio_att;
+	}
+
 	
 	$t_points_prev = $t_points;
 	
@@ -130,12 +140,11 @@ if (strpos($real_gamename, 'Assault') !== false) {
 			inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." p on p.id = stats.pid 
 			INNER JOIN ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." o ON stats.objid = o.id
 			WHERE p.id = $pid 
-			and m.gid = $gid
+			AND m.gid = $gid ".($rank_year > 0 ? "AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'" : "")."
 			and stats.def_teamsize >= 2 
 			and stats.att_teamsize >= 2
 			group by def_teamsize, att_teamsize Order by def_teamsize DESC, att_teamsize DESC";
 			$q_obj = mysql_query($objsql);
-			
 			while ($r_obj = mysql_fetch_array($q_obj)) 
 			{
 				$t_points += row('Assault Objectives '.$r_obj[att_teamsize].'v'.$r_obj[def_teamsize], $r_obj[objs], ($r_obj[def_teamsize]*2 - $r_obj[att_teamsize])*10.0/6.0, true, $r_obj[ratedobjs]);
@@ -247,7 +256,10 @@ echo '<tr>	<td class="dark">Total</td>
 		</tr>';
 
 $gametime = ceil($r_cnt['gametime'] / 60);
-$t_points = $t_points / $gametime;
+if ($gametime > 0)
+	$t_points = $t_points / $gametime;
+else
+	$t_points = 0;
 echo '<tr>	<td class="dark">Divided by game minutes</td>
 				<td class="grey2" align="center">'.$gametime.'</td>
 				<td class="grey2" align="center"></td>
@@ -256,7 +268,7 @@ echo '<tr>	<td class="dark">Divided by game minutes</td>
 		</tr>';
 		
 IF ($gametime < 10) {
-	$t_points += row('Penalty for playing < 10 minutes', get_dp($t_points), 0, false);
+	$t_points += row('Penalty for playing < 10 minutes', get_dp($t_points), -0.95, false);
 }
 
 IF ($gametime >= 10 && $gametime < 30) {

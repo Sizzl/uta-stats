@@ -261,7 +261,7 @@ foreach ($rank_years as $rank_year) {
 
 		// Add steep penalties for newcomers (or fake nicks)
 		if ($gametime < 10) {
-			$t_points += rcalc(get_dp($t_points), 0, false); // < 10 mins
+			$t_points += rcalc(get_dp($t_points), -0.95, false); // < 10 mins
 		}
 		elseif ($gametime >= 10 && $gametime < 30) {
 			$t_points += rcalc(get_dp($t_points), -0.90, false); // < 30 mins
