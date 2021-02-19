@@ -27,7 +27,7 @@ if (strpos($gamename, 'Assault') !== false)
 		SUM(p.spree_double*0.5) AS spree_double, SUM(p.spree_multi*1) AS spree_multi, SUM(p.spree_ultra*2) AS spree_ultra, SUM(p.spree_monster*4) AS spree_monster,
 		SUM(p.spree_kill*0.5) AS spree_kill, SUM(p.spree_rampage*1.0) AS spree_rampage, SUM(p.spree_dom*1.5) AS spree_dom, SUM(p.spree_uns*2) AS spree_uns, SUM(p.spree_god*3) AS spree_god,
 		SUM(p.ass_assist*2.0) AS ass_assist, SUM(p.ass_h_launch*3.0) AS ass_h_launch, SUM(p.ass_r_launch*3.0) AS ass_r_launch, 
-		SUM(p.ass_h_launched*1.0) AS ass_h_launched, SUM(p.ass_r_launched*1.0) AS ass_r_launched,
+		SUM(p.ass_h_launched*0.5) AS ass_h_launched, SUM(p.ass_r_launched*0.5) AS ass_r_launched,
 		SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
 		SUM(p.gametime) AS gametime 
 		FROM uts_player p inner join uts_match m on p.matchid = m.id

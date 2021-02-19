@@ -95,7 +95,7 @@ $r_cnt = small_query("SELECT
 echo'
 <table border="0" cellpadding="1" cellspacing="2" width="720">
   <tbody><tr>
-    <td class="heading" align="center"><a href="?pinfo&amp;pid='.$pid.'">'.FlagImage($r_info['country'], false).' '.htmlentities($playername,ENT_SUBSTITUTE,$htmlcp).'</a>\'s '. htmlentities($r_game['name']) .' ranking explained </td>
+    <td class="heading" align="center"><a href="?pinfo&amp;pid='.$pid.'">'.FlagImage($r_info['country'], false).' '.htmlentities($playername,ENT_SUBSTITUTE,$htmlcp).'</a>\'s '.($rank_year > 0 ? $rank_year." ": "").htmlentities($r_game['name']).' ranking explained </td>
   </tr>
 </tbody></table>';
 echo '<br /><br />';
