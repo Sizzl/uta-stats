@@ -48,7 +48,7 @@ if (strlen($gtitle)==0) {
 	else
 		$gtitle = "(".$year_first." - ".$year_last.")";
 }
-echo'<table border="0" cellpadding="0" cellspacing="0">
+echo'<table class="box" border="0" cellpadding="0" cellspacing="0"'.(isset($t_width) ? " width=\"".$t_width."\"" : "").'>
   <tbody>
   <tr>
     <td class="heading" align="center" colspan="39">Hourly and Monthly Activity '.$gtitle.'</td>

@@ -77,7 +77,7 @@ while ($r_rgame = mysql_fetch_array($q_rgame))
 	echo '<a class="darkhuman" href="./?p='.$_GET['p'];
 	echo '&cfilter='.$r_rplayer[country];
 	echo '">'.FlagImage($r_rplayer[country]).'</a> &nbsp; ';
-	echo '<a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer[pid].'">';
+	echo '<a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer[pid].($rank_year > 0 ? "&amp;year=".$rank_year : "").'">';
 	echo htmlentities($r_rplayer[name],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']).'</a></td>';
 	// end modifications -->
 	echo '

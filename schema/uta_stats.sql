@@ -47,6 +47,11 @@ CREATE TABLE IF NOT EXISTS `uts_games` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ;
 
+-- AUTO_INCREMENT for table `uts_games`
+--
+ALTER TABLE `uts_games`
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 -- 
 -- Dumping data for table `uts_games`
 -- 
@@ -92,6 +97,12 @@ CREATE TABLE IF NOT EXISTS `uts_gamestype` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ;
 
+--
+-- AUTO_INCREMENT for table `uts_gamestype`
+--
+ALTER TABLE `uts_gamestype`
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 -- --------------------------------------------------------
 
 -- 
@@ -127,6 +138,12 @@ CREATE TABLE IF NOT EXISTS `uts_killsmatrix` (
   `kills` tinyint(3) unsigned NOT NULL default '0',
   KEY `matchid` (`matchid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- INDEX for table `uts_killsmatrix`
+--
+ALTER TABLE `uts_killsmatrix`
+  ADD INDEX `matchid` (`matchid`);
 
 -- --------------------------------------------------------
 
@@ -193,6 +210,24 @@ CREATE TABLE IF NOT EXISTS `uts_match` (
   KEY `mapfile` (`mapfile`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ;
 
+--
+-- AUTO_INCREMENT for table `uts_match`
+--
+ALTER TABLE `uts_match`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- INDEX for table `uts_match`
+--
+ALTER TABLE `uts_match`
+  ADD INDEX `matchcode` (`matchcode`);
+
+ALTER TABLE `uts_match`
+  ADD INDEX `mapfile` (`mapfile`);
+
+ALTER TABLE `uts_match`
+  ADD INDEX `serverip` (`serverip`);
+
 -- --------------------------------------------------------
 
 -- 
@@ -212,6 +247,19 @@ CREATE TABLE IF NOT EXISTS `uts_pinfo` (
   PRIMARY KEY  (`id`),
   KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ;
+
+--
+-- AUTO_INCREMENT for table `uts_pinfo`
+--
+ALTER TABLE `uts_pinfo`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- INDEX for table `uts_pinfo`
+--
+ALTER TABLE `uts_pinfo`
+  ADD INDEX `name` (`name`);
+
 
 -- --------------------------------------------------------
 
@@ -291,6 +339,33 @@ CREATE TABLE IF NOT EXISTS `uts_player` (
   KEY `gid` (`gid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ;
 
+--
+-- AUTO_INCREMENT for table `uts_player`
+--
+ALTER TABLE `uts_player`
+  MODIFY `id` mediumint(10) NOT NULL AUTO_INCREMENT;
+
+--
+-- INDEX for table `uts_player`
+--
+ALTER TABLE `uts_player`
+  ADD INDEX `name` (`name`);
+
+ALTER TABLE `uts_player`
+  ADD INDEX `match_team` (`matchid`,`team`);
+
+ALTER TABLE `uts_player`
+  ADD INDEX `pid` (`pid`);
+
+ALTER TABLE `uts_player`
+  ADD INDEX `gid` (`gid`);
+
+ALTER TABLE `uts_player`
+  ADD INDEX `playerid` (`playerid`);
+
+ALTER TABLE `uts_player`
+  ADD INDEX `ip` (`ip`);
+
 -- --------------------------------------------------------
 
 -- 
@@ -317,6 +392,12 @@ CREATE TABLE IF NOT EXISTS `uts_rank` (
   KEY `gamename` (`gid`,`rank`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ;
 
+--
+-- AUTO_INCREMENT for table `uts_rank`
+--
+ALTER TABLE `uts_rank`
+  MODIFY `id` mediumint(10) NOT NULL AUTO_INCREMENT;
+
 -- --------------------------------------------------------
 
 -- 
@@ -340,6 +421,12 @@ CREATE TABLE IF NOT EXISTS `uts_smartass_objs` (
   PRIMARY KEY  (`id`),
   KEY `matchid` (`mapfile`,`objnum`,`rating`)
 ) ENGINE=MyISAM AUTO_INCREMENT=878 DEFAULT CHARSET=latin1 AUTO_INCREMENT=878 ;
+
+--
+-- AUTO_INCREMENT for table `uts_smartass_objs`
+--
+ALTER TABLE `uts_smartass_objs`
+  MODIFY `id` mediumint(10) NOT NULL AUTO_INCREMENT;
 
 -- 
 -- Dumping data for table `uts_smartass_objs`
@@ -1511,6 +1598,30 @@ CREATE TABLE IF NOT EXISTS `uts_smartass_objstats` (
   KEY `playerid` (`playerid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 ;
 
+--
+-- AUTO_INCREMENT for table `uts_smartass_objstats`
+--
+ALTER TABLE `uts_smartass_objstats`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- INDEX for table `uts_smartass_objstats`
+--
+ALTER TABLE `uts_smartass_objstats`
+  ADD INDEX `matchid` (`matchid`);
+
+ALTER TABLE `uts_smartass_objstats`
+  ADD INDEX `matchid` (`matchid`);
+
+ALTER TABLE `uts_smartass_objstats`
+  ADD INDEX `pid` (`pid`);
+  
+ALTER TABLE `uts_smartass_objstats`
+  ADD INDEX `playerid` (`playerid`);
+
+ALTER TABLE `uts_smartass_objstats`
+  ADD INDEX `match_pid` (`matchid`,`pid`);
+
 -- --------------------------------------------------------
 
 -- 
@@ -1531,6 +1642,18 @@ CREATE TABLE IF NOT EXISTS `uts_weapons` (
   PRIMARY KEY  (`id`),
   KEY `name` (`name`(20))
 ) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
+
+--
+-- AUTO_INCREMENT for table `uts_weapons`
+--
+ALTER TABLE `uts_weapons`
+  MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- INDEX for table `uts_weapons`
+--
+ALTER TABLE `uts_weapons`
+  ADD INDEX `name` (`name`);
 
 -- 
 -- Dumping data for table `uts_weapons`
@@ -1577,6 +1700,7 @@ DROP TABLE IF EXISTS `uts_weaponstats`;
 CREATE TABLE IF NOT EXISTS `uts_weaponstats` (
   `matchid` mediumint(8) unsigned NOT NULL default '0',
   `pid` int(10) unsigned NOT NULL default '0',
+  `year` smallint(4) unsigned NOT NULL default '0',
   `weapon` tinyint(3) unsigned NOT NULL default '0',
   `kills` mediumint(8) unsigned NOT NULL default '0',
   `shots` int(10) unsigned NOT NULL default '0',
@@ -1585,6 +1709,15 @@ CREATE TABLE IF NOT EXISTS `uts_weaponstats` (
   `acc` float unsigned NOT NULL default '0',
   KEY `full` (`matchid`,`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- INDEX for table `uts_weaponstats`
+--
+ALTER TABLE `uts_weaponstats`
+  ADD INDEX `pid_weap_year` (`pid`, `weapon`, `year`);
+
+ALTER TABLE `uts_weaponstats`
+  ADD INDEX `pid_match` (`pid`, `matchid`);
 
 -- --------------------------------------------------------
 

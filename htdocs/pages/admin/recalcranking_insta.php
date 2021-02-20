@@ -168,157 +168,172 @@ foreach ($rank_years as $rank_year) {
 		
 		$r_game = small_query("SELECT name, gamename FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '$gid'");
 		$real_gamename = $r_game['gamename'];
-		$t_points = 0;
-
-		if (strpos($real_gamename, 'Assault') !== false) {
-			$r_cnt = small_query("SELECT
-				SUM(p.frags) AS frags, SUM(p.deaths) AS deaths, SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills,
-				SUM(p.flag_taken) AS flag_taken, SUM(p.flag_pickedup) AS flag_pickedup, SUM(p.flag_return) AS flag_return, SUM(p.flag_capture) AS flag_capture, SUM(p.flag_cover) AS flag_cover,
-				SUM(p.flag_seal) AS flag_seal, SUM(p.flag_assist) AS flag_assist, SUM(p.flag_kill) AS flag_kill,
-				SUM(p.dom_cp) AS dom_cp, SUM(p.ass_obj) AS ass_obj,
-				SUM(p.ass_assist) AS ass_assist, SUM(p.ass_h_launch) AS ass_h_launch, SUM(p.ass_r_launch) AS ass_r_launch, 
-				SUM(p.ass_h_launched) AS ass_h_launched, SUM(p.ass_r_launched) AS ass_r_launched,
-				SUM(p.spree_double) AS spree_double, SUM(p.spree_multi) AS spree_multi, SUM(p.spree_ultra) AS spree_ultra, SUM(p.spree_monster) AS spree_monster,
-				SUM(p.spree_kill) AS spree_kill, SUM(p.spree_rampage) AS spree_rampage, SUM(p.spree_dom) AS spree_dom, SUM(p.spree_uns) AS spree_uns, SUM(p.spree_god) AS spree_god,
-				SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
-				SUM(p.gametime) AS gametime, COUNT(m.id) AS matches
-				FROM ".(isset($t_player) ? $t_player : "uts_player")." p inner join ".(isset($t_match) ? $t_match : "uts_match")." m on p.matchid = m.id
-				WHERE p.pid = '".$pid."' and p.gid = '".$gid."' AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."';");
-		
-				
-			$ass_att = $r_cnt['ass_att']; 
-			$ass_def = $r_cnt['ass_def'];
-			$ratio_att = intval($ass_att * 100 / ($ass_att + $ass_def));	
-			$ratio_def = 100 - $ratio_att;
-			$t_points_prev = $t_points;
-			// Assault Objectives
-			$objsql = "SELECT COUNT(stats.id) as objs, SUM(o.rating) as ratedobjs, def_teamsize, att_teamsize
-				from ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats")." stats 
-				inner join ".(isset($t_match) ? $t_match : "uts_match")." m on stats.matchid = m.id 
-				inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." p on p.id = stats.pid 
-				INNER JOIN ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." o ON stats.objid = o.id
-				WHERE p.id = $pid 
-				and m.gid = $gid
-				AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
-				and stats.def_teamsize >= 2 
-				and stats.att_teamsize >= 2
-				group by def_teamsize, att_teamsize Order by def_teamsize DESC, att_teamsize DESC";
-				$q_obj = mysql_query($objsql);
-				
-				while ($r_obj = mysql_fetch_array($q_obj)) 
-				{
-					// Objectives
-					$t_points += rcalc($r_obj[objs], ($r_obj[def_teamsize]*2 - $r_obj[att_teamsize])*10.0/6.0, true, $r_obj[ratedobjs]);
-				}
-				$t_points += rcalc($r_cnt['ass_assist'], 2); // Objective Assists
-
-				// Assault Events
-				$t_points += rcalc($r_cnt['ass_h_launch'], 3); // Hammer launchee
-				$t_points += rcalc($r_cnt['ass_h_launched'], 0.5); // Hammer launcher
-				$t_points += rcalc($r_cnt['ass_r_launch'], 3); // Rocket launchee
-				$t_points += rcalc($r_cnt['ass_r_launched'], 0.5); // Rocket launcher
-
-				$assault_sum = $t_points-$t_points_prev;
-				if ($ratio_att > 50)
-				{
-					$penaltyfactor = ($ass_att + $ass_def) / (2 * $ass_att) - 1; 
-					if ($penaltyfactor <= 0)
-						$t_points += rcalc($assault_sum, get_dp($penaltyfactor), false); // % Attacking penalty
-				}
-				
-				// Frag Events
-				$t_points_prev = $t_points;	
-				$t_points += rcalc($r_cnt['frags'], 0.5); // Frags
-				$t_points += rcalc($r_cnt['deaths'], -1.0/6.0); // Deaths
-				//$t_points += rcalc($r_cnt['suicides'], -0.25 ); // Suicides
-				$t_points += rcalc($r_cnt['teamkills'], -2); // TK's
-				$t_points += rcalc($r_cnt['spree_double'], 0.5); // DKs
-				$t_points += rcalc($r_cnt['spree_multi'], 1); // MuKs
-				$t_points += rcalc($r_cnt['spree_ultra'], 2); // UKs
-				$t_points += rcalc($r_cnt['spree_monster'], 4); // MoKs
-				$t_points += rcalc($r_cnt['spree_kill'], 0.5); // KS
-				$t_points += rcalc($r_cnt['spree_rampage'], 1.0); // Ramp
-				$t_points += rcalc($r_cnt['spree_dom'], 1.5); // Dom
-				$t_points += rcalc($r_cnt['spree_uns'], 2);  // Uns
-				$t_points += rcalc($r_cnt['spree_god'], 3); // God
-
-				$frags_sum = $t_points - $t_points_prev;
-				if ($ratio_def > 50)
-				{
-					$penaltyfactor = ($ass_att + $ass_def) / (2 * $ass_def) - 1; 
-					if ($penaltyfactor <= 0)
-						$t_points += rcalc($frags_sum, get_dp($penaltyfactor), false);	// Frag penalty for % defending		
-				}
-		}
-		else
+		$s_lastmatches = "SELECT m.id AS matchId FROM ".(isset($t_player) ? $t_player : "uts_player")." p 
+						INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." m ON p.matchid = m.id
+						WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
+						AND p.pid = '".$pid."' and p.gid = '".$gid."' ORDER BY m.id DESC LIMIT 0,2";
+		$m_obj = mysql_query($s_lastmatches);
+		$matches = array();
+		while ($m_lms = mysql_fetch_array($m_obj))
 		{
-			// TO-DO - other game type instant recalc
+			array_push($matches,$m_lms['matchId']);
 		}
+		// if (count($matches) > 0)
+		sort($matches);
 
-
-		$gametime = ceil($r_cnt['gametime'] / 60);
-		$t_points = $t_points / $gametime;
-
-		// Add steep penalties for newcomers (or fake nicks)
-		if ($gametime < 10) {
-			$t_points += rcalc(get_dp($t_points), -0.95, false); // < 10 mins
-		}
-		elseif ($gametime >= 10 && $gametime < 30) {
-			$t_points += rcalc(get_dp($t_points), -0.90, false); // < 30 mins
-		}
-		elseif ($gametime >= 30 && $gametime < 50) {
-			$t_points += rcalc(get_dp($t_points), -0.80, false); // < 50 mins
-		}
-		elseif ($gametime >= 50 && $gametime < 100) {
-			$t_points += rcalc(get_dp($t_points), -0.5, false); // < 100 mins
-		}
-		elseif ($gametime >= 100 && $gametime < 200) {
-			$t_points += rcalc(get_dp($t_points), -0.3, false); // < 200 mins
-		}
-		elseif ($gametime >= 200 && $gametime < 300) {
-			$t_points += rcalc(get_dp($t_points), -0.15, false); // < 300 mins
-		}
-
-		$rank_nrank = $t_points; 
-
-		$rank_gametime = $gametime;
-		$rank_matches = $r_cnt['matches'];
-
-		// Select rank record
-		$r_rankp = small_query("SELECT id, time, rank, matches FROM uts_rank WHERE pid = '$pid' AND gid = '$gid' AND year = '".$rank_year."'");
-		$rank_id = $r_rankp[id];
-		$rank_crank = $r_rankp[rank];
-
-
-		if ($rank_id == NULL) {
-			// Add new rank record if one does not exist
-			mysql_query("INSERT INTO uts_rank SET time = '$r_gametime', pid = '$pid', gid = '$gid', rank = '0', matches = '0', year = '".$rank_year."';") or die(mysql_error());
-			$rank_id = mysql_insert_id();
-			$rank_crank = 0;
-		} 
-
-		// Work out effective rank given
-		$eff_rank = $rank_nrank-$rank_crank;
-		if ($rank_year <= 0)
+		foreach($matches as $matchid)
 		{
-			$sql = "UPDATE uts_player SET rank = '".$eff_rank."' WHERE id = '$playerecordid';";
+			$t_points = 0;
+			if (strpos($real_gamename, 'Assault') !== false) {
+				$r_cnt = small_query("SELECT
+					SUM(p.frags) AS frags, SUM(p.deaths) AS deaths, SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills,
+					SUM(p.flag_taken) AS flag_taken, SUM(p.flag_pickedup) AS flag_pickedup, SUM(p.flag_return) AS flag_return, SUM(p.flag_capture) AS flag_capture, SUM(p.flag_cover) AS flag_cover,
+					SUM(p.flag_seal) AS flag_seal, SUM(p.flag_assist) AS flag_assist, SUM(p.flag_kill) AS flag_kill,
+					SUM(p.dom_cp) AS dom_cp, SUM(p.ass_obj) AS ass_obj,
+					SUM(p.ass_assist) AS ass_assist, SUM(p.ass_h_launch) AS ass_h_launch, SUM(p.ass_r_launch) AS ass_r_launch, 
+					SUM(p.ass_h_launched) AS ass_h_launched, SUM(p.ass_r_launched) AS ass_r_launched,
+					SUM(p.spree_double) AS spree_double, SUM(p.spree_multi) AS spree_multi, SUM(p.spree_ultra) AS spree_ultra, SUM(p.spree_monster) AS spree_monster,
+					SUM(p.spree_kill) AS spree_kill, SUM(p.spree_rampage) AS spree_rampage, SUM(p.spree_dom) AS spree_dom, SUM(p.spree_uns) AS spree_uns, SUM(p.spree_god) AS spree_god,
+					SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
+					SUM(p.gametime) AS gametime, COUNT(m.id) AS matches
+					FROM ".(isset($t_player) ? $t_player : "uts_player")." p inner join ".(isset($t_match) ? $t_match : "uts_match")." m on p.matchid = m.id
+					WHERE p.pid = '".$pid."' and p.gid = '".$gid."' AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' AND m.id <= '".$matchid."';");
+			
+				$ass_att = $r_cnt['ass_att']; 
+				$ass_def = $r_cnt['ass_def'];
+				$ratio_att = intval($ass_att * 100 / ($ass_att + $ass_def));	
+				$ratio_def = 100 - $ratio_att;
+				$t_points_prev = $t_points;
+				// Assault Objectives
+				$objsql = "SELECT COUNT(stats.id) as objs, SUM(o.rating) as ratedobjs, def_teamsize, att_teamsize
+					from ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats")." stats 
+					inner join ".(isset($t_match) ? $t_match : "uts_match")." m on stats.matchid = m.id 
+					inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." p on p.id = stats.pid 
+					INNER JOIN ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." o ON stats.objid = o.id
+					WHERE p.id = $pid 
+						and m.gid = $gid
+					AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
+					AND m.id <= '".$matchid."'
+					and stats.def_teamsize >= 2 
+					and stats.att_teamsize >= 2
+					group by def_teamsize, att_teamsize Order by def_teamsize DESC, att_teamsize DESC";
+					$q_obj = mysql_query($objsql);
+					
+					while ($r_obj = mysql_fetch_array($q_obj)) 
+					{
+						// Objectives
+						$t_points += rcalc($r_obj[objs], ($r_obj[def_teamsize]*2 - $r_obj[att_teamsize])*10.0/6.0, true, $r_obj[ratedobjs]);
+					}
+					$t_points += rcalc($r_cnt['ass_assist'], 2); // Objective Assists
+	
+					// Assault Events
+					$t_points += rcalc($r_cnt['ass_h_launch'], 3); // Hammer launchee
+					$t_points += rcalc($r_cnt['ass_h_launched'], 0.5); // Hammer launcher
+					$t_points += rcalc($r_cnt['ass_r_launch'], 3); // Rocket launchee
+					$t_points += rcalc($r_cnt['ass_r_launched'], 0.5); // Rocket launcher
+	
+					$assault_sum = $t_points-$t_points_prev;
+					if ($ratio_att > 50)
+					{
+						$penaltyfactor = ($ass_att + $ass_def) / (2 * $ass_att) - 1; 
+						if ($penaltyfactor <= 0)
+							$t_points += rcalc($assault_sum, get_dp($penaltyfactor), false); // % Attacking penalty
+					}
+				
+					// Frag Events
+					$t_points_prev = $t_points;	
+					$t_points += rcalc($r_cnt['frags'], 0.5); // Frags
+					$t_points += rcalc($r_cnt['deaths'], -1.0/6.0); // Deaths
+					// $t_points += rcalc($r_cnt['suicides'], -0.25 ); // Suicides
+					$t_points += rcalc($r_cnt['teamkills'], -2); // TK's
+					$t_points += rcalc($r_cnt['spree_double'], 0.5); // DKs
+					$t_points += rcalc($r_cnt['spree_multi'], 1); // MuKs
+					$t_points += rcalc($r_cnt['spree_ultra'], 2); // UKs
+					$t_points += rcalc($r_cnt['spree_monster'], 4); // MoKs
+					$t_points += rcalc($r_cnt['spree_kill'], 0.5); // KS
+					$t_points += rcalc($r_cnt['spree_rampage'], 1.0); // Ramp
+					$t_points += rcalc($r_cnt['spree_dom'], 1.5); // Dom
+					$t_points += rcalc($r_cnt['spree_uns'], 2);  // Uns
+					$t_points += rcalc($r_cnt['spree_god'], 3); // God
+	
+					$frags_sum = $t_points - $t_points_prev;
+					if ($ratio_def > 50)
+					{
+						$penaltyfactor = ($ass_att + $ass_def) / (2 * $ass_def) - 1; 
+						if ($penaltyfactor <= 0)
+							$t_points += rcalc($frags_sum, get_dp($penaltyfactor), false);	// Frag penalty for % defending		
+					}
+			}
+			else
+			{
+				// TO-DO - other game type instant recalc
+			}
+	
+
+			$gametime = ceil($r_cnt['gametime'] / 60);
+			$t_points = $t_points / $gametime;
+
+			// Add steep penalties for newcomers (or fake nicks)
+			if ($gametime < 10) {
+				$t_points += rcalc(get_dp($t_points), -0.95, false); // < 10 mins
+			}
+			elseif ($gametime >= 10 && $gametime < 30) {
+				$t_points += rcalc(get_dp($t_points), -0.90, false); // < 30 mins
+			}
+			elseif ($gametime >= 30 && $gametime < 50) {
+				$t_points += rcalc(get_dp($t_points), -0.80, false); // < 50 mins
+			}
+			elseif ($gametime >= 50 && $gametime < 100) {
+				$t_points += rcalc(get_dp($t_points), -0.5, false); // < 100 mins
+			}
+			elseif ($gametime >= 100 && $gametime < 200) {
+				$t_points += rcalc(get_dp($t_points), -0.3, false); // < 200 mins
+			}
+			elseif ($gametime >= 200 && $gametime < 300) {
+				$t_points += rcalc(get_dp($t_points), -0.15, false); // < 300 mins
+			}
+
+			$rank_nrank = $t_points; 
+
+			$rank_gametime = $gametime;
+			$rank_matches = $r_cnt['matches'];
+
+			// Select rank record
+			$r_rankp = small_query("SELECT id, time, rank, matches FROM uts_rank WHERE pid = '$pid' AND gid = '$gid' AND year = '".$rank_year."'");
+			$rank_id = $r_rankp[id];
+			$rank_crank = $r_rankp[rank];
+
+
+			if ($rank_id == NULL) {
+				// Add new rank record if one does not exist
+				mysql_query("INSERT INTO uts_rank SET time = '$r_gametime', pid = '$pid', gid = '$gid', rank = '0', matches = '0', year = '".$rank_year."';") or die(mysql_error());
+				$rank_id = mysql_insert_id();
+				$rank_crank = 0;
+			} 
+
+			// Work out effective rank given
+			$eff_rank = $rank_nrank-$rank_crank;
+			if ($rank_year <= 0)
+			{
+				$sql = "UPDATE uts_player SET rank = '".$eff_rank."' WHERE id = '$playerecordid';";
+				if (isset($results['debugpid']) && $results['debugpid'] == $pid)
+					$s_debug = $s_debug."-----\r\ntotals-3-add_eff_rank_pts:\r\n".$sql."\r\n";
+
+				mysql_query($sql) or die(mysql_error());
+			}
+			// Update the rank
+			if ($rank_crank==0)
+				$rank_crank = $rank_nrank;
+
+			$sql = "UPDATE uts_rank SET time = '".$rank_gametime."', rank = '".$rank_nrank."', prevrank = '".$rank_crank."', matches = '".$rank_matches."' WHERE id = '".$rank_id."' and year = '".$rank_year."';";
 			if (isset($results['debugpid']) && $results['debugpid'] == $pid)
-				$s_debug = $s_debug."-----\r\ntotals-3-add_eff_rank_pts:\r\n".$sql."\r\n";
+				$s_debug = $s_debug."-----\r\ntotals-4-update_rank:\r\n".$sql."\r\n";
 
 			mysql_query($sql) or die(mysql_error());
+			ob_end_flush();
+			flush();	
+			ob_flush();
 		}
-		// Update the rank
-		if ($rank_crank==0)
-			$rank_crank = $rank_nrank;
-
-		$sql = "UPDATE uts_rank SET time = '".$rank_gametime."', rank = '".$rank_nrank."', prevrank = '".$rank_crank."', matches = '".$rank_matches."' WHERE id = '".$rank_id."' and year = '".$rank_year."';";
-		if (isset($results['debugpid']) && $results['debugpid'] == $pid)
-			$s_debug = $s_debug."-----\r\ntotals-4-update_rank:\r\n".$sql."\r\n";
-
-		mysql_query($sql) or die(mysql_error());
-		ob_end_flush();
-		flush();	
-		ob_flush();
 	}
 
 	echo 'Done</td>

@@ -22,7 +22,7 @@ $cfilter_url = (!empty($_GET['cfilter'])) ? "&amp;cfilter=".$_GET['cfilter'] : "
 // Cratos
 if (empty($filter) && empty($sort)) $firstLoad = true; else $firstLoad = false;
 
-IF (empty($filter)) {
+if (empty($filter)) {
 	$filter = "name";
 }
 
@@ -54,17 +54,17 @@ $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
 $ppageurl = "<a class=\"pages\" href=\"./?p=players&amp;filter=$filter&amp;sort=$sort&amp;page=$ppage".$cfilter_url."\">[Previous]</a>";
-IF ($ppage < "0") { $ppageurl = "[Previous]"; }
+if ($ppage < "0") { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
 $npageurl = "<a class=\"pages\" href=\"./?p=players&amp;filter=$filter&amp;sort=$sort&amp;page=$npage".$cfilter_url."\">[Next]</a>";
-IF ($npage >= "$ecount") { $npageurl = "[Next]"; }
+if ($npage >= "$ecount") { $npageurl = "[Next]"; }
 
 $fpageurl = "<a class=\"pages\" href=\"./?p=players&amp;filter=$filter&amp;sort=$sort&amp;page=$fpage".$cfilter_url."\">[First]</a>";
-IF ($cpage == "0") { $fpageurl = "[First]"; }
+if ($cpage == "0") { $fpageurl = "[First]"; }
 
 $lpageurl = "<a class=\"pages\" href=\"./?p=players&amp;filter=$filter&amp;sort=$sort&amp;page=$lpage".$cfilter_url."\">[Last]</a>";
-IF ($cpage == "$lpage") { $lpageurl = "[Last]"; }
+if ($cpage == "$lpage") { $lpageurl = "[Last]"; }
 
 // Show information
 echo'

@@ -93,7 +93,16 @@ while ($r_weapons = mysql_fetch_array($q_weapons)) {
 	$weapons[$pid][$weaponid][$r_weapons['type']] = $r_weapons['value'];
 }
 
-
+// Check rank_year
+if (!isset($rank_year) || $rank_year == 0)
+{
+	// Fetch this from the match gametime
+	$r_match = small_query("SELECT LEFT(time,4) AS matchtime FROM uts_match WHERE id = '".$matchid."';");
+	if (isset($r_match))
+		$rank_year = substr($r_match['matchtime'],0,4);
+	else
+		$rank_year = date("Y");
+}
 // Finally write the weapon statistics for this match
 $s_weapons = array();
 foreach($weapons as $playerid => $weapon) {
@@ -102,6 +111,7 @@ foreach($weapons as $playerid => $weapon) {
 		mysql_query("	INSERT	
 							INTO		uts_weaponstats
 							SET		matchid = '$matchid',
+									year = '$rank_year',
 										pid = '$playerid',
 										weapon = '$weaponid',
 										kills = '${infos['weap_kills']}',
@@ -128,35 +138,33 @@ foreach($weapons as $playerid => $weapon) {
 }
 
 
-// Update the player's weapon statistics (matchid 0);
+// Update the player's all-time and annual weapon statistics (matchid 0, year = 0 or X);
+if ($rank_year > 0)
+	$rank_years = array(0,$rank_year);
+else
+	$rank_years = array(0);
+
 foreach($weapons as $playerid => $weapon) {
 	foreach($weapon as $weaponid => $infos) {
 		if ($infos['weap_kills'] == 0 and $infos['weap_shotcount'] == 0) continue;
-		// Check whether a record for this player and weapon already
-		// exists
-		$r_pstat = small_query("	SELECT	pid
-											FROM		uts_weaponstats
-											WHERE		matchid = '0'
-												AND	pid = '$playerid'
-												AND	weapon = '$weaponid'");
-		// No -> create
-		if (!$r_pstat) {
-			mysql_query("	INSERT	
-								INTO		uts_weaponstats
-								SET		matchid = '0',
-											pid = '$playerid',
-											weapon = '$weaponid',
-											kills = '${infos['weap_kills']}',
-											shots = '${infos['weap_shotcount']}',
-											hits= '${infos['weap_hitcount']}',
-											damage = '${infos['weap_damagegiven']}',
-											acc = '". round($infos['weap_accuracy'], 2) ."';") or die(mysql_error());
-		// Yes -> update 
-		} else {
-			// Get match count for acc
-			// $r_accstat = small_query("SELECT COUNT(pid) FROM uts_weaponstats WHERE matchid <> '0' AND pid = '$playerid' AND weapon = '$weaponid'");
-			/*
-			mysql_query("	UPDATE	uts_weaponstats
+		foreach ($rank_years as $year)
+		{
+			// Check whether a record for this player and weapon already exists
+			$r_pstat = small_query("SELECT pid FROM uts_weaponstats WHERE matchid = '0' AND pid = '$playerid' AND weapon = '$weaponid' AND year = '$year';");
+
+			// No -> create (TO-DO: annual insertion based on existing data)
+			if (!$r_pstat) {
+				mysql_query("INSERT INTO uts_weaponstats
+						SET matchid = '0', pid = '$playerid', weapon = '$weaponid',
+							kills = '${infos['weap_kills']}', shots = '${infos['weap_shotcount']}',
+							hits= '${infos['weap_hitcount']}', damage = '${infos['weap_damagegiven']}',
+							acc = '". round($infos['weap_accuracy'], 2) ."', year = '$year';") or die(mysql_error());
+			// Yes -> update 
+			} else {
+				// Get match count for acc
+				// $r_accstat = small_query("SELECT COUNT(pid) FROM uts_weaponstats WHERE matchid <> '0' AND pid = '$playerid' AND weapon = '$weaponid'");
+				/*
+				mysql_query("	UPDATE	uts_weaponstats
 								SET		weapon = '$weaponid',
 											kills = kills + '${infos['weap_kills']}',
 											shots = shots + '${infos['weap_shotcount']}',
@@ -166,16 +174,13 @@ foreach($weapons as $playerid => $weapon) {
 								WHERE		matchid = '0'
 									AND	pid = '$playerid'
 									AND	weapon = '$weaponid';") or die(mysql_error()); */
-			mysql_query("	UPDATE	uts_weaponstats
-								SET		weapon = '$weaponid',
-											kills = kills + '${infos['weap_kills']}',
-											shots = shots + '${infos['weap_shotcount']}',
-											hits = hits + '${infos['weap_hitcount']}',
-											damage = damage + '${infos['weap_damagegiven']}',
-											acc = ((100/(shots + '${infos['weap_shotcount']}'))*(hits + '${infos['weap_hitcount']}'))
-								WHERE		matchid = '0'
-									AND	pid = '$playerid'
-									AND	weapon = '$weaponid';") or die(mysql_error());
+				mysql_query("UPDATE uts_weaponstats
+						SET weapon = '$weaponid', kills = kills + '${infos['weap_kills']}',
+						shots = shots + '${infos['weap_shotcount']}', hits = hits + '${infos['weap_hitcount']}',
+						damage = damage + '${infos['weap_damagegiven']}',
+						acc = ((100/(shots + '${infos['weap_shotcount']}'))*(hits + '${infos['weap_hitcount']}'))
+						WHERE matchid = '0' AND pid = '$playerid' AND weapon = '$weaponid' AND year = '$year';") or die(mysql_error());
+			}
 		}
 	}
 }

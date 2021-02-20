@@ -131,7 +131,7 @@ while ($r_rplayer = mysql_fetch_array($q_rplayer))
 	if ($rank_year > 0)
 		echo '&year='.$rank_year;
 	echo '">'.FlagImage($r_rplayer[country]).'</a>';
-	echo ' <a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer['pid'].'">'.htmlentities($r_rplayer[name],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']) .'</a></td>';
+	echo ' <a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer['pid'].($rank_year > 0 ? "&amp;year=".$rank_year : "").'">'.htmlentities($r_rplayer[name],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']) .'</a></td>';
 	// End Modifications to rank by country -->
 	echo '
 		<td class="dark" align="center">'.get_dp($r_rplayer[rank]).'</td>
