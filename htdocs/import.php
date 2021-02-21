@@ -9,6 +9,7 @@ function add_info($name, $value) {
 if (isset($_REQUEST['rememberkey'])) setcookie('uts_importkey', $_REQUEST['key'], time()+60*60*24*30*365);
 if (isset($_COOKIE['uts_importkey'])) $adminkey = $_COOKIE['uts_importkey'];
 global $rank_year;
+
 require ("includes/uta_functions.php");
 require ("includes/functions.php");
 require ("includes/config.php");
@@ -19,15 +20,11 @@ $compatible_actor_versions = array('beta 4.0', 'beta 4.1', 'beta 4.2', '0.4.0', 
 if (isset($_REQUEST['key'])) $adminkey = $_REQUEST['key'];
 if (!isset($adminkey)) $adminkey = '';
 
-// Debugging mode?
-$debug = isset($_REQUEST['debug']) ? $_REQUEST['debug'] : false;
-
-// Output HTML?
-$html = isset($_REQUEST['html']) ? $_REQUEST['html'] : true;
-
 // Were running from the command line (cron-jobs)
 if (php_sapi_name() == 'cli' or !isset($_SERVER['SERVER_PORT']) or !$_SERVER['SERVER_PORT'])
 {
+	// Running from command line, translate args into REQUEST
+	parse_str(implode('&', array_slice($argv, 1)), $_REQUEST);
 	// No password needed when in cli mode.
 	$adminkey = $import_adminkey;
 	// There is no time limit when running the cli. And no page to reload :)
@@ -38,7 +35,17 @@ if (php_sapi_name() == 'cli' or !isset($_SERVER['SERVER_PORT']) or !$_SERVER['SE
 	if (!empty($import_homedir)) chdir($import_homedir);
 }
 
-if ($html) {
+// Debugging mode?
+$debug = isset($_REQUEST['debug']) ? $_REQUEST['debug'] : false;
+$debugpid = isset($_REQUEST['debugpid']) ? $_REQUEST['debugpid'] : 0;
+if (is_numeric($debugpid) && $debugpid > 0)
+	$results['debugpid'] = $debugpid;
+
+// Output HTML?
+$html = isset($_REQUEST['html']) ? $_REQUEST['html'] : true;
+
+if ($html)
+{
 	if (!isset($_GET['noheader']))
 	{
 	        if ($_SESSION["themelocation"]) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
@@ -69,7 +76,8 @@ if (empty($import_adminkey))
 {
 	if ($html) echo'<tr><td class="smheading" align="left" width="150">Error:</td><td class="grey" align="left">';
 	echo "\$import_adminkey not set in config.php!\n";
-	if ($html) {
+	if ($html)
+	{
 		echo '</td></tr></table>';
 		include("includes/footer.php");
 	}
@@ -654,6 +662,19 @@ while (false !== ($filename = readdir($logdir)))
 		if ($duplicate > 0 && isset($processdupes))
 		{
 			echo "Forced dupe processing (ID: $matchid)\n";
+
+			// Clear weapon stats
+			echo " - Clearing weapon stats (ID: $matchid)\n";
+			mysql_query("DELETE FROM uts_weaponstats WHERE matchid = '".$matchid."';") or die(mysql_error());
+			// Clear kills matrix
+			echo " - Clearing kills matrix (ID: $matchid)\n";
+			mysql_query("DELETE FROM uts_killsmatrix WHERE matchid = '".$matchid."';") or die(mysql_error());
+			// Clear player matrix
+			echo " - Clearing player matrix (ID: $matchid)\n";
+			mysql_query("DELETE FROM uts_player WHERE matchid = '".$matchid."';") or die(mysql_error());
+			// Clear obj stats
+			echo " - Clearing AS objective stats (ID: $matchid)\n";
+			mysql_query("DELETE FROM uts_smartass_objstats WHERE matchid = '".$matchid."';") or die(mysql_error());
 		}
 		else
 		{

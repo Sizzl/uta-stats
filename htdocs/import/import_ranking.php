@@ -5,7 +5,7 @@ if (!isset($gamename))
 if ($playerbanned)
 	return;
 
-if (!isset($rank_year) || $rank_year == 0)
+if (!isset($rank_year) || $rank_year <= 0)
 {
 	$rank_year = 0;
 	$rank_time_start = 0;
@@ -51,6 +51,9 @@ if (strpos($gamename, 'Assault') !== false)
 		$ratio_att = intval($ass_att * 100 / ($ass_att + $ass_def)); // add checks
 		$ratio_def = 100 - $ratio_att;
 	}									
+
+
+
 	// Fragging Events
 	$rank_fpos = $r_cnt[frags]+$r_cnt[spree_double]+$r_cnt[spree_multi]+$r_cnt[spree_ultra]+$r_cnt[spree_monster]+$r_cnt[spree_kill]+$r_cnt[spree_rampage]+$r_cnt[spree_dom]+$r_cnt[spree_uns]+$r_cnt[spree_god];
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
@@ -76,16 +79,16 @@ if (strpos($gamename, 'Assault') !== false)
 
 	// ObjectiveFaktor = def*2 - att				
 	$objsql = "SELECT COUNT(stats.id) as objs, SUM(o.rating) as ratedobjs, def_teamsize, att_teamsize
-			from uts_smartass_objstats stats 
-			inner join uts_match m on stats.matchid = m.id 
-			inner join uts_pinfo p on p.id = stats.pid 
+			FROM uts_smartass_objstats stats 
+			INNER join uts_match m ON stats.matchid = m.id 
+			INNER join uts_pinfo p ON p.id = stats.pid 
 			INNER JOIN uts_smartass_objs o ON stats.objid = o.id
-			where m.id <= $matchid and p.id = $pid 
-			and m.gid = $gid
-			and stats.def_teamsize >= 2 
-			and stats.att_teamsize >= 2
-			m.time >= '$rank_time_start' AND m.time <= '$rank_time_end'
-			group by def_teamsize, att_teamsize";			
+			WHERE m.id <= $matchid AND p.id = $pid 
+			AND m.gid = $gid
+			AND stats.def_teamsize >= 2 
+			AND stats.att_teamsize >= 2
+			AND m.time >= '$rank_time_start' AND m.time <= '$rank_time_end'
+			GROUP BY def_teamsize, att_teamsize";			
 
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."-----\r\n".$matchid."-2-objsql:\r\n".$objsql."\r\n";
@@ -172,26 +175,22 @@ if ($rank_gametime >= 10 && $rank_gametime < 30) {
 	$rank_nrank = $rank_nrank*.10;
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid) $s_debug = $s_debug."--\r\n".$matchid."-2f-penalty:\r\n Penalty = Rank - 90% = ".$rank_nrank."\r\n\r\n";
 }
-		
-if ($rank_gametime >= 30 && $rank_gametime < 50) {
+elseif ($rank_gametime >= 30 && $rank_gametime < 50) {
 	$rank_nrank = $rank_nrank*.20;
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."--\r\n".$matchid."-2f-penalty:\r\n Penalty = Rank - 80% = ".$rank_nrank."\r\n\r\n";
 }
-		
-if ($rank_gametime >= 50 && $rank_gametime < 100) {
+elseif ($rank_gametime >= 50 && $rank_gametime < 100) {
 	$rank_nrank = $rank_nrank*.50;
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."--\r\n".$matchid."-2f-penalty:\r\n Penalty = Rank - 50% = ".$rank_nrank."\r\n\r\n";
 }
-		
-if ($rank_gametime >= 100 && $rank_gametime < 200) {
+elseif ($rank_gametime >= 100 && $rank_gametime < 200) {
 	$rank_nrank = $rank_nrank*.70;
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."--\r\n".$matchid."-2f-penalty:\r\n Penalty = Rank - 30% = ".$rank_nrank."\r\n\r\n";
 }
-
-if ($rank_gametime >= 200 && $rank_gametime < 300) {
+elseif ($rank_gametime >= 200 && $rank_gametime < 300) {
 	$rank_nrank = $rank_nrank*.85;
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."--\r\n".$matchid."-2f-penalty:\r\n Penalty = Rank - 15% = ".$rank_nrank."\r\n\r\n";
@@ -202,11 +201,9 @@ if ($rank_gametime >= 200 && $rank_gametime < 300) {
 // Select rank record
 $r_rankp = small_query("SELECT id, time, rank, matches FROM uts_rank WHERE pid = '$pid' AND gid = '$gid' AND year = '".$rank_year."'");
 $rank_id = $r_rankp[id];
-$rank_gametime = $r_rankp[time];
-$rank_crank = $r_rankp[rank];
-$rank_matches = $r_rankp[matches];
 
-if ($rank_id == NULL) {
+if ($rank_id == NULL)
+{
 	// Add new rank record if one does not exist
 	mysql_query("INSERT INTO uts_rank SET time = '$r_gametime', pid = '$pid', gid = '$gid', rank = '0', matches = '0', year = '".$rank_year."';") or die(mysql_error());
 	$rank_id = mysql_insert_id();
@@ -214,6 +211,12 @@ if ($rank_id == NULL) {
 	$rank_crank = 0;
 	$rank_matches = 0;
 } // end IF($rank_id == NULL)
+else
+{
+	$rank_gametime = $r_rankp[time];
+	$rank_crank = $r_rankp[rank]; // current (to track previous)
+	$rank_matches = $r_rankp[matches];
+}
 // Add number of matches played
 $rank_matches = $rank_matches+1;
 
