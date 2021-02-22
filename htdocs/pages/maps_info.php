@@ -98,17 +98,17 @@ $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
 $page = my_addslashes($_GET['p']);
-$ppageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;page=$ppage\">[Previous]</a>";
+$ppageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$ppage\">[Previous]</a>";
 if ($ppage < "0") { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
-$npageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;page=$npage\">[Next]</a>";
+$npageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$npage\">[Next]</a>";
 if ($npage >= "$ecount") { $npageurl = "[Next]"; }
 
-$fpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;page=$fpage\">[First]</a>";
+$fpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$fpage\">[First]</a>";
 if ($cpage == "0") { $fpageurl = "[First]"; }
 
-$lpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;page=$lpage\">[Last]</a>";
+$lpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$lpage\">[Last]</a>";
 if ($cpage == "$lpage") { $lpageurl = "[Last]"; }
 
 echo'
@@ -135,7 +135,7 @@ while ($r_maps = mysql_fetch_array($q_maps))
 	  $r_gametime = GetMinutes($r_maps['gametime']);
 	  $r_servername = get_short_servername($r_maps['servername']);
 
-	  $map_pcount = small_count("SELECT id FROM uts_player WHERE matchid = $r_maps['id']");
+	  $map_pcount = small_count("SELECT id FROM uts_player WHERE matchid = ".$r_maps['id'].";");
 
 	  echo'
 	  <tr>
