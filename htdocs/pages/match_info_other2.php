@@ -1,6 +1,9 @@
 <?php 
 // include_once('pages/match_info_killsmatrix.php');
 
+if (!isset($rank_year))
+    $rank_year = 0;
+
 include('includes/weaponstats.php');
 weaponstats($mid, 0, 'Weapons Summary - '.$ass_att.' Attacking');
 
@@ -35,10 +38,9 @@ while ($r_pickups = zero_out(mysql_fetch_array($q_pickups))) {
 
 	  $r_pname = $r_pickups[name];
 	  $myurl = urlencode($r_pname);
-
 	  echo'
 	  <tr>
-		<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups[pid].'">'.FormatPlayerName($r_pickups[country], $r_pickups[pid], $r_pname, $gid, $gamename).'</a></td>
+		<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups[pid].'">'.FormatPlayerName($r_pickups[country], $r_pickups[pid], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
 		<td class="'.$class.'" align="center">'.$r_pickups[pu_pads].'</td>
 		<td class="'.$class.'" align="center">'.$r_pickups[pu_armour].'</td>
 		<td class="'.$class.'" align="center">'.$r_pickups[pu_keg].'</td>
@@ -80,7 +82,7 @@ IF($mid2 == NULL) {
 
 		  echo'
 		  <tr>
-			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups[pid].'">'.FormatPlayerName($r_pickups[country], $r_pickups[pid], $r_pname, $gid, $gamename).'</a></td>
+			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups[pid].'">'.FormatPlayerName($r_pickups[country], $r_pickups[pid], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
 			<td class="'.$class.'" align="center">'.$r_pickups[pu_pads].'</td>
 			<td class="'.$class.'" align="center">'.$r_pickups[pu_armour].'</td>
 			<td class="'.$class.'" align="center">'.$r_pickups[pu_keg].'</td>
@@ -110,9 +112,9 @@ echo'</tbody></table>
   </tr>
   <tr>
     <td class="dark" align="center" width="150">First Blood</td>
-    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood[country], $sql_firstblood[firstblood], $sql_firstblood[name], $gid, $gamename).'</td>
+    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood[country], $sql_firstblood[firstblood], $sql_firstblood[name], $gid, $gamename,true,null,$rank_year).'</td>
     <td class="dark" align="center" width="150">First Blood</td>
-    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood2[country], $sql_firstblood[firstblood], $sql_firstblood2[name], $gid, $gamename).'</td>
+    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood2[country], $sql_firstblood[firstblood], $sql_firstblood2[name], $gid, $gamename,true,null,$rank_year).'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Double Kills</td>

@@ -340,14 +340,14 @@ function ordinal($number) {
 }
 
 
-function RankImageOrText($pid, $name, $rank, $gid, $gamename, $mini = true, $format = NULL, $rankchange = NULL) {
+function RankImageOrText($pid, $name, $rank, $gid, $gamename, $mini = true, $format = NULL, $rankchange = NULL, $year = 0) {
 
 	$points = 0;
 	if (empty($rank)) {
-		$r_rank = small_query("SELECT rank FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE pid = '$pid' AND gid= '$gid';");
+		$r_rank = small_query("SELECT rank FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE pid = '$pid' AND gid= '$gid' AND year= '$year';");
 		if (!$r_rank) return('');
 		$points = get_dp($r_rank['rank']);
-		$r_no = small_query("SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE gid = '$gid' and rank > ${points}9");
+		$r_no = small_query("SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE gid = '$gid' AND year= '$year' AND rank > ${points}9");
 		$rank = $r_no['no'];
 	}
 
@@ -379,14 +379,14 @@ function RankImageOrText($pid, $name, $rank, $gid, $gamename, $mini = true, $for
 }
 
 
-function FormatPlayerName($country, $pid, $name, $gid = NULL, $gamename = NULL, $mini = true, $rankchange = NULL) {
+function FormatPlayerName($country, $pid, $name, $gid = NULL, $gamename = NULL, $mini = true, $rankchange = NULL, $year = 0) {
 	static $cache = array();
 	global $htmlcp;
 	if (isset($cache[$pid])) return($cache[$pid]);
 
 	$ranktext = false;
 	if (!empty($gamename) and $pid !== NULL) {
-		$ranktext = RankImageOrText($pid, $name, 0, $gid, $gamename, $mini, NULL, $rankchange);
+		$ranktext = RankImageOrText($pid, $name, 0, $gid, $gamename, $mini, NULL, $rankchange, $year);
 	}
 	$ret = '';
 	if (!empty($country)) $ret .= FlagImage($country, $mini) ." ";

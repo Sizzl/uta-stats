@@ -45,6 +45,7 @@ echo'
 
 $matchinfo = small_query("SELECT m.time, m.servername, g.name AS gamename, m.gamename AS real_gamename, m.gid, m.mapname, m.mapfile, m.serverinfo, m.gameinfo, m.mutators, m.serverip FROM uts_match AS m, uts_games AS g WHERE m.gid = g.id AND m.id = $mid");
 $matchdate = mdate($matchinfo[time]);
+$rank_year = substr($matchinfo[time],0,4);
 $gamename = $matchinfo[gamename];
 $real_gamename = $matchinfo[real_gamename];
 $gid = $matchinfo[gid];
