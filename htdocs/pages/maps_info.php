@@ -2,22 +2,25 @@
 
 // include ("includes/uta_functions.php");
 
-$map = $_GET[map];
-$realmap = my_addslashes($_GET[map]);
+$map = $_GET['map'];
+$realmap = my_addslashes($_GET['map']);
 $realmap = "".$realmap.".unr";
 
 $map_matches = small_query("SELECT COUNT(id) as matchcount, SUM(t0score+t1score+t2score+t3score) AS gamescore,
 SUM(gametime) AS gametime, SUM(kills) AS kills, SUM(suicides) AS suicides FROM uts_match WHERE mapfile = '$realmap'");
 $map_last = small_query("SELECT time FROM uts_match WHERE mapfile = '$realmap' ORDER BY time DESC LIMIT 0,1");
 
-$map_tottime = GetMinutes($map_matches[gametime]);
-$map_lastmatch = mdate($map_last[time]);
+$map_tottime = GetMinutes($map_matches['gametime']);
+$map_lastmatch = mdate($map_last['time']);
 
 // Map pic code
 $mappic = strtolower("images/maps/".$map.".jpg");
 
-if (file_exists($mappic)) {
-} else {
+if (file_exists($mappic))
+{
+}
+else
+{
    $mappic = ("images/maps/blank.jpg");
 }
 
@@ -76,37 +79,37 @@ $mcount = small_count("SELECT id FROM uts_match WHERE mapfile = '$realmap' GROUP
 $ecount = $mcount/25;
 $ecount2 = number_format($ecount, 0, '.', '');
 
-IF($ecount > $ecount2) {
+if ($ecount > $ecount2)
+{
 	$ecount2 = $ecount2+1;
 }
 
 $fpage = 0;
-IF($ecount < 1) { $lpage = 0; }
+if ($ecount < 1) { $lpage = 0; }
 else { $lpage = $ecount2-1; }
 
 $cpage = $_GET["page"];
 $qpage = $cpage*25;
 
-IF ($cpage == "") { $cpage = "0"; }
+if ($cpage == "") { $cpage = "0"; }
 
 $tfpage = $cpage+1;
 $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
-$ppageurl = "<a class=\"pages\" href=\"./?p=servers&amp;page=$ppage\">[Previous]</a>";
-IF ($ppage < "0") { $ppageurl = "[Previous]"; }
+$page = my_addslashes($_GET['p']);
+$ppageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;page=$ppage\">[Previous]</a>";
+if ($ppage < "0") { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
-$npageurl = "<a class=\"pages\" href=\"./?p=servers&amp;page=$npage\">[Next]</a>";
-IF ($npage >= "$ecount") { $npageurl = "[Next]"; }
+$npageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;page=$npage\">[Next]</a>";
+if ($npage >= "$ecount") { $npageurl = "[Next]"; }
 
-$fpageurl = "<a class=\"pages\" href=\"./?p=servers&amp;page=$fpage\">[First]</a>";
-IF ($cpage == "0") { $fpageurl = "[First]"; }
+$fpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;page=$fpage\">[First]</a>";
+if ($cpage == "0") { $fpageurl = "[First]"; }
 
-$lpageurl = "<a class=\"pages\" href=\"./?p=servers&amp;page=$lpage\">[Last]</a>";
-IF ($cpage == "$lpage") { $lpageurl = "[Last]"; }
-
-
+$lpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;page=$lpage\">[Last]</a>";
+if ($cpage == "$lpage") { $lpageurl = "[Last]"; }
 
 echo'
 <table class="box" border="0" cellpadding="1" cellspacing="1">
@@ -124,19 +127,20 @@ echo'
 $sql_maps = "SELECT m.id, m.time, g.name AS gamename, m.gametime, m.servername
 FROM uts_match AS m, uts_games AS g WHERE m.mapfile = '$realmap' AND m.gid = g.id ORDER BY time DESC LIMIT $qpage,25";
 $q_maps = mysql_query($sql_maps) or die(mysql_error());
-while ($r_maps = mysql_fetch_array($q_maps)) {
+while ($r_maps = mysql_fetch_array($q_maps))
+{
 
-	  $r_mapfile = un_ut($r_maps[mapfile]);
-	  $r_matchtime = mdate($r_maps[time]);
-	  $r_gametime = GetMinutes($r_maps[gametime]);
-	  $r_servername = get_short_servername($r_maps[servername]);
+	  $r_mapfile = un_ut($r_maps['mapfile']);
+	  $r_matchtime = mdate($r_maps['time']);
+	  $r_gametime = GetMinutes($r_maps['gametime']);
+	  $r_servername = get_short_servername($r_maps['servername']);
 
-	  $map_pcount = small_count("SELECT id FROM uts_player WHERE matchid = $r_maps[id]");
+	  $map_pcount = small_count("SELECT id FROM uts_player WHERE matchid = $r_maps['id']");
 
 	  echo'
 	  <tr>
-		<td class="dark" align="center"><a class="darkhuman" href="./?p=match&amp;mid='.$r_maps[id].'">'.$r_matchtime.'</a></td>
-		<td class="grey" align="center">'.$r_maps[gamename].'</td>
+		<td class="dark" align="center"><a class="darkhuman" href="./?p=match&amp;mid='.$r_maps['id'].'">'.$r_matchtime.'</a></td>
+		<td class="grey" align="center">'.$r_maps['gamename'].'</td>
 		<td class="grey" align="center">'.$map_pcount.'</td>
 		<td class="grey" align="center">'.$r_gametime.'</td>
 		<td nowrap class="grey" align="center">'.$r_servername.'</td>
