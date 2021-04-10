@@ -30,5 +30,5 @@
 	}
 
 	$updateasswin = "UPDATE uts_match SET ass_win = $asswin WHERE id = $matchid;";
-	mysql_query($updateasswin) or die(mysql_error());
+	mysql_query($updateasswin) or die("import_ass UPDATE ".mysql_error());
 ?>

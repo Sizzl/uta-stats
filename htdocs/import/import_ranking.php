@@ -1,4 +1,5 @@
 <?php 
+global $ftp_matchesonly;
 if (!isset($gamename))
 	die("This shouldn't be run outside of existing code.");
 
@@ -21,6 +22,10 @@ if (strpos($gamename, 'Assault') !== false)
 	// ***************************************************************************************
 	// CRATOS: New Ranking for Assault
 	// ***************************************************************************************
+        $where = "";
+        if (isset($ftp_matchesonly) && $ftp_matchesonly==true)
+                $where = " AND m.matchmode='1'";
+
 	$rank_ass = 0;
 	$sql = "SELECT
 		SUM(p.frags*0.5) AS frags, SUM(p.deaths*1.0/6.0) AS deaths, SUM(p.teamkills*2) AS teamkills,			
@@ -31,7 +36,7 @@ if (strpos($gamename, 'Assault') !== false)
 		SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
 		SUM(p.gametime) AS gametime 
 		FROM uts_player p inner join uts_match m on p.matchid = m.id
-		WHERE p.pid = '$pid' AND p.gid = '$gid' AND p.matchid <= '$matchid' AND m.time >= '$rank_time_start' AND m.time <= '$rank_time_end'";
+		WHERE p.pid = '".$pid."' AND p.gid = '".$gid."' AND p.matchid <= '".$matchid."' AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'".$where.";";
 
 	$r_cnt = small_query($sql);
 
@@ -87,7 +92,7 @@ if (strpos($gamename, 'Assault') !== false)
 			AND m.gid = $gid
 			AND stats.def_teamsize >= 2 
 			AND stats.att_teamsize >= 2
-			AND m.time >= '$rank_time_start' AND m.time <= '$rank_time_end'
+			AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' ".$where."
 			GROUP BY def_teamsize, att_teamsize";			
 
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
@@ -205,7 +210,7 @@ $rank_id = $r_rankp[id];
 if ($rank_id == NULL)
 {
 	// Add new rank record if one does not exist
-	mysql_query("INSERT INTO uts_rank SET time = '$r_gametime', pid = '$pid', gid = '$gid', rank = '0', matches = '0', year = '".$rank_year."';") or die(mysql_error());
+	mysql_query("INSERT INTO uts_rank SET time = '$r_gametime', pid = '$pid', gid = '$gid', rank = '0', matches = '0', year = '".$rank_year."';") or die("import_ranking INSERT; ".mysql_error());
 	$rank_id = mysql_insert_id();
 	$rank_gametime = 0;
 	$rank_crank = 0;
@@ -229,13 +234,13 @@ if ($rank_year <= 0)
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."-----\r\ntotals-3-add_eff_rank_pts:\r\n".$sql."\r\n";
 
-	mysql_query($sql) or die(mysql_error());
+	mysql_query($sql) or die("import_ranking player UPDATE; ".mysql_error());
 }
 // Update the rank
 $sql = "UPDATE uts_rank SET time = '".$rank_gametime."', rank = '".$rank_nrank."', prevrank = '".$rank_crank."', matches = '".$rank_matches."' WHERE id = '".$rank_id."' and year = '".$rank_year."';";
 if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 	$s_debug = $s_debug."-----\r\ntotals-4-update_rank:\r\n".$sql."\r\n";
 
-mysql_query($sql) or die(mysql_error());
+mysql_query($sql) or die("import_ranking UPDATE rank; ".mysql_error());
 
 ?>

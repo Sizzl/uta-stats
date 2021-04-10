@@ -33,6 +33,8 @@ if (php_sapi_name() == 'cli' or !isset($_SERVER['SERVER_PORT']) or !$_SERVER['SE
 	$html = false;
 	// Chdir to our homedir
 	if (!empty($import_homedir)) chdir($import_homedir);
+} else {
+	$html = true;
 }
 
 // Debugging mode?
@@ -42,7 +44,7 @@ if (is_numeric($debugpid) && $debugpid > 0)
 	$results['debugpid'] = $debugpid;
 
 // Output HTML?
-$html = isset($_REQUEST['html']) ? $_REQUEST['html'] : true;
+$html = isset($_REQUEST['html']) ? $_REQUEST['html'] : $html;
 
 if ($html)
 {
@@ -291,7 +293,7 @@ while (false !== ($filename = readdir($logdir)))
 			$col5 = trim($col5, " \n\r");
 
 			$id++;
-			mysql_query("INSERT INTO uts_temp_$uid VALUES ($id, '$col0', '$col1', '$col2', '$col3', '$col4', '$col5');") or die(mysql_error());
+			mysql_query("INSERT INTO uts_temp_$uid VALUES ($id, '$col0', '$col1', '$col2', '$col3', '$col4', '$col5');") or die("log2tmp - ".mysql_error());
 		}
 	}
 	fclose($handle);
@@ -332,6 +334,14 @@ while (false !== ($filename = readdir($logdir)))
 			$log_incompatible = true;
 			$actor_version = "League Matches Only (see import.php) - result: ".$qm_matchmode['col2'];
 		}
+		// Exception for Easter
+		$qm_mutatorex = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GoodMutator' AND col3 LIKE '%Easter Egg Hunt%'");
+		if (isset($qm_mutatorex) && strpos($qm_mutatorex['col3'],"Easter Egg Hunt") > 0)
+		{
+			$log_incompatible = false;
+			$allow_solologs = true;
+			unset($actor_version);
+		}
 	}
 
 	if ($html) echo '</td></tr><tr><td class="smheading" align="left" width="350">';
@@ -366,6 +376,14 @@ while (false !== ($filename = readdir($logdir)))
 	$s_suicides = $qm_suicides[suicides];
 	$s_deaths = $qm_deaths[deaths];
 
+	$sql_mutators = "SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GoodMutator'";
+	$qm_mutators = "";
+	$q_mutators = mysql_query($sql_mutators);
+	while ($r_mutators = mysql_fetch_array($q_mutators))
+	{
+		$qm_mutators .= "".$r_mutators[col3].", ";
+	}
+
 	// Add teamkills only if its a team game, else add them to kills total
 	if ($qm_teamgame[col3] == "True")
 	{
@@ -384,7 +402,7 @@ while (false !== ($filename = readdir($logdir)))
 		echo "No (Empty Match)\n";
 		if ($html) echo '</td></tr>';
 	}
-	elseif ($qm_playercount < 2)
+	elseif ($qm_playercount < 2 && strpos($qm_mutators,"Easter Egg Hunt")===FALSE)
 	{
 		echo "No (Not Enough Players)\n";
 		if ($html) echo '</td></tr>';
@@ -401,13 +419,6 @@ while (false !== ($filename = readdir($logdir)))
 	}
 	else
 	{
-
-		$sql_mutators = "SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GoodMutator'";
-		$q_mutators = mysql_query($sql_mutators);
-		while ($r_mutators = mysql_fetch_array($q_mutators))
-		{
-			$qm_mutators .= "".$r_mutators[col3].", ";
-		}
 
 		$qm_serveran = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_AdminName'");
 		$qm_serverae = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_AdminEmail'");
@@ -516,7 +527,7 @@ while (false !== ($filename = readdir($logdir)))
 			if ($html) echo '</td></tr>';							
 			// Delete Temp MySQL Table
 			$droptable = "DROP TABLE uts_temp_$uid";
-			mysql_query($droptable) or die(mysql_error());		
+			mysql_query($droptable) or die("tmp drop ".mysql_error());		
 			if ($html) echo'<tr><td class="smheading" align="left" width="350">';
 			echo "Deleting Temp MySQL Table: ";
 			if ($html) echo '</td><td class="grey" align="left" width="200">';
@@ -556,7 +567,7 @@ while (false !== ($filename = readdir($logdir)))
 			$gid = $r_gid['id'];
 		else
 		{
-			mysql_query("INSERT INTO uts_games SET gamename = '$gamename', name = '$gamename'") or die(mysql_error());
+			mysql_query("INSERT INTO uts_games SET gamename = '$gamename', name = '$gamename'") or die("game ins - ".mysql_error());
 			$gid = mysql_insert_id();
 		}
 
@@ -665,16 +676,16 @@ while (false !== ($filename = readdir($logdir)))
 
 			// Clear weapon stats
 			echo " - Clearing weapon stats (ID: $matchid)\n";
-			mysql_query("DELETE FROM uts_weaponstats WHERE matchid = '".$matchid."';") or die(mysql_error());
+			mysql_query("DELETE FROM uts_weaponstats WHERE matchid = '".$matchid."';") or die("Clear WS ".mysql_error());
 			// Clear kills matrix
 			echo " - Clearing kills matrix (ID: $matchid)\n";
-			mysql_query("DELETE FROM uts_killsmatrix WHERE matchid = '".$matchid."';") or die(mysql_error());
+			mysql_query("DELETE FROM uts_killsmatrix WHERE matchid = '".$matchid."';") or die("Clear KM ".mysql_error());
 			// Clear player matrix
 			echo " - Clearing player matrix (ID: $matchid)\n";
-			mysql_query("DELETE FROM uts_player WHERE matchid = '".$matchid."';") or die(mysql_error());
+			mysql_query("DELETE FROM uts_player WHERE matchid = '".$matchid."';") or die("Clear PS ".mysql_error());
 			// Clear obj stats
 			echo " - Clearing AS objective stats (ID: $matchid)\n";
-			mysql_query("DELETE FROM uts_smartass_objstats WHERE matchid = '".$matchid."';") or die(mysql_error());
+			mysql_query("DELETE FROM uts_smartass_objstats WHERE matchid = '".$matchid."';") or die("Clear OS ".mysql_error());
 		}
 		else
 		{
@@ -686,7 +697,7 @@ while (false !== ($filename = readdir($logdir)))
 				'$teamgame', '$mapname', '$mapfile', '$serverinfo', '$gameinfo', '$s_frags', '$s_kills', '$s_suicides', '$s_teamkills', '$s_deaths',
 				$t0info, $t1info, $t2info, $t3info, $t0score, $t1score, $t2score, $t3score);";
 
-			$q_serverinfo = mysql_query($sql_serverinfo) or die(mysql_error());
+			$q_serverinfo = mysql_query($sql_serverinfo) or die("Match Ins ".mysql_error());
 			$matchid = mysql_insert_id();			// Get our Match ID
 			echo "Yes (ID: $matchid)\n";
 		}
@@ -698,11 +709,11 @@ while (false !== ($filename = readdir($logdir)))
 		// Cratos: Add FriendlyFireScale, Timedilation
 		// ************************************************************************************
 		$friendlyfirescale = intval(floatval($qm_gameinfoff[col3])*100);
-		$sql = "UPDATE uts_match set 
+		$sql = "UPDATE uts_match SET 
 				friendlyfirescale = '".$friendlyfirescale."',
 				timedilation = '".$timedilation."' 
-				WHERE id = $matchid";
-		mysql_query($sql) or die(mysql_error());		
+				WHERE id = '".$matchid."';";
+		mysql_query($sql) or die("FF/TD update; ".mysql_error());		
 
 									
 		
@@ -789,6 +800,9 @@ while (false !== ($filename = readdir($logdir)))
 			// Process all the other player information
 			include("import/import_playerstuff.php");
 
+			// Process all the player pickup information
+			include("import/import_playerpickups.php");
+
 			if ($playerbanned)
 			{
 				// Banned players don't have a rank.
@@ -841,15 +855,21 @@ while (false !== ($filename = readdir($logdir)))
 		// Check if theres any players left, if none or one delete the match (its possible ...)
 		$final_pcount = small_count("SELECT id FROM uts_player WHERE matchid = $matchid");
 
-		if ($final_pcount == NULL || $final_pcount == 1)
+		if ($final_pcount == NULL || ($final_pcount == 1 && (!isset($allow_solologs) || $allow_solologs==false)))
 		{
-			echo'<tr>
-				<td class="smheading" align="left" width="350">Deleting Match:</td>
-				<td class="grey" align="left" width="200">0 or 1 Player Entries Left</td>
-			</tr>';
-
+			if ($html)
+			{
+				echo'<tr>
+					<td class="smheading" align="left" width="350">Deleting Match:</td>
+					<td class="grey" align="left" width="200">0 or 1 Player Entries Left</td>
+				</tr>';
+			}
+			else
+			{
+				echo "\nRemoving match info; 1 or less valid players remain. Override with \$allow_sololog\n";
+			}
 			$sql_radjust = "SELECT pid, gid, rank FROM uts_player WHERE matchid = $matchid";
-			$q_radjust = mysql_query($sql_radjust) or die(mysql_error());
+			$q_radjust = mysql_query($sql_radjust) or die("Rank Sel ".mysql_error());
 			while ($r_radjust = mysql_fetch_array($q_radjust)) {
 				$pid = $r_radjust[pid];
 				$gid = $r_radjust[gid];
@@ -863,7 +883,7 @@ while (false !== ($filename = readdir($logdir)))
 				$oldrank = $sql_crank[rank];
 				$matchcount = $sql_crank[matches]-1;
 
-				mysql_query("UPDATE uts_rank SET rank = $newrank, prevrank = $oldrank, matches = $matchcount WHERE id = $rid") or die(mysql_error());
+				mysql_query("UPDATE uts_rank SET rank = $newrank, prevrank = $oldrank, matches = $matchcount WHERE id = $rid") or die("Rank Upd ".mysql_error());
 			}
 			mysql_query("DELETE FROM uts_rank WHERE matches = 0") or die(mysql_error());
 
@@ -1043,10 +1063,11 @@ echo "\n\n";
 
 // Debugging output
 //  Use $results['debugpid'] to define a player ID to debug output for
-if ($html) echo '<pre>';
-echo $s_debug;
-if ($html) echo '</pre>';
-
+if ($debug) {
+	if ($html) echo '<pre>';
+	echo $s_debug;
+	if ($html) echo '</pre>';
+}
 if ($html) echo '<br /><table border="0" cellpadding="1" cellspacing="2" width="720"><tr><td class="heading" align="center" colspan="2">';
 echo "Import Script Completed\n";
 if ($html) echo '</td></tr></table>';

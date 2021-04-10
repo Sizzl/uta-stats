@@ -42,7 +42,7 @@ function rowtotal($title, $sum) {
 
 
 global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
-global $admin_ip, $pic_enable, $htmlcp;
+global $admin_ip, $pic_enable, $htmlcp, $ftp_matchesonly;
 $pid = isset($pid) ? addslashes($pid) : addslashes($_GET['pid']);
 $gid = isset($gid) ? addslashes($gid) : addslashes($_GET['gid']);
 $mode = isset($mode) ? addslashes($mode) : addslashes($_GET['mode']);
@@ -88,6 +88,11 @@ if (!$r_game) {
 	exit;
 }
 $real_gamename = $r_game['gamename'];
+
+$where = "";
+if (isset($ftp_matchesonly) && $ftp_matchesonly==true)
+        $where = " AND m.matchmode='1'";
+
 $matches = array();
 if ($mode!="test")
 {
@@ -97,11 +102,11 @@ else
 {
 	$r_lmsql = "SELECT m.matchid
 			FROM ".(isset($t_player) ? $t_player : "uts_player")." p inner join ".(isset($t_match) ? $t_match : "uts_match")." m on p.matchid = m.id
-		WHERE ".($rank_year > 0 ? "m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959' AND" : "")." p.pid = $pid and p.gid = $gid ORDER BY m.matchid DESC LIMIT 0,2";
+		WHERE ".($rank_year > 0 ? "m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959' AND" : "")." p.pid = '".$pid."' and p.gid = '".$gid."' ".$where." ORDER BY m.matchid DESC LIMIT 0,2;";
 
 	$s_lastmatches = "SELECT m.id AS matchId FROM ".(isset($t_player) ? $t_player : "uts_player")." p 
 				INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." m ON p.matchid = m.id
-				WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
+				WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' ".$where."
 				AND p.pid = '".$pid."' and p.gid = '".$gid."' ORDER BY m.id DESC LIMIT 0,2";
 	$m_obj = mysql_query($s_lastmatches);
 	while ($m_lms = mysql_fetch_array($m_obj))
@@ -127,7 +132,7 @@ foreach($matches as $matchid)
 		SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
 		SUM(p.gametime) AS gametime 
 		FROM ".(isset($t_player) ? $t_player : "uts_player")." p inner join ".(isset($t_match) ? $t_match : "uts_match")." m on p.matchid = m.id
-		WHERE ".($rank_year > 0 ? "m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959' AND" : "")." p.pid = $pid and p.gid = $gid";
+		WHERE ".($rank_year > 0 ? "m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959' AND" : "")." p.pid = '".$pid."' and p.gid = '".$gid."'".$where.";";
 	}
 	else
 	{
@@ -144,7 +149,7 @@ foreach($matches as $matchid)
 		SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
 		SUM(p.gametime) AS gametime 
 		FROM ".(isset($t_player) ? $t_player : "uts_player")." p inner join ".(isset($t_match) ? $t_match : "uts_match")." m on p.matchid = m.id
-		WHERE ".($rank_year > 0 ? "m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959' AND" : "")." m.id <= '".$matchid."' AND p.pid = $pid and p.gid = $gid";
+		WHERE ".($rank_year > 0 ? "m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959' AND" : "")." m.id <= '".$matchid."' AND p.pid = '".$pid."' and p.gid = '".$gid."'".$where.";";
 	}
 	$r_cnt = small_query($r_sql);
 
@@ -195,7 +200,7 @@ foreach($matches as $matchid)
 			inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." p on p.id = stats.pid 
 			INNER JOIN ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." o ON stats.objid = o.id
 			WHERE p.id = $pid 
-			AND m.gid = $gid ".($rank_year > 0 ? "AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'" : "")."
+			AND m.gid = $gid ".($rank_year > 0 ? "AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'" : "")." ".$where."
 			and stats.def_teamsize >= 2 
 			and stats.att_teamsize >= 2
 			group by def_teamsize, att_teamsize Order by def_teamsize DESC, att_teamsize DESC";

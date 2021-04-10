@@ -116,9 +116,12 @@ echo'</tr>
 	echo'<td class="grey" align="left">';
 	$playerbanned = false;
 	unset($s_debug);
+	$where = "";
+	if (isset($ftp_matchesonly) && $ftp_matchesonly==true)
+		$where = "AND m.matchmode='1' ";
 	$q_sql = "SELECT p.id, p.matchid, p.pid, p.gid, m.gamename, m.time
 			FROM uts_player p, uts_pinfo pi, uts_match m
-			WHERE pi.id = p.pid AND pi.banned <> 'Y' AND m.id = p.matchid
+			WHERE pi.id = p.pid AND pi.banned <> 'Y' AND m.id = p.matchid ".$where."
                               AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
 			ORDER BY m.time ASC, p.matchid ASC, p.playerid ASC";
 	echo "\r\n<!-- ".$q_sql." -->\r\n";

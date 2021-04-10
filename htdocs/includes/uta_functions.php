@@ -73,8 +73,9 @@ function DateAdd($timestamp, $seconds,$minutes,$hours,$days,$months,$years) {
 }
 
 function uta_ass_objectiveinfo($mid, $att_teamname) {
-global $t_smartass_objs, $t_smartass_objstats, $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
-
+  global $t_smartass_objs, $t_smartass_objstats, $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
+  if (is_numeric($mid))
+  {
 	echo'
 	<table border="0" cellpadding="0" cellspacing="2" width="620">
 	<tbody><tr>
@@ -89,7 +90,7 @@ global $t_smartass_objs, $t_smartass_objstats, $t_match, $t_pinfo, $t_player, $t
 		
 $sql_objs = "SELECT ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs").".id as objid, objnum, objname, defensepriority 
 			FROM ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs").".mapfile = ".(isset($t_match) ? $t_match : "uts_match").".mapfile
-			WHERE ".(isset($t_match) ? $t_match : "uts_match").".id = $mid ORDER BY defensepriority desc, objname asc";
+			WHERE ".(isset($t_match) ? $t_match : "uts_match").".id = ".$mid." ORDER BY defensepriority desc, objname asc;";
 $q_objs = mysql_query($sql_objs) or die(mysql_error());
 
 while ($r_objs = mysql_fetch_array($q_objs)) {
@@ -103,7 +104,7 @@ while ($r_objs = mysql_fetch_array($q_objs)) {
 	$sql_objgone = "SELECT 'broken_inc_functions' AS slowquery, ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".timestamp as objtime,
 					".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id as pid, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name as pname, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country as pcountry
 					from ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats")." inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." on ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".pid = ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id 
-					WHERE ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".matchid = $mid AND ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".objid = $objid";
+					WHERE ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".matchid = '.$mid.' AND ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".objid = '".$objid."';";
 					
 	$q_objgone = small_query($sql_objgone);	
 	
@@ -128,6 +129,7 @@ while ($r_objs = mysql_fetch_array($q_objs)) {
 			echo '<td class="grey" align="center"></td>';
 		}
 	echo '</tr>';	
+	}
 	
  }
  echo '</tbody></table>';	

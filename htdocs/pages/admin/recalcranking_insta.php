@@ -150,10 +150,15 @@ foreach ($rank_years as $rank_year) {
 	echo'<td class="grey" align="left">';
 	$playerbanned = false;
 	$i = 0;
+
+        $where = "";
+        if (isset($ftp_matchesonly) && $ftp_matchesonly==true)
+                $where = "AND m.matchmode='1' ";
+
 	$q_pids = mysql_query("SELECT DISTINCT p.gid, p.pid
 				FROM uts_player p, uts_pinfo pi, uts_match m
 				WHERE pi.id = p.pid
-				AND m.id = p.matchid
+				AND m.id = p.matchid ".$where."
 				AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
 				AND pi.banned <> 'Y';");
 				
@@ -170,7 +175,7 @@ foreach ($rank_years as $rank_year) {
 		$real_gamename = $r_game['gamename'];
 		$s_lastmatches = "SELECT m.id AS matchId FROM ".(isset($t_player) ? $t_player : "uts_player")." p 
 						INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." m ON p.matchid = m.id
-						WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
+						WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' ".$where."
 						AND p.pid = '".$pid."' and p.gid = '".$gid."' ORDER BY m.id DESC LIMIT 0,2";
 		$m_obj = mysql_query($s_lastmatches);
 		$matches = array();
@@ -197,7 +202,7 @@ foreach ($rank_years as $rank_year) {
 					SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
 					SUM(p.gametime) AS gametime, COUNT(m.id) AS matches
 					FROM ".(isset($t_player) ? $t_player : "uts_player")." p inner join ".(isset($t_match) ? $t_match : "uts_match")." m on p.matchid = m.id
-					WHERE p.pid = '".$pid."' and p.gid = '".$gid."' AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' AND m.id <= '".$matchid."';");
+					WHERE p.pid = '".$pid."' and p.gid = '".$gid."' AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' ".$where."  AND m.id <= '".$matchid."';");
 			
 				$ass_att = $r_cnt['ass_att']; 
 				$ass_def = $r_cnt['ass_def'];
@@ -213,7 +218,7 @@ foreach ($rank_years as $rank_year) {
 					WHERE p.id = $pid 
 						and m.gid = $gid
 					AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
-					AND m.id <= '".$matchid."'
+					AND m.id <= '".$matchid."' ".$where."
 					and stats.def_teamsize >= 2 
 					and stats.att_teamsize >= 2
 					group by def_teamsize, att_teamsize Order by def_teamsize DESC, att_teamsize DESC";

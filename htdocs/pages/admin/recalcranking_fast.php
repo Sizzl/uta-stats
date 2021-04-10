@@ -59,11 +59,14 @@ echo'</tr>
 									ORDER BY p.matchid ASC, 
 												p.playerid ASC");
 	*/
+        $where = "";
+        if (isset($ftp_matchesonly) && $ftp_matchesonly==true)
+                $where = "AND m.matchmode='1' ";
 	
 	$q_pids = mysql_query("SELECT DISTINCT p.gid, p.pid
 				FROM uts_player p, uts_pinfo pi, uts_match m
 				WHERE pi.id = p.pid
-				AND m.id = p.matchid
+				AND m.id = p.matchid ".$where."
 				AND pi.banned <> 'Y'");
 				
 	while ($r_pid = mysql_fetch_array($q_pids)) {
@@ -80,9 +83,9 @@ echo'</tr>
 										uts_pinfo pi,
 										uts_match m
 								WHERE 	pi.id = p.pid 										
-									AND	m.id = p.matchid
-									AND p.gid = $gid
-									AND p.pid = $pid
+									AND	m.id = p.matchid ".$where."
+									AND p.gid = '".$gid."'
+									AND p.pid = '".$pid."'
 									AND pi.banned <> 'Y' 
 								ORDER BY p.matchid DESC
 								LIMIT 0,1");		

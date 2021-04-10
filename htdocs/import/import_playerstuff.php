@@ -7,7 +7,7 @@
 		$pid_country = $r_pid['country'];
 		$playerbanned = ($r_pid['banned'] == 'Y') ? true : false;
 	} else {
-		mysql_query("INSERT INTO uts_pinfo SET name = '$playername'") or die(mysql_error());
+		mysql_query("INSERT INTO uts_pinfo SET name = '$playername'") or die("import_playerstuff pinfo INSERT; ".mysql_error());
 		$pid = mysql_insert_id();
 		$pid_country = false;
 		$playerbanned = false;
@@ -20,8 +20,8 @@
 	
 	// Did the player do first blood?
 	if ($playerid == $firstblood) {
-		$upd_firstblood = "UPDATE uts_match SET firstblood = '$pid' WHERE id = $matchid";
-		mysql_query($upd_firstblood) or die(mysql_error());
+		$upd_firstblood = "UPDATE uts_match SET firstblood = '$pid' WHERE id = '$matchid'";
+		mysql_query($upd_firstblood) or die("import_playerstuff FB; ".mysql_error());
 	}
 
 	// Get player's IP
@@ -177,7 +177,7 @@
 										ttl = '$r_ttl', 
 										gamescore= '$r_score'"; 
 	
-	$q_playerid = mysql_query($sql_playerid) or die(mysql_error());
+	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff final; ".mysql_error());
 	$playerecordid = mysql_insert_id();
 
 
