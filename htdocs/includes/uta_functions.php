@@ -104,8 +104,8 @@ while ($r_objs = mysql_fetch_array($q_objs)) {
 	$sql_objgone = "SELECT 'broken_inc_functions' AS slowquery, ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".timestamp as objtime,
 					".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id as pid, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name as pname, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country as pcountry
 					from ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats")." inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." on ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".pid = ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id 
-					WHERE ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".matchid = '.$mid.' AND ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".objid = '".$objid."';";
-					
+					WHERE ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".matchid = '".$mid."' AND ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".objid = '".$objid."';";
+	echo "<!-- dbvl: ".$sql_objgone." -->\n";				
 	$q_objgone = small_query($sql_objgone);	
 	
 	if ($q_objgone != Null)

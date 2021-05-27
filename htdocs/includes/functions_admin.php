@@ -56,6 +56,7 @@ $options['vars'][$i]['initialvalue'] = 'ip_from';
 
 
 function adminselect(&$options) {
+	global $dbversion;
 	$i = !empty($_REQUEST['step']) ? $_REQUEST['step'] : 0;
 
 	if (!isset($options['showlist'])) $options['showlist']==true; // Display list of players --// Default to true - Timo 01/05/07
@@ -180,7 +181,11 @@ function adminselect(&$options) {
 					
 					$sql_server = "SELECT id, servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." GROUP BY servername, serverip ORDER BY servername ASC";
 					if (isset($var['wheregid'])) {
-						$sql_server = "SELECT id, servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE gid = '". $values[$var['wheregid']] ."' GROUP BY servername, serverip ORDER BY servername ASC";
+						if (isset($dbversion) && floatval($dbversion) > 5.6) {
+							$sql_server = "SELECT ANY_VALUE(id), servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE gid = '". $values[$var['wheregid']] ."' GROUP BY servername, serverip ORDER BY servername ASC";
+						} else {
+							$sql_server = "SELECT id, servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE gid = '". $values[$var['wheregid']] ."' GROUP BY servername, serverip ORDER BY servername ASC";
+						}
 					}
 					$q_server = mysql_query($sql_server) or die(mysql_error());
 					while ($r_server = mysql_fetch_array($q_server)) {
@@ -211,7 +216,11 @@ function adminselect(&$options) {
 						}
 						$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE 1 $where_extra ORDER BY pi.name ASC";
 						if (isset($var['wherematch'])) {
-							$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.matchid = '". $values[$var['wherematch']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+							if (isset($dbversion) && floatval($dbversion) > 5.6) {
+								$sql_player = "SELECT pi.id, ANY_VALUE(pi.name) FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.matchid = '". $values[$var['wherematch']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+							} else {
+								$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.matchid = '". $values[$var['wherematch']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+							}
 						}
 						if (isset($var['whereserver'])) {
 							$r_server = small_query("SELECT servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '". $values[$var['whereserver']] ."'");

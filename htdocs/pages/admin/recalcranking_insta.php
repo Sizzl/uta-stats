@@ -304,14 +304,14 @@ foreach ($rank_years as $rank_year) {
 			$rank_matches = $r_cnt['matches'];
 
 			// Select rank record
-			$r_rankp = small_query("SELECT id, time, rank, matches FROM uts_rank WHERE pid = '$pid' AND gid = '$gid' AND year = '".$rank_year."'");
+			$r_rankp = small_query("SELECT `id`, `time`, `rank`, `matches` FROM `uts_rank` WHERE `pid` = '".$pid."' AND `gid` = '".$gid."' AND `year` = '".$rank_year."'");
 			$rank_id = $r_rankp[id];
 			$rank_crank = $r_rankp[rank];
 
 
 			if ($rank_id == NULL) {
 				// Add new rank record if one does not exist
-				mysql_query("INSERT INTO uts_rank SET time = '$r_gametime', pid = '$pid', gid = '$gid', rank = '0', matches = '0', year = '".$rank_year."';") or die(mysql_error());
+				mysql_query("INSERT INTO `uts_rank` SET `time` = '".$rank_gametime."', `pid` = '".$pid."', `gid` = '".$gid."', `rank` = '0', `matches` = '0', `year` = '".$rank_year."';") or die(mysql_error());
 				$rank_id = mysql_insert_id();
 				$rank_crank = 0;
 			} 
@@ -320,7 +320,7 @@ foreach ($rank_years as $rank_year) {
 			$eff_rank = $rank_nrank-$rank_crank;
 			if ($rank_year <= 0)
 			{
-				$sql = "UPDATE uts_player SET rank = '".$eff_rank."' WHERE id = '$playerecordid';";
+				$sql = "UPDATE `uts_player` SET `rank` = '".$eff_rank."' WHERE `id` = '".$rank_id."';";
 				if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 					$s_debug = $s_debug."-----\r\ntotals-3-add_eff_rank_pts:\r\n".$sql."\r\n";
 
@@ -330,7 +330,7 @@ foreach ($rank_years as $rank_year) {
 			if ($rank_crank==0)
 				$rank_crank = $rank_nrank;
 
-			$sql = "UPDATE uts_rank SET time = '".$rank_gametime."', rank = '".$rank_nrank."', prevrank = '".$rank_crank."', matches = '".$rank_matches."' WHERE id = '".$rank_id."' and year = '".$rank_year."';";
+			$sql = "UPDATE `uts_rank` SET `time` = '".$rank_gametime."', `rank` = '".$rank_nrank."', `prevrank` = '".$rank_crank."', `matches` = '".$rank_matches."' WHERE `id` = '".$rank_id."' AND `year` = '".$rank_year."';";
 			if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 				$s_debug = $s_debug."-----\r\ntotals-4-update_rank:\r\n".$sql."\r\n";
 

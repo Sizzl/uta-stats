@@ -1,5 +1,6 @@
 <?php 
 if (empty($import_adminkey) or isset($_REQUEST['import_adminkey']) or $import_adminkey != $adminkey) die('bla');
+global $dbversion;
 	
 $options['title'] = 'Player record auto-merge suggestions';
 $options['requireconfirmation'] = false;
@@ -9,7 +10,11 @@ $safemode = false;
 $sql_iplist = "SELECT COUNT(pid) as pidCount, ip FROM uts_player WHERE ip <> '3588675586' AND ip <> '3104445278' GROUP BY ip ORDER BY pidCount DESC";// LIMIT 0,100";
 $q_iplist = mysql_query($sql_iplist) or die(mysql_error());
 while ($r_iplist = mysql_fetch_array($q_iplist)) {
-  $sql_dfind = "SELECT uts_pinfo.name, uts_player.pid, COUNT(uts_player.matchid) AS matchCount, uts_player.ip FROM uts_player INNER JOIN uts_pinfo ON (uts_pinfo.id = uts_player.pid) WHERE uts_player.ip = '".$r_iplist['ip']."' GROUP BY pid ORDER BY matchCount DESC";
+  if (isset($dbversion) && floatval($dbversion) > 5.6) {
+    $sql_dfind = "SELECT ANY_VALUE(`uts_pinfo`.`name`) AS `name`, `uts_player`.`pid`, COUNT(`uts_player`.`matchid`) AS `matchCount`, ANY_VALUE(`uts_player`.`ip`) AS `ip` FROM `uts_player` INNER JOIN `uts_pinfo` ON (`uts_pinfo`.`id` = `uts_player`.`pid`) WHERE `uts_player`.`ip` = '".$r_iplist['ip']."' GROUP BY `pid` ORDER BY `matchCount` DESC";
+  } else {
+    $sql_dfind = "SELECT uts_pinfo.name, uts_player.pid, COUNT(uts_player.matchid) AS matchCount, uts_player.ip FROM uts_player INNER JOIN uts_pinfo ON (uts_pinfo.id = uts_player.pid) WHERE uts_player.ip = '".$r_iplist['ip']."' GROUP BY pid ORDER BY matchCount DESC";
+  }
   $q_dfind = mysql_query($sql_dfind) or die(mysql_error());
   if (mysql_num_rows($q_dfind) > 1) {
     $regs = array();
@@ -21,7 +26,11 @@ while ($r_iplist = mysql_fetch_array($q_iplist)) {
     }
     if (count($regs) > 0) {
       // shortlist the registered accounts to find most used
-      $sql_rfind = "SELECT uts_pinfo.name, uts_player.pid, COUNT(uts_player.matchid) AS matchCount FROM uts_player INNER JOIN uts_pinfo ON (uts_pinfo.id = uts_player.pid) WHERE uts_player.pid IN (".implode(',', $regs).") GROUP BY uts_player.pid ORDER BY matchCount DESC;";
+      if (isset($dbversion) && floatval($dbversion) > 5.6) { 
+        $sql_rfind = "SELECT ANY_VALUE(`uts_pinfo`.`name`) AS `name`, `uts_player`.`pid`, COUNT(`uts_player`.`matchid`) AS `matchCount` FROM `uts_player` INNER JOIN `uts_pinfo` ON (`uts_pinfo`.`id` = `uts_player`.`pid`) WHERE `uts_player`.`pid` IN (".implode(',', $regs).") GROUP BY `uts_player`.`pid` ORDER BY `matchCount` DESC;";
+      } else {
+        $sql_rfind = "SELECT uts_pinfo.name, uts_player.pid, COUNT(uts_player.matchid) AS matchCount FROM uts_player INNER JOIN uts_pinfo ON (uts_pinfo.id = uts_player.pid) WHERE uts_player.pid IN (".implode(',', $regs).") GROUP BY uts_player.pid ORDER BY matchCount DESC;";
+      }
       $q_rfind = mysql_query($sql_rfind) or die(mysql_error());
       $regs = array(); 
       while ($r_rlist = mysql_fetch_array($q_rfind)) {

@@ -31,8 +31,11 @@ echo'<br><table border="0" cellpadding="1" cellspacing="2" width="600">
 	<td class="smheading" align="center" colspan="2">Players using IPs '.$ip_from.' - '.$ip_to.' and their last 5 matches using these IPs</td>
 </tr>';
 
-
-$sql_players = "SELECT pi.name, pi.id AS pid FROM uts_player p, uts_pinfo pi WHERE p.pid = pi.id AND p.ip BETWEEN INET_ATON('$ip_from') AND INET_ATON('$ip_to') GROUP BY pid";
+if (isset($dbversion) && floatval($dbversion) > 5.6) {
+	$sql_players = "SELECT ANY_VALUE(`pi`.`name`) as `name`, `pi`.`id` AS `pid` FROM `uts_player` `p`, `uts_pinfo` `pi` WHERE `p`.`pid` = `pi`.`id` AND `p`.`ip` BETWEEN INET_ATON('$ip_from') AND INET_ATON('$ip_to') GROUP BY `pid`;";
+} else {
+	$sql_players = "SELECT pi.name, pi.id AS pid FROM uts_player p, uts_pinfo pi WHERE p.pid = pi.id AND p.ip BETWEEN INET_ATON('$ip_from') AND INET_ATON('$ip_to') GROUP BY pid;";
+}
 $q_players = mysql_query($sql_players) or die(mysql_error());
 $j = 0;
 while ($r_players = mysql_fetch_array($q_players)) {

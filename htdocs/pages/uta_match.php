@@ -3,12 +3,12 @@
 include_once('includes/teamstats.php');
 // include('includes/uta_functions.php');
 $matchcode = $_GET['matchcode'];
-global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
+global $t_match, $t_pinfo, $t_player, $t_games, $dbversion; // fetch table globals.
 // FINAL SCORE brajan 26082005
 $score0 ='0';
 $score1 ='0';
 		$sql_matchsummary = "SELECT * FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE matchmode = 1 AND matchcode='".$matchcode."' ORDER BY mapsequence";	  
-		$q_matchsummary = mysql_query($sql_matchsummary) or die(mysql_error());
+		$q_matchsummary = mysql_query($sql_matchsummary) or die("sum:".mysql_error());
 		$total_time = 0;
 		$starttime = $endtime = 0;
 			while ($r_matchsummary = mysql_fetch_array($q_matchsummary)) {
@@ -92,7 +92,7 @@ $score1 ='0';
 			group by ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country 
 			ORDER BY ".$sort_by." DESC";
 						
-	$q_sql = mysql_query($sql) or die(mysql_error());	
+	$q_sql = mysql_query($sql) or die("m1:".mysql_error());	
 	while ($p_sql = mysql_fetch_assoc($q_sql)) 
 	{	
 		if ($p_sql[team] < 0.5 ) {
@@ -125,8 +125,23 @@ $score1 ='0';
 	}
 	
 	// Team Summary
-	echo'<tr class="grey"><td align="center" colspan="12">Match Team Totals</td></tr>';	
-	$sql =  "SELECT 'broken_match2' AS dohquery, sum(".(isset($t_player) ? $t_player : "uts_player").".frags) as frags, 
+	echo'<tr class="grey"><td align="center" colspan="12">Match Team Totals</td></tr>';
+	if (isset($dbversion) && floatval($dbversion) > 5.6) {
+		// Only Full GROUP BY statements can be used
+		$sql =  "SELECT 'broken_match2' AS dohquery, sum(".(isset($t_player) ? $t_player : "uts_player").".frags) as frags, 
+			(sum(".(isset($t_player) ? $t_player : "uts_player").".kills)-sum(".(isset($t_player) ? $t_player : "uts_player").".teamkills)) as kills, sum(".(isset($t_player) ? $t_player : "uts_player").".deaths) as deaths, avg(".(isset($t_player) ? $t_player : "uts_player").".avgping) as ping, 
+			count(".(isset($t_player) ? $t_player : "uts_player").".matchid) as maps, ".(isset($t_player) ? $t_player : "uts_player").".team as team,
+			sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_launch) as ass_h_launch, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_r_launch) as ass_r_launch,
+			sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_launched) as ass_h_launched, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_r_launched) as ass_r_launched,
+			sum(".(isset($t_player) ? $t_player : "uts_player").".ass_assist) as ass_assist, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_jump) as ass_h_jump, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_obj) as objs,
+			ANY_VALUE(".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id) AS pid, ANY_VALUE(".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name) AS pname, ANY_VALUE(".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country) AS pcountry
+			from ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." inner join ".(isset($t_player) ? $t_player : "uts_player")." on ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id = ".(isset($t_player) ? $t_player : "uts_player").".pid
+			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id and ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 and ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
+			group by ".(isset($t_player) ? $t_player : "uts_player").".team
+			order by ".(isset($t_player) ? $t_player : "uts_player").".team";
+	} else {
+		// Pre 5.7 query (acceptable to use loose grouping)
+		$sql =  "SELECT 'broken_match2' AS dohquery, sum(".(isset($t_player) ? $t_player : "uts_player").".frags) as frags, 
 			(sum(".(isset($t_player) ? $t_player : "uts_player").".kills)-sum(".(isset($t_player) ? $t_player : "uts_player").".teamkills)) as kills, sum(".(isset($t_player) ? $t_player : "uts_player").".deaths) as deaths, avg(".(isset($t_player) ? $t_player : "uts_player").".avgping) as ping, 
 			count(".(isset($t_player) ? $t_player : "uts_player").".matchid) as maps, ".(isset($t_player) ? $t_player : "uts_player").".team as team,
 			sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_launch) as ass_h_launch, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_r_launch) as ass_r_launch,
@@ -137,8 +152,8 @@ $score1 ='0';
 			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id and ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 and ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
 			group by ".(isset($t_player) ? $t_player : "uts_player").".team
 			order by ".(isset($t_player) ? $t_player : "uts_player").".team";
-			
-	$q_sql = mysql_query($sql) or die(mysql_error());
+	}		
+	$q_sql = mysql_query($sql) or die("m2:".mysql_error());
 	while ($p_sql = mysql_fetch_assoc($q_sql)) 
 	{	
 		if ($p_sql[team] < 0.5 ) {
@@ -180,7 +195,7 @@ $team1score = 0;
 
 // MAPS INFO - START
 $sql_assault = "SELECT * FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE matchcode = '".$matchcode."' AND matchmode = 1 ORDER BY time, mapsequence, id";
-$q_assault = mysql_query($sql_assault) or die(mysql_error());
+$q_assault = mysql_query($sql_assault) or die("mis:".mysql_error());
 
 global $winclass; // Added winclass for team colours. --// Timo 25/07/05
 

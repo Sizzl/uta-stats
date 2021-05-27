@@ -28,6 +28,7 @@ switch ($pagehandler)
 	
 	case "utapugrecent": utapugrecent(); break;	// list of recent PUG games, 30 in date order
 	case "utapugsummary": utapugsummary(); break;	// summary of all PUG games
+	case "utapugeventeaster": utapugeaster(); break;
 
 	case "utarecent": utarecent(); break;	// list of recent league games, 30 in date order
 	case "uta_match": uta_match(); break;	// list of recent league games, 30 in date order
@@ -71,6 +72,10 @@ function utapugsummary()
 {
 	include("pages/uta_pug_sum.php");
 }
+function utapugeaster()
+{
+	include("pages/uta_pug_easter.php");
+}
 
 function utapinfo()
 {
@@ -79,7 +84,16 @@ function utapinfo()
 
 function page()
 {
-	include("pages/home.php");
+	if (is_file("pages/home.php") && filesize("pages/home.php")>1024) {
+		include("pages/home.php");
+	} else {
+		echo "<meta http-equiv=\"refresh\" content=\"1; URL='index.php?p=utapugrecent'\" />
+<table border=\"0\" cellpadding=\"1\" cellspacing=\"2\" width=\"710\">
+  <tbody><tr>
+    <td class=\"heading\" align=\"center\">Stats Summary Currently Unavailable - Switching to Live Results...</td>
+  </tr>
+</tbody></table>";
+	}
 }
 
 function admin()
@@ -184,10 +198,10 @@ function minfo()
 
 function totals()
 {
-	if (is_file("pages/totals.php")) {
+	if (is_file("pages/totals.php") && filesize("pages/totals.php") > 1024) {
 		include("pages/totals.php");
 	} else {
-		echo "
+		echo "<meta http-equiv=\"refresh\" content=\"4; URL='index.php?p=utapugrecent'\" /> 
 <table border=\"0\" cellpadding=\"1\" cellspacing=\"2\" width=\"710\">
   <tbody><tr>
     <td class=\"heading\" align=\"center\">Totals Summary - Currently Unavailable</td>

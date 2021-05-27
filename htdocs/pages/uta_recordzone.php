@@ -214,8 +214,8 @@ echo'
 <div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>
 <br>
 <div><font color="#ff0000">New records (<21 days) are marked RED</font></div>
-<div><font color="#00ff00">StdAS:</font> Minimum Teamsizes: 4v4. Maximum Teamsizedifference: 1. </div>
-<div><font color="#00ff00">ProAS:</font> Minimum Teamsizes: 3v3. Maximum Teamsizedifference: 1. </div>
-<div><font color="#00ff00">iAS:</font>   Minimum Teamsizes: 3v3. Maximum Teamsizedifference: 1. </div>
+<div><font color="#00ff00">StdAS:</font> Minimum Team Sizes: 4v4. Maximum Team Size Difference: 1. </div>
+<div><font color="#00ff00">ProAS:</font> Minimum Team Sizes: 3v3. Maximum Team Size Difference: 1. </div>
+<div><font color="#00ff00">iAS:</font>   Minimum Team Sizes: 3v3. Maximum Team Size Difference: 1. </div>
 <div>Records that dont fulfil these requirements are marked with (&sup1)</div>';
 ?>

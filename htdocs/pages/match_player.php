@@ -1,4 +1,6 @@
 <?php 
+global $dbversion;
+
 $mid = $_GET[mid];
 $pid = $_GET[pid];
 $r_infos = small_query("SELECT p.playerid, p.country, pi.name, pi.banned, p.gid, g.name AS gamename FROM uts_player p, uts_pinfo pi, uts_games g WHERE p.gid = g.id AND p.pid = pi.id AND p.pid = '$pid'  AND matchid = '$mid' LIMIT 0,1;");
@@ -126,10 +128,24 @@ if (file_exists($mappic)) {
     <td class="smheading" align="center" width="50">Avg TTL</td>
     <td class="smheading" align="center" width="50">Time</td>
   </tr>';
-
-$r_gsumm = zero_out(small_query("SELECT gamescore, frags, SUM(frags+suicides) AS kills, deaths, suicides, teamkills, eff, accuracy, ttl, gametime, spree_kill, spree_rampage, spree_dom, spree_uns, spree_god
-FROM uts_player WHERE matchid = $mid AND pid = '$pid'
-GROUP BY pid"));
+if (isset($dbversion) && floatval($dbversion) > 5.6) {
+  $r_gsumq = "SELECT ANY_VALUE(gamescore) AS `gamescore`, 
+			ANY_VALUE(frags) AS `frags`, SUM(frags+suicides) AS `kills`, 
+			ANY_VALUE(deaths) AS `deaths`, ANY_VALUE(suicides) AS `suicides`, ANY_VALUE(teamkills) AS `teamkills`,
+			ANY_VALUE(eff) AS `eff`,
+			ANY_VALUE(accuracy) AS `accuracy`,
+			ANY_VALUE(ttl) AS `ttl`,
+			ANY_VALUE(gametime) AS `gametime`,
+			ANY_VALUE(spree_kill) AS `spree_kill`,
+			ANY_VALUE(spree_rampage) AS `spree_rampage`,
+			ANY_VALUE(spree_dom) AS `spree_dom`,
+			ANY_VALUE(spree_uns) AS `spree_uns`,
+			ANY_VALUE(spree_god) AS `spree_god`
+		FROM uts_player WHERE `matchid` = '$mid' AND `pid` = '$pid' GROUP BY `pid`;";
+} else {
+  $r_gsumq = "SELECT gamescore, frags, SUM(frags+suicides) AS kills, deaths, suicides, teamkills, eff, accuracy, ttl, gametime, spree_kill, spree_rampage, spree_dom, spree_uns, spree_god FROM uts_player WHERE matchid = $mid AND pid = '$pid' GROUP BY pid;";
+}
+$r_gsumm = zero_out(small_query($r_gsumq));
 
   echo'
   <tr>
@@ -166,10 +182,20 @@ echo'
     <td class="smheading" align="center" width="40" '.OverlibPrintHint('US').'>Uns</td>
     <td class="smheading" align="center" width="40" '.OverlibPrintHint('GL').'>God</td>
   </tr>';
-
-$r_gsumm = zero_out(small_query("SELECT spree_double, spree_multi, spree_ultra, spree_monster, spree_kill, spree_rampage, spree_dom, spree_uns, spree_god
-FROM uts_player WHERE matchid = $mid AND pid = '$pid'
-GROUP BY pid"));
+if (isset($dbversion) && floatval($dbversion) > 5.6) {
+  $r_gsumq = "SELECT ANY_VALUE(spree_double) AS `spree_double`,
+			ANY_VALUE(spree_multi) AS `spree_multi`,
+			ANY_VALUE(spree_ultra) AS `spree_ultra`,
+			ANY_VALUE(spree_kill) AS `spree_kill`,
+			ANY_VALUE(spree_rampage) AS `spree_rampage`,
+			ANY_VALUE(spree_dom) AS `spree_dom`,
+			ANY_VALUE(spree_uns) AS `spree_uns`,
+			ANY_VALUE(spree_god) AS `spree_god`
+		FROM uts_player WHERE `matchid` = '$mid' AND `pid` = '$pid' GROUP BY `pid`;";
+} else {
+  $r_gsumq = "SELECT spree_double, spree_multi, spree_ultra, spree_monster, spree_kill, spree_rampage, spree_dom, spree_uns, spree_god FROM uts_player WHERE `matchid` = '$mid' AND `pid` = '$pid' GROUP BY `pid`;";
+}
+$r_gsumm = zero_out(small_query($r_gsumq));
 
 $sql_firstblood = small_query("SELECT firstblood FROM uts_match WHERE id = $mid");
 

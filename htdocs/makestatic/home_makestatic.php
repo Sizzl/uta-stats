@@ -61,8 +61,13 @@ echo'
 		<td class="smheading" align="center" width="52">Game Hours</td>
 	  </tr>';
 
-$sql_gamesummary = "SELECT 'home_makestatic.php(gamesummary)' AS script_name, g.id AS gid, g.name AS gamename, SUM(p.frags) AS frags, SUM(p.kills) AS kills, SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, COUNT(DISTINCT p.matchid) AS matchcount
-FROM uts_player AS p, uts_games AS g WHERE p.gid = g.id GROUP BY gamename ORDER BY gamename ASC";  // 5.3sec
+if (isset($dbversion) && floatval($dbversion) > 5.6) {
+	$sql_gamesummary = "SELECT 'home_makestatic.php(gamesummary)' AS `script_name`, ANY_VALUE(`g`.`id`) AS `gid`, `g`.`name` AS `gamename`, SUM(p.frags) AS frags, SUM(p.kills) AS kills, SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, COUNT(DISTINCT p.matchid) AS matchcount
+		FROM uts_player AS p, uts_games AS g WHERE p.gid = g.id GROUP BY `g`.`name` ORDER BY `g`.`name` ASC";  // 4sec
+} else {
+	$sql_gamesummary = "SELECT 'home_makestatic.php(gamesummary)' AS script_name, g.id AS gid, g.name AS gamename, SUM(p.frags) AS frags, SUM(p.kills) AS kills, SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, COUNT(DISTINCT p.matchid) AS matchcount
+		FROM uts_player AS p, uts_games AS g WHERE p.gid = g.id GROUP BY `g`.`name` ORDER BY `gamename` ASC";  // 5.3sec
+}
 $q_gamesummary = mysql_query($sql_gamesummary) or die(mysql_error());
 while ($r_gamesummary = mysql_fetch_array($q_gamesummary)) {
 

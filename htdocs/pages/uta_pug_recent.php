@@ -1,8 +1,7 @@
 <!-- <div style="color:red; font-weight:bold" class="heading">EXPERIMENTAL</div><br><br> -->
 <?php 
-global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
+global $t_match, $t_pinfo, $t_player, $t_games, $dbversion; // fetch table globals.
 // include ("includes/uta_functions.php");
-
 
 error_reporting(E_ALL^E_NOTICE);
 // Firstly we need to work out First Last Next Prev pages
@@ -22,8 +21,13 @@ if (!empty($gid)) $where .= " AND m.gid = '$gid'";
 $where .= " AND (matchcode <> 'HIDDEN') AND (servername LIKE '%PUG%' AND matchcode <> '') AND (teamname0 = 'RED' AND teamname1 = 'BLUE')";
 
 // NEW QUERY
-// 2006-09-05 changed query to fix clan tags and paging // brajan 
-$r_mcount = mysql_query("SELECT COUNT(*) AS result FROM ".(isset($t_match) ? $t_match : "uts_match")." m WHERE matchmode = 1 $where GROUP BY matchcode ORDER BY mapsequence,time");
+// 2006-09-05 changed query to fix clan tags and paging // brajan
+// 2021-05-25 changed to support newer MySQL // timo
+if (isset($dbversion) && floatval($dbversion) > 5.6) {
+  $r_mcount = mysql_query("SELECT COUNT(*) AS result FROM ".(isset($t_match) ? $t_match : "uts_match")." m WHERE matchmode = 1 $where GROUP BY matchcode ORDER BY ANY_VALUE(mapsequence),ANY_VALUE(time);");
+} else { 
+  $r_mcount = mysql_query("SELECT COUNT(*) AS result FROM ".(isset($t_match) ? $t_match : "uts_match")." m WHERE matchmode = 1 $where GROUP BY matchcode ORDER BY mapsequence,time");
+}
 while($count_row = mysql_fetch_assoc($r_mcount)){
 $mcount[] = $count_row['result'];
 }
@@ -111,7 +115,11 @@ echo'
     <td nowrap class="smheading" align="center" width="50">Score</td>
     <td nowrap class="smheading" align="center" width="130">Server</td>
   </tr>';
-$sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.serverinfo, m.gametime, m.matchmode, m.teamname0, m.teamname1, m.matchcode FROM ".(isset($t_match) ? $t_match : "uts_match")." AS m, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE g.id = m.gid AND m.matchmode = 1 $where GROUP BY m.teamname0, m.teamname1, m.matchcode ORDER BY m.time DESC LIMIT $qpage,25";
+if (isset($dbversion) && floatval($dbversion) > 5.6) {
+  $sql_recent = "SELECT ANY_VALUE(m.id) AS id, ANY_VALUE(m.time) AS time, ANY_VALUE(g.name) AS gamename, ANY_VALUE(m.serverinfo) AS serverinfo, ANY_VALUE(m.gametime) AS gametime, ANY_VALUE(m.matchmode) AS matchmode, m.teamname0, m.teamname1, m.matchcode FROM ".(isset($t_match) ? $t_match : "uts_match")." AS m, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE g.id = m.gid AND m.matchmode = 1 $where GROUP BY m.teamname0, m.teamname1, m.matchcode ORDER BY ANY_VALUE(m.time) DESC LIMIT $qpage,25";
+} else {
+  $sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.serverinfo, m.gametime, m.matchmode, m.teamname0, m.teamname1, m.matchcode FROM ".(isset($t_match) ? $t_match : "uts_match")." AS m, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE g.id = m.gid AND m.matchmode = 1 $where GROUP BY m.teamname0, m.teamname1, m.matchcode ORDER BY m.time DESC LIMIT $qpage,25";
+}
 $q_recent = mysql_query($sql_recent) or die(mysql_error());
 while ($r_recent = mysql_fetch_array($q_recent)) {
 	  $r_time = mdate($r_recent[time]);

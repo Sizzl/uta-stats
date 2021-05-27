@@ -24,9 +24,13 @@ echo'
     <td class="smheading" align="center" width="50">Matches</td>
     <td class="smheading" align="center" width="45">Hours</td>
   </tr>';
-
-$sql_totsumm = "SELECT g.name AS gamename, SUM(p.gamescore) AS gamescore, SUM(p.frags) AS frags, SUM(p.kills) AS kills, SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, COUNT(DISTINCT p.matchid) AS matchcount, SUM(p.gametime) AS sumgametime
-FROM uts_player AS p, uts_games AS g WHERE p.gid = g.id GROUP BY gamename ORDER BY gamename ASC";
+if (isset($dbversion) && floatval($dbversion) > 5.6) {
+	$sql_totsumm = "SELECT `g`.`name` AS `gamename`, SUM(p.gamescore) AS `gamescore`, SUM(`p`.`frags`) AS `frags`, SUM(`p`.`kills`) AS `kills`, SUM(`p`.`suicides`) AS `suicides`, SUM(`p`.`teamkills`) AS `teamkills`, COUNT(DISTINCT `p`.`matchid`) AS `matchcount`, SUM(`p`.`gametime`) AS `sumgametime`
+		FROM `uts_player` AS `p`, `uts_games` AS `g` WHERE `p`.`gid` = `g`.`id` GROUP BY `g`.`name` ORDER BY `g`.`name` ASC";
+} else {
+	$sql_totsumm = "SELECT g.name AS gamename, SUM(p.gamescore) AS gamescore, SUM(p.frags) AS frags, SUM(p.kills) AS kills, SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, COUNT(DISTINCT p.matchid) AS matchcount, SUM(p.gametime) AS sumgametime
+		FROM uts_player AS p, uts_games AS g WHERE p.gid = g.id GROUP BY `gamename` ORDER BY `gamename` ASC";
+}
 $q_totsumm = mysql_query($sql_totsumm) or die(mysql_error());
 while ($r_totsumm = zero_out(mysql_fetch_array($q_totsumm))) {
 

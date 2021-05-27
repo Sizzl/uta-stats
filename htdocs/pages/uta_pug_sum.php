@@ -6,7 +6,7 @@ $plik = 'uta_pug_totals-'.md5(base64_encode($_SERVER['QUERY_STRING'])); //file n
 $out = '';
 $home_plik = '/home/utassault/web/pugstats/static/'.$plik.'.cache'; //file path
 $lease = 1800; // cache file expire time
-global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
+global $t_match, $t_pinfo, $t_player, $t_games, $dbversion; // fetch table globals.
 if ( ( !file_exists($home_plik)) OR (time() > (int)filemtime($home_plik) + (int)$lease ) ){
 	
 include_once('includes/teamstats.php');
@@ -16,16 +16,21 @@ $matchcode = $_GET['matchcode'];
 
 //$score0 ='0';
 //$score1 ='0';
-		$sql_matchsummary = "SELECT serverip,servername,serverinfo,gameinfo,SUM(gametime) AS totaltime FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE servername LIKE '%PUG%' AND matchmode = '1' GROUP BY serverip";	  
-		$q_matchsummary = mysql_query($sql_matchsummary) or die(mysql_error());
-		$r_matchsummary = mysql_fetch_array($q_matchsummary);
-			 $serverip = $r_matchsummary[serverip];
-			 $servername = $r_matchsummary[servername];
-			 $serverinfo = $r_matchsummary[serverinfo];
-			 $gameinfo = $r_matchsummary[gameinfo];
-			 $total_time = $total_time + $r_matchsummary[totaltime];
-			 $server_info = preg_split('/\n | \r/', $serverinfo, -1, PREG_SPLIT_NO_EMPTY);
-	$out .= '
+
+if (isset($dbversion) && floatval($dbversion) > 5.6) {
+  $sql_matchsummary = "SELECT ANY_VALUE(serverip) AS serverip, ANY_VALUE(servername) AS servername, ANY_VALUE(serverinfo) AS serverinfo, ANY_VALUE(gameinfo) AS gameinfo ,SUM(gametime) AS totaltime FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE servername LIKE '%PUG%' AND matchmode = '1' GROUP BY serverip";	  
+} else {
+  $sql_matchsummary = "SELECT serverip,servername,serverinfo,gameinfo,SUM(gametime) AS totaltime FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE servername LIKE '%PUG%' AND matchmode = '1' GROUP BY serverip";	  
+}
+$q_matchsummary = mysql_query($sql_matchsummary) or die(mysql_error());
+$r_matchsummary = mysql_fetch_array($q_matchsummary);
+$serverip = $r_matchsummary[serverip];
+$servername = $r_matchsummary[servername];
+$serverinfo = $r_matchsummary[serverinfo];
+$gameinfo = $r_matchsummary[gameinfo];
+$total_time = $total_time + $r_matchsummary[totaltime];
+$server_info = preg_split('/\n | \r/', $serverinfo, -1, PREG_SPLIT_NO_EMPTY);
+$out .= '
 	<table border="0" cellpadding="3" cellspacing="3" width="720" style="background-color:#0F1D2F">
 	  <tbody>
 	  <tr><td align="center"><a href="unreal://'.$serverip.'">'. $servername.' - '.$serverip.'</a></td></tr>

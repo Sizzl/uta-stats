@@ -1,6 +1,6 @@
 <?php 
 // echo '<div style="width: 720px; color:red; font-weight:bold" class="heading">EXPERIMENTAL</div><br><br> -->';
-global $t_match, $t_pinfo, $t_player, $t_games, $t_match, $t_pickups, $t_pickupstats, $htmlcp; // fetch table globals.
+global $t_match, $t_pinfo, $t_player, $t_games, $t_match, $t_pickups, $t_pickupstats, $dbversion, $htmlcp; // fetch table globals.
 error_reporting(E_ALL^E_NOTICE);
 
 // include ("includes/uta_functions.php");
@@ -202,7 +202,22 @@ else
 	$pinfo = [];
 	while ($r_pickups = mysql_fetch_array($q_pickups))
 	{
-		$sql_leaders = "SELECT DISTINCT(`uts_pinfo`.`name`) AS playername,`uts_pinfo`.`country`, COUNT(DISTINCT(`uts_match`.`mapname`)) AS pucount,
+		if (isset($dbversion) && floatval($dbversion) > 5.6)
+		{
+			$sql_leaders = "SELECT DISTINCT(`uts_pinfo`.`name`) AS playername,ANY_VALUE(`uts_pinfo`.`country`) AS `country`, COUNT(DISTINCT(`uts_match`.`mapname`)) AS pucount,
+			                SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",1) AS pickuptype,
+			                CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",-1) AS unsigned) AS pickuporder,
+			                ANY_VALUE(`uts_pickupstats`.`pid`) AS `pid`
+				FROM `uts_pickupstats`
+				INNER JOIN `uts_pickups` ON (`uts_pickups`.`id` = `uts_pickupstats`.`pickup`)
+				INNER JOIN `uts_match` ON (`uts_match`.`id` = `uts_pickupstats`.`matchid`)
+				INNER JOIN `uts_pinfo` ON (`uts_pinfo`.`id` = `uts_pickupstats`.`pid`)
+				WHERE `pickup` = '".$r_pickups['pickup']."'  
+				GROUP BY `uts_pinfo`.`name`;";
+		}
+		else
+		{		
+			$sql_leaders = "SELECT DISTINCT(`uts_pinfo`.`name`) AS playername,`uts_pinfo`.`country`, COUNT(DISTINCT(`uts_match`.`mapname`)) AS pucount,
 			                SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",1) AS pickuptype,
 			                CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",-1) AS unsigned) AS pickuporder,
 			                `uts_pickupstats`.`pid`
@@ -212,6 +227,7 @@ else
 				INNER JOIN `uts_pinfo` ON (`uts_pinfo`.`id` = `uts_pickupstats`.`pid`)
 				WHERE `pickup` = '".$r_pickups['pickup']."'  
 				GROUP BY `uts_pinfo`.`name`;";
+		}
 		$q_leaders = mysql_query($sql_leaders) or die(mysql_error());
 		while ($r_leaders = mysql_fetch_array($q_leaders))
 		{

@@ -388,7 +388,8 @@ $sql_rank = "SELECT g.name AS gamename, r.rank, r.prevrank, r.matches, r.gid, r.
 		WHERE r.gid = g.id AND r.pid = '$pid' AND r.year = '".$rank_year."';";
 $q_rank = mysql_query($sql_rank) or die(mysql_error());
 while ($r_rank = mysql_fetch_array($q_rank)) {
-	$r_no = small_query("SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE year = '".$rank_year."' AND gid= '${r_rank['gid']}' and rank > ". get_dp($r_rank['rank']) ."9");
+	$q_no = "SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE `year` = '".$rank_year."' AND `gid` = '${r_rank['gid']}' AND `rank` > '".get_dp($r_rank['rank'])."9';";
+	$r_no = small_query($q_no);
 	echo'<tr>
 				<td class="grey" align="center">'.RankImageOrText($r_rank['pid'], $name, $r_no['no'], $r_rank['gid'], $r_rank['gamename'], false, '%IT%').'</td>
 		<td class="grey" align="center">'.$r_rank['gamename'].'</td>
