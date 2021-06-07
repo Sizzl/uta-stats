@@ -204,13 +204,14 @@ elseif ($rank_gametime >= 200 && $rank_gametime < 300) {
 // Get sums of different events
 		
 // Select rank record
-$r_rankp = small_query("SELECT id, time, rank, matches FROM uts_rank WHERE pid = '$pid' AND gid = '$gid' AND year = '".$rank_year."'");
+// $r_rankp = small_query("SELECT id, time, rank, matches FROM uts_rank WHERE pid = '$pid' AND gid = '$gid' AND year = '".$rank_year."'");
+$r_rankp = small_query("SELECT `id`, `time`, `rank`, `matches` FROM `uts_rank` WHERE `pid` = '".$pid."' AND `gid` = '".$gid."' AND `year` = '".$rank_year."';");
 $rank_id = $r_rankp[id];
 
 if ($rank_id == NULL)
 {
 	// Add new rank record if one does not exist
-	mysql_query("INSERT INTO uts_rank SET time = '$r_gametime', pid = '$pid', gid = '$gid', rank = '0', matches = '0', year = '".$rank_year."';") or die("import_ranking INSERT; ".mysql_error());
+	mysql_query("INSERT INTO `uts_rank` SET `time` = '".$r_gametime."', `pid` = '".$pid."', `gid` = '".$gid."', `rank` = '0', `matches` = '0', `year` = '".$rank_year."';") or die("import_ranking INSERT; ".mysql_error());
 	$rank_id = mysql_insert_id();
 	$rank_gametime = 0;
 	$rank_crank = 0;
@@ -230,14 +231,14 @@ $eff_rank = $rank_nrank-$rank_crank;
 if ($rank_year <= 0)
 {
 	// Add effective rank points given to uts_player record --// Timo 13/02/2021 - need to understand whether this needs filtering by year; will be a PITA if so.
-	$sql = "UPDATE uts_player SET rank = '".$eff_rank."' WHERE id = '$playerecordid';";
+	$sql = "UPDATE `uts_player` SET `rank` = '".$eff_rank."' WHERE `id` = '$playerecordid';";
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."-----\r\ntotals-3-add_eff_rank_pts:\r\n".$sql."\r\n";
 
 	mysql_query($sql) or die("import_ranking player UPDATE; ".mysql_error());
 }
 // Update the rank
-$sql = "UPDATE uts_rank SET time = '".$rank_gametime."', rank = '".$rank_nrank."', prevrank = '".$rank_crank."', matches = '".$rank_matches."' WHERE id = '".$rank_id."' and year = '".$rank_year."';";
+$sql = "UPDATE `uts_rank` SET `time` = '".$rank_gametime."', `rank` = '".$rank_nrank."', `prevrank` = '".$rank_crank."', `matches` = '".$rank_matches."' WHERE `id` = '".$rank_id."' and year = '".$rank_year."';";
 if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 	$s_debug = $s_debug."-----\r\ntotals-4-update_rank:\r\n".$sql."\r\n";
 

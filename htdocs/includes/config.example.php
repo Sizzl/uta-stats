@@ -82,7 +82,10 @@ if (isset($_SESSION['archive'])) {
 	} 
 }
 
-global $t_games,$t_gamestype,$t_killsmatrix,$t_match,$t_pinfo,$t_player,$t_rank,$t_smartass_objs,$t_smartass_objstats,$t_weapons,$t_weaponstats;
+global $t_discord_players,$t_discord_teams,$t_games,$t_gamestype,$t_killsmatrix,$t_match,$t_pinfo,$t_player,$t_rank,$t_smartass_objs,$t_smartass_objstats,$t_weapons,$t_weaponstats;
+
+$t_discord_players = $d_prefix."discord_players";
+$t_discord_teams = $d_prefix."discord_teams";
 $t_games = $d_prefix."games";
 $t_gamestype = $d_prefix."gamestype";
 $t_killsmatrix = $t_prefix."killsmatrix";

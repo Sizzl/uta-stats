@@ -691,9 +691,9 @@ while (false !== ($filename = readdir($logdir)))
 		{
 		
 			// Insert Server Info Into Database
-			$sql_serverinfo = "INSERT INTO uts_match (id, time, servername, serverip, gamename, gid, gametime, mutators, insta, tournament,	teamgame, mapname, mapfile, serverinfo, gameinfo, frags, kills, suicides, teamkills, deaths,
+			$sql_serverinfo = "INSERT INTO uts_match (time, servername, serverip, gamename, gid, gametime, mutators, insta, tournament,	teamgame, mapname, mapfile, serverinfo, gameinfo, frags, kills, suicides, teamkills, deaths,
 				t0, t1, t2, t3, t0score, t1score, t2score, t3score)
-				VALUES ('', '$gametime', '$servername', '$serverip:$serverport', '$gamename', '$gid', '$servergametime', '$mutators', '$gameinsta', '$tournament',
+				VALUES ('$gametime', '$servername', '$serverip:$serverport', '$gamename', '$gid', '$servergametime', '$mutators', '$gameinsta', '$tournament',
 				'$teamgame', '$mapname', '$mapfile', '$serverinfo', '$gameinfo', '$s_frags', '$s_kills', '$s_suicides', '$s_teamkills', '$s_deaths',
 				$t0info, $t1info, $t2info, $t3info, $t0score, $t1score, $t2score, $t3score);";
 

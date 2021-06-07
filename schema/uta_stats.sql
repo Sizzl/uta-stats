@@ -284,11 +284,11 @@ CREATE TABLE IF NOT EXISTS `uts_player` (
   `ip` int(10) unsigned NOT NULL default '0',
   `gid` tinyint(3) unsigned NOT NULL default '0',
   `gametime` float NOT NULL default '0',
-  `gamescore` smallint(5) unsigned NOT NULL default '0',
+  `gamescore` smallint(5) NOT NULL default '0',
   `lowping` smallint(5) unsigned default '0',
   `highping` smallint(5) unsigned default '0',
   `avgping` smallint(5) unsigned default '0',
-  `frags` smallint(5) unsigned NOT NULL default '0',
+  `frags` smallint(5) NOT NULL default '0',
   `deaths` smallint(5) unsigned NOT NULL default '0',
   `kills` smallint(5) unsigned NOT NULL default '0',
   `suicides` smallint(5) unsigned NOT NULL default '0',
@@ -1703,10 +1703,10 @@ CREATE TABLE IF NOT EXISTS `uts_weaponstats` (
   `year` smallint(4) unsigned NOT NULL default '0',
   `weapon` tinyint(3) unsigned NOT NULL default '0',
   `kills` mediumint(8) unsigned NOT NULL default '0',
-  `shots` int(10) unsigned NOT NULL default '0',
+  `shots` int(10) NOT NULL default '0',
   `hits` int(10) unsigned NOT NULL default '0',
   `damage` int(10) unsigned NOT NULL default '0',
-  `acc` float unsigned NOT NULL default '0',
+  `acc` float NOT NULL default '0',
   KEY `full` (`matchid`,`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 

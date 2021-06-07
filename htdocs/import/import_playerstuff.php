@@ -103,15 +103,15 @@
 	$r_tos = 0;
 	$r_ttl = 0;
 
-	$q_acc = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'accuracy' AND col3 = $playerid");
-	$q_deaths = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'deaths' AND col3 = $playerid");
-	$q_kills = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'kills' AND col3 = $playerid");
-	$q_teamkills = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'teamkills' AND col3 = $playerid");
-	$q_efficiency = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'efficiency' AND col3 = $playerid");
-	$q_suicides = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'suicides' AND col3 = $playerid");
-	$q_tos = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = $playerid");
-	$q_ttl = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'ttl' AND col3 = $playerid");
-	$q_score = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'score' AND col3 = $playerid");
+	$q_acc = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'accuracy' AND col3 = $playerid");
+	$q_deaths = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'deaths' AND col3 = $playerid");
+	$q_kills = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'kills' AND col3 = $playerid");
+	$q_teamkills = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'teamkills' AND col3 = $playerid");
+	$q_efficiency = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'efficiency' AND col3 = $playerid");
+	$q_suicides = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'suicides' AND col3 = $playerid");
+	$q_tos = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = $playerid");
+	$q_ttl = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'ttl' AND col3 = $playerid");
+	$q_score = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'score' AND col3 = $playerid");
 
 	IF ($teamgame == "True") {
 		$r_kills = $q_kills[col4];
@@ -126,7 +126,7 @@
 	$r_efficiency = get_dp($q_efficiency[col4]);
 	$r_deaths = $q_deaths[col4];
 	$r_suicides = $q_suicides[col4];
-	$r_frags = $r_kills-$r_suicides-$r_teamkills;
+	$r_frags = $r_kills - $r_suicides - $r_teamkills;
 
 	$r_tos = get_dp($q_tos[col4]);
 	$r_ttl = get_dp($q_ttl[col4]);
@@ -134,50 +134,49 @@
 
 	// Generate player record
 	$sql_playerid = "	INSERT 
-							INTO		uts_player 
-							SET		matchid = '$matchid',
-										playerid = '$playerid',
-										pid = '$pid',
-										team = '$playerteam',
-										gid = '$gid',
-										insta = '$gameinsta',
-										country = '$playercountry',
-										ip = '$playerip',
-										
-										
-										spree_double = '$q_spree_dbl',
-										spree_multi = '$q_spree_mult',
-										spree_ultra = '$q_spree_ult',
-										spree_monster = '$q_spree_mon',
-										spree_kill = '$q_spree_kill',
-										spree_rampage = '$q_spree_rampage',
-										spree_dom = '$q_spree_dom',
-										spree_uns = '$q_spree_uns',
-										spree_god = '$q_spree_god',
+							INTO		`uts_player`
+							SET		`matchid` = '".$matchid."',
+										`playerid` = '".$playerid."',
+										`pid` = '".$pid."',
+										`team` = '".$playerteam."',
+										`gid` = '".$gid."',
+										`insta` = '".$gameinsta."',
+										`country` = '".$playercountry."',
+										`ip` = '".$playerip."',
+																				
+										`spree_double` = '".$q_spree_dbl."',
+										`spree_multi` = '".$q_spree_mult."',
+										`spree_ultra` = '".$q_spree_ult."',
+										`spree_monster` = '".$q_spree_mon."',
+										`spree_kill` = '".$q_spree_kill."',
+										`spree_rampage` = '".$q_spree_rampage."',
+										`spree_dom` = '".$q_spree_dom."',
+										`spree_uns` = '".$q_spree_uns."',
+										`spree_god` = '".$q_spree_god."',
 											
-										pu_pads = '$pu_pads',
-										pu_armour = '$pu_armour',
-										pu_keg = '$pu_keg',
-										pu_belt = '$pu_belt',
-										pu_amp = '$pu_amp',
-										pu_invis = '$pu_invis',
+										`pu_pads` = '".$pu_pads."',
+										`pu_armour` = '".$pu_armour."',
+										`pu_keg` = '".$pu_keg."',
+										`pu_belt` = '".$pu_belt."',
+										`pu_amp` = '".$pu_amp."',
+										`pu_invis` = '".$pu_invis."',
 										
-										lowping = '$lowping',
-										highping = '$highping',
-										avgping = '$avgping',
+										`lowping` = '".$lowping."',
+										`highping` = '".$highping."',
+										`avgping` = '".$avgping."',
 						
-										accuracy = '$r_acc', 
-										frags = '$r_frags', 
-										deaths = '$r_deaths', 
-										kills = '$r_kills', 
-										suicides = '$r_suicides',
-										teamkills = '$r_teamkills', 
-										eff = '$r_efficiency', 
-										gametime = '$r_tos', 
-										ttl = '$r_ttl', 
-										gamescore= '$r_score'"; 
+										`accuracy` = '".$r_acc."', 
+										`frags` = '".$r_frags."', 
+										`deaths` = '".$r_deaths."', 
+										`kills` = '".$r_kills."', 
+										`suicides` = '".$r_suicides."',
+										`teamkills` = '".$r_teamkills."', 
+										`eff` = '".$r_efficiency."', 
+										`gametime` = '".$r_tos."', 
+										`ttl` = '".$r_ttl."', 
+										`gamescore` = '".$r_score."';"; 
 	
-	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff final; ".mysql_error());
+	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff final; (f=".$r_frags."; s=\n".$sql_playerid.")\n".mysql_error()."\n");
 	$playerecordid = mysql_insert_id();
 
 
