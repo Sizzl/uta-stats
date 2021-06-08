@@ -293,7 +293,7 @@ while (false !== ($filename = readdir($logdir)))
 			$col5 = trim($col5, " \n\r");
 
 			$id++;
-			mysql_query("INSERT INTO uts_temp_$uid VALUES ($id, '$col0', '$col1', '$col2', '$col3', '$col4', '$col5');") or die("log2tmp - ".mysql_error());
+			mysql_query("INSERT INTO `uts_temp_".$uid."` VALUES ($id, '$col0', '$col1', '$col2', '$col3', '$col4', '$col5');") or die("log2tmp - ".mysql_error());
 		}
 	}
 	fclose($handle);
@@ -304,10 +304,10 @@ while (false !== ($filename = readdir($logdir)))
 
 	$log_incompatible = false;
 	$actor_version = 'unknown';
-	$qm_logtype = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Log_Standard'");
+	$qm_logtype = small_query("SELECT `col3` FROM `uts_temp_".$uid."` WHERE `col1` = 'info' AND `col2` = 'Log_Standard';");
 	if ($qm_logtype['col3'] == 'UTStats')
 	{
-		$qm_logversion = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Log_Version'");
+		$qm_logversion = small_query("SELECT `col3` FROM `uts_temp_".$uid."` WHERE `col1` = 'info' AND `col2` = 'Log_Version';");
 		$actor_version = $qm_logversion['col3'];
 	}
 
@@ -328,14 +328,14 @@ while (false !== ($filename = readdir($logdir)))
 	// --// Timo @ 2009/02/19 - Filter out all non-league matches if toggle enabled
 	if ($ftp_matchesonly==true)
 	{
-		$qm_matchmode = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'ass_matchmode'");
+		$qm_matchmode = small_query("SELECT `col2` FROM `uts_temp_".$uid."` WHERE `col1` = 'ass_matchmode';");
 		if ($qm_matchmode['col2'] != "True")
 		{
 			$log_incompatible = true;
 			$actor_version = "League Matches Only (see import.php) - result: ".$qm_matchmode['col2'];
 		}
 		// Exception for Easter
-		$qm_mutatorex = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GoodMutator' AND col3 LIKE '%Easter Egg Hunt%'");
+		$qm_mutatorex = small_query("SELECT `col3` FROM `uts_temp_".$uid."` WHERE `col1` = 'game' AND `col2` = 'GoodMutator' AND `col3` LIKE '%Easter Egg Hunt%'");
 		if (isset($qm_mutatorex) && strpos($qm_mutatorex['col3'],"Easter Egg Hunt") > 0)
 		{
 			$log_incompatible = false;
@@ -526,7 +526,7 @@ while (false !== ($filename = readdir($logdir)))
 			echo "ERROR: DUPLICATE LOGFILE \nServer: $servername\nGame: $gametime \nIgnoring...";
 			if ($html) echo '</td></tr>';							
 			// Delete Temp MySQL Table
-			$droptable = "DROP TABLE uts_temp_$uid";
+			$droptable = "DROP TABLE `uts_temp_".$uid."`;";
 			mysql_query($droptable) or die("tmp drop ".mysql_error());		
 			if ($html) echo'<tr><td class="smheading" align="left" width="350">';
 			echo "Deleting Temp MySQL Table: ";
@@ -567,7 +567,7 @@ while (false !== ($filename = readdir($logdir)))
 			$gid = $r_gid['id'];
 		else
 		{
-			mysql_query("INSERT INTO uts_games SET gamename = '$gamename', name = '$gamename'") or die("game ins - ".mysql_error());
+			mysql_query("INSERT INTO `uts_games` SET `gamename` = '".$gamename."', `name` = '".$gamename."';") or die("game ins - ".mysql_error());
 			$gid = mysql_insert_id();
 		}
 
@@ -580,7 +580,7 @@ while (false !== ($filename = readdir($logdir)))
 		if (!isset($overriderules))
 		{
 			$overriderules = array();
-			$sql_overriderules = "SELECT id, serverip, gamename, mutator, gid FROM uts_gamestype ORDER BY id ASC;";
+			$sql_overriderules = "SELECT `id`, `serverip`, `gamename`, `mutator`, `gid` FROM `uts_gamestype` ORDER BY `id` ASC;";
 			$q_overriderules = mysql_query($sql_overriderules);
 			while ($r_overriderules = mysql_fetch_array($q_overriderules))
 			{
@@ -637,7 +637,7 @@ while (false !== ($filename = readdir($logdir)))
 
 
 		// Get Teams Info
-		$sql_tinfo = "SELECT col4 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'TeamName'  GROUP BY col4 ORDER BY col4 ASC";
+		$sql_tinfo = "SELECT `col4` FROM `uts_temp_".$uid."` WHERE `col1` = 'player' AND `col2` = 'TeamName'  GROUP BY `col4` ORDER BY `col4` ASC";
 		$q_tinfo = mysql_query($sql_tinfo) or die(mysql_error());
 
 		$t0info = 0;
@@ -868,14 +868,14 @@ while (false !== ($filename = readdir($logdir)))
 			{
 				echo "\nRemoving match info; 1 or less valid players remain. Override with \$allow_sololog\n";
 			}
-			$sql_radjust = "SELECT pid, gid, rank FROM uts_player WHERE matchid = $matchid";
+			$sql_radjust = "SELECT `pid`, `gid`, `rank` FROM `uts_player` WHERE `matchid` = '".$matchid."';";
 			$q_radjust = mysql_query($sql_radjust) or die("Rank Sel ".mysql_error());
 			while ($r_radjust = mysql_fetch_array($q_radjust)) {
 				$pid = $r_radjust[pid];
 				$gid = $r_radjust[gid];
 				$rank = $r_radjust[rank];
 
-				$sql_crank = small_query("SELECT id, rank, matches FROM uts_rank WHERE pid = $pid AND gid = $gid");
+				$sql_crank = small_query("SELECT `id`, `rank`, `matches` FROM `uts_rank` WHERE `pid` = '".$pid."' AND `gid` = '".$gid."';");
 				if (!$sql_crank) continue;
 
 				$rid = $sql_crank[id];
@@ -883,16 +883,16 @@ while (false !== ($filename = readdir($logdir)))
 				$oldrank = $sql_crank[rank];
 				$matchcount = $sql_crank[matches]-1;
 
-				mysql_query("UPDATE uts_rank SET rank = $newrank, prevrank = $oldrank, matches = $matchcount WHERE id = $rid") or die("Rank Upd ".mysql_error());
+				mysql_query("UPDATE `uts_rank` SET `rank` = '".$newrank."', `prevrank` = '".$oldrank."', `matches` = '".$matchcount."' WHERE `id` = '".$rid."';") or die("Rank Upd ".mysql_error());
 			}
-			mysql_query("DELETE FROM uts_rank WHERE matches = 0") or die(mysql_error());
+			mysql_query("DELETE FROM `uts_rank` WHERE `matches` = '0';") or die(mysql_error());
 
-			$rem_mrecord = "DELETE FROM uts_match WHERE id = $matchid";
+			$rem_mrecord = "DELETE FROM `uts_match` WHERE `id` = '".$matchid."';";
 			mysql_query($rem_mrecord);
-			$rem_precord = "DELETE FROM uts_player WHERE matchid = $matchid";
+			$rem_precord = "DELETE FROM `uts_player` WHERE `matchid` = '".$matchid."';";
 			mysql_query($rem_precord);
 			// CRATOS
-			$rem_objstats = "DELETE FROM uts_smartass_objstats WHERE matchid = $matchid";
+			$rem_objstats = "DELETE FROM `uts_smartass_objstats` WHERE `matchid` = '".$matchid."';";
 			mysql_query($rem_objstats);
 		}
 		else
@@ -938,14 +938,14 @@ while (false !== ($filename = readdir($logdir)))
 				}
 			}
 			if ($updategameinfo) {
-				mysql_query("UPDATE uts_match SET gameinfo = '$gameinfo' WHERE id = '$matchid'");
+				mysql_query("UPDATE `uts_match` SET `gameinfo` = '".$gameinfo."' WHERE `id` = '".$matchid."';");
 				$updategameinfo = false;
 			}
 		}
 	}
 
 	// Delete Temp MySQL Table
-	$droptable = "DROP TABLE uts_temp_$uid";
+	$droptable = "DROP TABLE `uts_temp_".$uid."`;";
 	mysql_query($droptable) or die(mysql_error());
 
 	if ($html) echo'<tr><td class="smheading" align="left" width="350">';
@@ -1024,7 +1024,7 @@ if (rand(0, 5) == 0)
 {
 	if ($html) echo '<p class="pages">';
 	echo "Optimizing tables... ";
-	mysql_query("OPTIMIZE TABLE uts_match, uts_player, uts_rank, uts_killsmatrix, uts_weaponstats, uts_pinfo;") or die(mysql_error());
+	mysql_query("OPTIMIZE TABLE `uts_match`, `uts_player`, `uts_rank`, `uts_killsmatrix`, `uts_weaponstats`, `uts_pinfo`;") or die(mysql_error());
 	echo "Done\n";
 	if ($html) echo '</p>';
 }
@@ -1034,7 +1034,7 @@ if (rand(0, 10) == 0)
 {
 	if ($html) echo '<p class="pages">';
 	echo "Analyzing tables... ";
-	mysql_query("ANALYZE TABLE uts_match, uts_player, uts_rank, uts_killsmatrix, uts_weaponstats, uts_pinfo;") or die(mysql_error());
+	mysql_query("ANALYZE TABLE `uts_match`, `uts_player`, `uts_rank`, `uts_killsmatrix`, `uts_weaponstats`, `uts_pinfo`;") or die(mysql_error());
 	echo "Done\n";
 	if ($html) echo '</p>';
 }

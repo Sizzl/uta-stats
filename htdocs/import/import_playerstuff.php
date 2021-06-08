@@ -33,7 +33,15 @@
 		$playerbanned = true;
 
 	// Map the IP to a country --// Modified 20/07/05 Timo: Added iptc fields (configurable via config.php)
-	$q_playercountry = small_query("SELECT ".$iptc["cfield"]." AS country FROM ".$iptc["table"]." WHERE ".$playerip." BETWEEN ".$iptc["ffield"]." AND ".$iptc["tfield"].";");
+	// $q_playercountry = small_query("SELECT ".$iptc["cfield"]." AS country FROM ".$iptc["table"]." WHERE ".$playerip." BETWEEN ".$iptc["ffield"]." AND ".$iptc["tfield"].";");
+	// Added index to ip_cidr and modified query for performance gains -- Timo 2021/06
+	$sql_playercountry = "SELECT ".$iptc["cfield"]." AS country
+			FROM 
+			( SELECT `".$iptc["ifield"]."` FROM `".$iptc["table"]."` WHERE `".$iptc["ffield"]."` <= ".$playerip." ORDER BY `".$iptc["ffield"]."` DESC LIMIT 1 ) `limit_ip`
+			INNER JOIN `".$iptc["table"]."` ON limit_ip.`".$iptc["ifield"]."` = `".$iptc["table"]."`.`".$iptc["ifield"]."`
+			WHERE `".$iptc["table"]."`.`".$iptc["tfield"]."` >= ".$playerip.";";
+	$q_playercountry = small_query($sql_playercountry);
+
 	if ($q_playercountry) {
 		$playercountry = strtolower($q_playercountry[country]);
 	} else {

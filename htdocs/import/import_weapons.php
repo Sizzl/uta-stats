@@ -157,7 +157,7 @@ foreach($weapons as $playerid => $weapon) {
 						SET `matchid` = '0', pid = '".$playerid."', `weapon` = '".$weaponid."',
 							`kills` = '".$infos['weap_kills']."', `shots` = '".$infos['weap_shotcount']."',
 							`hits` = '".$infos['weap_hitcount']."', `damage` = '".$infos['weap_damagegiven']."',
-							`acc` = '". round($infos['weap_accuracy'], 2) ."', `year` = '".$year."';") or die('ws1'.mysql_error());
+							`acc` = '". round(($infos['weap_accuracy'] > 0 ? $infos['weap_accuracy'] : 0), 2) ."', `year` = '".$year."';") or die('ws1'.mysql_error());
 			} else {
 			// Yes -> update 
 				// Get match count for acc
@@ -207,18 +207,18 @@ foreach($s_weapons as $weaponid => $infos) {
 										`pid` = '0',
 										`weapon` = '".$weaponid."',
 										`kills` = '".$infos['weap_kills']."',
-										`shots` = '".$infos['weap_shotcount']."',
+										`shots` = '".($infos['weap_shotcount'] > 0 ? $infos['weap_shotcount'] : 0)."',
 										`hits`= '".$infos['weap_hitcount']."',
 										`damage` = '".$infos['weap_damagegiven']."',
-										`acc` = '". round($infos['weap_accuracy'], 2) ."';";
+										`acc` = '". round(($infos['weap_accuracy'] > 0 ? $infos['weap_accuracy'] : 0), 2) ."';";
 	// Yes -> update 
 	} else {
 		$ws_sql = "UPDATE `uts_weaponstats` SET `weapon` = '".$weaponid."',
 							`kills` = `kills` + '".$infos['weap_kills']."',
-							`shots` = `shots` + '".$infos['weap_shotcount']."',
+							`shots` = `shots` + '".($infos['weap_shotcount'] > 0 ? $infos['weap_shotcount'] : 0)."',
 							`hits` = `hits` + '".$infos['weap_hitcount']."',
 							`damage` = `damage` + '".$infos['weap_damagegiven']."',
-							`acc` = (`acc` + '". round($infos['weap_accuracy'], 2) ."') / 2
+							`acc` = (`acc` + '". round(($infos['weap_accuracy'] ? $infos['weap_accuracy'] : 0), 2) ."') / 2
 							WHERE `matchid` = '0'
 							AND `pid` = '0'
 							AND `weapon` = '$weaponid';";

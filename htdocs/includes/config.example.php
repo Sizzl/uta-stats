@@ -43,7 +43,8 @@ $asclasses[] = array("id"=>"3",
   $iptc = array("table"=>"ipToCountry",
 		"cfield"=>"lower(country_code2)",
 		"tfield"=>"ip_to",
-		"ffield"=>"ip_from");
+		"ffield"=>"ip_from",
+		"ifield"=>"ip_cidr");
 
 // Theme location --// 10/07/05 Timo: Started basic theme selection
 // 		  --// 19/07/05 Timo: Moved theme information to uta_themes.php
