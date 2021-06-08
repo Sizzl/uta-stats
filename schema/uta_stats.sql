@@ -29,6 +29,36 @@ CREATE TABLE IF NOT EXISTS `ipToCountry` (
   PRIMARY KEY  (`ip_from`,`ip_to`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ipToCountry2`
+--
+
+DROP TABLE IF EXISTS `ipToCountry2`;
+CREATE TABLE IF NOT EXISTS `ipToCountry2` (
+  `ip_from` double NOT NULL DEFAULT '0',
+  `ip_to` double NOT NULL DEFAULT '0',
+  `ip_cidr` varchar(18) NOT NULL,
+  `geo_id` double NOT NULL DEFAULT '0',
+  `reg_id` double NOT NULL DEFAULT '0',
+  `anon` tinyint(1) NOT NULL DEFAULT '0',
+  `sat` tinyint(1) NOT NULL DEFAULT '0',
+  `country_code2` char(2) NOT NULL DEFAULT '',
+  `country_code3` char(3) DEFAULT NULL,
+  `country_name` varchar(50) NOT NULL DEFAULT '',
+  `country_lat` double(7,4) NOT NULL,
+  `country_lon` double(7,4) NOT NULL,
+  `continent_code2` char(2) NOT NULL,
+  `continent_name` varchar(20) NOT NULL,
+  `in_eu` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ip_from`,`ip_to`),
+  KEY `ip_from` (`ip_from`),
+  KEY `ip_to` (`ip_to`),
+  KEY `ip_cidr` (`ip_cidr`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 -- --------------------------------------------------------
 
 -- 
