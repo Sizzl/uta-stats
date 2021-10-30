@@ -16,6 +16,16 @@ else
 	$cpage = "0";
 }
 
+if (isset($_REQUEST["p"]) && $_REQUEST["p"] == "utapugeventhalloween")
+{
+	$pickup = "Lantern";
+	$hunttitle = "Halloween Hunting";
+}
+else
+{
+	$pickup = "Easter Egg";
+	$hunttitle = "Easter Eggstravaganza Event: The Hunt";
+}
 // Firstly we need to work out First Last Next Prev pages
 $where = ' ';
 $year = !empty($_REQUEST['year']) ? my_addslashes(sprintf("%04d", $_REQUEST['year'])) : date("Y");
@@ -56,7 +66,7 @@ $sql = "SELECT
 	FROM `".(isset($t_pickupstats) ? $t_pickupstats : "uts_pickupstats")."`
 	INNER JOIN `".(isset($t_pickups) ? $t_pickups : "uts_pickups")."` ON (`".(isset($t_pickups) ? $t_pickups : "uts_pickups")."`.`id` = `".(isset($t_pickupstats) ? $t_pickupstats : "uts_pickupstats")."`.`pickup`)
 	INNER JOIN `".(isset($t_match) ? $t_match : "uts_match")."` ON (`".(isset($t_match) ? $t_match : "uts_match")."`.`id` = `".(isset($t_pickupstats) ? $t_pickupstats : "uts_pickupstats")."`.`matchid`)
-	WHERE `".(isset($t_pickups) ? $t_pickups : "uts_pickups")."`.`name` LIKE '%Easter Egg%' AND year = '".$year."'
+	WHERE `".(isset($t_pickups) ? $t_pickups : "uts_pickups")."`.`name` LIKE '%".$pickup."%' AND year = '".$year."'
 	ORDER BY `mapdisplay`, `pickuptype`, `pickuporder` ASC";
 
 // echo "<!-- ".$sql." -->\n";
@@ -103,7 +113,7 @@ if($cpage == "0") { $fpageurl = "[First]"; }
 $lpageurl = "<a class=\"pages\" href=\"./?p=".$vpage."&amp;year=$year&amp;page=".$lpage."\">[Last]</a>";
 if($cpage == "$lpage") { $lpageurl = "[Last]"; }
 
-echo '<div style="width: 720px;" class="heading">Easter Eggstravaganza Event: The Hunt '.$year;
+echo '<div style="width: 720px;" class="heading">'.$hunttitle.' '.$year;
 if (date("Y") > 2021) // started in 2021
 {
 	echo '<br /><br /><form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
@@ -195,7 +205,7 @@ else
 	FROM `uts_pickupstats`
 	INNER JOIN `uts_pickups` ON (`uts_pickups`.`id` = `uts_pickupstats`.`pickup`)
 	INNER JOIN `uts_match` ON (`uts_match`.`id` = `uts_pickupstats`.`matchid`)
-	WHERE `uts_pickups`.`name` LIKE '%Easter Egg%' AND year = '".$year."'
+	WHERE `uts_pickups`.`name` LIKE '%".$pickup."%' AND year = '".$year."'
 	ORDER BY `pickuptype`, `pickuporder` ASC;";
 	$q_pickups = mysql_query($sql_pickups) or die (mysql_error());
 	$leaders = [];

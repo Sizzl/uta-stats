@@ -28,7 +28,11 @@ switch ($pagehandler)
 	
 	case "utapugrecent": utapugrecent(); break;	// list of recent PUG games, 30 in date order
 	case "utapugsummary": utapugsummary(); break;	// summary of all PUG games
-	case "utapugeventeaster": utapugeaster(); break;
+	
+	case "utapugeventeaster": utapugevents(); break;
+	case "utapugeventhalloween": utapugevents(); break;
+	case "utapugeventxmas": utapugevents(); break;
+	case "utapugeventloveday": utapugevents(); break;
 
 	case "utarecent": utarecent(); break;	// list of recent league games, 30 in date order
 	case "uta_match": uta_match(); break;	// list of recent league games, 30 in date order
@@ -72,9 +76,9 @@ function utapugsummary()
 {
 	include("pages/uta_pug_sum.php");
 }
-function utapugeaster()
+function utapugevents()
 {
-	include("pages/uta_pug_easter.php");
+	include("pages/uta_pug_events.php");
 }
 
 function utapinfo()

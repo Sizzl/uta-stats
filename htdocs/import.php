@@ -335,8 +335,8 @@ while (false !== ($filename = readdir($logdir)))
 			$actor_version = "League Matches Only (see import.php) - result: ".$qm_matchmode['col2'];
 		}
 		// Exception for Easter
-		$qm_mutatorex = small_query("SELECT `col3` FROM `uts_temp_".$uid."` WHERE `col1` = 'game' AND `col2` = 'GoodMutator' AND `col3` LIKE '%Easter Egg Hunt%'");
-		if (isset($qm_mutatorex) && strpos($qm_mutatorex['col3'],"Easter Egg Hunt") > 0)
+		$qm_mutatorex = small_query("SELECT `col3` FROM `uts_temp_".$uid."` WHERE `col1` = 'game' AND `col2` = 'GoodMutator' AND (`col3` LIKE '%Easter Egg Hunt%' or `col3` LIKE '%Halloween Hunt%')");
+		if (isset($qm_mutatorex) && strpos($qm_mutatorex['col3'],"Hunt") > 0)
 		{
 			$log_incompatible = false;
 			$allow_solologs = true;
