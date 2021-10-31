@@ -402,7 +402,7 @@ while (false !== ($filename = readdir($logdir)))
 		echo "No (Empty Match)\n";
 		if ($html) echo '</td></tr>';
 	}
-	elseif ($qm_playercount < 2 && strpos($qm_mutators,"Easter Egg Hunt")===FALSE)
+	elseif ($qm_playercount < 2 && (!isset($allow_solologs) || $allow_solologs==false))
 	{
 		echo "No (Not Enough Players)\n";
 		if ($html) echo '</td></tr>';
