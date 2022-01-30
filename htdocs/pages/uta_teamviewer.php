@@ -2,6 +2,7 @@
 include_once ("includes/config.php");
 // include_once ("includes/uta_functions.php");
 include_once ("uta_recordzone_filters.php");
+global $dbversion, $htmlcp;
 
 if ($_GET['team'])
 	$teamname = addslashes($_GET['team']);
@@ -63,7 +64,7 @@ uta_rz_FilterFormMini(); // Show Filter form
 					echo '<tr>';
 					echo "\r\n";
 				}
-				echo '<td class="grey" align="center" nowrap="nowrap"><a class="grey" href="?p='.$_GET['p'].'&team='.urlencode($teams->teams).'">'.htmlspecialchars($teams->teams).'</a></td>';
+				echo '<td class="grey" align="center" nowrap="nowrap"><a class="grey" href="?p='.$_GET['p'].'&team='.urlencode($teams->teams).'">'.htmlentities($teams->teams,ENT_SUBSTITUTE,$htmlcp).'</a></td>';
 				echo "\r\n";
 				$i++;
 			}
@@ -86,14 +87,26 @@ uta_rz_FilterFormMini(); // Show Filter form
 		echo '</td></tr>
 		<tr>
 			<td class="medheading" align="center" colspan="'.$thiscolspan.'"><br />Viewing team:- &nbsp;
-				<a class="medheading" href="?p='.$_GET['p'].'&team='.urlencode($teamname).'">'.htmlspecialchars($teamname).'</a>
+				<a class="medheading" href="?p='.$_GET['p'].'&team='.urlencode($teamname).'">'.htmlentities($teamname,ENT_SUBSTITUTE,$htmlcp).'</a>
 				<br />&nbsp;
 			</td>
 		</tr>';
 		unset($players_matches);
 		unset($players_teams);
-
-		$players_sql = "SELECT 'fixed_teamviewer' as dohquery, 
+		if (isset($dbversion) && floatval($dbversion) > 5.6) {
+			$players_sql = "SELECT 'fixed_teamviewer' as dohquery, 
+					ANY_VALUE(uts_match.id) AS matchid, ANY_VALUE(uts_match.teamname0), ANY_VALUE(uts_match.teamname1), uts_player.pid, uts_pinfo.*
+				FROM uts_player
+				INNER JOIN uts_pinfo ON ( uts_player.pid = uts_pinfo.id )
+				INNER JOIN uts_match ON ( uts_player.matchid = uts_match.id )
+				WHERE uts_pinfo.name LIKE '%®' AND 
+					uts_match.matchmode=1 AND (
+						(uts_match.`teamname0` = '".addslashes($teamname)."' AND uts_player.team=0) OR
+						(uts_match.`teamname1` = '".addslashes($teamname)."' AND uts_player.team=1)
+					) ".$record_condition_gametypes."
+				GROUP BY uts_player.pid;";
+		} else {
+			$players_sql = "SELECT 'fixed_teamviewer' as dohquery, 
 					uts_match.id AS matchid, uts_match.teamname0, uts_match.teamname1, uts_player.pid, uts_pinfo . *
 				FROM uts_player
 				INNER JOIN uts_pinfo ON ( uts_player.pid = uts_pinfo.id )
@@ -104,6 +117,7 @@ uta_rz_FilterFormMini(); // Show Filter form
 						(uts_match.`teamname1` = '".addslashes($teamname)."' AND uts_player.team=1)
 					) ".$record_condition_gametypes."
 				GROUP BY uts_player.pid;";
+		}
 		if (1==1) { // save me fixing the brackets
 /*
 		$matches_sql = "SELECT `id`, `teamname0`, `teamname1` FROM `uts_match` WHERE (`teamname0` = '".addslashes($teamname)."' OR `teamname1` = '".addslashes($teamname)."') AND matchmode='1' ".$record_condition_gametypes.";";
@@ -139,7 +153,7 @@ uta_rz_FilterFormMini(); // Show Filter form
 
 			$players_sql .= ")
 					 GROUP BY uts_player.pid;"; */
-			debugprint($players_sql,"SQL","121");
+			// debugprint($players_sql,"SQL","121");
 // 			echo "<!-- SQL: ".$players_sql." -->\r\n";
 			$players_query = mysql_query($players_sql) or die(mysql_error());
 			if (mysql_num_rows($players_query))
@@ -194,7 +208,6 @@ uta_rz_FilterFormMini(); // Show Filter form
 				$thismonth_start = date("Ym")."01000000";
 				$thismonth_end   = date("Ymt")."235959";
 				$i = 0;
-				global $htmlcp;
 				while ($player = mysql_fetch_object($players_query))
 				{
 					$playerid = $player->id;

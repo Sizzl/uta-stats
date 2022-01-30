@@ -691,13 +691,23 @@ while (false !== ($filename = readdir($logdir)))
 		{
 		
 			// Insert Server Info Into Database
+			if (!isset($s_frags))
+				$s_frags = 0;
+			if (!isset($s_kills))
+				$s_kills = 0;
+			if (!isset($s_teamkills))
+				$s_teamkills = 0;
+			if (!isset($s_suicides))
+				$s_suicides = 0;
+			if (!isset($s_deaths))
+				$s_deaths = 0;
 			$sql_serverinfo = "INSERT INTO uts_match (time, servername, serverip, gamename, gid, gametime, mutators, insta, tournament,	teamgame, mapname, mapfile, serverinfo, gameinfo, frags, kills, suicides, teamkills, deaths,
 				t0, t1, t2, t3, t0score, t1score, t2score, t3score)
 				VALUES ('$gametime', '$servername', '$serverip:$serverport', '$gamename', '$gid', '$servergametime', '$mutators', '$gameinsta', '$tournament',
 				'$teamgame', '$mapname', '$mapfile', '$serverinfo', '$gameinfo', '$s_frags', '$s_kills', '$s_suicides', '$s_teamkills', '$s_deaths',
 				$t0info, $t1info, $t2info, $t3info, $t0score, $t1score, $t2score, $t3score);";
 
-			$q_serverinfo = mysql_query($sql_serverinfo) or die("Match Ins ".mysql_error());
+			$q_serverinfo = mysql_query($sql_serverinfo) or die("Match Ins ".mysql_error().";SQL: ".$sql_serverinfo);
 			$matchid = mysql_insert_id();			// Get our Match ID
 			echo "Yes (ID: $matchid)\n";
 		}

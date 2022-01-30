@@ -18,7 +18,7 @@ if (!empty($gid)) $where .= " AND m.gid = '$gid'";
  
 // Added extra filter for non-specific friendly matches
 // 2006-09-05 added some stuff to avoid RED vs BLUE or empty clan names // brajan
-$where .= " AND (matchcode <> 'HIDDEN') AND (servername LIKE '%PUG%' AND matchcode <> '') AND (teamname0 = 'RED' AND teamname1 = 'BLUE')";
+$where .= " AND (matchcode <> 'HIDDEN') AND ((servername LIKE '%PUG%' OR servername LIKE '%Cup%') AND matchcode <> '') AND (teamname0 = 'RED' AND teamname1 = 'BLUE')";
 
 // NEW QUERY
 // 2006-09-05 changed query to fix clan tags and paging // brajan

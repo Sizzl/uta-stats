@@ -43,8 +43,10 @@
 	
 	$r_assteam = small_query("SELECT `col2` FROM `uts_temp_".$uid."` WHERE `col1` = 'assault_attacker' LIMIT 0,1;");
 	$assteam = $r_assteam[col2];
+	if (!isset($assteam))
+		$assteam = 0;
 	$updateassteam = "UPDATE `uts_match` SET `ass_att` = '".$assteam."' WHERE `id` = '".$matchid."';";
-	mysql_query($updateassteam) or die("uta_match UPDATE team; ".mysql_error());
+	mysql_query($updateassteam) or die("uta_match UPDATE team; ".mysql_error()."SQL-".$updateaassteam);
 	
 	
 	$teamname0 = addslashes($teamname0);

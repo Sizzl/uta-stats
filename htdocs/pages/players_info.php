@@ -2,7 +2,7 @@
 include_once ("includes/config.php");
 include_once ("includes/uta_functions.php");
 global $t_rank, $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
-global $admin_ip, $pic_enable, $htmlcp, $rank_year, $t_width;
+global $admin_ip, $pic_enable, $htmlcp, $rank_year, $t_width, $dbversion;
 $t_width="710";
 $pid = isset($pid) ? addslashes($pid) : addslashes($_GET['pid']);
 $rank_year = 0;
@@ -375,7 +375,7 @@ echo'<table class="box" border="0" cellpadding="1" cellspacing="1">
     <td class="heading" colspan="6" align="center">'.($rank_year > 0 ? $rank_year : "All Time").' Ranking</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="50">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>
+    <td class="smheading" align="center" width="50">'.htmlentities("Nï¿½",ENT_SUBSTITUTE,$htmlcp).'</td>
     <td class="smheading" align="center" width="140">Match Type</td>
     <td class="smheading" align="center" width="80">Rank</td>
     <td class="smheading" align="center" width="50">Matches</td>
@@ -491,8 +491,15 @@ echo'<br><table class="box" border="0" cellpadding="1" cellspacing="1">
     <td class="smheading" align="center" width="140">Host</td>
     <td class="smheading" align="center" width="140">Other nicks</td>
 	</tr>';
-$zapytanie = "SELECT ip, country FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid='$pid' GROUP BY ip";
-$ip_query = mysql_query($zapytanie) or die(mysql_error());
+if (isset($dbversion) && floatval($dbversion) > 5.6)
+{
+        $zapytanie = "SELECT ip, ANY_VALUE(country) FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid='$pid' GROUP BY ip";
+}
+else
+{
+        $zapytanie = "SELECT ip, country FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid='$pid' GROUP BY ip";
+}
+$ip_query = mysql_query($zapytanie) or die("adminip1".mysql_error());
 while ($ip_row = mysql_fetch_assoc($ip_query)) {
 echo'<tr>
 	<td class="dark" align="center" valign="top"><img src="images/flags/'.$ip_row[country].'.png"></td>

@@ -63,6 +63,13 @@ if (strpos($gamename, 'Assault') !== false)
 		$r_cnt = small_query($sql);
 		$ass_att = $r_cnt['ass_att']; 
 		$ass_def = $r_cnt['ass_def'];
+
+	}
+	// Re-check
+	if ($ass_att+$ass_def == 0)
+	{
+		$ratio_att = 0;
+		$ratio_def = 100;
 	}
 	else
 	{

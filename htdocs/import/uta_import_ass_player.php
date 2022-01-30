@@ -11,7 +11,7 @@
 		if ($headshots > 0)
 		{
 			$update_hs = "UPDATE uts_player SET	headshots = $headshots WHERE id = $playerecordid";
-			mysql_query($update_hs) or die(mysql_error());
+			mysql_query($update_hs) or die("uta_player UPDATE 1;".mysql_error());
 		}
 	}
 				
@@ -90,7 +90,7 @@
 											ass_h_jump = $ass_h_jump,
 											ass_assist = $ass_assist
 							WHERE 	id = $playerecordid";
-	mysql_query($ass_playerevents) or die(mysql_error());
+	mysql_query($ass_playerevents) or die("uta_player UPDATE 2; ".mysql_error());
 	
 	
 	//
@@ -113,6 +113,6 @@
 											ass_h_launched = $ass_h_launched,
 											ass_r_launched = $ass_r_launched
 							WHERE 	id = $playerecordid";
-	mysql_query($ass_playerevents) or die(mysql_error());
+	mysql_query($ass_playerevents) or die("uta_player UPDATE 3; ".mysql_error());
 																	
 ?>

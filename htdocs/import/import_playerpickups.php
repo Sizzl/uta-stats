@@ -20,6 +20,7 @@ foreach (array_keys($pickupnames) as &$pickup) {
 }
 
 if (!isset($qm_gamestart)) {
+	// $qm_gamestart = small_query("SELECT col0 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'realstart';");
 	$qm_gamestart = small_query("SELECT col0 FROM uts_temp_$uid WHERE col1 = 'game_start';");
 }
 
