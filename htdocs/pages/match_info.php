@@ -3,38 +3,42 @@ $r_info = small_query("SELECT teamgame, t0score, t1score, t2score, t3score FROM 
 if (!$r_info) die("Match not found");
 $teamgame = ($r_info['teamgame'] == 'True') ? true : false;
 
-include_once ("pages/match_info_server.php");
-
 $GLOBALS['gid'] = $gid;
 $_GLOBALS['gid'] = $gid;
 $GLOBALS['gamename'] = $gamename;
 $_GLOBALS['gamename'] = $gamename;
 
+include_once ("pages/match_info_server.php");
 include('includes/teamstats.php');
 switch($real_gamename) {
 	case "Assault":
 	case "Assault (insta)":
 	case "Assault (pro)":
+		// defer server_stats output
 		include("pages/match_info_ass.php");
 		break;
 		
 	case "Capture the Flag":
 	case "Capture the Flag (insta)":
+		$matchinfo = server_stats($mid);
 		include("pages/match_info_ctf.php");
 		teamstats($mid, 'Match Summary');
   		break;
 		
 	case "Domination":
 	case "Domination (insta)":
+		$matchinfo = server_stats($mid);
 		teamstats($mid, 'Match Summary', 'dom_cp', 'Dom Pts');
 		break;
 	
 	case "JailBreak":
 	case "JailBreak (insta)":
+		$matchinfo = server_stats($mid);
 		teamstats($mid, 'Match Summary', 'ass_obj', 'Team Releases');
 		break;
 		
 	default:
+		$matchinfo = server_stats($mid);
 		if ($teamgame) {
 			teamstats($mid, 'Match Summary');
    		} else {

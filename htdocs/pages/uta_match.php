@@ -244,7 +244,7 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 	echo'
 	<table border="0" cellpadding="0" cellspacing="2" width="720">
 	  <tbody>
-	  <tr><td class="hlheading" colspan="15" align="center"><a href="?p=minfo&map='. str_replace(".unr", "", $p_assault[mapfile]).'">'.$p_assault[mapname].'</a>'.$warmup.'</td></tr>
+	  <tr><td class="hlheading" colspan="15" align="center"><a href="?p=match&mid='.$mid.'&o=minfo&map='. str_replace(".unr", "", $p_assault[mapfile]).'">'.$p_assault[mapname].'</a>'.$warmup.'</td></tr>
 	  <tr'.$bcg.'><td align="center"><br />';
 	  uta_ass_objectiveinfo($mid, $ass_att);
 		echo '<br />';

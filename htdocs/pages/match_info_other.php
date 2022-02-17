@@ -1,7 +1,8 @@
 <?php 
 include_once('pages/match_info_killsmatrix.php');
-
 include_once('includes/weaponstats.php');
+global $dbversion;
+
 weaponstats($mid, NULL);
 
 echo'<br>
@@ -25,12 +26,24 @@ echo'<br>
 	<td class="smheading" align="center" width="40" '.OverlibPrintHint('US').'>Uns</td>
 	<td class="smheading" align="center" width="40" '.OverlibPrintHint('GL').'>God</td>
   </tr>';
-
-$sql_multis = "SELECT p.pid, pi.name, p.country, SUM(spree_double) AS spree_double, SUM(spree_multi) AS spree_multi,
-SUM(spree_ultra) AS spree_ultra, SUM(spree_monster)  AS spree_monster,
-SUM(spree_kill) AS spree_kill, SUM(spree_rampage) AS spree_rampage, SUM(spree_dom) AS spree_dom,
-SUM(spree_uns) AS spree_uns, SUM(spree_god) AS spree_god
-FROM uts_player as p, uts_pinfo AS pi  WHERE p.pid = pi.id  AND pi.banned <> 'Y' AND matchid = $mid GROUP BY pid ORDER BY name ASC";
+if (isset($dbversion) && floatval($dbversion) > 5.6)
+{
+	$sql_multis = "SELECT `p`.`pid`, `pi`.`name`, ANY_VALUE(`p`.`country`), SUM(spree_double) AS `spree_double`, SUM(spree_multi) AS `spree_multi`,
+		SUM(spree_ultra) AS `spree_ultra`, SUM(spree_monster) AS `spree_monster`,
+		SUM(spree_kill) AS `spree_kill`, SUM(spree_rampage) AS `spree_rampage`, SUM(spree_dom) AS `spree_dom`,
+		SUM(spree_uns) AS `spree_uns`, SUM(spree_god) AS `spree_god`
+		FROM `uts_player` as `p`, `uts_pinfo` AS `pi` WHERE `p`.`pid` = `pi`.`id`  AND `pi`.`banned` <> 'Y' AND `matchid` = '".$mid."'
+		GROUP BY `pid` ORDER BY `name` ASC;";
+}
+else
+{
+	$sql_multis = "SELECT `p`.`pid`, `pi`.`name`, `p`.`country`, SUM(spree_double) AS `spree_double`, SUM(spree_multi) AS `spree_multi`,
+		SUM(spree_ultra) AS `spree_ultra`, SUM(spree_monster) AS `spree_monster`,
+		SUM(spree_kill) AS `spree_kill`, SUM(spree_rampage) AS `spree_rampage`, SUM(spree_dom) AS `spree_dom`,
+		SUM(spree_uns) AS `spree_uns`, SUM(spree_god) AS `spree_god`
+		FROM `uts_player` as `p`, `uts_pinfo` AS `pi` WHERE `p`.`pid` = `pi`.`id`  AND `pi`.`banned` <> 'Y' AND `matchid` = '".$mid."'
+		GROUP BY `pid` ORDER BY `name` ASC;";
+}
 $q_multis = mysql_query($sql_multis) or die(mysql_error());
 $i = 0;
 while ($r_multis = zero_out(mysql_fetch_array($q_multis))) {
@@ -70,10 +83,20 @@ if (strpos($gamename, '(insta)') === false) {
 		<td class="smheading" align="center" width="80">Shield Belt</td>
 		<td class="smheading" align="center" width="80">Damage Amp</td>
 	</tr>';
-
-	$sql_pickups = "SELECT p.pid, pi.name, p.country, SUM(p.pu_pads) AS pu_pads, SUM(p.pu_armour) AS pu_armour, SUM(p.pu_keg) AS pu_keg,
-	SUM(p.pu_invis) AS pu_invis, SUM(p.pu_belt) AS pu_belt, SUM(p.pu_amp) AS pu_amp
-	FROM uts_player as p, uts_pinfo AS pi  WHERE p.pid = pi.id AND pi.banned <> 'Y' AND matchid = $mid GROUP BY pid ORDER BY name ASC";
+	if (isset($dbversion) && floatval($dbversion) > 5.6)
+	{
+		$sql_pickups = "SELECT `p`.`pid`, `pi`.`name`, ANY_VALUE(`p`.`country`), SUM(`p`.`pu_pads`) AS `pu_pads`, SUM(`p`.`pu_armour`) AS `pu_armour`,
+			SUM(`p`.`pu_keg`) AS `pu_keg`, SUM(`p`.`pu_invis`) AS `pu_invis`, SUM(`p`.`pu_belt`) AS `pu_belt`, SUM(`p`.`pu_amp`) AS `pu_amp`
+			FROM `uts_player` as `p`, `uts_pinfo` AS `pi` WHERE `p`.`pid` = `pi`.`id` AND `pi`.`banned` <> 'Y' AND `matchid` = '".$mid."'
+			GROUP BY `pid` ORDER BY `name` ASC;";
+	}
+	else
+	{
+		$sql_pickups = "SELECT `p`.`pid`, `pi`.`name`, `p`.`country`, SUM(`p`.`pu_pads`) AS `pu_pads`, SUM(`p`.`pu_armour`) AS `pu_armour`,
+			SUM(`p`.`pu_keg`) AS `pu_keg`, SUM(`p`.`pu_invis`) AS `pu_invis`, SUM(`p`.`pu_belt`) AS `pu_belt`, SUM(`p`.`pu_amp`) AS `pu_amp`
+			FROM `uts_player` as `p`, `uts_pinfo` AS `pi` WHERE `p`.`pid` = `pi`.`id` AND `pi`.`banned` <> 'Y' AND `matchid` = '".$mid."'
+			GROUP BY `pid` ORDER BY `name` ASC;";
+	}
 	$q_pickups = mysql_query($sql_pickups) or die(mysql_error());
 	$i = 0;
 	while ($r_pickups = zero_out(mysql_fetch_array($q_pickups))) {

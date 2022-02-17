@@ -1,69 +1,82 @@
 <?php 
-echo'
+// --// Feb 2022 Sizzl: Dropped into a function to allow multi-round support (e.g. both rounds in Assault)
+function server_stats($mid, $deferoutput=false, $mid2=-1)
+{
+	// Get Summary Info
+	$extra = "";
+	$matchdate2 = "";
+	if ($mid2 > -1)
+	{
+		$extra = " OR `id` = '".$mid2."'";
+		$matchinfo = small_query("SELECT m.time, m.servername, g.name AS gamename, m.gamename AS real_gamename, m.gid, m.mapname, m.mapfile, m.serverinfo, m.gameinfo, m.mutators, m.serverip FROM uts_match AS m, uts_games AS g WHERE m.gid = g.id AND m.id = '".$mid2."';");
+		$matchdate2 = mdate($matchinfo[time]);
+	}
+	$teamscore = small_query("SELECT SUM(t0score + t1score + t2score + t3score) AS `result` FROM `uts_match` WHERE `id` = '".$mid."'".$extra.";");
+	$playerscore = small_query("SELECT SUM(gamescore) AS `result` FROM `uts_player` WHERE `matchid` = '".$mid."'".$extra.";");
+	$fragcount = small_query("SELECT SUM(frags) AS `result` FROM `uts_match` WHERE `id` = '".$mid."'".$extra.";");
+	$killcount = small_query("SELECT SUM(kills) AS `result` FROM `uts_match` WHERE `id` = '".$mid."'".$extra.";");
+	$deathcount = small_query("SELECT SUM(deaths) AS `result` FROM `uts_match` WHERE `id` = '".$mid."'".$extra.";");
+	$suicidecount = small_query("SELECT SUM(suicides) AS `result` FROM `uts_match` WHERE `id` = '".$mid."'".$extra.";");
+
+	$matchinfo = small_query("SELECT m.time, m.servername, g.name AS gamename, m.gamename AS real_gamename, m.gid, m.mapname, m.mapfile, m.serverinfo, m.gameinfo, m.mutators, m.serverip FROM uts_match AS m, uts_games AS g WHERE m.gid = g.id AND m.id = '".$mid."';");
+	$matchdate = mdate($matchinfo[time]);
+	$rank_year = substr($matchinfo[time],0,4);
+	$gamename = $matchinfo[gamename];
+	$real_gamename = $matchinfo[real_gamename];
+	$gid = $matchinfo[gid];
+
+	$mapname = un_ut($matchinfo[mapfile]);
+	$mappic = strtolower("images/maps/".$mapname.".jpg");
+	if (!$deferoutput)
+	{
+		echo'
 <table border="0" cellpadding="1" cellspacing="2" width="720">
   <tbody><tr>
-    <td class="heading" align="center">Unreal Tournament Match</td>
+    <td class="heading" align="center">Unreal Tournament '.($mid2 > -1 ? "Match" : "Map").'</td>
   </tr>
 </tbody></table>
 <br>
 <table class="box" border="0" cellpadding="1" cellspacing="2">
   <tbody><tr>
-    <td class="heading" colspan="6" align="center">Totals for This Match</td>
+    <td class="heading" colspan="6" align="center">Totals for This '.($mid2 > -1 ? "Match" : "Map").'</td>
   </tr>
-    <tr>
-    <td class="smheading" align="center" width="45">Team Score</td>
-    <td class="smheading" align="center" width="50">Player Score</td>
-    <td class="smheading" align="center" width="45">Frags</td>
-    <td class="smheading" align="center" width="45">Kills</td>
-    <td class="smheading" align="center" width="50">Deaths</td>
-    <td class="smheading" align="center" width="60">Suicides</td>
-  </tr>';
-
-// Get Summary Info
-$teamscore = small_query("SELECT SUM(t0score + t1score + t2score + t3score) AS result FROM uts_match WHERE id = $mid");
-$playerscore = small_query("SELECT SUM(gamescore) AS result FROM uts_player WHERE matchid = $mid");
-$fragcount = small_query("SELECT SUM(frags) AS result FROM uts_match WHERE id = $mid");
-$killcount = small_query("SELECT SUM(kills) AS result FROM uts_match WHERE id = $mid");
-$deathcount = small_query("SELECT SUM(deaths) AS result FROM uts_match WHERE id = $mid");
-$suicidecount = small_query("SELECT SUM(suicides) AS result FROM uts_match WHERE id = $mid");
-
-echo'
-  <tr>
-    <td class="smheading" align="center" width="45">'.$teamscore[result].'</td>
-    <td class="smheading" align="center" width="50">'.$playerscore[result].'</td>
-    <td class="smheading" align="center" width="45">'.$fragcount[result].'</td>
-    <td class="smheading" align="center" width="45">'.$killcount[result].'</td>
-    <td class="smheading" align="center" width="50">'.$deathcount[result].'</td>
-    <td class="smheading" align="center" width="60">'.$suicidecount[result].'</td>
+    <tr>';
+		if (substr($gamename,0,7) != "Assault")
+			echo'
+    <td class="smheading" align="center" width="65">Team Score</td>
+    <td class="smheading" align="center" width="70">Player Score</td>';
+		echo'
+    <td class="smheading" align="center" width="65">Frags</td>
+    <td class="smheading" align="center" width="70">Deaths</td>
+    <td class="smheading" align="center" width="80">Suicides</td>
+  </tr><tr>';
+		if (substr($gamename,0,7) != "Assault")
+			echo'
+    <td class="smheading" align="center" width="65">'.$teamscore[result].'</td>
+    <td class="smheading" align="center" width="70">'.$playerscore[result].'</td>';
+		echo '
+    <td class="smheading" align="center" width="65">'.$fragcount[result].'</td>
+    <td class="smheading" align="center" width="70">'.$deathcount[result].'</td>
+    <td class="smheading" align="center" width="80">'.$suicidecount[result].'</td>
   </tr>
 </tbody></table>
 <br>
 <table border="0" cellpadding="1" cellspacing="2" width="720">
   <tbody><tr>
-    <td class="heading" colspan="4" align="center">Unreal Tournament Match Stats</td>
+    <td class="heading" colspan="4" align="center">Unreal Tournament '.($mid2 > -1 ? "Match" : "").' Stats</td>
   </tr>';
 
-$matchinfo = small_query("SELECT m.time, m.servername, g.name AS gamename, m.gamename AS real_gamename, m.gid, m.mapname, m.mapfile, m.serverinfo, m.gameinfo, m.mutators, m.serverip FROM uts_match AS m, uts_games AS g WHERE m.gid = g.id AND m.id = $mid");
-$matchdate = mdate($matchinfo[time]);
-$rank_year = substr($matchinfo[time],0,4);
-$gamename = $matchinfo[gamename];
-$real_gamename = $matchinfo[real_gamename];
-$gid = $matchinfo[gid];
+		if (!file_exists($mappic))
+		{
+		   $mappic = ("images/maps/blank.jpg");
+		}
 
-$mapname = un_ut($matchinfo[mapfile]);
-$mappic = strtolower("images/maps/".$mapname.".jpg");
+		$myurl = urlencode($mapname);
 
-if (file_exists($mappic)) {
-} else {
-   $mappic = ("images/maps/blank.jpg");
-}
-
-  $myurl = urlencode($mapname);
-
-  echo'
+		echo'
   <tr>
-    <td class="dark" align="center" width="110">Match Date</td>
-    <td class="grey" align="center">'.$matchdate.'</td>
+    <td class="dark" align="center" width="110">Match Date'.(strlen($matchdate2) > 0 ? "s" : "").'</td>
+    <td class="grey" align="center">'.$matchdate.(strlen($matchdate2) > 0 ? "\n<br />\n".$matchdate2 : "").'</td>
     <td class="dark" align="center" width="110">Server</td>
     <td class="grey" align="center" width="146"><a class="grey" href="./?p=sinfo&amp;serverip='.$matchinfo[serverip].'">'.$matchinfo[servername].'</a></td>
   </tr>
@@ -88,4 +101,14 @@ if (file_exists($mappic)) {
   </tr>
 </tbody></table>
 <br>';
+	}
+	return $matchinfo;
+}
+
+$matchinfo = server_stats($mid,true);
+$matchdate = mdate($matchinfo[time]);
+$rank_year = substr($matchinfo[time],0,4);
+$gamename = $matchinfo[gamename];
+$real_gamename = $matchinfo[real_gamename];
+$gid = $matchinfo[gid];
 ?>
