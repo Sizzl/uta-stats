@@ -70,7 +70,7 @@
 	// ************************************************************************************
 	// Import Objectives list
 	// ************************************************************************************	
-	$sql_objectivelist = "SELECT col2 as objnum, col3 as objname, col4 as objmsg FROM uts_temp_$uid WHERE col1 LIKE 'assault_objname'";	
+	$sql_objectivelist = "SELECT `col2` AS `objnum`, `col3` AS `objname`, `col4` AS `objmsg` FROM `uts_temp_".$uid."` WHERE `col1` LIKE 'assault_objname';";	
 	$q_objective = mysql_query($sql_objectivelist);
 		
 	// Fix mapfilename
@@ -84,7 +84,7 @@
 	 	$objmsg = addslashes($r_objective[objmsg]);				
 		
 		// Get Extended Info
-		$obj_ext_info = small_query("SELECT col2 as objnum, col3 as defpri, col4 as deftime FROM uts_temp_$uid WHERE col1 LIKE 'assault_objinfo' AND col2 = $objnum");
+		$obj_ext_info = small_query("SELECT `col2` AS `objnum`, `col3` AS `defpri`, `col4` AS `deftime` FROM `uts_temp_".$uid."` WHERE `col1` LIKE 'assault_objinfo' AND col2 = ".$objnum.";");
 	 	if ($obj_ext_info != Null)
 	 	{
 			$deftime = $obj_ext_info[deftime];	
@@ -100,14 +100,21 @@
 	 	}		
 	 	
 	 	// Get Existing Info
-	 	$q_id = small_query("SELECT id, defensepriority, objmsg, defensetime FROM uts_smartass_objs WHERE mapfile like '$mapfile' AND objnum = $objnum");		
+	 	$q_id = small_query("SELECT `id`, `defensepriority`, `objmsg`, `defensetime` FROM `uts_smartass_objs` WHERE `mapfile` LIKE '".$mapfile."' AND `objnum` = ".$objnum.";");
 						
 		// If Objective doesnt exist yet: INSERT
 		if ($q_id == NULL)
-		{					 	
-		 	$obj_sql = "INSERT INTO uts_smartass_objs (mapfile,objnum,objname,objmsg,defensepriority,defensetime) 
-		 					   values ('$mapfile',$objnum,'$objname','$objmsg',$defpri,$deftime)";
-		 	mysql_query($obj_sql) or die(mysql_error());			
+		{
+			// Find similarly named maps with identical objectives that have a custom rating, before defaulting the rating to 1
+			$q_rating = small_query("SELECT `id`, `mapfile`, `rating` FROM `uts_smartass_objs` WHERE `objname` = '".$objname."' AND `objmsg` = '".$objmsg."' AND `rating` <> 1 AND `mapfile` LIKE REGEXP_REPLACE('".$mapfile."', '-NE_beta|COMP|PV_|PE_|SE_|[0-9][a-g]\.|[0-9]\.|_beta|beta|-PE|-PV|_COMP|B[0-9]\.|alpha|SmE', '%', 1, 0, 'i') ORDER BY `id` DESC LIMIT 0,1;");
+			if ($q_rating == NULL)
+				$rating = 1;
+			else
+				$rating = $q_rating[rating];
+
+		 	$obj_sql = "INSERT INTO `uts_smartass_objs` (`mapfile`,`objnum`,`objname`,`objmsg`,`defensepriority`,`defensetime`,`rating`) 
+		 					   VALUES ('".$mapfile."',$objnum,'".$objname."','".$objmsg."',$defpri,$deftime,$rating);";
+		 	mysql_query($obj_sql) or die(mysql_error());
 		}	
 		else
 		{						
@@ -120,7 +127,7 @@
 			// Update if defensepriority is 0		
 			if (($defpri>0 && $existpri<=0) || ($existmsg=="" && $objmsg!="") || ($existtime<=0 && $deftime >0))
 			{
-			 	mysql_query("Update uts_smartass_objs set defensepriority = $defpri, objmsg = '$objmsg', defensetime = $deftime WHERE id = $existid") or die(mysql_error());							
+			 	mysql_query("UPDATE `uts_smartass_objs` SET `defensepriority` = ".$defpri.", `objmsg` = '".$objmsg."', `defensetime` = ".$deftime." WHERE `id` = ".$existid.";") or die(mysql_error());							
 			}
 		}	
 	}	

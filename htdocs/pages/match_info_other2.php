@@ -1,5 +1,6 @@
 <?php 
 // include_once('pages/match_info_killsmatrix.php');
+global $dbversion;
 
 if (!isset($rank_year))
     $rank_year = 0;
@@ -26,11 +27,20 @@ echo'
     <td class="smheading" align="center" width="80">Shield Belt</td>
     <td class="smheading" align="center" width="80">Damage Amp</td>
   </tr>';
-
-$sql_pickups = "SELECT p.pid, pi.name, p.country, SUM(p.pu_pads) AS pu_pads, SUM(p.pu_armour) AS pu_armour, SUM(p.pu_keg) AS pu_keg,
-SUM(p.pu_invis) AS pu_invis, SUM(p.pu_belt) AS pu_belt, SUM(p.pu_amp) AS pu_amp
-FROM uts_player as p, uts_pinfo AS pi  WHERE p.pid = pi.id AND pi.banned <> 'Y' AND matchid = $mid GROUP BY pid ORDER BY name ASC";
-$q_pickups = mysql_query($sql_pickups) or die(mysql_error());
+if (isset($dbversion) && floatval($dbversion) > 5.6)
+{
+	$sql_pickups = "SELECT p.pid, pi.name, ANY_VALUE(p.country), SUM(p.pu_pads) AS pu_pads, SUM(p.pu_armour) AS pu_armour, SUM(p.pu_keg) AS pu_keg,
+	SUM(p.pu_invis) AS pu_invis, SUM(p.pu_belt) AS pu_belt, SUM(p.pu_amp) AS pu_amp
+	FROM uts_player as p, uts_pinfo AS pi  WHERE p.pid = pi.id AND pi.banned <> 'Y' AND matchid = $mid GROUP BY pid ORDER BY name ASC";
+	$q_pickups = mysql_query($sql_pickups) or die(mysql_error());
+}
+else
+{
+	$sql_pickups = "SELECT p.pid, pi.name, p.country, SUM(p.pu_pads) AS pu_pads, SUM(p.pu_armour) AS pu_armour, SUM(p.pu_keg) AS pu_keg,
+	SUM(p.pu_invis) AS pu_invis, SUM(p.pu_belt) AS pu_belt, SUM(p.pu_amp) AS pu_amp
+	FROM uts_player as p, uts_pinfo AS pi  WHERE p.pid = pi.id AND pi.banned <> 'Y' AND matchid = $mid GROUP BY pid ORDER BY name ASC";
+	$q_pickups = mysql_query($sql_pickups) or die(mysql_error());
+}
 $i = 0;
 while ($r_pickups = zero_out(mysql_fetch_array($q_pickups))) {
      $i++;

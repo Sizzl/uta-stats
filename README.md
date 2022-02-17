@@ -7,7 +7,7 @@ Additional copyrights held (C) 2005/2006/2007 Cratos, Timo, brajan
 
 This program is free software; you can redistribute and/or modify
 it under the terms of the Open Unreal Mod License.
-See license.txt for more information.
+See [LICENSE](LICENSE) for more information.
 
 Contents
 ========
@@ -22,7 +22,7 @@ Contents
 
 Copy to your UTServer\System folder the following files:
 
-	UTStatsBeta4_2a.u
+	UTStats50.u
 	SmartAS-Message.u
 	SmartAS_101.u
 
@@ -30,13 +30,14 @@ Remove any previous entries for UTStats and UTSAccuBeta from [Engine.GameEngine]
 
 Add to [Engine.GameEngine] the following lines:
 
-	ServerActors=UTStatsBeta4_2a.UTStatsSA
+	ServerActors=UTStats50.UTStatsSA
 
 For servers running assault, additionally add to [Engine.GameEngine] the following lines:
 
 	ServerActors=SmartAS-Message.SmartASMessage
 	ServerActors=SmartAS_101.SmartAS_SA
 	ServerPackages=SmartAS-Message
+	ServerPackages=UTStats50
 
 Under the [Engine.GameInfo] check for:
 bLocalLog=True or bLocalLog=False
@@ -44,10 +45,7 @@ bLocalLog=True or bLocalLog=False
 This line HAS to be:
 bLocalLog=False
 
-
 # 2. Original UTStats information
-
-
 
 What Is It
 ----------

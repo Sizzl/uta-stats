@@ -415,19 +415,25 @@ function OverlibPrintHint($name, $text = NULL, $caption = NULL) {
 	$rv .= 'onmouseout="return nd();"';
 	return($rv);
 }
-
-function debug_output($desc, $data) {
+function debug_output($desc, $data, $showord=true) {
 	echo '<div align="left"><pre>';
 	echo $desc .": ";
 
-	$len = strlen($data);
-	for ($i = 0; $i < $len; $i++) {
-		echo substr($data, $i, 1) .'  ';
+	if ($showord)
+	{
+		$len = strlen($data);
+		for ($i = 0; $i < $len; $i++) {
+			echo substr($data, $i, 1) .'  ';
+		}
+		echo "\n";
+		echo str_repeat(' ', (strlen($desc) + 2));
+		for ($i = 0; $i < $len; $i++) {
+			echo ord(substr($data, $i, 1)) .' ';
+		}
 	}
-	echo "\n";
-	echo str_repeat(' ', (strlen($desc) + 2));
-	for ($i = 0; $i < $len; $i++) {
-		echo ord(substr($data, $i, 1)) .' ';
+	else
+	{
+		echo $data;
 	}
 	echo "</pre></div>";
 }

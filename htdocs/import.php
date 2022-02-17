@@ -14,7 +14,7 @@ require ("includes/uta_functions.php");
 require ("includes/functions.php");
 require ("includes/config.php");
 
-$compatible_actor_versions = array('beta 4.0', 'beta 4.1', 'beta 4.2', '0.4.0', '0.4.1', '0.4.2', '0.4.2a');
+$compatible_actor_versions = array('beta 4.0', 'beta 4.1', 'beta 4.2', '0.4.0', '0.4.1', '0.4.2', '0.4.2a', '0.4.2b', '5.0');
 
 // Get key from web browser
 if (isset($_REQUEST['key'])) $adminkey = $_REQUEST['key'];
@@ -208,18 +208,12 @@ while (false !== ($filename = readdir($logdir)))
 
 	for (;;)
 	{
-		$sql = "CREATE ". ($import_use_temporary_tables ? 'TEMPORARY ' : '') ."TABLE `uts_temp_$uid` (
-		`id` mediumint(5) NOT NULL,
-		`col0` char(20) NOT NULL default '',
-		`col1` char(120) NOT NULL default '',
-		`col2` char(120) NOT NULL default '',
-		`col3` char(120) NOT NULL default '',
-		`col4` char(120) NOT NULL default '',
-		`col5` char(120) NOT NULL default '',
-		KEY `part1` (`col1` (20),`col2` (20)),
-		KEY `part2` (`col0` (20),`col1` (20),`col2` (20)),
-		KEY `full` (`col0` (20),`col1` (20),`col2` (20),`col3` (20),`col4` (20),`col5` (20))
-		) ENGINE=". ($import_use_heap_tables ? 'HEAP' : 'MyISAM') .";";
+		$sql = "CREATE ". ($import_use_temporary_tables ? 'TEMPORARY ' : '') ."TABLE `uts_temp_$uid` (`id` mediumint(5) NOT NULL, `col0` char(20) NOT NULL default '',";
+		for ($c=1; $c < 21; $c++)
+		{
+			$sql = $sql."\n		`col".$c."` char(120) NULL default '',";
+		}
+		$sql = $sql."\n		KEY `part1` (`col1` (20),`col2` (20)),\n		KEY `part2` (`col0` (20),`col1` (20),`col2` (20)),\n		KEY `full` (`col0` (20),`col1` (20),`col2` (20),`col3` (20),`col4` (20),`col5` (20))) ENGINE=". ($import_use_heap_tables ? 'HEAP' : 'MyISAM') .";";
 
 		$result = mysql_query($sql);
 		if ($result) break;
@@ -265,7 +259,35 @@ while (false !== ($filename = readdir($logdir)))
 	// Create sql for NGLog
 	$row = 1;
 	$handle = fopen("$filename", "r");
+	while (($data = my_fgets($handle, 5000)) !== FALSE)
+	{
+		// if ($debug) debug_output('Raw input         ', $data);
+		$data = preg_replace('/[\x00]/', '', $data);
+		// if ($debug) debug_output('After preg_replace', $data);
+		$data = explode("\t", $data);
 
+		$num = count($data);
+		$row++;
+		if ($num > 1)
+		{
+			$ins = "INSERT INTO `uts_temp_".$uid."` (`id`";
+			for ($c=0; $c < $num; $c++)
+			{
+				$ins = $ins.", `col".$c."`";
+			}
+			$ins = $ins.") VALUES ('".$id."'";
+			for ($c=0; $c < $num; $c++)
+			{
+				$col = addslashes($data[$c]);
+				$col = trim($col, " \n\r");
+				$ins = $ins.", '".$col."'";
+			}
+			$ins = $ins.");";
+			if ($debug) debug_output('Log2tmp SQL insert: ', $ins, false);
+			$id++;
+			mysql_query($ins) or die("log2tmp - ".mysql_error());
+		}
+	}
 	while (($data = my_fgets($handle, 5000)) !== FALSE)
 	{
 		if ($debug) debug_output('Raw input         ', $data);
@@ -335,7 +357,7 @@ while (false !== ($filename = readdir($logdir)))
 			$actor_version = "League Matches Only (see import.php) - result: ".$qm_matchmode['col2'];
 		}
 		// Exception for Easter
-		$qm_mutatorex = small_query("SELECT `col3` FROM `uts_temp_".$uid."` WHERE `col1` = 'game' AND `col2` = 'GoodMutator' AND (`col3` LIKE '%Easter Egg Hunt%' or `col3` LIKE '%Halloween Hunt%')");
+		$qm_mutatorex = small_query("SELECT `col3` FROM `uts_temp_".$uid."` WHERE `col1` = 'game' AND `col2` = 'GoodMutator' AND (`col3` LIKE '%Easter Egg Hunt%' OR `col3` LIKE '%Halloween Hunt%')");
 		if (isset($qm_mutatorex) && strpos($qm_mutatorex['col3'],"Hunt") > 0)
 		{
 			$log_incompatible = false;
@@ -862,6 +884,14 @@ while (false !== ($filename = readdir($logdir)))
 			$imported_players[] = $playername;
 		}
 		if ($html) echo '</td></tr>';
+
+		if ($html) echo '<tr><td class="smheading" align="left" width="350">';
+		echo "\nBuilding damage tracking: ";
+		if ($html) echo '</td><td class="grey" align="left" width="200">';
+		include("import/import_killsdetail.php");
+		echo "Done\n";
+		if ($html) echo "</td></tr>";
+
 		// Check if theres any players left, if none or one delete the match (its possible ...)
 		$final_pcount = small_count("SELECT id FROM uts_player WHERE matchid = $matchid");
 
@@ -922,7 +952,6 @@ while (false !== ($filename = readdir($logdir)))
 			if ($html) echo '</td><td class="grey" align="left" width="200">';
 			include("import/import_killsmatrix.php");
 			echo "Done\n";
-
 
 			if ($html) echo '</td></tr><tr><td class="smheading" align="left" width="350">';
 			echo "Combining Duplicate Player Entries: ";
