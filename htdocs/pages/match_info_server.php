@@ -9,7 +9,7 @@ function server_stats($mid, $deferoutput=false, $mid2=-1)
 	{
 		$extra = " OR `id` = '".$mid2."'";
 		$matchinfo = small_query("SELECT m.time, m.servername, g.name AS gamename, m.gamename AS real_gamename, m.gid, m.mapname, m.mapfile, m.serverinfo, m.gameinfo, m.mutators, m.serverip FROM uts_match AS m, uts_games AS g WHERE m.gid = g.id AND m.id = '".$mid2."';");
-		$matchdate2 = mdate($matchinfo[time]);
+		$matchdate2 = mdate($matchinfo['time']);
 	}
 	$teamscore = small_query("SELECT SUM(t0score + t1score + t2score + t3score) AS `result` FROM `uts_match` WHERE `id` = '".$mid."'".$extra.";");
 	$playerscore = small_query("SELECT SUM(gamescore) AS `result` FROM `uts_player` WHERE `matchid` = '".$mid."'".$extra.";");
@@ -19,13 +19,13 @@ function server_stats($mid, $deferoutput=false, $mid2=-1)
 	$suicidecount = small_query("SELECT SUM(suicides) AS `result` FROM `uts_match` WHERE `id` = '".$mid."'".$extra.";");
 
 	$matchinfo = small_query("SELECT m.time, m.servername, g.name AS gamename, m.gamename AS real_gamename, m.gid, m.mapname, m.mapfile, m.serverinfo, m.gameinfo, m.mutators, m.serverip FROM uts_match AS m, uts_games AS g WHERE m.gid = g.id AND m.id = '".$mid."';");
-	$matchdate = mdate($matchinfo[time]);
-	$rank_year = substr($matchinfo[time],0,4);
-	$gamename = $matchinfo[gamename];
-	$real_gamename = $matchinfo[real_gamename];
-	$gid = $matchinfo[gid];
+	$matchdate = mdate($matchinfo['time']);
+	$rank_year = substr($matchinfo['time'],0,4);
+	$gamename = $matchinfo['gamename'];
+	$real_gamename = $matchinfo['real_gamename'];
+	$gid = $matchinfo['gid'];
 
-	$mapname = un_ut($matchinfo[mapfile]);
+	$mapname = un_ut($matchinfo['mapfile']);
 	$mappic = strtolower("images/maps/".$mapname.".jpg");
 	if (!$deferoutput)
 	{
@@ -52,12 +52,12 @@ function server_stats($mid, $deferoutput=false, $mid2=-1)
   </tr><tr>';
 		if (substr($gamename,0,7) != "Assault")
 			echo'
-    <td class="smheading" align="center" width="65">'.$teamscore[result].'</td>
-    <td class="smheading" align="center" width="70">'.$playerscore[result].'</td>';
+    <td class="smheading" align="center" width="65">'.$teamscore['result'].'</td>
+    <td class="smheading" align="center" width="70">'.$playerscore['result'].'</td>';
 		echo '
-    <td class="smheading" align="center" width="65">'.$fragcount[result].'</td>
-    <td class="smheading" align="center" width="70">'.$deathcount[result].'</td>
-    <td class="smheading" align="center" width="80">'.$suicidecount[result].'</td>
+    <td class="smheading" align="center" width="65">'.$fragcount['result'].'</td>
+    <td class="smheading" align="center" width="70">'.$deathcount['result'].'</td>
+    <td class="smheading" align="center" width="80">'.$suicidecount['result'].'</td>
   </tr>
 </tbody></table>
 <br>
@@ -78,26 +78,26 @@ function server_stats($mid, $deferoutput=false, $mid2=-1)
     <td class="dark" align="center" width="110">Match Date'.(strlen($matchdate2) > 0 ? "s" : "").'</td>
     <td class="grey" align="center">'.$matchdate.(strlen($matchdate2) > 0 ? "\n<br />\n".$matchdate2 : "").'</td>
     <td class="dark" align="center" width="110">Server</td>
-    <td class="grey" align="center" width="146"><a class="grey" href="./?p=sinfo&amp;serverip='.$matchinfo[serverip].'">'.$matchinfo[servername].'</a></td>
+    <td class="grey" align="center" width="146"><a class="grey" href="./?p=sinfo&amp;serverip='.$matchinfo['serverip'].'">'.$matchinfo['servername'].'</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Match Type</td>
     <td class="grey" align="center">'.$gamename.'</td>
     <td class="dark" align="center">Map Name</td>
-    <td class="greyhuman" align="center"><a class="grey" href="./?p=minfo&amp;map='.$myurl.'">'.$matchinfo[mapname].'</a></td>
+    <td class="greyhuman" align="center"><a class="grey" href="./?p=minfo&amp;map='.$myurl.'">'.$matchinfo['mapname'].'</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Server Info</td>
-    <td class="grey" align="center">'.$matchinfo[serverinfo].'</td>
+    <td class="grey" align="center">'.$matchinfo['serverinfo'].'</td>
     <td class="dark" align="center" rowspan="4" colspan="2"><img border="0" alt="'.$mapname.'" title="'.$mapname.'" src="'.$mappic.'"></td>
   </tr>
   <tr>
     <td class="dark" align="center">Game Info</td>
-    <td class="grey" align="center">'.$matchinfo[gameinfo].'</td>
+    <td class="grey" align="center">'.$matchinfo['gameinfo'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Mutators</td>
-    <td class="grey" align="center">'.$matchinfo[mutators].'</td>
+    <td class="grey" align="center">'.$matchinfo['mutators'].'</td>
   </tr>
 </tbody></table>
 <br>';
@@ -106,9 +106,9 @@ function server_stats($mid, $deferoutput=false, $mid2=-1)
 }
 
 $matchinfo = server_stats($mid,true);
-$matchdate = mdate($matchinfo[time]);
-$rank_year = substr($matchinfo[time],0,4);
-$gamename = $matchinfo[gamename];
-$real_gamename = $matchinfo[real_gamename];
-$gid = $matchinfo[gid];
+$matchdate = mdate($matchinfo['time']);
+$rank_year = substr($matchinfo['time'],0,4);
+$gamename = $matchinfo['gamename'];
+$real_gamename = $matchinfo['real_gamename'];
+$gid = $matchinfo['gid'];
 ?>

@@ -7,9 +7,9 @@
 	$authuser = ""; $authpid=0; $vcode=0;  
 	if ($qm_auth!=Null)
 	{
-		$authuser = addslashes(trim($qm_auth[authuser]));
-		$authpid = $qm_auth[pid];
-		$vcode = $qm_auth[vcode];
+		$authuser = addslashes(trim($qm_auth['authuser']));
+		$authpid = $qm_auth['pid'];
+		$vcode = $qm_auth['vcode'];
 	}
 	else
 	{

@@ -13,8 +13,8 @@ function SortPic($curr_field, $filter, $sort) {
 }
 
 // Get filter and set sorting
-$filter = my_addslashes($_GET[filter]);
-$sort = my_addslashes($_GET[sort]);
+$filter = my_addslashes($_GET['filter']);
+$sort = my_addslashes($_GET['sort']);
 // $cfilter (country filter) added 2006-09-08 brajan
 $cfilter_sql = (!empty($_GET['cfilter'])) ? " AND pi.country = '".$_GET['cfilter']."' " : "";
 $cfilter_url = (!empty($_GET['cfilter'])) ? "&amp;cfilter=".$_GET['cfilter'] : "";
@@ -127,30 +127,30 @@ else
 {
 	$sql_plist = "SELECT 'players.php(paged)' AS script_name, pi.name AS name, pi.country AS country, p.pid, COUNT(p.id) AS games, SUM(p.gamescore) as gamescore, SUM(p.frags) AS frags, SUM(p.kills) AS kills,
 	SUM(p.deaths) AS deaths, SUM(p.suicides) as suicides, AVG(p.eff) AS eff, AVG(p.accuracy) AS accuracy, AVG(p.ttl) AS ttl, SUM(gametime) as gametime
-	FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND TRIM(BOTH ' ' FROM pi.name) <> '' ".$cfilter_sql." GROUP BY p.pid ORDER BY $filter $sort LIMIT $qpage,50";
+	FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND TRIM(BOTH ' ' FROM pi.name) <> '' ".$cfilter_sql." GROUP BY p.pid ORDER BY ".$filter." ".$sort." LIMIT ".$qpage.",50";
 	$q_plist = mysql_query($sql_plist) or die(mysql_error());
 }
 
 
 while ($r_plist = mysql_fetch_array($q_plist)) {
 
-	  $gametime = sec2hour($r_plist[gametime]);
-	  $eff = get_dp($r_plist[eff]);
-	  $acc = get_dp($r_plist[accuracy]);
-	  $ttl = GetMinutes($r_plist[ttl]);
-	  $r_pname = $r_plist[name];
+	  $gametime = sec2hour($r_plist['gametime']);
+	  $eff = get_dp($r_plist['eff']);
+	  $acc = get_dp($r_plist['accuracy']);
+	  $ttl = GetMinutes($r_plist['ttl']);
+	  $r_pname = $r_plist['name'];
 	  $myurl = urlencode($r_pname);
 
 	  echo'
 	  <tr>
-		<td nowrap class="dark" align="left"><a class="darkhuman" href="./?p='.$_GET['p'].'&cfilter='.$r_plist[country].'">'.FlagImage($r_plist[country]).'</a>
+		<td nowrap class="dark" align="left"><a class="darkhuman" href="./?p='.$_GET['p'].'&cfilter='.$r_plist['country'].'">'.FlagImage($r_plist['country']).'</a>
 		<a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_plist['pid'].'">'.FormatPlayerName(NULL, $r_plist['pid'], $r_pname).'</a></td>
-		<td class="grey" align="center">'.$r_plist[games].'</td>
-		<td class="grey" align="center">'.$r_plist[gamescore].'</td>
-		<td class="grey" align="center">'.$r_plist[frags].'</td>
-		<td class="grey" align="center">'.$r_plist[kills].'</td>
-		<td class="grey" align="center">'.$r_plist[deaths].'</td>
-		<td class="grey" align="center">'.$r_plist[suicides].'</td>
+		<td class="grey" align="center">'.$r_plist['games'].'</td>
+		<td class="grey" align="center">'.$r_plist['gamescore'].'</td>
+		<td class="grey" align="center">'.$r_plist['frags'].'</td>
+		<td class="grey" align="center">'.$r_plist['kills'].'</td>
+		<td class="grey" align="center">'.$r_plist['deaths'].'</td>
+		<td class="grey" align="center">'.$r_plist['suicides'].'</td>
 		<td class="grey" align="center">'.$eff.'</td>
 		<td class="grey" align="center">'.$acc.'</td>
 		<td class="grey" align="center">'.$ttl.'</td>

@@ -7,8 +7,8 @@ $realmap = my_addslashes($_GET['map']);
 $realmap = "".$realmap.".unr";
 
 $map_matches = small_query("SELECT COUNT(id) as matchcount, SUM(t0score+t1score+t2score+t3score) AS gamescore,
-SUM(gametime) AS gametime, SUM(kills) AS kills, SUM(suicides) AS suicides FROM uts_match WHERE mapfile = '$realmap'");
-$map_last = small_query("SELECT time FROM uts_match WHERE mapfile = '$realmap' ORDER BY time DESC LIMIT 0,1");
+SUM(gametime) AS gametime, SUM(kills) AS kills, SUM(suicides) AS suicides FROM uts_match WHERE mapfile = '".$realmap."'");
+$map_last = small_query("SELECT time FROM uts_match WHERE mapfile = '".$realmap."' ORDER BY time DESC LIMIT 0,1");
 
 $map_tottime = GetMinutes($map_matches['gametime']);
 $map_lastmatch = mdate($map_last['time']);
@@ -31,12 +31,12 @@ echo'
   </tr>
   <tr>
     <td class="dark" align="center">Matches</td>
-    <td class="grey" align="center">'.$map_matches[matchcount].'</td>
+    <td class="grey" align="center">'.$map_matches['matchcount'].'</td>
     <td class="grey" align="center" rowspan="8"><img border="0" alt="'.$map.'" title="'.$map.'" src="'.$mappic.'"></td>
   </tr>
   <tr>
     <td class="dark" align="center">Total Score</td>
-    <td class="grey" align="center">'.$map_matches[gamescore].'</td>
+    <td class="grey" align="center">'.$map_matches['gamescore'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Total Time</td>
@@ -44,11 +44,11 @@ echo'
   </tr>
   <tr>
     <td class="dark" align="center">Total Kills</td>
-    <td class="grey" align="center">'.$map_matches[kills].'</td>
+    <td class="grey" align="center">'.$map_matches['kills'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Total Suicides</td>
-    <td class="grey" align="center">'.$map_matches[suicides].'</td>
+    <td class="grey" align="center">'.$map_matches['suicides'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Last Match</td>
@@ -71,10 +71,10 @@ if (substr($map,0,3) == "AS-")
 
 
 // Do graph stuff
-$bgwhere = "mapfile = '$realmap'";
+$bgwhere = "mapfile = '".$realmap."'";
 include("pages/graph_mbreakdown.php");
 
-$mcount = small_count("SELECT id FROM uts_match WHERE mapfile = '$realmap' GROUP BY id");
+$mcount = small_count("SELECT id FROM uts_match WHERE mapfile = '".$realmap."' GROUP BY id");
 
 $ecount = $mcount/25;
 $ecount2 = number_format($ecount, 0, '.', '');
@@ -103,7 +103,7 @@ if ($ppage < "0") { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
 $npageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$npage\">[Next]</a>";
-if ($npage >= "$ecount") { $npageurl = "[Next]"; }
+if ($npage >= "$ecount") { $npageurl = "[Next']"; }
 
 $fpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$fpage\">[First]</a>";
 if ($cpage == "0") { $fpageurl = "[First]"; }
@@ -125,7 +125,7 @@ echo'
   </tr>';
 
 $sql_maps = "SELECT m.id, m.time, g.name AS gamename, m.gametime, m.servername
-FROM uts_match AS m, uts_games AS g WHERE m.mapfile = '$realmap' AND m.gid = g.id ORDER BY time DESC LIMIT $qpage,25";
+FROM uts_match AS m, uts_games AS g WHERE m.mapfile = '".$realmap."' AND m.gid = g.id ORDER BY time DESC LIMIT $qpage,25";
 $q_maps = mysql_query($sql_maps) or die(mysql_error());
 while ($r_maps = mysql_fetch_array($q_maps))
 {

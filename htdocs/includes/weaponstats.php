@@ -12,7 +12,7 @@ function weaponstats($_mid, $_pid, $title = 'Weapons Summary')
 				FROM ".(isset($t_weapons) ? $t_weapons : "uts_weapons")." AS wn,
 				".(isset($t_weaponstats) ? $t_weaponstats : "uts_weaponstats")." AS w
 				LEFT JOIN (".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi) ON w.pid = pi.id
-				WHERE w.matchid = '$_mid' AND w.pid = '$_pid' AND w.year = '$rank_year' AND (wn.id = w.weapon) AND wn.hide <> 'Y'";
+				WHERE w.matchid = '".$_mid."' AND w.pid = '".$_pid."' AND w.year = '".$rank_year."' AND (wn.id = w.weapon) AND wn.hide <> 'Y'";
 
 	if ($_pid == 0 and $_mid != 0)
 	{
@@ -37,7 +37,7 @@ function weaponstats($_mid, $_pid, $title = 'Weapons Summary')
 								".(isset($t_weaponstats) ? $t_weaponstats : "uts_weaponstats")." AS w
 								LEFT JOIN (".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi)
 								ON		w.pid = pi.id
-							WHERE		w.matchid = '$_mid'
+							WHERE		w.matchid = '".$_mid."'
 								AND	(wn.id = w.weapon)
 								AND wn.hide <> 'Y'
 							GROUP BY	w.pid,

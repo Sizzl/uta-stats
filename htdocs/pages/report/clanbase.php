@@ -40,13 +40,13 @@ IF($redteam == $warinfo[0][1]) {
 $teama = str_replace("<img src=", "", $cbteama);
 $teamb = str_replace("<img src=", "", $cbteamb);
 
-list($teama, $teamacup) = split("'", $teama, 3);
-list($teamb, $teambcup) = split("'", $teamb, 3);
+list($teama, $teamacup) = explode("'", $teama, 3);
+list($teamb, $teambcup) = explode("'", $teamb, 3);
 
 $teama = '[cl]'.$teamaid.','.$teama.'[/cl]';
 $teamb = '[cl]'.$teambid.','.$teamb.'[/cl]';
 
-$sql_s = small_query("SELECT mapfile, gametime FROM uts_match WHERE id = '$id'");
+$sql_s = small_query("SELECT mapfile, gametime FROM uts_match WHERE id = '".$id."'");
 
 $map = str_replace(".unr", "", "$sql_s[mapfile]");
 $mappic = strtolower("images/maps/".$map.".jpg");

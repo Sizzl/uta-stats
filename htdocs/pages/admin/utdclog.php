@@ -101,8 +101,8 @@ if (!empty($filename)) {
 }
 
 echo '</tr>';
-if (!empty($filename)) echo'<tr><td class="smheading" align="center" colspan="4"><a class="grey" href="./admin.php?key='.$_REQUEST[key].'&amp;action='.$action.'">Go Back To Logfile Overview</a></td></tr>';
-echo'<tr><td class="smheading" align="center" colspan="4"><a class="grey" href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td></tr>';
+if (!empty($filename)) echo'<tr><td class="smheading" align="center" colspan="4"><a class="grey" href="./admin.php?key='.$_REQUEST['key'].'&amp;action='.$action.'">Go Back To Logfile Overview</a></td></tr>';
+echo'<tr><td class="smheading" align="center" colspan="4"><a class="grey" href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td></tr>';
 echo '</table>';
 
 ?>

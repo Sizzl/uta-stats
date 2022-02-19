@@ -73,7 +73,7 @@ while ($r_gamesummary = mysql_fetch_array($q_gamesummary)) {
 
 	$gid = $r_gamesummary[gid];
 
-	$q_gametime = small_query("SELECT SUM(gametime) AS gametime FROM uts_match WHERE gid = '$gid'");
+	$q_gametime = small_query("SELECT SUM(gametime) AS gametime FROM uts_match WHERE gid = '".$gid."'");
 	$gametime = sec2hour($q_gametime[gametime]);
 	
 	$sumfrags+=$r_gamesummary[frags];

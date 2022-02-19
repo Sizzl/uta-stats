@@ -12,7 +12,7 @@ $gid  = !empty($_REQUEST['gid']) ?  my_addslashes($_REQUEST['gid']) : 0;
 if (!empty($year) and empty($month) and empty($day)) $where .= " AND m.time LIKE '$year%'";
 if (!empty($year) and !empty($month) and empty($day)) $where .= " AND m.time LIKE '$year$month%'";
 if (!empty($year) and !empty($month) and !empty($day)) $where .= " AND m.time LIKE '$year$month$day%'";
-if (!empty($gid)) $where .= " AND m.gid = '$gid'";
+if (!empty($gid)) $where .= " AND m.gid = '".$gid."'";
 $r_mcount = small_query("SELECT COUNT(*) AS result FROM uts_match m WHERE 1 $where");
 $mcount = $r_mcount['result'];
 
@@ -113,20 +113,20 @@ $sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.mapfile, m.gametime, m
 $q_recent = mysql_query($sql_recent) or die(mysql_error());
 while ($r_recent = mysql_fetch_array($q_recent)) {
 
-	  $r_time = mdate($r_recent[time]);
-	  $r_mapfile = un_ut($r_recent[mapfile]);
-	  $r_gametime = GetMinutes($r_recent[gametime]);
-	  $r_servername = get_short_servername($r_recent[servername]);
-	  $r_serverip = $r_recent[serverip];
+	  $r_time = mdate($r_recent['time']);
+	  $r_mapfile = un_ut($r_recent['mapfile']);
+	  $r_gametime = GetMinutes($r_recent['gametime']);
+	  $r_servername = get_short_servername($r_recent['servername']);
+	  $r_serverip = $r_recent['serverip'];
 
 	  echo'
 	  <tr>
-		<td class="dark" align="center"><a class="darkid" href="./?p=match&amp;mid='.$r_recent[id].'">'.$r_recent[id].'</a></td>
-		<td nowrap class="dark" align="center"><a class="darkhuman" href="./?p=match&amp;mid='.$r_recent[id].'">'.$r_time.'</a></td>		
-		<td nowrap class="grey" align="center">'.$r_recent[gamename].'</td>
+		<td class="dark" align="center"><a class="darkid" href="./?p=match&amp;mid='.$r_recent['id'].'">'.$r_recent['id'].'</a></td>
+		<td nowrap class="dark" align="center"><a class="darkhuman" href="./?p=match&amp;mid='.$r_recent['id'].'">'.$r_time.'</a></td>		
+		<td nowrap class="grey" align="center">'.$r_recent['gamename'].'</td>
 		<td nowrap class="grey" align="center">'.$r_mapfile.'</td>
 		<td class="grey" align="center">'.$r_gametime.'</td>
-		<td nowrap class="grey" align="center">.'$r_servername'.</td>
+		<td nowrap class="grey" align="center">.'".$r_servername."'.</td>
 	  </tr>';
 }
 

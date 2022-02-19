@@ -1,6 +1,6 @@
 <?php 
 global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
-$r_info = small_query("SELECT teamgame, t0score, t1score, t2score, t3score, matchcode FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '$mid'");
+$r_info = small_query("SELECT teamgame, t0score, t1score, t2score, t3score, matchcode FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '".$mid."'");
 if (!$r_info) die("Match not found");
 $teamgame = ($r_info['teamgame'] == 'True') ? true : false;
 

@@ -39,20 +39,20 @@ FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.name LIKE '%".$
 $q_plist = mysql_query($sql_plist) or die(mysql_error());
 while ($r_plist = mysql_fetch_array($q_plist)) {
 
-	  $gametime = sec2hour($r_plist[gametime]);
-	  $eff = get_dp($r_plist[eff]);
-	  $acc = get_dp($r_plist[accuracy]);
-	  $ttl = GetMinutes($r_plist[ttl]);
+	  $gametime = sec2hour($r_plist['gametime']);
+	  $eff = get_dp($r_plist['eff']);
+	  $acc = get_dp($r_plist['accuracy']);
+	  $ttl = GetMinutes($r_plist['ttl']);
 	  
 	  echo'
 	  <tr>
-		<td nowrap class="dark" align="left"><a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_plist['pid'].'">'.FormatPlayerName($r_plist[country], $r_plist['pid'], $r_plist[name]).'</a></td>
-		<td class="grey" align="center">'.$r_plist[games].'</td>
-		<td class="grey" align="center">'.$r_plist[gamescore].'</td>
-		<td class="grey" align="center">'.$r_plist[frags].'</td>
-		<td class="grey" align="center">'.$r_plist[kills].'</td>
-		<td class="grey" align="center">'.$r_plist[deaths].'</td>
-		<td class="grey" align="center">'.$r_plist[suicides].'</td>
+		<td nowrap class="dark" align="left"><a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_plist['pid'].'">'.FormatPlayerName($r_plist['country'], $r_plist['pid'], $r_plist['name']).'</a></td>
+		<td class="grey" align="center">'.$r_plist['games'].'</td>
+		<td class="grey" align="center">'.$r_plist['gamescore'].'</td>
+		<td class="grey" align="center">'.$r_plist['frags'].'</td>
+		<td class="grey" align="center">'.$r_plist['kills'].'</td>
+		<td class="grey" align="center">'.$r_plist['deaths'].'</td>
+		<td class="grey" align="center">'.$r_plist['suicides'].'</td>
 		<td class="grey" align="center">'.$eff.'</td>
 		<td class="grey" align="center">'.$acc.'</td>
 		<td class="grey" align="center">'.$ttl.'</td>

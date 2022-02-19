@@ -24,7 +24,7 @@ while ($r_km = mysql_fetch_array($q_km)) {
 if (!isset($km)) return;
 
 // Are we processing a teamgame?
-$qm_teamgame = small_query("SELECT teamgame FROM uts_match WHERE id = '$mid';");
+$qm_teamgame = small_query("SELECT teamgame FROM uts_match WHERE id = '".$mid."';");
 $teamgame = $qm_teamgame['teamgame'];
 $teamgame = ($teamgame == 'False') ? false : true;
 
@@ -39,7 +39,7 @@ $sql_players = "	SELECT	p.pid,
 						FROM		uts_player p,
 									uts_pinfo pi
 						WHERE		(p.pid = pi.id)
-							AND	matchid = '$mid'
+							AND	matchid = '".$mid."'
 						ORDER	BY	team ASC,
 									gamescore DESC;";
 $q_players = mysql_query($sql_players) or die(mysql_error());

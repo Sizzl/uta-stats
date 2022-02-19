@@ -12,7 +12,7 @@
 		
 		$sql =	"	INSERT
 						INTO		uts_killsmatrix
-						SET		matchid 	=	'$matchid',
+						SET		matchid 	=	'".$matchid."',
 									killer	=	'". $r_killmatrix['killer'] ."',
 									victim	=	'". $r_killmatrix['killed'] ."',
 									kills		=	'". $r_killmatrix['kills'] ."';";

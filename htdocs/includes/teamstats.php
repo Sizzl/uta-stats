@@ -2,7 +2,7 @@
 function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'gamescore DESC', $firstblood = 0) {
 	global $gamename, $gid, $winclass; // added Win class for team colouring
 	global $t_match, $t_pinfo, $t_player, $t_games; // fetch table globals.
-	$r_info = small_query("SELECT teamgame, t0score, t1score, t2score, t3score FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '$mid'");
+	$r_info = small_query("SELECT teamgame, t0score, t1score, t2score, t3score FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '".$mid."'");
 	if (!$r_info) die("Match not found");
 	$teams = ($r_info['teamgame'] == 'True') ? true : false;
 	$teamscore[-1] = 0;
@@ -110,16 +110,16 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 		} else {
 			echo '<td nowrap class="darkhuman" align="left"><span style="text-decoration: line-through;">'.FormatPlayerName($r_players['country'], $r_players['pid'], $pname, $gid, $gamename, true, $r_players['rank']).'</span></td>';
 		}
-		echo '<td class="'.$class.'" align="center">'.$r_players[gamescore].'</td>';
+		echo '<td class="'.$class.'" align="center">'.$r_players['gamescore'].'</td>';
 
 		if ($extra) echo '<td class="'.$class.'" align="center">'.$r_players[$extra].'</td>';
 
-		echo '<td class="'.$class.'" align="center">'.$r_players[frags].'</td>';
+		echo '<td class="'.$class.'" align="center">'.$r_players['frags'].'</td>';
 		echo '<td class="'.$class.'" align="center">'.$kills.'</td>';
-		echo '<td class="'.$class.'" align="center">'.$r_players[deaths].'</td>';
-		echo '<td class="'.$class.'" align="center">'.$r_players[suicides].'</td>';
+		echo '<td class="'.$class.'" align="center">'.$r_players['deaths'].'</td>';
+		echo '<td class="'.$class.'" align="center">'.$r_players['suicides'].'</td>';
 
-		if ($teams) echo '<td class="'.$class.'" align="center">'.$r_players[teamkills].'</td>';
+		if ($teams) echo '<td class="'.$class.'" align="center">'.$r_players['teamkills'].'</td>';
 
 		echo '<td class="'.$class.'" align="center">'.$eff.'</td>';
 		echo '<td class="'.$class.'" align="center">'.$acc.'</td>';
@@ -157,18 +157,18 @@ function teamstats_team_totals(&$totals, $num, $teams, $extra, $teamscore) {
 	echo '<tr>';
 	echo '<td nowrap class="dark" align="center">Totals</td>';
 	if ($teams) {
-		echo '<td class="darkgrey" align="center"><strong>'.$teamscore.'</strong> ('.$totals[gamescore].')</td>';
+		echo '<td class="darkgrey" align="center"><strong>'.$teamscore.'</strong> ('.$totals['gamescore'].')</td>';
 	} else {
-		echo '<td class="darkgrey" align="center">'.$totals[gamescore].'</td>';
+		echo '<td class="darkgrey" align="center">'.$totals['gamescore'].'</td>';
 	}
 	if ($extra) echo '<td class="darkgrey" align="center">'.$totals[$extra].'</td>';
 
-	echo '<td class="darkgrey" align="center">'.$totals[frags].'</td>';
-	echo '<td class="darkgrey" align="center">'.$totals[kills].'</td>';
-	echo '<td class="darkgrey" align="center">'.$totals[deaths].'</td>';
-	echo '<td class="darkgrey" align="center">'.$totals[suicides].'</td>';
+	echo '<td class="darkgrey" align="center">'.$totals['frags'].'</td>';
+	echo '<td class="darkgrey" align="center">'.$totals['kills'].'</td>';
+	echo '<td class="darkgrey" align="center">'.$totals['deaths'].'</td>';
+	echo '<td class="darkgrey" align="center">'.$totals['suicides'].'</td>';
 
-	if ($teams) echo '<td class="darkgrey" align="center">'.$totals[teamkills].'</td>';
+	if ($teams) echo '<td class="darkgrey" align="center">'.$totals['teamkills'].'</td>';
 
 	echo '<td class="darkgrey" align="center">'.$eff.'</td>';
 	echo '<td class="darkgrey" align="center">'.$acc.'</td>';

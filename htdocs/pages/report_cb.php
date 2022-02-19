@@ -146,9 +146,9 @@ IF ($stage == "2") {
 			while($r_bteam = mysql_fetch_array($q_bteam)) {
 
 			echo'<tr>
-				<td class="grey">'.$r_bteam[name].'</td>
+				<td class="grey">'.$r_bteam['name'].'</td>
 				<td class="grey">
-				<select CLASS="searchform" name="'.$r_bteam[id].'">
+				<select CLASS="searchform" name="'.$r_bteam['id'].'">
 				<option selected CLASS="searchform" value="">Use Me To Assign a CB Player to Stats</option>';
 
 			for ($i = 0; $i < $bluecount; $i++) {

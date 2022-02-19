@@ -526,7 +526,7 @@ if ($ShowNGStatsTotals)
 	while ($r_mweapons = mysql_fetch_array($q_mweapons)) {
 	
 		$wid =  $r_mweapons[id];
-		$sql_mweaponsl = "SELECT w.pid AS playerid, pi.name AS name, pi.country AS country, w.kills, COUNT(DISTINCT w.matchid) AS mcount FROM uts_weaponstats AS w LEFT JOIN uts_pinfo AS pi ON w.pid = pi.id WHERE w.weapon = '$wid' AND w.pid > 0 AND pi.banned <> 'Y' GROUP BY id, name ORDER BY w.kills DESC LIMIT 0,1";
+		$sql_mweaponsl = "SELECT w.pid AS playerid, pi.name AS name, pi.country AS country, w.kills, COUNT(DISTINCT w.matchid) AS mcount FROM uts_weaponstats AS w LEFT JOIN uts_pinfo AS pi ON w.pid = pi.id WHERE w.weapon = '".$wid."' AND w.pid > 0 AND pi.banned <> 'Y' GROUP BY id, name ORDER BY w.kills DESC LIMIT 0,1";
 		$q_mweaponsl = mysql_query($sql_mweaponsl) or die(mysql_error());
 		while ($r_mweaponsl = mysql_fetch_array($q_mweaponsl)) {
 	
@@ -564,7 +564,7 @@ if ($ShowNGStatsTotals)
 	while ($r_mweapons = mysql_fetch_array($q_mweapons)) {
 	
 		$wid =  $r_mweapons[id];
-		$sql_mweaponsl = "SELECT w.matchid, w.pid AS playerid, pi.name AS name, pi.country AS country, w.kills FROM uts_weaponstats AS w LEFT JOIN uts_pinfo AS pi ON w.pid = pi.id WHERE w.weapon = '$wid' AND w.pid > 0 AND w.matchid > 0 AND pi.banned <> 'Y' ORDER BY w.kills DESC LIMIT 0,1";
+		$sql_mweaponsl = "SELECT w.matchid, w.pid AS playerid, pi.name AS name, pi.country AS country, w.kills FROM uts_weaponstats AS w LEFT JOIN uts_pinfo AS pi ON w.pid = pi.id WHERE w.weapon = '".$wid."' AND w.pid > 0 AND w.matchid > 0 AND pi.banned <> 'Y' ORDER BY w.kills DESC LIMIT 0,1";
 		$q_mweaponsl = mysql_query($sql_mweaponsl) or die(mysql_error());
 		while ($r_mweaponsl = mysql_fetch_array($q_mweaponsl)) {
 	

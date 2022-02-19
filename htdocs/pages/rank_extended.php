@@ -9,18 +9,18 @@ $rank_year = 0;
 if (isset($_GET['year']) && strlen($_GET['year'])==4 && is_numeric($_GET['year']))
         $rank_year = intval(my_addslashes($_GET['year']));
 
-$r_gamename = small_query("SELECT name FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '$gid'");
+$r_gamename = small_query("SELECT name FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '".$gid."'");
 $gamename = $r_gamename['name'];
 
 if ($_GET['cfilter'] && strlen($_GET['cfilter'])==2)
 {
 	// Timo 2021 - this is broken, needs fixing
-	$r_pcount = small_query("SELECT COUNT(*) AS pcount FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." LEFT JOIN ".(isset($t_player) ? $t_player : "uts_player")." ON ".(isset($t_rank) ? $t_rank : "uts_rank").".pid = ".(isset($t_player) ? $t_player : "uts_player").".id WHERE ".(isset($t_player) ? $t_player : "uts_player").".country = '".$_GET['cfilter']."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".gid = '$gid' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".year = '".$rank_year."';");
+	$r_pcount = small_query("SELECT COUNT(*) AS pcount FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." LEFT JOIN ".(isset($t_player) ? $t_player : "uts_player")." ON ".(isset($t_rank) ? $t_rank : "uts_rank").".pid = ".(isset($t_player) ? $t_player : "uts_player").".id WHERE ".(isset($t_player) ? $t_player : "uts_player").".country = '".$_GET['cfilter']."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".gid = '".$gid."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".year = '".$rank_year."';");
 	$pcount = $r_pcount['pcount'];
 }
 else
 {
-	$r_pcount = small_query("SELECT COUNT(*) as pcount FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE gid= '$gid' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".year = '".$rank_year."';");
+	$r_pcount = small_query("SELECT COUNT(*) as pcount FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE gid= '".$gid."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".year = '".$rank_year."';");
 	$pcount = $r_pcount['pcount'];
 }
 
@@ -110,10 +110,10 @@ $ranking = $qpage;
 if ($_GET['cfilter'])
 {
 	if (strlen($_GET['cfilter'])==2)
-		$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '$gid' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' AND r.year = '".$rank_year."' ORDER BY `rank` DESC LIMIT $qpage,$outerlimit;";
+		$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' AND r.year = '".$rank_year."' ORDER BY `rank` DESC LIMIT $qpage,$outerlimit;";
 }
 else
-	$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '$gid' AND `pi`.`banned` <> 'Y' AND `r`.`year` = '".$rank_year."' ORDER BY `rank` DESC LIMIT $qpage,$outerlimit";
+	$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND `pi`.`banned` <> 'Y' AND `r`.`year` = '".$rank_year."' ORDER BY `rank` DESC LIMIT $qpage,$outerlimit";
 $q_rplayer = mysql_query($sql_rplayer) or die(mysql_error());
 while ($r_rplayer = mysql_fetch_array($q_rplayer))
 {
@@ -127,15 +127,15 @@ while ($r_rplayer = mysql_fetch_array($q_rplayer))
 	// Modifications to rank by country --// Idea by brajan  20/07/05 : Timo.
 	echo '<a href="./?p='.$_GET['p'].'&gid='.$_GET['gid'];
 	if (!$_GET['cfilter'])
-		echo '&cfilter='.$r_rplayer[country];
+		echo '&cfilter='.$r_rplayer['country'];
 	if ($rank_year > 0)
 		echo '&year='.$rank_year;
-	echo '">'.FlagImage($r_rplayer[country]).'</a>';
-	echo ' <a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer['pid'].($rank_year > 0 ? "&amp;year=".$rank_year : "").'">'.htmlentities($r_rplayer[name],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']) .'</a></td>';
+	echo '">'.FlagImage($r_rplayer['country']).'</a>';
+	echo ' <a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer['pid'].($rank_year > 0 ? "&amp;year=".$rank_year : "").'">'.htmlentities($r_rplayer['name'],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']) .'</a></td>';
 	// End Modifications to rank by country -->
 	echo '
-		<td class="dark" align="center">'.get_dp($r_rplayer[rank]).'</td>
-		<td class="grey" align="center">'.$r_rplayer[matches].'</td>
+		<td class="dark" align="center">'.get_dp($r_rplayer['rank']).'</td>
+		<td class="grey" align="center">'.$r_rplayer['matches'].'</td>
 	  </tr>';
 }
 echo'

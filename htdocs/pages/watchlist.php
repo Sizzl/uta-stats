@@ -46,7 +46,7 @@ foreach($watchlist as $pid) {
 						FROM		uts_pinfo pi,
 									uts_match m,
 									uts_player p
-						WHERE		pi.id = '$pid'
+						WHERE		pi.id = '".$pid."'
 							AND	p.matchid = m.id
 							AND	p.pid = pi.id
 						ORDER BY	m.time DESC
@@ -65,7 +65,7 @@ foreach($watchlist as $pid) {
 									AVG(p.avgping) as ping,
 									SUM(gametime) as gametime
 						FROM 		uts_player AS p
-						WHERE 	p.pid = '$pid'
+						WHERE 	p.pid = '".$pid."'
 						GROUP BY p.pid";
 	$r_pinfo = small_query($sql_pinfo);
 						

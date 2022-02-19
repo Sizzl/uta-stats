@@ -80,11 +80,11 @@ if (strpos($gamename, 'Assault') !== false)
 
 
 	// Fragging Events
-	$rank_fpos = $r_cnt[frags]+$r_cnt[spree_double]+$r_cnt[spree_multi]+$r_cnt[spree_ultra]+$r_cnt[spree_monster]+$r_cnt[spree_kill]+$r_cnt[spree_rampage]+$r_cnt[spree_dom]+$r_cnt[spree_uns]+$r_cnt[spree_god];
+	$rank_fpos = $r_cnt['frags']+$r_cnt['spree_double']+$r_cnt['spree_multi']+$r_cnt['spree_ultra']+$r_cnt['spree_monster']+$r_cnt['spree_kill']+$r_cnt['spree_rampage']+$r_cnt['spree_dom']+$r_cnt['spree_uns']+$r_cnt['spree_god'];
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."--\r\n".$matchid."-1b-r_calc:\r\n Frag(pos) Summary: Frags + DKs + MKs + UKs + MKs + Sprees + Ramp + Doms + Unstops = ".$rank_fpos."\r\n";
 
-	$rank_fneg = $r_cnt[deaths]+$r_cnt[teamkills];
+	$rank_fneg = $r_cnt['deaths']+$r_cnt['teamkills'];
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."--\r\n".$matchid."-1c-r_calc:\r\n Frag(neg) Summary: Deaths + TKs = ".$rank_fneg."\r\n";
 
@@ -98,9 +98,9 @@ if (strpos($gamename, 'Assault') !== false)
 	
 	
 	// Objective Events
-	$assault_sum = $r_cnt[ass_assist]+$r_cnt[ass_h_launch]+$r_cnt[ass_r_launch]+$r_cnt[ass_h_launched]+$r_cnt[ass_r_launched];
+	$assault_sum = $r_cnt['ass_assist']+$r_cnt['ass_h_launch']+$r_cnt['ass_r_launch']+$r_cnt['ass_h_launched']+$r_cnt['ass_r_launched'];
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
-		$s_debug = $s_debug."--\r\n".$matchid."-1d-r_calc:\r\n Assault Summary: Assists + HLauncher + RLauncher + HLaunched + RLaunched = ".$r_cnt[ass_assist]." + ".$r_cnt[ass_h_launch]." + ".$r_cnt[ass_r_launch]." + ".$r_cnt[ass_h_launched]." + ".$r_cnt[ass_r_launched]." = ".$assault_sum."\r\n";
+		$s_debug = $s_debug."--\r\n".$matchid."-1d-r_calc:\r\n Assault Summary: Assists + HLauncher + RLauncher + HLaunched + RLaunched = ".$r_cnt['ass_assist']." + ".$r_cnt['ass_h_launch']." + ".$r_cnt['ass_r_launch']." + ".$r_cnt['ass_h_launched']." + ".$r_cnt['ass_r_launched']." = ".$assault_sum."\r\n";
 
 	// ObjectiveFaktor = def*2 - att				
 	$objsql = "SELECT COUNT(stats.id) as objs, SUM(o.rating) as ratedobjs, def_teamsize, att_teamsize
@@ -124,7 +124,7 @@ if (strpos($gamename, 'Assault') !== false)
 	{				
 		while ($r_obj = mysql_fetch_array($q_obj)) 
 		{					
-			$rankobj += ($r_obj[ratedobjs] * ($r_obj[def_teamsize]*2 - $r_obj[att_teamsize]));
+			$rankobj += ($r_obj['ratedobjs'] * ($r_obj['def_teamsize']*2 - $r_obj['att_teamsize']));
 		}
 	}
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
@@ -154,19 +154,19 @@ else
 			SUM(spree_kill*1) AS spree_kill, SUM(spree_rampage*1) AS spree_rampage, SUM(spree_dom*1.5) AS spree_dom, SUM(spree_uns*2) AS spree_uns, SUM(spree_god*3) AS spree_god,
 			SUM(gametime) AS gametime		
 			FROM uts_player p inner join uts_match m on p.matchid = m.id
-			FROM uts_player WHERE p.pid = '$pid' AND p.gid = '$gid' AND p.matchid <= '$matchid' AND m.time >= '$rank_time_start' AND m.time <= '$rank_time_end'");
+			FROM uts_player WHERE p.pid = '".$pid."' AND p.gid = '".$gid."' AND p.matchid <= '".$matchid."' AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'");
 	
 	// Work out per game ranking amounts
-	$rank_ctf = $r_cnt[flag_taken]+$r_cnt[flag_pickedup]+$r_cnt[flag_return]+$r_cnt[flag_capture]+$r_cnt[flag_cover]+$r_cnt[flag_seal]+$r_cnt[flag_assist]+$r_cnt[flag_kill];
-	$rank_dom = $r_cnt[com_cp];
-	$rank_jb = $r_cnt[ass_obj] * 0.15;			
-	$rank_fpos = $r_cnt[frags]+$r_cnt[spree_double]+$r_cnt[spree_multi]+$r_cnt[spree_ultra]+$r_cnt[spree_monster]+$r_cnt[spree_kill]+$r_cnt[spree_rampage]+$r_cnt[spree_dom]+$r_cnt[spree_uns]+$r_cnt[spree_god];
-	$rank_fneg = $r_cnt[deaths]+$r_cnt[suicides]+$r_cnt[teamkills];
+	$rank_ctf = $r_cnt['flag_taken']+$r_cnt['flag_pickedup']+$r_cnt['flag_return']+$r_cnt['flag_capture']+$r_cnt['flag_cover']+$r_cnt['flag_seal']+$r_cnt['flag_assist']+$r_cnt['flag_kill'];
+	$rank_dom = $r_cnt['com_cp'];
+	$rank_jb = $r_cnt['ass_obj'] * 0.15;			
+	$rank_fpos = $r_cnt['frags']+$r_cnt['spree_double']+$r_cnt['spree_multi']+$r_cnt['spree_ultra']+$r_cnt['spree_monster']+$r_cnt['spree_kill']+$r_cnt['spree_rampage']+$r_cnt['spree_dom']+$r_cnt['spree_uns']+$r_cnt['spree_god'];
+	$rank_fneg = $r_cnt['deaths']+$r_cnt['suicides']+$r_cnt['teamkills'];
 }
 
-if (isset($r_cnt[gametime]) && $r_cnt[gametime] > 0)
+if (isset($r_cnt['gametime']) && $r_cnt['gametime'] > 0)
 {
-	$r_gametime = ceil($r_cnt[gametime]/60);
+	$r_gametime = ceil($r_cnt['gametime']/60);
 }
 else
 {
@@ -231,9 +231,9 @@ elseif ($rank_gametime >= 200 && $rank_gametime < 300) {
 // Get sums of different events
 		
 // Select rank record
-// $r_rankp = small_query("SELECT id, time, rank, matches FROM uts_rank WHERE pid = '$pid' AND gid = '$gid' AND year = '".$rank_year."'");
+// $r_rankp = small_query("SELECT id, time, rank, matches FROM uts_rank WHERE pid = '".$pid."' AND gid = '".$gid."' AND year = '".$rank_year."'");
 $r_rankp = small_query("SELECT `id`, `time`, `rank`, `matches` FROM `uts_rank` WHERE `pid` = '".$pid."' AND `gid` = '".$gid."' AND `year` = '".$rank_year."';");
-$rank_id = $r_rankp[id];
+$rank_id = $r_rankp['id'];
 
 if ($rank_id == NULL)
 {
@@ -246,9 +246,9 @@ if ($rank_id == NULL)
 } // end IF($rank_id == NULL)
 else
 {
-	$rank_gametime = $r_rankp[time];
-	$rank_crank = $r_rankp[rank]; // current (to track previous)
-	$rank_matches = $r_rankp[matches];
+	$rank_gametime = $r_rankp['time'];
+	$rank_crank = $r_rankp['rank']; // current (to track previous)
+	$rank_matches = $r_rankp['matches'];
 }
 // Add number of matches played
 $rank_matches = $rank_matches+1;
@@ -258,7 +258,7 @@ $eff_rank = $rank_nrank-$rank_crank;
 if ($rank_year <= 0)
 {
 	// Add effective rank points given to uts_player record --// Timo 13/02/2021 - need to understand whether this needs filtering by year; will be a PITA if so.
-	$sql = "UPDATE `uts_player` SET `rank` = '".$eff_rank."' WHERE `id` = '$playerecordid';";
+	$sql = "UPDATE `uts_player` SET `rank` = '".$eff_rank."' WHERE `id` = '".$playerecordid."';";
 	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 		$s_debug = $s_debug."-----\r\ntotals-3-add_eff_rank_pts:\r\n".$sql."\r\n";
 

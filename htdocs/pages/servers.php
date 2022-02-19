@@ -55,15 +55,15 @@ FROM uts_match GROUP BY servername, serverip ORDER BY gametime DESC LIMIT $qpage
 $q_servers = mysql_query($sql_servers) or die(mysql_error());
 while ($r_servers = mysql_fetch_array($q_servers)) {
 
-	  $r_gametime = sec2hour($r_servers[gametime]);
+	  $r_gametime = sec2hour($r_servers['gametime']);
 
 	  echo'
 	  <tr>
-		<td class="dark" align="center"><a class="darkhuman" href="./?p=sinfo&amp;serverip='.$r_servers[serverip].'">'.$r_servers[servername].'</a></td>
-		<td class="grey" align="center"><a href="./?p=squery&amp;serverip='.$r_servers[serverip].'"><img border="0" alt="Server Status" title="Server Status" src="images/magnify.gif"></a></td>
-		<td class="grey" align="center">'.$r_servers[matchcount].'</td>
-		<td class="grey" align="center">'.$r_servers[frags].'</td>
-		<td class="grey" align="center">'.$r_servers[matchscore].'</td>
+		<td class="dark" align="center"><a class="darkhuman" href="./?p=sinfo&amp;serverip='.$r_servers['serverip'].'">'.$r_servers['servername'].'</a></td>
+		<td class="grey" align="center"><a href="./?p=squery&amp;serverip='.$r_servers['serverip'].'"><img border="0" alt="Server Status" title="Server Status" src="images/magnify.gif"></a></td>
+		<td class="grey" align="center">'.$r_servers['matchcount'].'</td>
+		<td class="grey" align="center">'.$r_servers['frags'].'</td>
+		<td class="grey" align="center">'.$r_servers['matchscore'].'</td>
 		<td class="grey" align="center">'.$r_gametime.'</td>
 	  </tr>';
 }

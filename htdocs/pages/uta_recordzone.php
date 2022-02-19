@@ -20,8 +20,8 @@ function SortPic($curr_field, $filter, $sort) {
 $mapsperpage=100;
 
 // Get filter and set sorting
-$filter = my_addslashes($_GET[filter]);
-$sort = my_addslashes($_GET[sort]);
+$filter = my_addslashes($_GET['filter']);
+$sort = my_addslashes($_GET['sort']);
 
 include_once("uta_recordzone_filters.php");
 
@@ -99,10 +99,10 @@ $sql_maps = "SELECT mapfile, COUNT(".(isset($t_match) ? $t_match : "uts_match").
 $q_maps = mysql_query($sql_maps) or die(mysql_error());
 while ($r_maps = mysql_fetch_array($q_maps)) {
 
-	$r_mapfile = un_ut($r_maps[mapfile]);
+	$r_mapfile = un_ut($r_maps['mapfile']);
 	$r_mapfileunr = $r_mapfile .".unr";
 	$myurl = urlencode($r_mapfile);
-	$matchcount = $r_maps[matchcount]; 
+	$matchcount = $r_maps['matchcount']; 
 	  
 	// Get Record for this map
 	$sql_record = "SELECT ".(isset($t_match) ? $t_match : "uts_match").".id as recmatchid, ostats.timestamp as rectime, ".(isset($t_match) ? $t_match : "uts_match").".servername as servername, 
@@ -112,7 +112,7 @@ while ($r_maps = mysql_fetch_array($q_maps)) {
 			from ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats")." ostats 
 			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ostats.matchid = ".(isset($t_match) ? $t_match : "uts_match").".id
 			inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pinfo on pinfo.id = ostats.pid 
-			where ostats.final = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".mapfile like '$r_mapfileunr' AND att_teamsize <= (def_teamsize+1)";
+			where ostats.final = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".mapfile like '".$r_mapfileunr."' AND att_teamsize <= (def_teamsize+1)";
 			if ($record_condition_gametypes!="") $sql_record .= " $record_condition_gametypes ";
 			if ($record_condition_teamsize!="") $sql_record .= " $record_condition_teamsize ";
 			$sql_record .= " ORDER by ostats.timestamp ASC LIMIT 0,1";				    
@@ -130,7 +130,7 @@ while ($r_maps = mysql_fetch_array($q_maps)) {
 			from ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats")." ostats 
 			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ostats.matchid = ".(isset($t_match) ? $t_match : "uts_match").".id
 			inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pinfo on pinfo.id = ostats.pid 
-			where ostats.final = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".mapfile like '$r_mapfileunr' ";
+			where ostats.final = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".mapfile like '".$r_mapfileunr."' ";
 			if ($record_condition_gametypes!="") $sql_record .= " $record_condition_gametypes ";
 			//if ($record_condition_teamsize!="") $sql_record .= " $record_condition_teamsize ";
 			$sql_record .= " ORDER by ostats.timestamp ASC LIMIT 0,1";				 				    
@@ -143,22 +143,22 @@ while ($r_maps = mysql_fetch_array($q_maps)) {
 	$r_record = $q_record;
 	if ($r_record!=NULL)
 	{
-		$gametime = GetMinutes($r_record[rectime]);
-	  	$playername = $r_record[recplayername];
-	  	$playerid = $r_record[recplayerid];
-	  	$pcountry = $r_record[recpcountry]; 
-	  	$matchid = $r_record[recmatchid];
-	  	$matchname = mdate($r_record[matchtime]);
-	  	$servername = get_short_servername($r_record[servername]);
-	  	$serverip = $r_record[serverip];	  		  
-		$matchmode = $r_record[matchmode];
+		$gametime = GetMinutes($r_record['rectime']);
+	  	$playername = $r_record['recplayername'];
+	  	$playerid = $r_record['recplayerid'];
+	  	$pcountry = $r_record['recpcountry']; 
+	  	$matchid = $r_record['recmatchid'];
+	  	$matchname = mdate($r_record['matchtime']);
+	  	$servername = get_short_servername($r_record['servername']);
+	  	$serverip = $r_record['serverip'];	  		  
+		$matchmode = $r_record['matchmode'];
 		unset($matchteam);
 		if ($matchmode==1)
 		{
-			if ($r_record[attackingid]==1)
-				$matchteam = "<a class=\"grey\" href=\"./?p=utateams&team=".urlencode($r_record[teamname1])."\">".htmlspecialchars($r_record[teamname1])."</a>";
+			if ($r_record['attackingid']==1)
+				$matchteam = "<a class=\"grey\" href=\"./?p=utateams&team=".urlencode($r_record['teamname1'])."\">".htmlspecialchars($r_record['teamname1'])."</a>";
 			else
-				$matchteam = "<a class=\"grey\" href=\"./?p=utateams&team=".urlencode($r_record[teamname0])."\">".htmlspecialchars($r_record[teamname0])."</a>";
+				$matchteam = "<a class=\"grey\" href=\"./?p=utateams&team=".urlencode($r_record['teamname0'])."\">".htmlspecialchars($r_record['teamname0'])."</a>";
 		}	
 	}
 	  	  
@@ -168,10 +168,10 @@ while ($r_maps = mysql_fetch_array($q_maps)) {
 	
 	if ($r_record!=NULL)
 	{
-		$time_s = $r_record[matchtime]; // 20050722140406
+		$time_s = $r_record['matchtime']; // 20050722140406
 		$time_d = mktime(0,0,0,substr($time_s,4,2),substr($time_s,6,2),substr($time_s,0,4));
 		
-		if (((time(void) -$time_d) / 86400.0) > 21)
+		if (((time() -$time_d) / 86400.0) > 21)
 		{
 			if ($regular == 1) echo '<td class="grey" align="center">'.$gametime.'</td>';
 			else echo '<td class="grey" align="center">'.$gametime.'&sup1</td>';

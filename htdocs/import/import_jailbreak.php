@@ -13,10 +13,10 @@
 	
 	
 	mysql_query("	UPDATE 	uts_player 
-						SET 		ass_obj = '$r_releases', 
-									suicides = '$r_suicides',
-									frags = '$r_frags',
-									eff = '$r_efficiency'
+						SET 		ass_obj = '".$r_releases."', 
+									suicides = '".$r_suicides."',
+									frags = '".$r_frags."',
+									eff = '".$r_efficiency."'
 						WHERE 	id = $playerecordid;") or die(mysql_error());	
 		
 ?>

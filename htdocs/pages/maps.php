@@ -26,8 +26,8 @@ function secToHR($seconds) {
 
 global $dbversion;
 // Get filter and set sorting
-$filter = my_addslashes($_GET[filter]);
-$sort = my_addslashes($_GET[sort]);
+$filter = my_addslashes($_GET['filter']);
+$sort = my_addslashes($_GET['sort']);
 
 // if (empty($filter) || preg_match("/(\')|(;)|(\-)|(\>)|(!)|(\<)|(where)|(drop)|(select)|(from)|(if)/i",$filter)) {
 if (empty($filter) || !(preg_match("/(^mapfile$)|(^matchcount$)|(^pick90$)|(^pick60$)|(^pick30$)|(^lastmonth$)|(^lastweek$)|(^frags$)|(^matchscore$)|(^avggametime$)|(^gametime$)/i",$filter))) {
@@ -143,23 +143,23 @@ $sort).'">Total Gametime</a>'.SortPic('gametime', $filter, $sort).'</td> </tr>';
 $q_maps = mysql_query($sql_maps) or die(mysql_error());
 while ($r_maps = mysql_fetch_array($q_maps)) {
 
-	  $r_mapfile = un_ut($r_maps[mapfile]);
+	  $r_mapfile = un_ut($r_maps['mapfile']);
 	  $myurl = urlencode($r_mapfile);
-	  // $r_gametime = GetMinutes($r_maps[gametime]);
-	  $r_gametime = secToHR($r_maps[gametime]);
-	  $r_avggametime = secToHR($r_maps[avggametime]);
+	  // $r_gametime = GetMinutes($r_maps['gametime']);
+	  $r_gametime = secToHR($r_maps['gametime']);
+	  $r_avggametime = secToHR($r_maps['avggametime']);
 
 	  echo'
 	  <tr>
 		<td class="dark" align="center"><a class="darkhuman" href="./?p=minfo&amp;map='.$myurl.'">'.$r_mapfile.'</a></td>
-		<td class="grey" align="center">'.$r_maps[matchcount].'</td>
-		<td class="grey" align="center">'.$r_maps[pick90].'</td>
-		<td class="grey" align="center">'.$r_maps[pick60].'</td>
-		<td class="grey" align="center">'.$r_maps[pick30].'</td>
-		<td class="grey" align="center">'.$r_maps[lastmonth].'</td>
-		<td class="grey" align="center">'.$r_maps[lastweek].'</td>
-		<td class="grey" align="center">'.get_dp($r_maps[frags]).'</td>
-		<td class="grey" align="center">'.get_dp($r_maps[matchscore]).'</td>
+		<td class="grey" align="center">'.$r_maps['matchcount'].'</td>
+		<td class="grey" align="center">'.$r_maps['pick90'].'</td>
+		<td class="grey" align="center">'.$r_maps['pick60'].'</td>
+		<td class="grey" align="center">'.$r_maps['pick30'].'</td>
+		<td class="grey" align="center">'.$r_maps['lastmonth'].'</td>
+		<td class="grey" align="center">'.$r_maps['lastweek'].'</td>
+		<td class="grey" align="center">'.get_dp($r_maps['frags']).'</td>
+		<td class="grey" align="center">'.get_dp($r_maps['matchscore']).'</td>
 		<td class="grey" align="center">'.$r_avggametime.'</td>
 		<td class="grey" align="center">'.$r_gametime.'</td>
 	  </tr>';

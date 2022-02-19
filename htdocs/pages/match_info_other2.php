@@ -73,17 +73,17 @@ while ($r_pickups = zero_out(mysql_fetch_array($q_pickups))) {
      $i++;
      $class = ($i % 2) ? 'grey' : 'grey2';
 
-	  $r_pname = $r_pickups[name];
+	  $r_pname = $r_pickups['name'];
 	  $myurl = urlencode($r_pname);
 	  echo'
 	  <tr>
-		<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups[pid].'">'.FormatPlayerName($r_pickups[country], $r_pickups[pid], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
-		<td class="'.$class.'" align="center">'.$r_pickups[pu_pads].'</td>
-		<td class="'.$class.'" align="center">'.$r_pickups[pu_armour].'</td>
-		<td class="'.$class.'" align="center">'.$r_pickups[pu_keg].'</td>
-		<td class="'.$class.'" align="center">'.$r_pickups[pu_invis].'</td>
-		<td class="'.$class.'" align="center">'.$r_pickups[pu_belt].'</td>
-		<td class="'.$class.'" align="center">'.$r_pickups[pu_amp].'</td>
+		<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName($r_pickups['country'], $r_pickups['pid'], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
+		<td class="'.$class.'" align="center">'.$r_pickups['pu_pads'].'</td>
+		<td class="'.$class.'" align="center">'.$r_pickups['pu_armour'].'</td>
+		<td class="'.$class.'" align="center">'.$r_pickups['pu_keg'].'</td>
+		<td class="'.$class.'" align="center">'.$r_pickups['pu_invis'].'</td>
+		<td class="'.$class.'" align="center">'.$r_pickups['pu_belt'].'</td>
+		<td class="'.$class.'" align="center">'.$r_pickups['pu_amp'].'</td>
 	  </tr>';
 }
 
@@ -121,18 +121,18 @@ if (isset($mid2)) {
      $i++;
      $class = ($i % 2) ? 'grey' : 'grey2';
 
-	  $r_pname = $r_pickups[name];
+	  $r_pname = $r_pickups['name'];
 	  $myurl = urlencode($r_pname);
 
 		  echo'
 		  <tr>
-			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups[pid].'">'.FormatPlayerName($r_pickups[country], $r_pickups[pid], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_pads].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_armour].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_keg].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_invis].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_belt].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_amp].'</td>
+			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName($r_pickups['country'], $r_pickups['pid'], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_pads'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_armour'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_keg'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_invis'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_belt'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_amp'].'</td>
 		  </tr>';
 	}
 }
@@ -160,42 +160,42 @@ echo '
   </tr>
   <tr>
     <td class="dark" align="center" width="150">First Blood</td>
-    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood[country], $sql_firstblood[firstblood], $sql_firstblood[name], $gid, $gamename,true,null,$rank_year).'</td>';
+    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood['country'], $sql_firstblood['firstblood'], $sql_firstblood['name'], $gid, $gamename,true,null,$rank_year).'</td>';
 if (isset($mid2))
 	echo '    <td class="dark" align="center" width="150">First Blood</td>
-    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood2[country], $sql_firstblood2[firstblood], $sql_firstblood2[name], $gid, $gamename,true,null,$rank_year).'</td>';
+    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood2['country'], $sql_firstblood2['firstblood'], $sql_firstblood2['name'], $gid, $gamename,true,null,$rank_year).'</td>';
 echo '
   </tr>
   <tr>
     <td class="dark" align="center">Double Kills</td>
-    <td class="grey2" align="center">'.$sql_multis[spree_double].'</td>';
+    <td class="grey2" align="center">'.$sql_multis['spree_double'].'</td>';
 if (isset($mid2))
 	echo '    <td class="dark" align="center">Double Kills</td>
-    <td class="grey2" align="center">'.$sql_multis2[spree_double].'</td>';
+    <td class="grey2" align="center">'.$sql_multis2['spree_double'].'</td>';
 echo '
   </tr>
   <tr>
     <td class="dark" align="center">Multi Kills</td>
-    <td class="grey" align="center">'.$sql_multis[spree_multi].'</td>';
+    <td class="grey" align="center">'.$sql_multis['spree_multi'].'</td>';
 if (isset($mid2))
 	echo '    <td class="dark" align="center">Multi Kills</td>
-    <td class="grey" align="center">'.$sql_multis2[spree_multi].'</td>';
+    <td class="grey" align="center">'.$sql_multis2['spree_multi'].'</td>';
 echo '
   </tr>
   <tr>
     <td class="dark" align="center">Ultra Kills</td>
-    <td class="grey2" align="center">'.$sql_multis[spree_ultra].'</td>';
+    <td class="grey2" align="center">'.$sql_multis['spree_ultra'].'</td>';
 if (isset($mid2))
 	echo '    <td class="dark" align="center">Ultra Kills</td>
-    <td class="grey2" align="center">'.$sql_multis2[spree_ultra].'</td>';
+    <td class="grey2" align="center">'.$sql_multis2['spree_ultra'].'</td>';
 echo '
   </tr>
   <tr>
     <td class="dark" align="center">Monster Kills</td>
-    <td class="grey" align="center">'.$sql_multis[spree_monster].'</td>';
+    <td class="grey" align="center">'.$sql_multis['spree_monster'].'</td>';
 if (isset($mid2))
 	echo '    <td class="dark" align="center">Monster Kills</td>
-    <td class="grey" align="center">'.$sql_multis2[spree_monster].'</td>';
+    <td class="grey" align="center">'.$sql_multis2['spree_monster'].'</td>';
 echo '
   </tr>
 </tbody></table>';

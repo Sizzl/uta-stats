@@ -7,7 +7,7 @@ if (isset($_REQUEST['submit'])) {
 								SET	image = '". my_addslashes($_REQUEST['image'][$id]) ."',
 										sequence = '". my_addslashes($_REQUEST['sequence'][$id]) ."',
 										hide = '". (isset($_REQUEST['hide'][$id]) ? 'Y' : 'N') ."'
-								WHERE	id =  '$id';") or die(mysql_error());
+								WHERE	id =  '".$id."';") or die(mysql_error());
 	}
 }
 
@@ -52,7 +52,7 @@ echo '</tr>';
 
 echo'</form>
 	<tr>
-	<td class="smheading" align="center" colspan="4"><a class="grey" href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td>
+	<td class="smheading" align="center" colspan="4"><a class="grey" href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td>
 </tr></table>';
 	
 ?>

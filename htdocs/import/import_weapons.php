@@ -161,18 +161,18 @@ foreach($weapons as $playerid => $weapon) {
 			} else {
 			// Yes -> update 
 				// Get match count for acc
-				// $r_accstat = small_query("SELECT COUNT(pid) FROM uts_weaponstats WHERE matchid <> '0' AND pid = '$playerid' AND weapon = '$weaponid'");
+				// $r_accstat = small_query("SELECT COUNT(pid) FROM uts_weaponstats WHERE matchid <> '0' AND pid = '".$playerid."' AND weapon = '".$weaponid."'");
 				/*
 				mysql_query("	UPDATE	uts_weaponstats
-								SET		weapon = '$weaponid',
+								SET		weapon = '".$weaponid."',
 											kills = kills + '${infos['weap_kills']}',
 											shots = shots + '${infos['weap_shotcount']}',
 											hits = hits + '${infos['weap_hitcount']}',
 											damage = damage + '${infos['weap_damagegiven']}',
 											acc = (acc + '". round($infos['weap_accuracy'], 2) ."') / 2
 								WHERE		matchid = '0'
-									AND	pid = '$playerid'
-									AND	weapon = '$weaponid';") or die(mysql_error()); */
+									AND	pid = '".$playerid."'
+									AND	weapon = '".$weaponid."';") or die(mysql_error()); */
 				if ($r_pstat['shots'] > 0 || $infos['weap_shotcount'] > 0)
 					$acc = ((100/($r_pstat['shots'] + $infos['weap_shotcount']))*($r_pstat['hits'] + $infos['weap_hitcount']));
 				else
@@ -221,7 +221,7 @@ foreach($s_weapons as $weaponid => $infos) {
 							`acc` = (`acc` + '". round(($infos['weap_accuracy'] ? $infos['weap_accuracy'] : 0), 2) ."') / 2
 							WHERE `matchid` = '0'
 							AND `pid` = '0'
-							AND `weapon` = '$weaponid';";
+							AND `weapon` = '".$weaponid."';";
 	}
 	mysql_query($ws_sql) or die('wsg:'.mysql_error());
 

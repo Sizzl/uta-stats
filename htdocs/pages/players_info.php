@@ -11,7 +11,7 @@ if (isset($_GET['year']) && strlen($_GET['year'])==4 && is_numeric($_GET['year']
 if ($rank_year < 2005 || $rank_year > date("Y"))
 	$rank_year = 0;
 
-$r_info = small_query("SELECT name, country, banned FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." WHERE id = '$pid'");
+$r_info = small_query("SELECT name, country, banned FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." WHERE id = '".$pid."'");
 if (!$r_info) {
 	echo "Player not found";
 	include_once("includes/footer.php");
@@ -114,34 +114,34 @@ $sql_plist = "SELECT 'players_info.php(list)' AS script_name, g.name AS gamename
 		FROM ".(isset($t_player) ? $t_player : "uts_player")." p,
 			".(isset($t_games) ? $t_games : "uts_games")." g
 			".($rank_year > 0 ? ", ".(isset($t_match) ? $t_match : "uts_match")." m" : "")."
-		WHERE p.gid = g.id AND p.pid = '$pid' ".($rank_year > 0 ? "AND m.id = p.matchid AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'" : "")."
+		WHERE p.gid = g.id AND p.pid = '".$pid."' ".($rank_year > 0 ? "AND m.id = p.matchid AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'" : "")."
 		GROUP BY p.gid";
 
 $q_plist = mysql_query($sql_plist) or die(mysql_error());
 while ($r_plist = mysql_fetch_array($q_plist)) {
 
-	$gametime = sec2hour($r_plist[gametime]);
-	$eff = ($r_plist[sumeff]>0 ? get_dp($r_plist[kills]/$r_plist[sumeff]*100) : 0); // Fixed division by zero for non ignored matches --// Timo 01/05/07
-	$acc = get_dp($r_plist[accuracy]);
-	$ttl = GetMinutes($r_plist[ttl]);
-	if (strpos($r_plist[gamename],'Assault') !== false)
+	$gametime = sec2hour($r_plist['gametime']);
+	$eff = ($r_plist['sumeff']>0 ? get_dp($r_plist['kills']/$r_plist['sumeff']*100) : 0); // Fixed division by zero for non ignored matches --// Timo 01/05/07
+	$acc = get_dp($r_plist['accuracy']);
+	$ttl = GetMinutes($r_plist['ttl']);
+	if (strpos($r_plist['gamename'],'Assault') !== false)
 		$playedAS = true;
 
 	if (strpos($r_plist['gamename'],'Flag') !== false)
 		$playedCTF = true;
 
 	echo'<tr>
-		<td class="dark" align="center">'.$r_plist[gamename].'</td>
-		<td class="grey" align="center">'.$r_plist[gamescore].'</td>
-		<td class="grey" align="center">'.$r_plist[frags].'</td>
-		<td class="grey" align="center">'.$r_plist[kills].'</td>
-		<td class="grey" align="center">'.$r_plist[deaths].'</td>
-		<td class="grey" align="center">'.$r_plist[suicides].'</td>
-		<td class="grey" align="center">'.$r_plist[teamkills].'</td>
+		<td class="dark" align="center">'.$r_plist['gamename'].'</td>
+		<td class="grey" align="center">'.$r_plist['gamescore'].'</td>
+		<td class="grey" align="center">'.$r_plist['frags'].'</td>
+		<td class="grey" align="center">'.$r_plist['kills'].'</td>
+		<td class="grey" align="center">'.$r_plist['deaths'].'</td>
+		<td class="grey" align="center">'.$r_plist['suicides'].'</td>
+		<td class="grey" align="center">'.$r_plist['teamkills'].'</td>
 		<td class="grey" align="center">'.$eff.'</td>
 		<td class="grey" align="center">'.$acc.'</td>
 		<td class="grey" align="center">'.$ttl.'</td>
-		<td class="grey" align="center">'.$r_plist[games].'</td>
+		<td class="grey" align="center">'.$r_plist['games'].'</td>
 		<td class="grey" align="center">'.$gametime.'</td>
 	  </tr>';
 }
@@ -150,30 +150,30 @@ $r_sumplist = small_query("SELECT SUM(p.gamescore) AS gamescore, SUM(p.frags) AS
 SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, SUM(p.kills+p.deaths+p.suicides+p.teamkills) AS sumeff,
 AVG(p.accuracy) AS accuracy, AVG(p.ttl) AS ttl, COUNT(p.id) AS games, SUM(p.gametime) as gametime
 FROM ".(isset($t_player) ? $t_player : "uts_player")." p ".($rank_year > 0 ? ", ".(isset($t_match) ? $t_match : "uts_match")." m" : "")."
-WHERE p.pid = '$pid' ".($rank_year > 0 ? "AND m.id = p.matchid AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'" : ""));
+WHERE p.pid = '".$pid."' ".($rank_year > 0 ? "AND m.id = p.matchid AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'" : ""));
 
-$gametime = sec2hour($r_sumplist[gametime]);
-if ($r_sumplist[sumeff]>0) {
-	$eff = get_dp($r_sumplist[kills]/$r_sumplist[sumeff]*100);
+$gametime = sec2hour($r_sumplist['gametime']);
+if ($r_sumplist['sumeff']>0) {
+	$eff = get_dp($r_sumplist['kills']/$r_sumplist['sumeff']*100);
 } else {
 	$eff = 0;
 }
-$acc = get_dp($r_sumplist[accuracy]);
-$ttl = GetMinutes($r_sumplist[ttl]);
+$acc = get_dp($r_sumplist['accuracy']);
+$ttl = GetMinutes($r_sumplist['ttl']);
 
   echo'
   <tr>
     <td class="dark" align="center"><b>Totals</b></td>
-	<td class="darkgrey" align="center">'.$r_sumplist[gamescore].'</td>
-	<td class="darkgrey" align="center">'.$r_sumplist[frags].'</td>
-	<td class="darkgrey" align="center">'.$r_sumplist[kills].'</td>
-	<td class="darkgrey" align="center">'.$r_sumplist[deaths].'</td>
-	<td class="darkgrey" align="center">'.$r_sumplist[suicides].'</td>
-	<td class="darkgrey" align="center">'.$r_sumplist[teamkills].'</td>
+	<td class="darkgrey" align="center">'.$r_sumplist['gamescore'].'</td>
+	<td class="darkgrey" align="center">'.$r_sumplist['frags'].'</td>
+	<td class="darkgrey" align="center">'.$r_sumplist['kills'].'</td>
+	<td class="darkgrey" align="center">'.$r_sumplist['deaths'].'</td>
+	<td class="darkgrey" align="center">'.$r_sumplist['suicides'].'</td>
+	<td class="darkgrey" align="center">'.$r_sumplist['teamkills'].'</td>
 	<td class="darkgrey" align="center">'.$eff.'</td>
 	<td class="darkgrey" align="center">'.$acc.'</td>
 	<td class="darkgrey" align="center">'.$ttl.'</td>
-	<td class="darkgrey" align="center">'.$r_sumplist[games].'</td>
+	<td class="darkgrey" align="center">'.$r_sumplist['games'].'</td>
 	<td class="darkgrey" align="center">'.$gametime.'</td>
   </tr>
 </tbody></table>';
@@ -184,7 +184,7 @@ if (isset($playedCTF))
 	$sql_cdatot = zero_out(small_query("SELECT SUM(flag_taken) AS flag_taken,
 		 SUM(flag_pickedup) AS flag_pickedup, SUM(flag_dropped) AS flag_dropped, SUM(flag_assist) AS flag_assist, SUM(flag_cover) AS flag_cover,
 		 SUM(flag_seal) AS flag_seal, SUM(flag_capture) AS flag_capture, SUM(flag_kill)as flag_kill,
-		 SUM(flag_return) AS flag_return FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = '$pid'"));
+		 SUM(flag_return) AS flag_return FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = '".$pid."'"));
 	if (isset($sql_cdatot) && count($sql_cdatot))
 	{
 		echo'
@@ -207,15 +207,15 @@ if (isset($playedCTF))
 
 		echo'
   <tr>
-    <td class="grey" align="center">'.$sql_cdatot[flag_taken].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_pickedup].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_dropped].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_assist].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_cover].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_seal].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_capture].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_kill].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_return].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_taken'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_pickedup'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_dropped'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_assist'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_cover'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_seal'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_capture'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_kill'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_return'].'</td>
   </tr>
 </tbody></table>';
 	}
@@ -254,18 +254,18 @@ if (isset($playedAS))
 		SUM(p.ass_r_launched) AS ass_r_launched, 
 		SUM(p.ass_suicide_coop) AS ass_suicide_coop
 		FROM ".(isset($t_player) ? $t_player : "uts_player")." p".($rank_year > 0 ? ", ".(isset($t_match) ? $t_match : "uts_match")." m" : "")."
-		WHERE p.pid = '$pid' ".($rank_year > 0 ? "AND p.matchid = m.id AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'": "").""));
+		WHERE p.pid = '".$pid."' ".($rank_year > 0 ? "AND p.matchid = m.id AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'": "").""));
 	
 	  echo'
 	  <tr>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_obj].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_assist].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_h_jump].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_h_launch].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_r_launch].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_h_launched].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_r_launched].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_suicide_coop].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_obj'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_assist'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_h_jump'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_h_launch'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_r_launch'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_h_launched'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_r_launched'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_suicide_coop'].'</td>
 	  </tr>
 </tbody></table>'; 
 }
@@ -292,27 +292,27 @@ echo '
     <td class="smheading" align="center" width="40" '.OverlibPrintHint('GL').'>God</td>
   </tr>';
 
-$sql_firstblood = zero_out(small_query("SELECT COUNT(m.id) AS fbcount FROM ".(isset($t_match) ? $t_match : "uts_match")." m WHERE m.firstblood = '$pid'".($rank_year > 0 ? " AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'": "")));
+$sql_firstblood = zero_out(small_query("SELECT COUNT(m.id) AS fbcount FROM ".(isset($t_match) ? $t_match : "uts_match")." m WHERE m.firstblood = '".$pid."'".($rank_year > 0 ? " AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'": "")));
 
 $sql_multis = zero_out(small_query("SELECT SUM(p.spree_double) AS spree_double, SUM(p.spree_multi) AS spree_multi,
 			SUM(p.spree_ultra) AS spree_ultra, SUM(p.spree_monster)  AS spree_monster,
 			SUM(p.spree_kill) AS spree_kill, SUM(p.spree_rampage) AS spree_rampage, SUM(p.spree_dom) AS spree_dom,
 			SUM(p.spree_uns) AS spree_uns, SUM(p.spree_god) AS spree_god
 			FROM ".(isset($t_player) ? $t_player : "uts_player")." p".($rank_year > 0 ? ", ".(isset($t_match) ? $t_match : "uts_match")." m" : "")." 
-			WHERE p.pid = '$pid'".($rank_year > 0 ? " AND p.matchid = m.id AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'": "")));
+			WHERE p.pid = '".$pid."'".($rank_year > 0 ? " AND p.matchid = m.id AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'": "")));
 
   echo'
   <tr>
-	<td class="grey" align="center">'.$sql_firstblood[fbcount].'</td>
-	<td class="grey" align="center">'.$sql_multis[spree_double].'</td>
-	<td class="grey" align="center">'.$sql_multis[spree_multi].'</td>
-	<td class="grey" align="center">'.$sql_multis[spree_ultra].'</td>
-	<td class="grey" align="center">'.$sql_multis[spree_monster].'</td>
-	<td class="grey" align="center">'.$sql_multis[spree_kill].'</td>
-	<td class="grey" align="center">'.$sql_multis[spree_rampage].'</td>
-	<td class="grey" align="center">'.$sql_multis[spree_dom].'</td>
-	<td class="grey" align="center">'.$sql_multis[spree_uns].'</td>
-	<td class="grey" align="center">'.$sql_multis[spree_god].'</td>
+	<td class="grey" align="center">'.$sql_firstblood['fbcount'].'</td>
+	<td class="grey" align="center">'.$sql_multis['spree_double'].'</td>
+	<td class="grey" align="center">'.$sql_multis['spree_multi'].'</td>
+	<td class="grey" align="center">'.$sql_multis['spree_ultra'].'</td>
+	<td class="grey" align="center">'.$sql_multis['spree_monster'].'</td>
+	<td class="grey" align="center">'.$sql_multis['spree_kill'].'</td>
+	<td class="grey" align="center">'.$sql_multis['spree_rampage'].'</td>
+	<td class="grey" align="center">'.$sql_multis['spree_dom'].'</td>
+	<td class="grey" align="center">'.$sql_multis['spree_uns'].'</td>
+	<td class="grey" align="center">'.$sql_multis['spree_god'].'</td>
   </tr>
   </tbody></table>
 <br>
@@ -335,22 +335,22 @@ if ($rank_year > 0)
 			SUM(p.pu_invis) AS pu_invis, SUM(p.pu_belt) AS pu_belt, SUM(p.pu_amp) AS pu_amp
 			FROM ".(isset($t_player) ? $t_player : "uts_player")." p,
 			".(isset($t_match) ? $t_match : "uts_match")." m
-			WHERE p.pid = '$pid' AND p.matchid = m.id AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959';"));
+			WHERE p.pid = '".$pid."' AND p.matchid = m.id AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959';"));
 }
 else
 {
 	$r_pickups = zero_out(small_query("SELECT SUM(pu_pads) AS pu_pads, SUM(pu_armour) AS pu_armour, SUM(pu_keg) AS pu_keg,
 			SUM(pu_invis) AS pu_invis, SUM(pu_belt) AS pu_belt, SUM(pu_amp) AS pu_amp
-			FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = '$pid';"));
+			FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = '".$pid."';"));
 }
   echo'
   <tr>
-	<td class="grey" align="center">'.$r_pickups[pu_pads].'</td>
-	<td class="grey" align="center">'.$r_pickups[pu_armour].'</td>
-	<td class="grey" align="center">'.$r_pickups[pu_keg].'</td>
-	<td class="grey" align="center">'.$r_pickups[pu_invis].'</td>
-	<td class="grey" align="center">'.$r_pickups[pu_belt].'</td>
-	<td class="grey" align="center">'.$r_pickups[pu_amp].'</td>
+	<td class="grey" align="center">'.$r_pickups['pu_pads'].'</td>
+	<td class="grey" align="center">'.$r_pickups['pu_armour'].'</td>
+	<td class="grey" align="center">'.$r_pickups['pu_keg'].'</td>
+	<td class="grey" align="center">'.$r_pickups['pu_invis'].'</td>
+	<td class="grey" align="center">'.$r_pickups['pu_belt'].'</td>
+	<td class="grey" align="center">'.$r_pickups['pu_amp'].'</td>
   </tr>
   </tbody></table>
 <br>';
@@ -362,9 +362,9 @@ echo '<br>';
 
 // Do graph stuff
 if ($rank_year > 0)
-	$bgwhere = "pid = '$pid' AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'";
+	$bgwhere = "pid = '".$pid."' AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'";
 else
-	$bgwhere = "pid = '$pid'";
+	$bgwhere = "pid = '".$pid."'";
 
 include_once("pages/graph_utapbreakdown.php");
 
@@ -385,7 +385,7 @@ echo '</tr>';
 
 $sql_rank = "SELECT g.name AS gamename, r.rank, r.prevrank, r.matches, r.gid, r.pid 
 		FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_games) ? $t_games : "uts_games")." AS g 
-		WHERE r.gid = g.id AND r.pid = '$pid' AND r.year = '".$rank_year."';";
+		WHERE r.gid = g.id AND r.pid = '".$pid."' AND r.year = '".$rank_year."';";
 $q_rank = mysql_query($sql_rank) or die(mysql_error());
 while ($r_rank = mysql_fetch_array($q_rank)) {
 	$q_no = "SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE `year` = '".$rank_year."' AND `gid` = '${r_rank['gid']}' AND `rank` > '".get_dp($r_rank['rank'])."9';";
@@ -450,24 +450,24 @@ $sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.mapfile, INET_NTOA(p.i
 		FROM ".(isset($t_match) ? $t_match : "uts_match")." m,
 		".(isset($t_player) ? $t_player : "uts_player")." p,
 		".(isset($t_games) ? $t_games : "uts_games")." g
-		WHERE p.pid = '$pid' AND m.id = p.matchid AND m.gid = g.id ".($rank_year > 0 ? "AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'": "")." 
+		WHERE p.pid = '".$pid."' AND m.id = p.matchid AND m.gid = g.id ".($rank_year > 0 ? "AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'": "")." 
 		ORDER BY time DESC LIMIT 0,50";
 $q_recent = mysql_query($sql_recent) or die(mysql_error());
 while ($r_recent = mysql_fetch_array($q_recent)) {
 
-	  $r_time = mdate($r_recent[time]);
-	  $r_mapfile = un_ut($r_recent[mapfile]);
-	  $r_servername =  get_short_servername($r_recent[servername]);
-	  $r_serverip = $r_recent[serverip];
+	  $r_time = mdate($r_recent['time']);
+	  $r_mapfile = un_ut($r_recent['mapfile']);
+	  $r_servername =  get_short_servername($r_recent['servername']);
+	  $r_serverip = $r_recent['serverip'];
 
 	  echo'
 	  <tr>
-		<td class="dark" align="center"><a class="darkid" href="./?p=match&amp;mid='.$r_recent[id].'">'.$r_recent[id].'</a></td>
-		<td class="dark" align="center"><a class="darkhuman" href="./?p=match&amp;mid='.$r_recent[id].'">'.$r_time.'</a></td>
-		<td class="grey" align="center">'.$r_recent[gamename].'</td>
+		<td class="dark" align="center"><a class="darkid" href="./?p=match&amp;mid='.$r_recent['id'].'">'.$r_recent['id'].'</a></td>
+		<td class="dark" align="center"><a class="darkhuman" href="./?p=match&amp;mid='.$r_recent['id'].'">'.$r_time.'</a></td>
+		<td class="grey" align="center">'.$r_recent['gamename'].'</td>
 		<td class="grey" align="center">'.$r_mapfile.'</td>
 		<td nowrap class="grey" align="center"><a class="grey" href="./?p=sinfo&amp;serverip='.$r_serverip.'">'.$r_servername.'</a></td>';
-		if (isset($is_admin) and $is_admin) echo '<td class="grey" align="center">'. $r_recent[ip].'</td>';
+		if (isset($is_admin) and $is_admin) echo '<td class="grey" align="center">'. $r_recent['ip'].'</td>';
 
 	  echo '</tr>';
 }
@@ -477,10 +477,10 @@ echo'
 ';
 // IP & NICK CHECKING - START (brajan 20050801)
 	if ((isset($is_admin) and $is_admin) || (isset($admin_ip) && in_array($_SERVER['REMOTE_ADDR'], $admin_ip)) ){
-		if(isset($_POST[v_pid]))
-			$pid = $_POST[v_pid];
-		elseif(isset($_GET[pid]))
-			$pid = $_GET[pid];
+		if(isset($_POST['v_pid']))
+			$pid = $_POST['v_pid'];
+		elseif(isset($_GET['pid']))
+			$pid = $_GET['pid'];
 echo'<br><table class="box" border="0" cellpadding="1" cellspacing="1">
   <tbody><tr>
     <td class="heading" colspan="6" align="center">Used IPs</td>
@@ -493,31 +493,31 @@ echo'<br><table class="box" border="0" cellpadding="1" cellspacing="1">
 	</tr>';
 if (isset($dbversion) && floatval($dbversion) > 5.6)
 {
-        $zapytanie = "SELECT ip, ANY_VALUE(country) FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid='$pid' GROUP BY ip";
+        $zapytanie = "SELECT ip, ANY_VALUE(country) FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid='".$pid."' GROUP BY ip";
 }
 else
 {
-        $zapytanie = "SELECT ip, country FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid='$pid' GROUP BY ip";
+        $zapytanie = "SELECT ip, country FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid='".$pid."' GROUP BY ip";
 }
 $ip_query = mysql_query($zapytanie) or die("adminip1".mysql_error());
 while ($ip_row = mysql_fetch_assoc($ip_query)) {
 echo'<tr>
-	<td class="dark" align="center" valign="top"><img src="images/flags/'.$ip_row[country].'.png"></td>
-	<td class="dark" align="center" valign="top"><a href="./pages/whois.php?q='.long2ip($ip_row[ip]).'" target="_blank">'.long2ip($ip_row[ip]).'</a></td>
-	<td class="grey" align="center" valign="top">'.gethostbyaddr(long2ip($ip_row[ip])).'</td>
+	<td class="dark" align="center" valign="top"><img src="images/flags/'.$ip_row['country'].'.png"></td>
+	<td class="dark" align="center" valign="top"><a href="./pages/whois.php?q='.long2ip($ip_row['ip']).'" target="_blank">'.long2ip($ip_row['ip']).'</a></td>
+	<td class="grey" align="center" valign="top">'.gethostbyaddr(long2ip($ip_row['ip'])).'</td>
 	<td class="grey" align="left" valign="top">';
-		$zapytanie_id = "SELECT pid FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE ip='$ip_row[ip]' GROUP BY pid";
+		$zapytanie_id = "SELECT pid FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE ip='".$ip_row['ip']."' GROUP BY pid";
 		$id_query = mysql_query($zapytanie_id) or die(mysql_error());
 			while ($id_row = mysql_fetch_assoc($id_query)) {
 				
-				$zapytanie_name = "SELECT id,name FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." WHERE id='$id_row[pid]' GROUP BY name";
+				$zapytanie_name = "SELECT id,name FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." WHERE id='".$id_row['pid']."' GROUP BY name";
 				$name_query = mysql_query($zapytanie_name) or die(mysql_error());
 					while ($name_row = mysql_fetch_assoc($name_query)) {
-						if( substr($name_row[name], -1) == chr(174) ){
-							echo "- <strong style=\"color:red\">".htmlspecialchars($name_row[name])."</strong><br>\n";
+						if( substr($name_row['name'], -1) == chr(174) ){
+							echo "- <strong style=\"color:red\">".htmlspecialchars($name_row['name'])."</strong><br>\n";
 						}
 						else{
-							echo "- ".htmlspecialchars($name_row[name])."<br>\n";	
+							echo "- ".htmlspecialchars($name_row['name'])."<br>\n";	
 						}
 			}
 		}

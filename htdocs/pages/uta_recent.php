@@ -14,7 +14,7 @@ $gid  = !empty($_REQUEST['gid']) ?  my_addslashes($_REQUEST['gid']) : 0;
 if (!empty($year) and empty($month) and empty($day)) $where .= " AND m.time LIKE '$year%'";
 if (!empty($year) and !empty($month) and empty($day)) $where .= " AND m.time LIKE '$year$month%'";
 if (!empty($year) and !empty($month) and !empty($day)) $where .= " AND m.time LIKE '$year$month$day%'";
-if (!empty($gid)) $where .= " AND m.gid = '$gid'";
+if (!empty($gid)) $where .= " AND m.gid = '".$gid."'";
  
 // Added extra filter for non-specific friendly matches
 // 2006-09-05 added some stuff to avoid RED vs BLUE or empty clan names // brajan
@@ -124,28 +124,28 @@ if (isset($dbversion) && floatval($dbversion) > 5.6) {
 }
 $q_recent = mysql_query($sql_recent) or die(mysql_error());
 while ($r_recent = mysql_fetch_array($q_recent)) {
-	  $r_time = mdate($r_recent[time]);
-	  $r_mapfile = un_ut($r_recent[mapfile]);
-	  $r_gametime = GetMinutes($r_recent[gametime]);
+	  $r_time = mdate($r_recent['time']);
+	  $r_mapfile = un_ut($r_recent['mapfile']);
+	  $r_gametime = GetMinutes($r_recent['gametime']);
 // TOTAL MATCH TIME AND SERVER
-		$sql_matchsummary = "SELECT id, gametime, servername, serverip, score0, score1 FROM uts_match WHERE matchmode = 1 AND matchcode='".$r_recent[matchcode]."' ORDER BY mapsequence";	  
+		$sql_matchsummary = "SELECT id, gametime, servername, serverip, score0, score1 FROM uts_match WHERE matchmode = 1 AND matchcode='".$r_recent['matchcode']."' ORDER BY mapsequence";	  
 		$q_matchsummary = mysql_query($sql_matchsummary) or die(mysql_error());
 		$total_time = 0;
 			while ($r_matchsummary = mysql_fetch_array($q_matchsummary)) {
-				$total_time = $total_time + $r_matchsummary[gametime];
-				$servername = $r_matchsummary[servername];
-			  	$serverip = $r_matchsummary[serverip];
-			  	$score0 = $r_matchsummary[score0];
-			  	$score1 = $r_matchsummary[score1];
+				$total_time = $total_time + $r_matchsummary['gametime'];
+				$servername = $r_matchsummary['servername'];
+			  	$serverip = $r_matchsummary['serverip'];
+			  	$score0 = $r_matchsummary['score0'];
+			  	$score1 = $r_matchsummary['score1'];
 			}
 	$servername = get_short_servername($servername);
 	$total_time = GetHours($total_time);
 	//if($score0 == '-1' || $score1 == '-1') { continue; }
 	echo'
 	  <tr>
-		<td nowrap class="dark" align="center"><a class="darkhuman" href="./?p=uta_match&amp;matchcode='.$r_recent[matchcode].'">'.$r_time.'</a></td>
-		<td nowrap class="grey" align="center">'.$r_recent[gamename].'</td>
-		<td nowrap class="grey" align="center"><a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent[teamname0]).'">'.htmlentities($r_recent[teamname0],ENT_SUBSTITUTE,$htmlcp).'</a> vs. <a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent[teamname1]).'">'.htmlentities($r_recent[teamname1],ENT_SUBSTITUTE,$htmlcp).'</a></td>
+		<td nowrap class="dark" align="center"><a class="darkhuman" href="./?p=uta_match&amp;matchcode='.$r_recent['matchcode'].'">'.$r_time.'</a></td>
+		<td nowrap class="grey" align="center">'.$r_recent['gamename'].'</td>
+		<td nowrap class="grey" align="center"><a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname0']).'">'.htmlentities($r_recent['teamname0'],ENT_SUBSTITUTE,$htmlcp).'</a> vs. <a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname1']).'">'.htmlentities($r_recent['teamname1'],ENT_SUBSTITUTE,$htmlcp).'</a></td>
 		<td class="grey" align="center">'.$total_time.'</td>
     	<td nowrap class="grey" align="center">'.$score0.' - '.$score1.'</td>    	
     	<td class="grey" align="center">'.$servername.'</td>

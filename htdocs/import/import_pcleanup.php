@@ -10,16 +10,16 @@ $cleaned = false;
 $sql_pname = "SELECT pid, name FROM uts_player, uts_pinfo AS pi WHERE matchid = $matchid AND pid = pi.id";
 $q_pname = mysql_query($sql_pname);
 while ($r_pname = mysql_fetch_array($q_pname)) {
-	$playername = addslashes($r_pname[name]);
+	$playername = addslashes($r_pname['name']);
 	$pid = $r_pname['pid'];
 
 
 	// Check if player has more than 1 record
-	$q_ids = mysql_query("SELECT playerid FROM uts_player WHERE pid = '$pid' AND matchid = $matchid");
+	$q_ids = mysql_query("SELECT playerid FROM uts_player WHERE pid = '".$pid."' AND matchid = $matchid");
 	
 	IF (mysql_num_rows($q_ids) > 1) {
 		$numrecords = mysql_num_rows($q_ids);
-		echo $r_pname[name] .' ';
+		echo $r_pname['name'] .' ';
 		// get all the ids this player had
 		$playerids	= array();
 		while ($r_ids = mysql_fetch_array($q_ids)) {
@@ -31,7 +31,7 @@ while ($r_pname = mysql_fetch_array($q_pname)) {
 			
 		
 		// Fix matchcount in ranking table
-		mysql_query("UPDATE uts_rank SET matches = matches - ". ($numrecords - 1) ." WHERE pid = '$pid' AND gid = '$gid'") or die(mysql_error());
+		mysql_query("UPDATE uts_rank SET matches = matches - ". ($numrecords - 1) ." WHERE pid = '".$pid."' AND gid = '".$gid."'") or die(mysql_error());
 		
 		// ***********************
 		// UPDATE THE KILLS MATRIX
@@ -82,7 +82,7 @@ while ($r_pname = mysql_fetch_array($q_pname)) {
 		
 		// Get non summed information
 		
-		$r_truepinfo1 = small_query("SELECT insta, pid, team, isabot, country, ip, gid FROM uts_player WHERE pid = '$pid' AND matchid = $matchid LIMIT 0,1");
+		$r_truepinfo1 = small_query("SELECT insta, pid, team, isabot, country, ip, gid FROM uts_player WHERE pid = '".$pid."' AND matchid = ".$matchid." LIMIT 0,1;");
 		
 		// Group Player Stuff so we only have 1 player record per match
 		$r_truepinfo2 = small_query("SELECT
@@ -136,74 +136,72 @@ while ($r_pname = mysql_fetch_array($q_pname)) {
 		SUM(pu_invis) AS pu_invis,
 		SUM(pu_belt) AS pu_belt,
 		SUM(pu_amp) AS pu_amp
-		FROM uts_player WHERE matchid = $matchid AND pid = '$pid'");
+		FROM uts_player WHERE matchid = $matchid AND pid = '".$pid."';");
 
 		// Remove all of this player's records
-		$rem_precord = "DELETE FROM uts_player WHERE matchid = $matchid AND pid = '$pid'";
+		$rem_precord = "DELETE FROM uts_player WHERE matchid = $matchid AND pid = '".$pid."';";
 		mysql_query($rem_precord);
 		
 		// Add this new record to match
 		$upd_precord = "	INSERT 
 								INTO 		uts_player 
-								SET		matchid = $matchid,
-											insta = '$r_truepinfo1[insta]',
-											playerid = '$newplayerid',
-											pid = '$pid',
-											team = '$r_truepinfo1[team]',
-											isabot = '$r_truepinfo1[isabot]',
-											country = '$r_truepinfo1[country]',
-											ip = '$r_truepinfo1[ip]',
-											gid = '$r_truepinfo1[gid]',
-											gametime = '$r_truepinfo2[gametime]',
-											gamescore = '$r_truepinfo2[gamescore]',
-											lowping = '$r_truepinfo2[lowping]',
-											highping = '$r_truepinfo2[highping]',
-											avgping = '$r_truepinfo2[avgping]',
-											frags = '$r_truepinfo2[frags]',
-											deaths = '$r_truepinfo2[deaths]',
-											kills = '$r_truepinfo2[kills]',
-											suicides = '$r_truepinfo2[suicides]',
-											teamkills = '$r_truepinfo2[teamkills]',
-											eff = '$r_truepinfo2[eff]',
-											accuracy = '$r_truepinfo2[accuracy]',
-											ttl = '$r_truepinfo2[ttl]',
-											flag_taken = '$r_truepinfo2[flag_taken]',
-											flag_dropped = '$r_truepinfo2[flag_dropped]',
-											flag_return = '$r_truepinfo2[flag_return]',
-											flag_capture = '$r_truepinfo2[flag_capture]',
-											flag_cover = '$r_truepinfo2[flag_cover]',
-											flag_seal = '$r_truepinfo2[flag_seal]',
-											flag_assist = '$r_truepinfo2[flag_assist]',
-											flag_kill = '$r_truepinfo2[flag_kill]',
-											flag_pickedup = '$r_truepinfo2[flag_pickedup]',
-											dom_cp = '$r_truepinfo2[dom_cp]',
-											ass_obj = '$r_truepinfo2[ass_obj]',
-											
-											ass_h_launch = '$r_truepinfo2[ass_h_launch]',
-											ass_r_launch = '$r_truepinfo2[ass_r_launch]',
-											ass_h_launched = '$r_truepinfo2[ass_h_launched]',
-											ass_r_launched = '$r_truepinfo2[ass_r_launched]',
-											ass_h_jump = '$r_truepinfo2[ass_h_jump]',
-											ass_suicide_coop = '$r_truepinfo2[ass_suicide_coop]',
-											ass_assist = '$r_truepinfo2[ass_assist]',																							
-											
-											spree_double = '$r_truepinfo2[spree_double]',
-											spree_triple = '$r_truepinfo2[spree_triple]',
-											spree_multi = '$r_truepinfo2[spree_multi]',
-											spree_mega = '$r_truepinfo2[spree_mega]',
-											spree_ultra = '$r_truepinfo2[spree_ultra]',
-											spree_monster = '$r_truepinfo2[spree_monster]',
-											spree_kill = '$r_truepinfo2[spree_kill]',
-											spree_rampage = '$r_truepinfo2[spree_rampage]',
-											spree_dom = '$r_truepinfo2[spree_dom]',
-											spree_uns = '$r_truepinfo2[spree_uns]',
-											spree_god = '$r_truepinfo2[spree_god]',
-											pu_pads = '$r_truepinfo2[pu_pads]',
-											pu_armour = '$r_truepinfo2[pu_armour]',
-											pu_keg = '$r_truepinfo2[pu_keg]',
-											pu_invis = '$r_truepinfo2[pu_invis]',
-											pu_belt = '$r_truepinfo2[pu_belt]',
-											pu_amp = '$r_truepinfo2[pu_amp]';";
+								SET		matchid = ".$matchid.",
+											insta = '".$r_truepinfo1['insta']."',
+											playerid = '".$newplayerid."',
+											pid = '".$pid."',
+											team = '".$r_truepinfo1['team']."',
+											isabot = '".$r_truepinfo1['isabot']."',
+											country = '".$r_truepinfo1['country']."',
+											ip = '".$r_truepinfo1['ip']."',
+											gid = '".$r_truepinfo1['gid']."',
+											gametime = '".$r_truepinfo2['gametime']."',
+											gamescore = '".$r_truepinfo2['gamescore']."',
+											lowping = '".$r_truepinfo2['lowping']."',
+											highping = '".$r_truepinfo2['highping']."',
+											avgping = '".$r_truepinfo2['avgping']."',
+											frags = '".$r_truepinfo2['frags']."',
+											deaths = '".$r_truepinfo2['deaths']."',
+											kills = '".$r_truepinfo2['kills']."',
+											suicides = '".$r_truepinfo2['suicides']."',
+											teamkills = '".$r_truepinfo2['teamkills']."',
+											eff = '".$r_truepinfo2['eff']."',
+											accuracy = '".$r_truepinfo2['accuracy']."',
+											ttl = '".$r_truepinfo2['ttl']."',
+											flag_taken = '".$r_truepinfo2['flag_taken']."',
+											flag_dropped = '".$r_truepinfo2['flag_dropped']."',
+											flag_return = '".$r_truepinfo2['flag_return']."',
+											flag_capture = '".$r_truepinfo2['flag_capture']."',
+											flag_cover = '".$r_truepinfo2['flag_cover']."',
+											flag_seal = '".$r_truepinfo2['flag_seal']."',
+											flag_assist = '".$r_truepinfo2['flag_assist']."',
+											flag_kill = '".$r_truepinfo2['flag_kill']."',
+											flag_pickedup = '".$r_truepinfo2['flag_pickedup']."',
+											dom_cp = '".$r_truepinfo2['dom_cp']."',
+											ass_obj = '".$r_truepinfo2['ass_obj']."',
+											ass_h_launch = '".$r_truepinfo2['ass_h_launch']."',
+											ass_r_launch = '".$r_truepinfo2['ass_r_launch']."',
+											ass_h_launched = '".$r_truepinfo2['ass_h_launched']."',
+											ass_r_launched = '".$r_truepinfo2['ass_r_launched']."',
+											ass_h_jump = '".$r_truepinfo2['ass_h_jump']."',
+											ass_suicide_coop = '".$r_truepinfo2['ass_suicide_coop']."',
+											ass_assist = '".$r_truepinfo2['ass_assist']."',
+											spree_double = '".$r_truepinfo2['spree_double']."',
+											spree_triple = '".$r_truepinfo2['spree_triple']."',
+											spree_multi = '".$r_truepinfo2['spree_multi']."',
+											spree_mega = '".$r_truepinfo2['spree_mega']."',
+											spree_ultra = '".$r_truepinfo2['spree_ultra']."',
+											spree_monster = '".$r_truepinfo2['spree_monster']."',
+											spree_kill = '".$r_truepinfo2['spree_kill']."',
+											spree_rampage = '".$r_truepinfo2['spree_rampage']."',
+											spree_dom = '".$r_truepinfo2['spree_dom']."',
+											spree_uns = '".$r_truepinfo2['spree_uns']."',
+											spree_god = '".$r_truepinfo2['spree_god']."',
+											pu_pads = '".$r_truepinfo2['pu_pads']."',
+											pu_armour = '".$r_truepinfo2['pu_armour']."',
+											pu_keg = '".$r_truepinfo2['pu_keg']."',
+											pu_invis = '".$r_truepinfo2['pu_invis']."',
+											pu_belt = '".$r_truepinfo2['pu_belt']."',
+											pu_amp = '".$r_truepinfo2['pu_amp']."';";
 		mysql_query($upd_precord) or die(mysql_error());
 		$cleaned = true;
 	}

@@ -6,7 +6,7 @@ if (isset($_GET["serverip"])) {
 }
 
 // Firstly we need to work out First Last Next Prev pages
-$scount = small_count("SELECT id FROM uts_match WHERE serverip = '$serverip'");
+$scount = small_count("SELECT id FROM uts_match WHERE serverip = '".$serverip."'");
 
 $ecount = $scount/25;
 $ecount2 = number_format($ecount, 0, '.', '');
@@ -45,7 +45,7 @@ if ($cpage == "$lpage") { $lpageurl = "[Last]"; }
 
 // Get the last match entry for this server
 
-$serverinfo = small_query("SELECT time, servername, serverinfo, gameinfo, mutators FROM uts_match WHERE serverip = '$serverip' ORDER BY time DESC LIMIT 0,1");
+$serverinfo = small_query("SELECT time, servername, serverinfo, gameinfo, mutators FROM uts_match WHERE serverip = '".$serverip."' ORDER BY time DESC LIMIT 0,1");
 $matchdate = mdate($serverinfo[time]);
 
 echo'
@@ -71,7 +71,7 @@ echo'
 <br>';
 
 // Do graph stuff
-$bgwhere = "serverip = '$serverip'";
+$bgwhere = "serverip = '".$serverip."'";
 include_once("pages/graph_mbreakdown.php");
 
 echo'<div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>
@@ -86,19 +86,19 @@ echo'<div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl
     <td class="smheading" align="center" width="40">Time</td>
   </tr>';
 
-$sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.mapfile, m.gametime FROM uts_match AS m, uts_games AS g  WHERE g.id = m.gid AND m.serverip = '$serverip' ORDER BY m.time DESC LIMIT $qpage,25";
+$sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.mapfile, m.gametime FROM uts_match AS m, uts_games AS g  WHERE g.id = m.gid AND m.serverip = '".$serverip."' ORDER BY m.time DESC LIMIT $qpage,25";
 $q_recent = mysql_query($sql_recent) or die(mysql_error());
 while ($r_recent = mysql_fetch_array($q_recent)) {
 
-	  $r_time = mdate($r_recent[time]);
-	  $r_mapfile = un_ut($r_recent[mapfile]);
-	  $r_gametime = sec2min($r_recent[gametime]);
+	  $r_time = mdate($r_recent['time']);
+	  $r_mapfile = un_ut($r_recent['mapfile']);
+	  $r_gametime = sec2min($r_recent['gametime']);
 	  $myurl = urlencode($r_mapfile);
 
 	  echo'
 	  <tr>
-		<td class="dark" align="center"><a class="darkhuman" href="./?p=match&amp;mid='.$r_recent[id].'">'.$r_time.'</a></td>
-		<td class="grey" align="center">'.$r_recent[gamename].'</td>
+		<td class="dark" align="center"><a class="darkhuman" href="./?p=match&amp;mid='.$r_recent['id'].'">'.$r_time.'</a></td>
+		<td class="grey" align="center">'.$r_recent['gamename'].'</td>
 		<td class="grey" align="center"><a class="grey" href="./?p=minfo&amp;map='.$myurl.'">'.$r_mapfile.'</a></td>
 		<td class="grey" align="center">'.$r_gametime.'</td>
 	  </tr>';

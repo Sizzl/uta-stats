@@ -64,7 +64,7 @@ $startfrom = 2187201;
 // skip to another player if current already has a rank when RESUME mode is enabled
 // otherwise calculate it
 		if($results['reset'] == 'No'){ 
-			$r_rankp = small_query("SELECT id FROM uts_rank WHERE pid = '$pid' AND gid = '$gid'");
+			$r_rankp = small_query("SELECT id FROM uts_rank WHERE pid = '".$pid."' AND gid = '".$gid."'");
 				if( @mysql_num_rows($r_rankp) > 0){ continue;	}
 		}
 	include('import/import_ranking.php');

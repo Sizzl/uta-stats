@@ -26,14 +26,14 @@ require_once(dirname(__FILE__) .'/countries.php');
 
 // Addslashes if magic_quotes are off
 function my_addslashes($data) {
-	IF (!get_magic_quotes_gpc()) {
+	if (!get_magic_quotes_gpc()) {
 	   $data = addslashes($data);
 	}
 	return $data;
 }
 
 function my_stripslashes($data) {
-	IF (!get_magic_quotes_gpc()) {
+	if (!get_magic_quotes_gpc()) {
 	   $data = $data;
 	} else {
 	   $data = stripslashes($data);
@@ -344,10 +344,10 @@ function RankImageOrText($pid, $name, $rank, $gid, $gamename, $mini = true, $for
 
 	$points = 0;
 	if (empty($rank)) {
-		$r_rank = small_query("SELECT `rank` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE `pid` = '$pid' AND `gid` = '$gid' AND `year` = '$year';");
+		$r_rank = small_query("SELECT `rank` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE `pid` = '".$pid."' AND `gid` = '".$gid."' AND `year` = '".$year."';");
 		if (!$r_rank) return('');
 		$points = get_dp($r_rank['rank']);
-		$r_no = small_query("SELECT (COUNT(*) + 1) AS `no` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE `gid` = '$gid' AND `year` = '$year' AND `rank` > '${points}9';");
+		$r_no = small_query("SELECT (COUNT(*) + 1) AS `no` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE `gid` = '".$gid."' AND `year` = '".$year."' AND `rank` > '${points}9';");
 		$rank = $r_no['no'];
 	}
 

@@ -3,7 +3,7 @@ echo'<textarea rows="50" name="cbrep" cols="75">';
 
 $id = $_GET[id];
 
-$sql_s = small_query("SELECT mapfile, gametime FROM uts_match WHERE id = '$id'");
+$sql_s = small_query("SELECT mapfile, gametime FROM uts_match WHERE id = '".$id."'");
 
 $map = str_replace(".unr", "", "$sql_s[mapfile]");
 $mappic = strtolower("images/maps/".$map.".jpg");

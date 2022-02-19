@@ -143,7 +143,7 @@ echo'</tr>
 		// skip to another player if current already has a rank when RESUME mode is enabled
 		// otherwise calculate it
 		if($results['reset'] == 'No'){ 
-			$r_rankp = small_query("SELECT id FROM uts_rank WHERE pid = '$pid' AND gid = '$gid'");
+			$r_rankp = small_query("SELECT id FROM uts_rank WHERE pid = '".$pid."' AND gid = '".$gid."'");
 				if( @mysql_num_rows($r_rankp) > 0){ continue;	}
 		}
 		// when rank_year is defined, it will only recalc that year, if All is specified, we need to do the year and all-time
@@ -173,7 +173,7 @@ echo '
 }
 echo '
 <tr>
-	<td class="smheading" align="center" colspan="2">Rankings recalculated - <a href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td>
+	<td class="smheading" align="center" colspan="2">Rankings recalculated - <a href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td>
 </tr></table>';
 
 ?>

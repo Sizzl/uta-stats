@@ -13,7 +13,7 @@ $gametime = $sql_assault['gametime'];
 $matchtime = $sql_assault['time'];
 
 // Get information about the other match
-$sql_assault2 = small_query("SELECT `id`, `gametime`, `ass_win`, `time` FROM `uts_match` WHERE `assaultid` = '$ass_id' AND `id` != '".$mid."' LIMIT 0,1");
+$sql_assault2 = small_query("SELECT `id`, `gametime`, `ass_win`, `time` FROM `uts_match` WHERE `assaultid` = '".$ass_id."' AND `id` != '".$mid."' LIMIT 0,1");
 if ($sql_assault2)
 {
 	$mid2 = $sql_assault2['id'];
@@ -50,7 +50,7 @@ else
 	$matchinfo = server_stats($mid); // return only this round
 
 // Work out who was attacking which match
-$ass_att = $sql_assault[ass_att];
+$ass_att = $sql_assault['ass_att'];
 if ($ass_att == 0)
 {
 	$ass_att = "Red";
@@ -63,8 +63,8 @@ else
 }
 
 // Work out the end result for each match
-$asswin = $sql_assault[ass_win];
-$asswin2 = $sql_assault2[ass_win];
+$asswin = $sql_assault['ass_win'];
+$asswin2 = $sql_assault2['ass_win'];
 if ($asswin == 0)
 {
 	$asswin = "$ass_att2 Successfully Defended";

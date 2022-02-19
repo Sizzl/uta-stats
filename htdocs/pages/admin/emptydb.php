@@ -49,7 +49,7 @@ IF ($results['sure'] == "Yes" and $results['really'] == "Yes") {
 		echo'<td class="grey" align="left" width="300">Done</td>
 	</tr>
 	<tr>
-		<td class="smheading" align="center" colspan="2">Database Emptied - <a href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td>
+		<td class="smheading" align="center" colspan="2">Database Emptied - <a href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td>
 	</tr></table>';
 } else {
 	echo'<br><table border="0" cellpadding="1" cellspacing="2" width="600">
@@ -61,7 +61,7 @@ IF ($results['sure'] == "Yes" and $results['really'] == "Yes") {
 		<td class="grey" align="left" width="300">Answer Was No</td>
 	</tr>
 	<tr>
-		<td class="smheading" align="center" colspan="2">Database Not Emptied - <a href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td>
+		<td class="smheading" align="center" colspan="2">Database Not Emptied - <a href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td>
 	</tr></table>';
 }
 

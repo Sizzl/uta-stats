@@ -11,7 +11,7 @@ if (isset($_REQUEST['submit'])) {
 		} else {
 			mysql_query("	UPDATE	uts_games
 									SET	name = '". my_addslashes($_REQUEST['name'][$id]) ."'
-									WHERE	id =  '$id';") or die(mysql_error());
+									WHERE	id =  '".$id."';") or die(mysql_error());
 		}
 	}
 }
@@ -67,7 +67,7 @@ echo '</tr>';
 
 echo'</form>
 	<tr>
-	<td class="smheading" align="center" colspan="4"><a class="grey" href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td>
+	<td class="smheading" align="center" colspan="4"><a class="grey" href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td>
 </tr>
 </table>';
 	

@@ -45,7 +45,7 @@ if ($ban) {
 	</tr>
 	
 	<tr>
-		<td class="smheading" align="center" colspan="2">Player Banned - <a href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td>
+		<td class="smheading" align="center" colspan="2">Player Banned - <a href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td>
 	</tr></table>';
 } else {
 	echo'<table border="0" cellpadding="1" cellspacing="2" width="600">
@@ -64,13 +64,13 @@ if ($ban) {
 	$q_nrank = mysql_query($sql_nrank) or die(mysql_error());
 	while ($r_nrank = mysql_fetch_array($q_nrank)) {
 	
-		mysql_query("INSERT INTO uts_rank SET time = '$r_nrank[time]', pid = $pid, gid = $r_nrank[gid], rank = '$r_nrank[rank]', prevrank = '$r_nrank[rank]', matches = $r_nrank[matches]") or die(mysql_error());
+		mysql_query("INSERT INTO uts_rank SET time = '".$r_nrank['time']."', pid = $pid, gid = ".$r_nrank['gid'].", rank = '".$r_nrank['rank']."', prevrank = '".$r_nrank['rank']."', matches = ".$r_nrank['matches'].";") or die(mysql_error());
 	}
 	
 		echo'<td class="grey" align="left" width="400">Done</td>
 	</tr>	
 	<tr>
-		<td class="smheading" align="center" colspan="2">Player Unbanned - <a href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td>
+		<td class="smheading" align="center" colspan="2">Player Unbanned - <a href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td>
 	</tr></table>';
 }
 	

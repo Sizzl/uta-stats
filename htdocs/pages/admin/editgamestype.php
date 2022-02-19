@@ -221,7 +221,7 @@ echo '</tr>';
 
 echo'</form>
 	<tr>
-	<td class="smheading" align="center" colspan="2"><a class="grey" href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td>
+	<td class="smheading" align="center" colspan="2"><a class="grey" href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td>
 </tr>
 </table>';
 	

@@ -13,19 +13,19 @@ $score1 ='0';
 		$starttime = $endtime = 0;
 			while ($r_matchsummary = mysql_fetch_array($q_matchsummary)) {
 				if ($starttime == 0)
-					$starttime = $r_matchsummary[time];
-				$endtime = $r_matchsummary[time];
-				$total_time = $total_time + $r_matchsummary[gametime];
-			 	$score0 = $r_matchsummary[score0];
-			  	$score1 = $r_matchsummary[score1];
-			  	$serverip = $r_matchsummary[serverip];
-			  	$servername = $r_matchsummary[servername];
-			  	$serverinfo = $r_matchsummary[serverinfo];
-			  	$gameinfo = $r_matchsummary[gameinfo];
-			  	$team1a = htmlspecialchars($r_matchsummary[teamname1]);
-				$team1 = "<a class=\"heading\" href=\"./?p=utateams&amp;team=".urlencode($r_matchsummary[teamname1])."\">".$team1a."</a>";
-				$team0a = htmlspecialchars($r_matchsummary[teamname0]);
-				$team0 = "<a class=\"heading\" href=\"./?p=utateams&amp;team=".urlencode($r_matchsummary[teamname0])."\">".$team0a."</a>";
+					$starttime = $r_matchsummary['time'];
+				$endtime = $r_matchsummary['time'];
+				$total_time = $total_time + $r_matchsummary['gametime'];
+			 	$score0 = $r_matchsummary['score0'];
+			  	$score1 = $r_matchsummary['score1'];
+			  	$serverip = $r_matchsummary['serverip'];
+			  	$servername = $r_matchsummary['servername'];
+			  	$serverinfo = $r_matchsummary['serverinfo'];
+			  	$gameinfo = $r_matchsummary['gameinfo'];
+			  	$team1a = htmlspecialchars($r_matchsummary['teamname1']);
+				$team1 = "<a class=\"heading\" href=\"./?p=utateams&amp;team=".urlencode($r_matchsummary['teamname1'])."\">".$team1a."</a>";
+				$team0a = htmlspecialchars($r_matchsummary['teamname0']);
+				$team0 = "<a class=\"heading\" href=\"./?p=utateams&amp;team=".urlencode($r_matchsummary['teamname0'])."\">".$team0a."</a>";
 		  	}
 		  	$server_info = preg_split('/\n | \r/', $serverinfo, -1, PREG_SPLIT_NO_EMPTY);
 	// SERVER INFO
@@ -95,7 +95,7 @@ $score1 ='0';
 	$q_sql = mysql_query($sql) or die("m1:".mysql_error());	
 	while ($p_sql = mysql_fetch_assoc($q_sql)) 
 	{	
-		if ($p_sql[team] < 0.5 ) {
+		if ($p_sql['team'] < 0.5 ) {
 			$teamname = $team0a; 
 			$tr_color = "#4C0000";
 			} 
@@ -105,22 +105,22 @@ $score1 ='0';
 		}
 		
 		echo'<tr class="grey" style="background-color:'.$tr_color.'; height:20px; vertical-align:middle">';
-		echo '<td nowrap align="left"><b>'.FormatPlayerName($p_sql[pcountry], $p_sql[pid], $p_sql[pname]).'</b></td>';
-		echo '<td nowrap align="center">'.$p_sql[objs].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_assist].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_h_launch].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_h_launched].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_r_launch].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_r_launched].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_h_jump].'</td>';
-		if ($p_sql[kills]+$p_sql[deaths]==0)
+		echo '<td nowrap align="left"><b>'.FormatPlayerName($p_sql['pcountry'], $p_sql['pid'], $p_sql['pname']).'</b></td>';
+		echo '<td nowrap align="center">'.$p_sql['objs'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_assist'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_h_launch'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_h_launched'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_r_launch'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_r_launched'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_h_jump'].'</td>';
+		if ($p_sql['kills']+$p_sql['deaths']==0)
 			$effi = '0';
 		else
-			$effi = (!empty($p_sql[kills])) ? (float) $p_sql[kills] / ($p_sql[kills] + $p_sql[deaths]) * 100 : '0'; // match effi // brajan 2007-05-28
-		echo '<td nowrap align="center" title="'.$p_sql[pname].'\'s average eff: '.round($effi, 2).'%">'.$p_sql[kills].'</td>';
-		echo '<td nowrap align="center" title="'.$p_sql[pname].'\'s average eff: '.round($effi, 2).'%">'.$p_sql[deaths].'</td>';
-		echo '<td nowrap align="center">'.intval($p_sql[maps] / 2).'</td>';
-		echo '<td nowrap align="center">'.intval($p_sql[ping]).'</td>';
+			$effi = (!empty($p_sql['kills'])) ? (float) $p_sql['kills'] / ($p_sql['kills'] + $p_sql['deaths']) * 100 : '0'; // match effi // brajan 2007-05-28
+		echo '<td nowrap align="center" title="'.$p_sql['pname'].'\'s average eff: '.round($effi, 2).'%">'.$p_sql['kills'].'</td>';
+		echo '<td nowrap align="center" title="'.$p_sql['pname'].'\'s average eff: '.round($effi, 2).'%">'.$p_sql['deaths'].'</td>';
+		echo '<td nowrap align="center">'.intval($p_sql['maps'] / 2).'</td>';
+		echo '<td nowrap align="center">'.intval($p_sql['ping']).'</td>';
 		echo'</tr>';
 	}
 	
@@ -156,7 +156,7 @@ $score1 ='0';
 	$q_sql = mysql_query($sql) or die("m2:".mysql_error());
 	while ($p_sql = mysql_fetch_assoc($q_sql)) 
 	{	
-		if ($p_sql[team] < 0.5 ) {
+		if ($p_sql['team'] < 0.5 ) {
 			$teamname = $team0a; 
 			$tr_color = "#4C0000";
 			} 
@@ -167,18 +167,18 @@ $score1 ='0';
 		
 		echo'<tr class="grey" style="background-color:'.$tr_color.'; height:20px; vertical-align:middle">';
 		echo '<td nowrap align="left"><b>'.$teamname.'</b></td>';
-		echo '<td nowrap align="center">'.$p_sql[objs].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_assist].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_h_launch].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_h_launched].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_r_launch].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_r_launched].'</td>';
-		echo '<td nowrap align="center">'.$p_sql[ass_h_jump].'</td>';
-		$clan_effi = (!empty($p_sql[kills])) ? (float) $p_sql[kills] / ($p_sql[kills] + $p_sql[deaths]) * 100 : '0';  // match effi // brajan 2007-05-28
-		echo '<td nowrap align="center" title="Average clan eff: '.round($clan_effi, 2).'%">'.$p_sql[kills].'</td>';
-		echo '<td nowrap align="center" title="Average clan eff: '.round($clan_effi, 2).'%">'.$p_sql[deaths].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['objs'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_assist'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_h_launch'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_h_launched'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_r_launch'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_r_launched'].'</td>';
+		echo '<td nowrap align="center">'.$p_sql['ass_h_jump'].'</td>';
+		$clan_effi = (!empty($p_sql['kills'])) ? (float) $p_sql['kills'] / ($p_sql['kills'] + $p_sql['deaths']) * 100 : '0';  // match effi // brajan 2007-05-28
+		echo '<td nowrap align="center" title="Average clan eff: '.round($clan_effi, 2).'%">'.$p_sql['kills'].'</td>';
+		echo '<td nowrap align="center" title="Average clan eff: '.round($clan_effi, 2).'%">'.$p_sql['deaths'].'</td>';
 		echo '<td nowrap align="center"></td>';
-		echo '<td nowrap align="center">'.intval($p_sql[ping]).'</td>';
+		echo '<td nowrap align="center">'.intval($p_sql['ping']).'</td>';
 		echo'</tr>';
 	}
 	
@@ -201,35 +201,35 @@ global $winclass; // Added winclass for team colours. --// Timo 25/07/05
 
 while ($p_assault = mysql_fetch_assoc($q_assault)) {
 	$bcg = ($i % 2) ? ' class="blank"' : ' class="lggrey"';
-	$warmup = ($i == 0 && $p_assault[mapsleft] > $p_assault[matchlength]) ? '&nbsp; &nbsp; <span class="redteamscore" style="background: none; font-weight:bold"> [Warm-up] </span>' : '';
-	$mid = $p_assault[id];
-	$ass_id = $p_assault[assaultid];
-	$gametime = $p_assault[gametime];
+	$warmup = ($i == 0 && $p_assault['mapsleft'] > $p_assault['matchlength']) ? '&nbsp; &nbsp; <span class="redteamscore" style="background: none; font-weight:bold"> [Warm-up] </span>' : '';
+	$mid = $p_assault['id'];
+	$ass_id = $p_assault['assaultid'];
+	$gametime = $p_assault['gametime'];
 	unset($firstblood);
-	$firstblood = $p_assault[firstblood];
+	$firstblood = $p_assault['firstblood'];
 
 	unset($winclass);
 	
 	// who was attacking
-	$ass_att = $p_assault[ass_att];
+	$ass_att = $p_assault['ass_att'];
 		if($ass_att == 0) {
-			$ass_att = $p_assault[teamname0];
-			$ass_att2 = $p_assault[teamname1];
+			$ass_att = $p_assault['teamname0'];
+			$ass_att2 = $p_assault['teamname1'];
 		} else {
-			$ass_att = $p_assault[teamname1];
-			$ass_att2 = $p_assault[teamname0];
+			$ass_att = $p_assault['teamname1'];
+			$ass_att2 = $p_assault['teamname0'];
 		}
 	// result
-	$asswin = $p_assault[ass_win];
-	$asswin2 = $p_assault[ass_win];
+	$asswin = $p_assault['ass_win'];
+	$asswin2 = $p_assault['ass_win'];
 		if($asswin == 0) {
 			$asswin = "$ass_att2 Successfully Defended in ". GetMinutes($gametime);
-			$winclass = ($ass_att==$p_assault[teamname0]) ? ("blueteamscore") : ("redteamscore");
+			$winclass = ($ass_att==$p_assault['teamname0']) ? ("blueteamscore") : ("redteamscore");
 		
 		} else {
 			$asswin = "$ass_att Successfully Attacked in ". GetMinutes($gametime);
 			if($i != 0) $team0score = $team0score+1;
-			$winclass = ($ass_att==$p_assault[teamname1]) ? ("blueteamscore") : ("redteamscore");
+			$winclass = ($ass_att==$p_assault['teamname1']) ? ("blueteamscore") : ("redteamscore");
 		}
 	
 	if($asswin2 == 0) {
@@ -244,7 +244,7 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 	echo'
 	<table border="0" cellpadding="0" cellspacing="2" width="720">
 	  <tbody>
-	  <tr><td class="hlheading" colspan="15" align="center"><a href="?p=match&mid='.$mid.'&o=minfo&map='. str_replace(".unr", "", $p_assault[mapfile]).'">'.$p_assault[mapname].'</a>'.$warmup.'</td></tr>
+	  <tr><td class="hlheading" colspan="15" align="center"><a href="?p=match&mid='.$mid.'&o=minfo&map='. str_replace(".unr", "", $p_assault['mapfile']).'">'.$p_assault['mapname'].'</a>'.$warmup.'</td></tr>
 	  <tr'.$bcg.'><td align="center"><br />';
 	  uta_ass_objectiveinfo($mid, $ass_att);
 		echo '<br />';
@@ -253,7 +253,7 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 	<tr><td class="'.$winclass.'" style="font-size: 10pt;" colspan="15" align="center">'.$asswin.'</td></tr>
 	</tbody></table><br><hr>';
 	$i++;
-	$content = explode('<br />', $p_assault[serverinfo]);
+	$content = explode('<br />', $p_assault['serverinfo']);
 } // end while
 
 echo "<span class=\"text2\">&sup1; = Player scored &quot;First Blood&quot;</span>";

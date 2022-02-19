@@ -53,7 +53,7 @@ echo "
 ";
 
 if (!empty($year) and empty($month) and empty($day)) $where .= " AND m.time LIKE '$year%'";
-if (!empty($gid)) $where .= " AND m.gid = '$gid'";
+if (!empty($gid)) $where .= " AND m.gid = '".$gid."'";
  
 $sql = "SELECT 
 		DISTINCT CONCAT(REPLACE(`".(isset($t_match) ? $t_match : "uts_match")."`.`mapname`,'AS-',''),';', `".(isset($t_pickups) ? $t_pickups : "uts_pickups")."`.`name`),
@@ -140,10 +140,10 @@ if ($cpage > 0)
 	$q_recent = mysql_query($sql_recent) or die(mysql_error());
 	while ($r_recent = mysql_fetch_array($q_recent))
 	{
-		$r_mapname = un_ut($r_recent[mapname]);
-		$r_mapfile = un_ut($r_recent[mapdisplay]);
-		$r_pickup = $r_recent[name];
-		$r_pickupid = $r_recent[pickup];
+		$r_mapname = un_ut($r_recent['mapname']);
+		$r_mapfile = un_ut($r_recent['mapdisplay']);
+		$r_pickup = $r_recent['name'];
+		$r_pickupid = $r_recent['pickup'];
 
 		if (isset($lastmap) && $lastmap != $r_mapfile || !isset($lastmap)) {
 			if (isset($lastmap) && strlen($lastmap) > 0) {
@@ -175,7 +175,7 @@ if ($cpage > 0)
 		$q_hunters = mysql_query($sql_pu) or die(mysql_error());
 		while ($r_hunters = mysql_fetch_array($q_hunters))
 		{
-			$playername = $r_hunters[name];
+			$playername = $r_hunters['name'];
 			echo htmlentities($playername,ENT_SUBSTITUTE,$htmlcp)."; ";
 		}
 	echo '</td>

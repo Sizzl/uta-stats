@@ -56,17 +56,17 @@ while ($r_rgame = mysql_fetch_array($q_rgame))
 	if (isset($_GET['cfilter']))
 	{
 		if (strlen($_GET['cfilter'])==2)
-		  	$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.year = '".$rank_year."' AND r.pid = pi.id AND r.gid =  '$r_rgame[gid]' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
+		  	$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.year = '".$rank_year."' AND r.pid = pi.id AND r.gid =  '".$r_rgame['gid']."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
 	}
 	else	
-		$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.year = '".$rank_year."' AND r.pid = pi.id AND r.gid =  '$r_rgame[gid]' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
+		$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.year = '".$rank_year."' AND r.pid = pi.id AND r.gid =  '".$r_rgame['gid']."' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
 	// end modifications -->
 
 	$q_rplayer = mysql_query($sql_rplayer) or die(mysql_error());
 	while ($r_rplayer = mysql_fetch_array($q_rplayer))
 	{
 		$ranking++;
-		$myurl = urlencode($r_rplayer[name]);
+		$myurl = urlencode($r_rplayer['name']);
 	  echo'
 		  <tr>
 			<td class="grey" align="center">'.$ranking.'</td>
@@ -75,21 +75,21 @@ while ($r_rgame = mysql_fetch_array($q_rgame))
 	// hmm this wasn't working :/
 	// now it is :) // brajan 2006-09-07
 	echo '<a class="darkhuman" href="./?p='.$_GET['p'];
-	echo '&cfilter='.$r_rplayer[country];
-	echo '">'.FlagImage($r_rplayer[country]).'</a> &nbsp; ';
-	echo '<a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer[pid].($rank_year > 0 ? "&amp;year=".$rank_year : "").'">';
-	echo htmlentities($r_rplayer[name],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']).'</a></td>';
+	echo '&cfilter='.$r_rplayer['country'];
+	echo '">'.FlagImage($r_rplayer['country']).'</a> &nbsp; ';
+	echo '<a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer['pid'].($rank_year > 0 ? "&amp;year=".$rank_year : "").'">';
+	echo htmlentities($r_rplayer['name'],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']).'</a></td>';
 	// end modifications -->
 	echo '
-			<td class="dark" align="center">'.get_dp($r_rplayer[rank]).'</td>
-			<td class="grey" align="center">'.$r_rplayer[matches].'</td>
-			<!-- <td class="grey" align="center">'.$r_rplayer[matches].'</td> -->
+			<td class="dark" align="center">'.get_dp($r_rplayer['rank']).'</td>
+			<td class="grey" align="center">'.$r_rplayer['matches'].'</td>
+			<!-- <td class="grey" align="center">'.$r_rplayer['matches'].'</td> -->
 		  </tr>';
 		ob_flush();
 	}
 	echo'
 	  <tr>
-		<td class="smheading" align="center" colspan="4"><a href="./?p=ext_rank&amp;gid='.$r_rgame[gid].(isset($_GET['cfilter']) ? '&cfilter='.addslashes($_GET['cfilter']) : '').($rank_year == 0 ? '' : '&year='.$rank_year).'">Click Here To See All The Rankings<a/></td>
+		<td class="smheading" align="center" colspan="4"><a href="./?p=ext_rank&amp;gid='.$r_rgame['gid'].(isset($_GET['cfilter']) ? '&cfilter='.addslashes($_GET['cfilter']) : '').($rank_year == 0 ? '' : '&year='.$rank_year).'">Click Here To See All The Rankings<a/></td>
 	  </tr>
 	  </tbody></table><br>';
 }

@@ -135,7 +135,7 @@ function replace_vars($text, &$searchrepl) {
 
 function get_values($date_from, $date_to, $pid, $gid, $prefix, &$searchrepl) {
 	$sql_time = (empty($date_from)) ? '' : "AND	m.time >= '".date("YmdHis", $week_start)."' and m.time <= '".date("YmdHis", $week_end);
-	$sql_gid = (empty($gid)) ? '' : "AND m.gid = '$gid'";
+	$sql_gid = (empty($gid)) ? '' : "AND m.gid = '".$gid."'";
 	$sql_order = ($prefix != 'LM') ? '' : 'ORDER BY m.time DESC LIMIT 0,1';
 	$sql_groupby = ($prefix != 'LM') ? 'p.pid' : '1';
 	$sql = "	SELECT	m.time AS gamedate,
@@ -183,7 +183,7 @@ function get_values($date_from, $date_to, $pid, $gid, $prefix, &$searchrepl) {
 				WHERE 	m.id = p.matchid
 							$sql_time
 							$sql_gid
-					AND   p.pid = '$pid'
+					AND   p.pid = '".$pid."'
 				GROUP BY $sql_groupby
 							$sql_order";
 	$result = small_query($sql);	
@@ -229,7 +229,7 @@ $output = &$pic[$num]['output'];
 
 
 if (empty($pid)) die("No pid supplied");
-$r_pinfo = small_query("SELECT name, country, banned FROM uts_pinfo WHERE id = '$pid'");
+$r_pinfo = small_query("SELECT name, country, banned FROM uts_pinfo WHERE id = '".$pid."'");
 if (!$r_pinfo) die("Unable to fetch player record");
 if ($r_pinfo['banned'] == 'Y') pic_error('err_banned');
 $playername = $r_pinfo['name'];
@@ -238,7 +238,7 @@ $playercountry = $r_pinfo['country'];
 
 $gamename = '(unknown)';
 if (!empty($gid)) {
-	$r_gameinfo = small_query("SELECT name FROM uts_games WHERE id = '$gid'");
+	$r_gameinfo = small_query("SELECT name FROM uts_games WHERE id = '".$gid."'");
 	if (!$r_gameinfo) die("Unable to fetch game record");
 	$gamename = $r_gameinfo['name'];
 }

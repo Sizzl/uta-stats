@@ -224,8 +224,8 @@ SUM(p.kills) AS kills, SUM(p.deaths) AS deaths,
 SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, SUM(p.kills+p.deaths+p.suicides+p.teamkills) AS sumeff,
 AVG(p.accuracy) AS accuracy, AVG(p.ttl) AS ttl,
 COUNT(p.id) AS games, SUM(p.gametime) as gametime
-FROM uts_player AS p, uts_match AS m WHERE p.pid = '$playerid'
- AND p.matchid = m.id AND (m.time >= '$thismonth_start' AND m.time <= '$thismonth_end');";
+FROM uts_player AS p, uts_match AS m WHERE p.pid = '".$playerid."'
+ AND p.matchid = m.id AND (m.time >= '".$thismonth_start."' AND m.time <= '".$thismonth_end."');";
 					debugprint($sql_plist,"SQL","182 [".$playerid."]");
 				        $tme = "-";
 				        $eff = "-";
@@ -239,20 +239,20 @@ FROM uts_player AS p, uts_match AS m WHERE p.pid = '$playerid'
 					if (mysql_num_rows($q_plist))
 					{
 						$r_plist = mysql_fetch_array($q_plist);
-						if ($r_plist[gametime])
-						        $tme = sec2hour($r_plist[gametime]);	
-						if ($r_plist[sumeff] > 0 && $r_plist[kills] > 0)
-						        $eff = get_dp($r_plist[kills]/$r_plist[sumeff]*100);
-						if ($r_plist[accuracy])
-						        $acc = get_dp($r_plist[accuracy]);
-						if ($r_plist[ttl])
-						        $ttl = GetMinutes($r_plist[ttl]);
-						if ($r_plist[gamescore])
-							$scr = $r_plist[gamescore];
-						if ($r_plist[frags])
-							$frg = $r_plist[frags];
-						if ($r_plist[games])
-							$mtc = $r_plist[games];
+						if ($r_plist['gametime'])
+						        $tme = sec2hour($r_plist['gametime']);	
+						if ($r_plist['sumeff'] > 0 && $r_plist['kills'] > 0)
+						        $eff = get_dp($r_plist['kills']/$r_plist['sumeff']*100);
+						if ($r_plist['accuracy'])
+						        $acc = get_dp($r_plist['accuracy']);
+						if ($r_plist['ttl'])
+						        $ttl = GetMinutes($r_plist['ttl']);
+						if ($r_plist['gamescore'])
+							$scr = $r_plist['gamescore'];
+						if ($r_plist['frags'])
+							$frg = $r_plist['frags'];
+						if ($r_plist['games'])
+							$mtc = $r_plist['games'];
 					}
 					echo '
 						<td class="'.$plclass.'" width="30" align="center">'.$scr.'</td>'; // thismonth S
@@ -273,7 +273,7 @@ SUM(p.kills) AS kills, SUM(p.deaths) AS deaths,
 SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, SUM(kills+deaths+suicides+teamkills) AS sumeff,
 AVG(p.accuracy) AS accuracy, AVG(p.ttl) AS ttl,
 COUNT(p.id) AS games, SUM(p.gametime) as gametime
-FROM uts_player AS p WHERE p.pid = '$playerid';";
+FROM uts_player AS p WHERE p.pid = '".$playerid."';";
 					debugprint($sql_plist,"SQL","226 [".$playerid."]");
 				        $tme = "-";
 				        $eff = "-";
@@ -287,20 +287,20 @@ FROM uts_player AS p WHERE p.pid = '$playerid';";
 					if (mysql_num_rows($q_plist))
 					{
 						$r_plist = mysql_fetch_array($q_plist);
-						if ($r_plist[gametime])
-						        $tme = sec2hour($r_plist[gametime]);	
-						if ($r_plist[sumeff] > 0 && $r_plist[kills] > 0)
-						        $eff = get_dp($r_plist[kills]/$r_plist[sumeff]*100);
-						if ($r_plist[accuracy])
-						        $acc = get_dp($r_plist[accuracy]);
-						if ($r_plist[ttl])
-						        $ttl = GetMinutes($r_plist[ttl]);
-						if ($r_plist[gamescore])
-							$scr = $r_plist[gamescore];
-						if ($r_plist[frags])
-							$frg = $r_plist[frags];
-						if ($r_plist[games])
-							$mtc = $r_plist[games];
+						if ($r_plist['gametime'])
+						        $tme = sec2hour($r_plist['gametime']);	
+						if ($r_plist['sumeff'] > 0 && $r_plist['kills'] > 0)
+						        $eff = get_dp($r_plist['kills']/$r_plist['sumeff']*100);
+						if ($r_plist['accuracy'])
+						        $acc = get_dp($r_plist['accuracy']);
+						if ($r_plist['ttl'])
+						        $ttl = GetMinutes($r_plist['ttl']);
+						if ($r_plist['gamescore'])
+							$scr = $r_plist['gamescore'];
+						if ($r_plist['frags'])
+							$frg = $r_plist['frags'];
+						if ($r_plist['games'])
+							$mtc = $r_plist['games'];
 					}
 					echo '
 						<td class="'.$opclass.'" width="30" align="center"><span class="'.$spclass.'">'.$scr.'</span></td>'; // totals S
@@ -320,18 +320,18 @@ FROM uts_player AS p WHERE p.pid = '$playerid';";
 
 					$sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.mapfile, INET_NTOA(p.ip) AS ip,
 					m.servername, m.serverip FROM uts_match m, uts_player p, uts_games g
-					WHERE p.pid = '$playerid' AND m.id = p.matchid AND m.gid = g.id ORDER BY time DESC LIMIT 0,1";
+					WHERE p.pid = '".$playerid."' AND m.id = p.matchid AND m.gid = g.id ORDER BY time DESC LIMIT 0,1";
 					debugprint($sql_recent,"SQL","267 [".$playerid."]");
 					$q_recent = mysql_query($sql_recent) or die(mysql_error());
 					if (mysql_num_rows($q_recent))
 					{
 						$r_recent = mysql_fetch_array($q_recent);
-					        $r_time = mdate($r_recent[time]);
-					        $r_mapfile = un_ut($r_recent[mapfile]);
-					        $r_servername =  get_short_servername($r_recent[servername]);
-					        $r_serverip = $r_recent[serverip];
+					        $r_time = mdate($r_recent['time']);
+					        $r_mapfile = un_ut($r_recent['mapfile']);
+					        $r_servername =  get_short_servername($r_recent['servername']);
+					        $r_serverip = $r_recent['serverip'];
 						$r_time = str_replace("at","<br />at",$r_time);
-						$lastmatch = "<a class=\"".$plclass."\" href=\"./?p=match&amp;mid=".$r_recent[id]."\">".$r_time."</a>";
+						$lastmatch = "<a class=\"".$plclass."\" href=\"./?p=match&amp;mid=".$r_recent['id']."\">".$r_time."</a>";
 						unset($r_recent,$r_time,$r_mapfile,$r_servername,$r_serverip);
 					}
 

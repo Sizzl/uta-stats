@@ -315,7 +315,7 @@ while (false !== ($filename = readdir($logdir)))
 			$col5 = trim($col5, " \n\r");
 
 			$id++;
-			mysql_query("INSERT INTO `uts_temp_".$uid."` VALUES ($id, '$col0', '$col1', '$col2', '$col3', '$col4', '$col5');") or die("log2tmp - ".mysql_error());
+			mysql_query("INSERT INTO `uts_temp_".$uid."` VALUES ($id, '".$col0."', '".$col1."', '".$col2."', '".$col3."', '".$col4."', '".$col5."');") or die("log2tmp - ".mysql_error());
 		}
 	}
 	fclose($handle);
@@ -394,32 +394,32 @@ while (false !== ($filename = readdir($logdir)))
 
 	$qm_playercount = small_count("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'rename' GROUP BY col3");
 
-	$s_frags = $qm_frags[frags];
-	$s_suicides = $qm_suicides[suicides];
-	$s_deaths = $qm_deaths[deaths];
+	$s_frags = $qm_frags['frags'];
+	$s_suicides = $qm_suicides['suicides'];
+	$s_deaths = $qm_deaths['deaths'];
 
 	$sql_mutators = "SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GoodMutator'";
 	$qm_mutators = "";
 	$q_mutators = mysql_query($sql_mutators);
 	while ($r_mutators = mysql_fetch_array($q_mutators))
 	{
-		$qm_mutators .= "".$r_mutators[col3].", ";
+		$qm_mutators .= "".$r_mutators['col3'].", ";
 	}
 
 	// Add teamkills only if its a team game, else add them to kills total
-	if ($qm_teamgame[col3] == "True")
+	if ($qm_teamgame['col3'] == "True")
 	{
-		$s_kills = $qm_kills[kills];
-		$s_teamkills = $qm_teamkills[teamkills];
+		$s_kills = $qm_kills['kills'];
+		$s_teamkills = $qm_teamkills['teamkills'];
 	}
 	else
 	{
-		$s_kills = $qm_kills[kills]+$qm_teamkills[teamkills];
+		$s_kills = $qm_kills['kills']+$qm_teamkills['teamkills'];
 		$s_teamkills = 0;
 	}
 	// Check if anything happened, if it didnt stop everything now
 	
-	if ($qm_kills[kills] == 0 && $qm_deaths[deaths] == 0 && $s_suicides == -5)
+	if ($qm_kills['kills'] == 0 && $qm_deaths['deaths'] == 0 && $s_suicides == -5)
 	{  // CRATOS
 		echo "No (Empty Match)\n";
 		if ($html) echo '</td></tr>';
@@ -434,9 +434,9 @@ while (false !== ($filename = readdir($logdir)))
 		echo "No (Logfile incompatible [created by UTStats $actor_version])\n";
 		if ($html) echo '</td></tr>';
 	}
-	elseif ($import_ignore_if_gametime_less_than != 0 and ceil(($qm_gameend[col0] - $qm_gamestart[col0]) / 60) < $import_ignore_if_gametime_less_than)
+	elseif ($import_ignore_if_gametime_less_than != 0 and ceil(($qm_gameend['col0'] - $qm_gamestart['col0']) / 60) < $import_ignore_if_gametime_less_than)
 	{
-		echo "No (game too short [". ceil(($qm_gameend[col0] - $qm_gamestart[col0]) / 60) ." &lt; $import_ignore_if_gametime_less_than minutes])\n";
+		echo "No (game too short [". ceil(($qm_gameend['col0'] - $qm_gamestart['col0']) / 60) ." &lt; $import_ignore_if_gametime_less_than minutes])\n";
 		if ($html) echo '</td></tr>';
 	}
 	else
@@ -459,17 +459,17 @@ while (false !== ($filename = readdir($logdir)))
 		$qm_gameinfoff = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'FriendlyFireScale' LIMIT 0,1");
 		$qm_gameinfows = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'WeaponsStay'");
 		
-		$gametime = $qm_time[col3];
-		$offset = $qm_zone[col3]; // --// Timo: 18/09/05
-		$servername = addslashes($qm_servername[col3]);
-		$serverip = $qm_serverip[col3];
-		$serverport = $qm_serverport[col3];
-		$gamename = addslashes($qm_gamename[col3]);
-		$servergametime = get_dp($qm_gameend[col0] - $qm_gamestart[col0]);
-		$tournament = $qm_tournament[col3];
-		$teamgame = $qm_teamgame[col3];
-		$mapname = addslashes($qm_mapname[col3]);
-		$mapfile = addslashes($qm_mapfile[col3]);
+		$gametime = $qm_time['col3'];
+		$offset = $qm_zone['col3']; // --// Timo: 18/09/05
+		$servername = addslashes($qm_servername['col3']);
+		$serverip = $qm_serverip['col3'];
+		$serverport = $qm_serverport['col3'];
+		$gamename = addslashes($qm_gamename['col3']);
+		$servergametime = get_dp($qm_gameend['col0'] - $qm_gamestart['col0']);
+		$tournament = $qm_tournament['col3'];
+		$teamgame = $qm_teamgame['col3'];
+		$mapname = addslashes($qm_mapname['col3']);
+		$mapfile = addslashes($qm_mapfile['col3']);
 		
 				
 		// ************************************************************************************
@@ -478,14 +478,14 @@ while (false !== ($filename = readdir($logdir)))
 		$q_sname = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'ass_servername'");
 		if ($q_sname!=NULL)
 		{
-			$servername = trim($q_sname[col2]);	
+			$servername = trim($q_sname['col2']);	
 			$servername = addslashes($servername); // --// Timo 2020-08-23 (Yes, still fixing sh!t 15 years later)
 		}
 		else
 		{		
 			// try to get existing servername by ip/port
 			$srv = small_query("Select servername from uts_match where serverip = '$serverip:$serverport' LIMIT 0,1");
-			if ($srv!=Null) $servername = $srv[servername]; 
+			if ($srv!=Null) $servername = $srv['servername']; 
 			else
 			{ 
 				// this is just for logfiles with an old SmartAS or DM/UTPure
@@ -508,8 +508,8 @@ while (false !== ($filename = readdir($logdir)))
 		// *******************************************************************************************************
 		$qm_gamestartreg = small_query("SELECT col0 FROM uts_temp_$uid WHERE col1 = 'game_start'");	
 		if ($qm_gamestartreg!=NULL)
-			if ($qm_gamestart[col0] < $qm_gamestartreg[col0])
-				$servergametime = get_dp($qm_gameend[col0] - $qm_gamestartreg[col0]);
+			if ($qm_gamestart['col0'] < $qm_gamestartreg['col0'])
+				$servergametime = get_dp($qm_gameend['col0'] - $qm_gamestartreg['col0']);
 				
 				
 		// *******************************************************************************************************
@@ -523,7 +523,7 @@ while (false !== ($filename = readdir($logdir)))
 		// *******************************************************************************************************		
 		
 		// Get Timedilation
-		$gamespeed = floatval($qm_gameinfogs[col3]);	// default: 100
+		$gamespeed = floatval($qm_gameinfogs['col3']);	// default: 100
 		$timedilation = $gamespeed * 1.1 / 100.0;			
 				
 		// Fix Servergametime
@@ -542,7 +542,7 @@ while (false !== ($filename = readdir($logdir)))
 		else
 			$gametime = utdate($gametime);
 
-		$duplicate = small_count("SELECT id FROM uts_match WHERE serverip='$serverip:$serverport' AND time='$gametime' AND mapfile='$mapfile'");
+		$duplicate = small_count("SELECT id FROM uts_match WHERE serverip='$serverip:$serverport' AND time='".$gametime."' AND mapfile='".$mapfile."'");
 		if ($duplicate > 0 && !isset($processdupes))	
 		{			
 			echo "ERROR: DUPLICATE LOGFILE \nServer: $servername\nGame: $gametime \nIgnoring...";
@@ -562,7 +562,7 @@ while (false !== ($filename = readdir($logdir)))
 		}
 		elseif ($duplicate > 0 && isset($processdupes))
 		{
-			$dupe_m = small_query("SELECT id FROM uts_match WHERE serverip='$serverip:$serverport' AND time='$gametime' AND mapfile='$mapfile'");
+			$dupe_m = small_query("SELECT id FROM uts_match WHERE serverip='$serverip:$serverport' AND time='".$gametime."' AND mapfile='".$mapfile."'");
 			$matchid = $dupe_m["id"];	
 		}
 
@@ -577,14 +577,14 @@ while (false !== ($filename = readdir($logdir)))
 
 		// Append insta to game if it was an insta game
 		$gameinsta = 0;
-		if ($qm_insta[col3] == "True") { $gameinsta = 1; $gamename = "$gamename (insta)"; } else { $gameinsta = 0; }
+		if ($qm_insta['col3'] == "True") { $gameinsta = 1; $gamename = "$gamename (insta)"; } else { $gameinsta = 0; }
 		
 		// CRATOS: Check for PRO matches
-		if (intval($qm_gameinfoff[col3]) != 0) { $gamename = "$gamename (pro)"; }		
+		if (intval($qm_gameinfoff['col3']) != 0) { $gamename = "$gamename (pro)"; }		
 
 		// Get the unique ID of this gametype.
 		// Create a new one if it has none yet.
-		$r_gid = small_query("SELECT id FROM uts_games WHERE gamename = '$gamename'");
+		$r_gid = small_query("SELECT id FROM uts_games WHERE gamename = '".$gamename."'");
 		if ($r_gid)
 			$gid = $r_gid['id'];
 		else
@@ -626,22 +626,22 @@ while (false !== ($filename = readdir($logdir)))
 
 		$qm_firstblood = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'first_blood'");
 
-		$firstblood = addslashes($qm_firstblood[col2]);
+		$firstblood = addslashes($qm_firstblood['col2']);
 
 
-		$serverinfo = addslashes("Admin: $qm_serveran[col3]<br />Email: $qm_serverae[col3] <br /><br />
-		<u>MOTD</u><br />$qm_serverm1[col3]<br />$qm_serverm2[col3]<br />$qm_serverm3[col3]<br />$qm_serverm4[col3]");
+		$serverinfo = addslashes("Admin: $qm_serveran['col3']<br />Email: $qm_serverae['col3'] <br /><br />
+		<u>MOTD</u><br />$qm_serverm1['col3']<br />$qm_serverm2['col3']<br />$qm_serverm3['col3']<br />$qm_serverm4['col3']");
 
 
-		$gameinfo = addslashes(	add_info('Time Limit:', $qm_gameinfotl[col3]) .
-										add_info('Frag Limit:', $qm_gameinfofl[col3]) .
-										add_info('Goal Team Score:', $qm_gameinfogt[col3]) .
-										add_info('Max Players:', $qm_gameinfomp[col3]) .
-										add_info('Max Specs:', $qm_gameinfoms[col3]) .
-										add_info('Game Speed:', $qm_gameinfogs[col3]) .
-										add_info('Translocator:', $qm_gameinfout[col3]) .
-										add_info('Friendly Fire:', $qm_gameinfoff[col3]) .
-										add_info('Weapon Stay:', $qm_gameinfows[col3]) .
+		$gameinfo = addslashes(	add_info('Time Limit:', $qm_gameinfotl['col3']) .
+										add_info('Frag Limit:', $qm_gameinfofl['col3']) .
+										add_info('Goal Team Score:', $qm_gameinfogt['col3']) .
+										add_info('Max Players:', $qm_gameinfomp['col3']) .
+										add_info('Max Specs:', $qm_gameinfoms['col3']) .
+										add_info('Game Speed:', $qm_gameinfogs['col3']) .
+										add_info('Translocator:', $qm_gameinfout['col3']) .
+										add_info('Friendly Fire:', $qm_gameinfoff['col3']) .
+										add_info('Weapon Stay:', $qm_gameinfows['col3']) .
 										add_info('UTStats Actor Version:', $actor_version));
 
 		// Tidy Up The Info
@@ -668,10 +668,10 @@ while (false !== ($filename = readdir($logdir)))
 		$t3info = 0;
 
 		while ($r_tinfo = mysql_fetch_array($q_tinfo)) {
-		      IF ($r_tinfo[col4] == "Red") { $t0info = 1; }
-		      IF ($r_tinfo[col4] == "Blue") { $t1info = 1; }
-		      IF ($r_tinfo[col4] == "Green") { $t2info = 1; }
-		      IF ($r_tinfo[col4] == "Gold") { $t3info = 1; }
+		      IF ($r_tinfo['col4'] == "Red") { $t0info = 1; }
+		      IF ($r_tinfo['col4'] == "Blue") { $t1info = 1; }
+		      IF ($r_tinfo['col4'] == "Green") { $t2info = 1; }
+		      IF ($r_tinfo['col4'] == "Gold") { $t3info = 1; }
 		}
 
 		// Get Teamscores
@@ -725,8 +725,8 @@ while (false !== ($filename = readdir($logdir)))
 				$s_deaths = 0;
 			$sql_serverinfo = "INSERT INTO uts_match (time, servername, serverip, gamename, gid, gametime, mutators, insta, tournament,	teamgame, mapname, mapfile, serverinfo, gameinfo, frags, kills, suicides, teamkills, deaths,
 				t0, t1, t2, t3, t0score, t1score, t2score, t3score)
-				VALUES ('$gametime', '$servername', '$serverip:$serverport', '$gamename', '$gid', '$servergametime', '$mutators', '$gameinsta', '$tournament',
-				'$teamgame', '$mapname', '$mapfile', '$serverinfo', '$gameinfo', '$s_frags', '$s_kills', '$s_suicides', '$s_teamkills', '$s_deaths',
+				VALUES ('".$gametime."', '".$servername."', '$serverip:$serverport', '".$gamename."', '".$gid."', '".$servergametime."', '".$mutators."', '".$gameinsta."', '".$tournament."',
+				'".$teamgame."', '".$mapname."', '".$mapfile."', '".$serverinfo."', '".$gameinfo."', '".$s_frags."', '".$s_kills."', '".$s_suicides."', '".$s_teamkills."', '".$s_deaths."',
 				$t0info, $t1info, $t2info, $t3info, $t0score, $t1score, $t2score, $t3score);";
 
 			$q_serverinfo = mysql_query($sql_serverinfo) or die("Match Ins ".mysql_error().";SQL: ".$sql_serverinfo);
@@ -740,7 +740,7 @@ while (false !== ($filename = readdir($logdir)))
 		// ************************************************************************************
 		// Cratos: Add FriendlyFireScale, Timedilation
 		// ************************************************************************************
-		$friendlyfirescale = intval(floatval($qm_gameinfoff[col3])*100);
+		$friendlyfirescale = intval(floatval($qm_gameinfoff['col3'])*100);
 		$sql = "UPDATE uts_match SET 
 				friendlyfirescale = '".$friendlyfirescale."',
 				timedilation = '".$timedilation."' 
@@ -772,21 +772,21 @@ while (false !== ($filename = readdir($logdir)))
 		$q_player = mysql_query($sql_player) or die(mysql_error());
 		while ($r_player = mysql_fetch_array($q_player))
 		{
-			$playerid = $r_player[col4];
+			$playerid = $r_player['col4'];
 
 			// Get players last name used
 			$r_player2 = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'rename' AND col4 = $playerid ORDER BY id DESC LIMIT 0,1");
-			$playername = addslashes($r_player2[col3]);
+			$playername = addslashes($r_player2['col3']);
 
 
 			// Are they a Bot
 			$r_player1 = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'IsABot' AND col3 = $playerid ORDER BY id DESC LIMIT 0,1");
-			$playertype = $r_player1[col4];
+			$playertype = $r_player1['col4'];
 			// This player is a bot
 			if ($playertype == 'True' and $import_ignore_bots) {
 				$ignored_players[] = $playername;
 				// We do not want to know who killed and who was killed by this bot...
-				mysql_query("DELETE FROM uts_temp_$uid WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '$playerid' OR col4 = '$playerid');") or die(mysql_error());
+				mysql_query("DELETE FROM uts_temp_$uid WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '".$playerid."' OR col4 = '".$playerid."');") or die(mysql_error());
 				if ($html) echo "<span style='text-decoration: line-through;'>";
 				echo "Bot:$playername ";
 				if ($html) echo "</span>";
@@ -795,7 +795,7 @@ while (false !== ($filename = readdir($logdir)))
 
 			// Get players last team
 			$r_player3 = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'TeamChange' AND col3 = $playerid ORDER BY id DESC LIMIT 0,1");
-			$playerteam = $r_player3[col4];
+			$playerteam = $r_player3['col4'];
 
 			$qc_kills = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'kills'AND col3 = $playerid");
 			$qc_teamkills = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'teamkills' AND col3 = $playerid");
@@ -807,10 +807,10 @@ while (false !== ($filename = readdir($logdir)))
 			// CRATOS: only ignore him if his TimeOnServer is < 30sec
 			// 
 			$qc_time = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = $playerid LIMIT 0,1");
-			if ($qc_time != NULL) $timeonserver = intval($qc_time[col4]);
+			if ($qc_time != NULL) $timeonserver = intval($qc_time['col4']);
 			else $timeonserver = 0; 
 	
-			if ($qc_kills[col4] == 0 && $qc_deaths[col4] == 0 && $qc_teamkills[col4] == 0 && $qc_objs[assobjcount] <= 0 && $timeonserver < 30)
+			if ($qc_kills['col4'] == 0 && $qc_deaths['col4'] == 0 && $qc_teamkills['col4'] == 0 && $qc_objs['assobjcount'] <= 0 && $timeonserver < 30)
 			{
 				if ($timeonserver < 10 || $servergametime > 60) 	
 				{			
@@ -838,13 +838,13 @@ while (false !== ($filename = readdir($logdir)))
 			if ($playerbanned)
 			{
 				// Banned players don't have a rank.
-				mysql_query("DELETE FROM uts_rank WHERE pid = '$pid'");
+				mysql_query("DELETE FROM uts_rank WHERE pid = '".$pid."'");
 
 				if ($import_ban_type == 2)
 				{
 					// We do not want to know who killed and who was killed by this banned player
 					$ignored_players[] = $playername;
-					mysql_query("DELETE FROM uts_temp_$uid WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '$playerid' OR col4 = '$playerid');") or die(mysql_error());
+					mysql_query("DELETE FROM uts_temp_$uid WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '".$playerid."' OR col4 = '".$playerid."');") or die(mysql_error());
 					if ($html) echo "<span style='text-decoration: line-through;'>";
 					echo "Banned:$playername ";
 					if ($html) echo "</span>";
@@ -911,17 +911,17 @@ while (false !== ($filename = readdir($logdir)))
 			$sql_radjust = "SELECT `pid`, `gid`, `rank` FROM `uts_player` WHERE `matchid` = '".$matchid."';";
 			$q_radjust = mysql_query($sql_radjust) or die("Rank Sel ".mysql_error());
 			while ($r_radjust = mysql_fetch_array($q_radjust)) {
-				$pid = $r_radjust[pid];
-				$gid = $r_radjust[gid];
-				$rank = $r_radjust[rank];
+				$pid = $r_radjust['pid'];
+				$gid = $r_radjust['gid'];
+				$rank = $r_radjust['rank'];
 
 				$sql_crank = small_query("SELECT `id`, `rank`, `matches` FROM `uts_rank` WHERE `pid` = '".$pid."' AND `gid` = '".$gid."';");
 				if (!$sql_crank) continue;
 
-				$rid = $sql_crank[id];
-				$newrank = $sql_crank[rank]-$rank;
-				$oldrank = $sql_crank[rank];
-				$matchcount = $sql_crank[matches]-1;
+				$rid = $sql_crank['id'];
+				$newrank = $sql_crank['rank']-$rank;
+				$oldrank = $sql_crank['rank'];
+				$matchcount = $sql_crank['matches']-1;
 
 				mysql_query("UPDATE `uts_rank` SET `rank` = '".$newrank."', `prevrank` = '".$oldrank."', `matches` = '".$matchcount."' WHERE `id` = '".$rid."';") or die("Rank Upd ".mysql_error());
 			}

@@ -171,7 +171,7 @@ foreach ($rank_years as $rank_year) {
 		$pid = $r_pid['pid'];
 		$gid = $r_pid['gid'];
 		
-		$r_game = small_query("SELECT name, gamename FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '$gid'");
+		$r_game = small_query("SELECT name, gamename FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '".$gid."'");
 		$real_gamename = $r_game['gamename'];
 		$s_lastmatches = "SELECT m.id AS matchId FROM ".(isset($t_player) ? $t_player : "uts_player")." p 
 						INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." m ON p.matchid = m.id
@@ -227,7 +227,7 @@ foreach ($rank_years as $rank_year) {
 					while ($r_obj = mysql_fetch_array($q_obj)) 
 					{
 						// Objectives
-						$t_points += rcalc($r_obj[objs], ($r_obj[def_teamsize]*2 - $r_obj[att_teamsize])*10.0/6.0, true, $r_obj[ratedobjs]);
+						$t_points += rcalc($r_obj['objs'], ($r_obj['def_teamsize']*2 - $r_obj['att_teamsize'])*10.0/6.0, true, $r_obj['ratedobjs']);
 					}
 					$t_points += rcalc($r_cnt['ass_assist'], 2); // Objective Assists
 	
@@ -305,8 +305,8 @@ foreach ($rank_years as $rank_year) {
 
 			// Select rank record
 			$r_rankp = small_query("SELECT `id`, `time`, `rank`, `matches` FROM `uts_rank` WHERE `pid` = '".$pid."' AND `gid` = '".$gid."' AND `year` = '".$rank_year."'");
-			$rank_id = $r_rankp[id];
-			$rank_crank = $r_rankp[rank];
+			$rank_id = $r_rankp['id'];
+			$rank_crank = $r_rankp['rank'];
 
 
 			if ($rank_id == NULL) {
@@ -352,7 +352,7 @@ foreach ($rank_years as $rank_year) {
 } // foreach year
 echo '
 <tr>
-	<td class="smheading" align="center" colspan="2">Rankings recalculated - <a href="./admin.php?key='.$_REQUEST[key].'">Go Back To Admin Page</a></td>
+	<td class="smheading" align="center" colspan="2">Rankings recalculated - <a href="./admin.php?key='.$_REQUEST['key'].'">Go Back To Admin Page</a></td>
 </tr></table>';
 
 

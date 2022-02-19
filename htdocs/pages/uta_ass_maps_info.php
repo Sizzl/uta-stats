@@ -30,17 +30,17 @@ echo' </td>
 
 
 $sql_objs = "SELECT id, objnum, objname, objmsg, defensepriority, rating
-			FROM ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." WHERE mapfile like '$realmap' order by defensepriority desc, objname asc";
+			FROM ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." WHERE mapfile like '".$realmap."' order by defensepriority desc, objname asc";
 $q_objs = mysql_query($sql_objs) or die(mysql_error());
 
 while ($r_objs = mysql_fetch_array($q_objs)) {
 	
 	// Get Objective Info
-	$r_id = $r_objs[id];
-	$r_objnum = $r_objs[objnum];
-	$r_objname = $r_objs[objname];
-	$r_objmsg = $r_objs[objmsg];
-	$r_rating = $r_objs[rating];
+	$r_id = $r_objs['id'];
+	$r_objnum = $r_objs['objnum'];
+	$r_objname = $r_objs['objname'];
+	$r_objmsg = $r_objs['objmsg'];
+	$r_rating = $r_objs['rating'];
 	
 	// Get AVG stuff
 	$sql_objtaken = "SELECT count(objid) as takencount, avg(timestamp) as avgtime from ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats")." where objid = $r_id";
@@ -49,8 +49,8 @@ while ($r_objs = mysql_fetch_array($q_objs)) {
 	$avgtime = "";
 	if ($r_taken != Null)
 	{
-		$takencount = $r_taken[takencount];
-		$avgtime = GetMinutes($r_taken[avgtime]); 
+		$takencount = $r_taken['takencount'];
+		$avgtime = GetMinutes($r_taken['avgtime']); 
 	}
 
 	// Get a Record using teamsize condition
@@ -96,20 +96,20 @@ while ($r_objs = mysql_fetch_array($q_objs)) {
 	  
 	if ($r_record != Null)
 	{
-		$recordtimestr = GetMinutes($r_record[rectime]);
-	  	$playername = $r_record[recplayername];
-	  	$playerid = $r_record[recplayerid];
-	  	$pcountry = $r_record[recpcountry]; 
-	  	$matchid = $r_record[recmatchid];
-	  	$matchname = mdate($r_record[matchtime]);	  		
-                $matchmode = $r_record[matchmode];
+		$recordtimestr = GetMinutes($r_record['rectime']);
+	  	$playername = $r_record['recplayername'];
+	  	$playerid = $r_record['recplayerid'];
+	  	$pcountry = $r_record['recpcountry']; 
+	  	$matchid = $r_record['recmatchid'];
+	  	$matchname = mdate($r_record['matchtime']);	  		
+                $matchmode = $r_record['matchmode'];
 		unset($matchteam);
                 if ($matchmode==1)
                 {
-                        if ($r_record[attackingid]==1)
-                                $matchteam = $r_record[teamname1];
+                        if ($r_record['attackingid']==1)
+                                $matchteam = $r_record['teamname1'];
                         else
-                                $matchteam = $r_record[teamname0];
+                                $matchteam = $r_record['teamname0'];
                 }
 	}
 	

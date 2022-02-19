@@ -9,7 +9,8 @@ function mks($str)
         global $notallowed, $spec_chars;
         $str = str_replace($notallowed, '', $str);
         $str = str_replace($spec_chars, '', $str);
-        if (get_magic_quotes_gpc() == 0) { $str = addslashes(trim($str)); };
+        //if (get_magic_quotes_gpc() == 0) { $str = addslashes(trim($str)); };
+        $str = addslashes(trim($str));;
         return $str;
 }
 
@@ -96,9 +97,9 @@ $q_objs = mysql_query($sql_objs) or die(mysql_error());
 while ($r_objs = mysql_fetch_array($q_objs)) {
 	
 	// Get Objective Info
-	$objid = $r_objs[objid];
-	$objnum = $r_objs[objnum];
-	$objname = $r_objs[objname];
+	$objid = $r_objs['objid'];
+	$objnum = $r_objs['objnum'];
+	$objname = $r_objs['objname'];
 	
 	// Who did take it?	
 	$sql_objgone = "SELECT 'broken_inc_functions' AS slowquery, ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats").".timestamp as objtime,
@@ -110,10 +111,10 @@ while ($r_objs = mysql_fetch_array($q_objs)) {
 	
 	if ($q_objgone != Null)
 	{
-		$timestring = GetMinutes($q_objgone[objtime]); 
-		$pid = $q_objgone[pid];
-		$pname = $q_objgone[pname];
-		$pcountry = $q_objgone[pcountry]; 		
+		$timestring = GetMinutes($q_objgone['objtime']); 
+		$pid = $q_objgone['pid'];
+		$pname = $q_objgone['pname'];
+		$pcountry = $q_objgone['pcountry']; 		
 	}		
 	
 	echo '<tr>';

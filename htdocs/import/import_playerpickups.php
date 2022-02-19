@@ -27,8 +27,8 @@ if (!isset($qm_gamestart)) {
 if (!isset($gametime)) {
 	$qm_time = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Absolute_Time'");
 	$qm_zone = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'GMT_Offset'");
-	$gametime = $qm_time[col3];
-	$offset = $qm_zone[col3];
+	$gametime = $qm_time['col3'];
+	$offset = $qm_zone['col3'];
 	if ($offset)
 		$gametime = offsetutdate($gametime,$offset);
 	else
@@ -41,20 +41,20 @@ $q_pickupstats = mysql_query($sql_pickupstats);
 
 while ($r_pickupstats = mysql_fetch_array($q_pickupstats)) {
 	// Cycle through pickups, log times against those we are tracking
-	if (!(in_array($r_pickupstats[col2],array_keys($pickupnames)))) {
+	if (!(in_array($r_pickupstats['col2'],array_keys($pickupnames)))) {
 		// Dynamically insert pickups? To-Do
 		if (isset($dynamicpickups) && $dynamicpickups==true) {
-			mysql_query("INSERT INTO uts_pickups SET name = '".addslashes($r_pickupstats[col2])."';") or die(mysql_error());
+			mysql_query("INSERT INTO uts_pickups SET name = '".addslashes($r_pickupstats['col2'])."';") or die(mysql_error());
 			$pickupid = mysql_insert_id();
 			$pickupnames[$r_pickupstats['col2']] = $pickupid;
 		}
 	}
 
-	if (in_array($r_pickupstats[col2],array_keys($pickupnames))) {
+	if (in_array($r_pickupstats['col2'],array_keys($pickupnames))) {
 		$pickupid = $pickupnames[$r_pickupstats['col2']];
 
-		$pickupact = $r_pickupstats[col0];
-		$pickuprel = $pickupact - $qm_gamestart[col0]; // relative time after map started and player spawned, in-game seconds with dilation
+		$pickupact = $r_pickupstats['col0'];
+		$pickuprel = $pickupact - $qm_gamestart['col0']; // relative time after map started and player spawned, in-game seconds with dilation
 
 		if (isset($timedilation)) {
 			$pickuprwt = $gametime + ($pickupact / $timedilation); // gametime is real world time, need to sort dilation here
@@ -103,10 +103,10 @@ foreach ($pickupnames as $pickupname => $pickupid) {
 			} else {
 				mysql_query("	INSERT	
 						INTO	uts_pickupstats
-						SET	matchid = '$matchid',
-							year = '$rank_year',
-							pid = '$pid',
-							pickup = '$pickupid',
+						SET	matchid = '".$matchid."',
+							year = '".$rank_year."',
+							pid = '".$pid."',
+							pickup = '".$pickupid."',
 							timestamp = '".$pickup['rwt']."',
 							time_logged = '".$pickup['act']."',
 							time_relative= '".$pickup['rel']."';") or die(mysql_error());

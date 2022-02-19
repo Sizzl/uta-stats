@@ -49,21 +49,21 @@ $i = 0;
 while ($r_multis = zero_out(mysql_fetch_array($q_multis))) {
 	$i++;
 	$class = ($i % 2) ? 'grey' : 'grey2';
-	$r_pname = $r_multis[name];
+	$r_pname = $r_multis['name'];
 	$myurl = urlencode($r_pname);
 
   echo'
   <tr>
-	<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_multis['pid'].'">'.FormatPlayerName($r_multis[country], $r_multis[pid], $r_pname, $gid, $gamename).'</a></td>
-	<td class="'.$class.'" align="center">'.$r_multis[spree_double].'</td>
-	<td class="'.$class.'" align="center">'.$r_multis[spree_multi].'</td>
-	<td class="'.$class.'" align="center">'.$r_multis[spree_ultra].'</td>
-	<td class="'.$class.'" align="center">'.$r_multis[spree_monster].'</td>
-	<td class="'.$class.'" align="center">'.$r_multis[spree_kill].'</td>
-	<td class="'.$class.'" align="center">'.$r_multis[spree_rampage].'</td>
-	<td class="'.$class.'" align="center">'.$r_multis[spree_dom].'</td>
-	<td class="'.$class.'" align="center">'.$r_multis[spree_uns].'</td>
-	<td class="'.$class.'" align="center">'.$r_multis[spree_god].'</td>
+	<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_multis['pid'].'">'.FormatPlayerName($r_multis['country'], $r_multis['pid'], $r_pname, $gid, $gamename).'</a></td>
+	<td class="'.$class.'" align="center">'.$r_multis['spree_double'].'</td>
+	<td class="'.$class.'" align="center">'.$r_multis['spree_multi'].'</td>
+	<td class="'.$class.'" align="center">'.$r_multis['spree_ultra'].'</td>
+	<td class="'.$class.'" align="center">'.$r_multis['spree_monster'].'</td>
+	<td class="'.$class.'" align="center">'.$r_multis['spree_kill'].'</td>
+	<td class="'.$class.'" align="center">'.$r_multis['spree_rampage'].'</td>
+	<td class="'.$class.'" align="center">'.$r_multis['spree_dom'].'</td>
+	<td class="'.$class.'" align="center">'.$r_multis['spree_uns'].'</td>
+	<td class="'.$class.'" align="center">'.$r_multis['spree_god'].'</td>
   </tr>';
 }
 
@@ -102,18 +102,18 @@ if (strpos($gamename, '(insta)') === false) {
 	while ($r_pickups = zero_out(mysql_fetch_array($q_pickups))) {
 		$i++;
 		$class = ($i % 2) ? 'grey' : 'grey2';
-		$r_pname = $r_pickups[name];
+		$r_pname = $r_pickups['name'];
 		$myurl = urlencode($r_pname);
 
 		echo'
 		<tr>
-			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName($r_pickups[country], $r_pickups[pid], $r_pname, $gid, $gamename).'</a></td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_pads].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_armour].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_keg].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_invis].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_belt].'</td>
-			<td class="'.$class.'" align="center">'.$r_pickups[pu_amp].'</td>
+			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName($r_pickups['country'], $r_pickups['pid'], $r_pname, $gid, $gamename).'</a></td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_pads'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_armour'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_keg'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_invis'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_belt'].'</td>
+			<td class="'.$class.'" align="center">'.$r_pickups['pu_amp'].'</td>
 		</tr>';
 	}
 }
@@ -130,7 +130,7 @@ echo'
     <td class="heading" colspan="2" align="center">First Blood</td>
   </tr>
   <tr>
-    <td class="grey2" align="center" width="150">'.FormatPlayerName($sql_firstblood[country], $sql_firstblood[firstblood], $sql_firstblood[name], $gid, $gamename).'</td>
+    <td class="grey2" align="center" width="150">'.FormatPlayerName($sql_firstblood['country'], $sql_firstblood['firstblood'], $sql_firstblood['name'], $gid, $gamename).'</td>
   </tr>
 </tbody></table>';
 ?>

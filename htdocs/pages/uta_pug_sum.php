@@ -24,11 +24,11 @@ if (isset($dbversion) && floatval($dbversion) > 5.6) {
 }
 $q_matchsummary = mysql_query($sql_matchsummary) or die(mysql_error());
 $r_matchsummary = mysql_fetch_array($q_matchsummary);
-$serverip = $r_matchsummary[serverip];
-$servername = $r_matchsummary[servername];
-$serverinfo = $r_matchsummary[serverinfo];
-$gameinfo = $r_matchsummary[gameinfo];
-$total_time = $total_time + $r_matchsummary[totaltime];
+$serverip = $r_matchsummary['serverip'];
+$servername = $r_matchsummary['servername'];
+$serverinfo = $r_matchsummary['serverinfo'];
+$gameinfo = $r_matchsummary['gameinfo'];
+$total_time = $total_time + $r_matchsummary['totaltime'];
 $server_info = preg_split('/\n | \r/', $serverinfo, -1, PREG_SPLIT_NO_EMPTY);
 $out .= '
 	<table border="0" cellpadding="3" cellspacing="3" width="720" style="background-color:#0F1D2F">
@@ -85,22 +85,22 @@ $out .= '
 $i = 0;
 	while ($p_sql = mysql_fetch_assoc($q_sql)) 
 	{	
-		if(substr($p_sql[pname], -1) != '®'){ continue; }
+		if(substr($p_sql['pname'], -1) != '®'){ continue; }
 		$tr_color = ($i % 2)? "#8F8F8F" : "";
 	
 		$out .=  '<tr class="grey" style="background-color:'.$tr_color.'; height:20px; vertical-align:middle">';
-		$out .=  '<td nowrap align="left"><b>'.FormatPlayerName($p_sql[pcountry], $p_sql[pid], $p_sql[pname]).'</b></td>';
-		$out .=  '<td nowrap align="center">'.$p_sql[objs].'</td>';
-		$out .=  '<td nowrap align="center">'.$p_sql[ass_assist].'</td>';
-		$out .=  '<td nowrap align="center">'.$p_sql[ass_h_launch].'</td>';
-		$out .=  '<td nowrap align="center">'.$p_sql[ass_h_launched].'</td>';
-		$out .=  '<td nowrap align="center">'.$p_sql[ass_r_launch].'</td>';
-		$out .=  '<td nowrap align="center">'.$p_sql[ass_r_launched].'</td>';
-		$out .=  '<td nowrap align="center">'.$p_sql[ass_h_jump].'</td>';
-		$out .=  '<td nowrap align="center">'.$p_sql[kills].'</td>';
-		$out .=  '<td nowrap align="center">'.$p_sql[deaths].'</td>';
-		$out .=  '<td nowrap align="center">'.intval($p_sql[maps] / 2).'</td>';
-		$out .=  '<td nowrap align="center">'.intval($p_sql[ping]).'</td>';
+		$out .=  '<td nowrap align="left"><b>'.FormatPlayerName($p_sql['pcountry'], $p_sql['pid'], $p_sql['pname']).'</b></td>';
+		$out .=  '<td nowrap align="center">'.$p_sql['objs'].'</td>';
+		$out .=  '<td nowrap align="center">'.$p_sql['ass_assist'].'</td>';
+		$out .=  '<td nowrap align="center">'.$p_sql['ass_h_launch'].'</td>';
+		$out .=  '<td nowrap align="center">'.$p_sql['ass_h_launched'].'</td>';
+		$out .=  '<td nowrap align="center">'.$p_sql['ass_r_launch'].'</td>';
+		$out .=  '<td nowrap align="center">'.$p_sql['ass_r_launched'].'</td>';
+		$out .=  '<td nowrap align="center">'.$p_sql['ass_h_jump'].'</td>';
+		$out .=  '<td nowrap align="center">'.$p_sql['kills'].'</td>';
+		$out .=  '<td nowrap align="center">'.$p_sql['deaths'].'</td>';
+		$out .=  '<td nowrap align="center">'.intval($p_sql['maps'] / 2).'</td>';
+		$out .=  '<td nowrap align="center">'.intval($p_sql['ping']).'</td>';
 		$out .=  '</tr>';
 		$i++;
 	}
@@ -122,20 +122,20 @@ $i = 0;
 	$q_sql = mysql_query($sql) or die(mysql_error());
 	while ($p_sql = mysql_fetch_assoc($q_sql)) {
 	$tr_color = ($i % 2)? "#8F8F8F" : "";
-	$team = ($p_sql[team] == '1') ? "Red" : "Blue";
+	$team = ($p_sql['team'] == '1') ? "Red" : "Blue";
 		$out .=  '<tr class="grey" style="background-color:'.$tr_color.'; height:20px; vertical-align:middle">
 							<td nowrap align="left"><b>'.$team.'</b></td>
-							<td nowrap align="center">'.$p_sql[objs].'</td>
-							<td nowrap align="center">'.$p_sql[ass_assist].'</td>
-							<td nowrap align="center">'.$p_sql[ass_h_launch].'</td>
-							<td nowrap align="center">'.$p_sql[ass_h_launched].'</td>
-							<td nowrap align="center">'.$p_sql[ass_r_launch].'</td>
-							<td nowrap align="center">'.$p_sql[ass_r_launched].'</td>
-							<td nowrap align="center">'.$p_sql[ass_h_jump].'</td>
-							<td nowrap align="center">'.$p_sql[kills].'</td>
-							<td nowrap align="center">'.$p_sql[deaths].'</td>
+							<td nowrap align="center">'.$p_sql['objs'].'</td>
+							<td nowrap align="center">'.$p_sql['ass_assist'].'</td>
+							<td nowrap align="center">'.$p_sql['ass_h_launch'].'</td>
+							<td nowrap align="center">'.$p_sql['ass_h_launched'].'</td>
+							<td nowrap align="center">'.$p_sql['ass_r_launch'].'</td>
+							<td nowrap align="center">'.$p_sql['ass_r_launched'].'</td>
+							<td nowrap align="center">'.$p_sql['ass_h_jump'].'</td>
+							<td nowrap align="center">'.$p_sql['kills'].'</td>
+							<td nowrap align="center">'.$p_sql['deaths'].'</td>
 							<td nowrap align="center"> -- </td>
-							<td nowrap align="center">'.intval($p_sql[ping]).'</td>
+							<td nowrap align="center">'.intval($p_sql['ping']).'</td>
 					</tr>';
 		$i++;
 	}

@@ -1,13 +1,13 @@
 <?php 
 	// Get the unique ID of this player.
 	// Create a new one if he has none yet.
-	$r_pid = small_query("SELECT id, country, banned FROM uts_pinfo WHERE name = '$playername'");
+	$r_pid = small_query("SELECT id, country, banned FROM uts_pinfo WHERE name = '".$playername."'");
 	if ($r_pid) {
 		$pid = $r_pid['id'];
 		$pid_country = $r_pid['country'];
 		$playerbanned = ($r_pid['banned'] == 'Y') ? true : false;
 	} else {
-		mysql_query("INSERT INTO uts_pinfo SET name = '$playername'") or die("import_playerstuff pinfo INSERT; ".mysql_error());
+		mysql_query("INSERT INTO uts_pinfo SET name = '".$playername."'") or die("import_playerstuff pinfo INSERT; ".mysql_error());
 		$pid = mysql_insert_id();
 		$pid_country = false;
 		$playerbanned = false;
@@ -20,13 +20,13 @@
 	
 	// Did the player do first blood?
 	if ($playerid == $firstblood) {
-		$upd_firstblood = "UPDATE uts_match SET firstblood = '$pid' WHERE id = '$matchid'";
+		$upd_firstblood = "UPDATE uts_match SET firstblood = '".$pid."' WHERE id = '".$matchid."'";
 		mysql_query($upd_firstblood) or die("import_playerstuff FB; ".mysql_error());
 	}
 
 	// Get player's IP
-	$q_playerip = small_query("SELECT INET_ATON(col4) AS ip FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'IP' and col3 = '$playerid' ORDER BY id ASC LIMIT 0,1");
-	$playerip = $q_playerip[ip];
+	$q_playerip = small_query("SELECT INET_ATON(col4) AS ip FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'IP' and col3 = '".$playerid."' ORDER BY id ASC LIMIT 0,1");
+	$playerip = $q_playerip['ip'];
 
 	// Check if player is in $ignored array (excludes ®egistered players [pug/league]) --// Added 29/04/07 Timo.
 	if (in_array($playerip,$ignored) && ord(substr($playername,-1,1))<>174)
@@ -43,29 +43,29 @@
 	$q_playercountry = small_query($sql_playercountry);
 
 	if ($q_playercountry) {
-		$playercountry = strtolower($q_playercountry[country]);
+		$playercountry = strtolower($q_playercountry['country']);
 	} else {
 		$playercountry = "xx";
 	}
 	
 	if ($playercountry != $pid_country) {
-		mysql_query("UPDATE uts_pinfo SET country = '$playercountry', banned = '".($playerbanned==true ? 'Y' : 'N')."' WHERE id = '$pid'") or die(mysql_error());
+		mysql_query("UPDATE uts_pinfo SET country = '".$playercountry."', banned = '".($playerbanned==true ? 'Y' : 'N')."' WHERE id = '".$pid."'") or die(mysql_error());
 	}
 
 	// Do we import banned players? --// recheck by Timo 29/04/07
 	if ($playerbanned and $import_ban_type == 2) return;
 
 	// Get Sprees
-	$q_spree_dbl = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_dbl' AND col3 = '$playerid'");
-	$q_spree_mult = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_mult' AND col3 = '$playerid'");
-	$q_spree_ult = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_ult' AND col3 = '$playerid'");
-	$q_spree_mon = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_mon' AND col3 = '$playerid'");
+	$q_spree_dbl = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_dbl' AND col3 = '".$playerid."'");
+	$q_spree_mult = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_mult' AND col3 = '".$playerid."'");
+	$q_spree_ult = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_ult' AND col3 = '".$playerid."'");
+	$q_spree_mon = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_mon' AND col3 = '".$playerid."'");
 
-	$q_spree_kill = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_kill' AND col3 = '$playerid'");
-	$q_spree_rampage = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_rampage' AND col3 = '$playerid'");
-	$q_spree_dom = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_dom' AND col3 = '$playerid'");
-	$q_spree_uns = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_uns' AND col3 = '$playerid'");
-	$q_spree_god = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_god' AND col3 = '$playerid'");
+	$q_spree_kill = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_kill' AND col3 = '".$playerid."'");
+	$q_spree_rampage = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_rampage' AND col3 = '".$playerid."'");
+	$q_spree_dom = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_dom' AND col3 = '".$playerid."'");
+	$q_spree_uns = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_uns' AND col3 = '".$playerid."'");
+	$q_spree_god = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_god' AND col3 = '".$playerid."'");
 
 
 	// Get Count of Pickups
@@ -81,19 +81,19 @@
 
 	while ($r_player7 = mysql_fetch_array($q_player7)) {
 		// Cycle through pickups and see what the player got
-		IF ($r_player7[col2] == "Thigh Pads") { $pu_pads = $r_player7[pu_count]; }
-		IF ($r_player7[col2] == "Body Armor") { $pu_armour = $r_player7[pu_count]; }
-		IF ($r_player7[col2] == "Super Health Pack") { $pu_keg = $r_player7[pu_count]; }
-		IF ($r_player7[col2] == "ShieldBelt") { $pu_belt = $r_player7[pu_count]; }
-		IF ($r_player7[col2] == "Damage Amplifier") { $pu_amp = $r_player7[pu_count]; }
-		IF ($r_player7[col2] == "Invisibility") { $pu_invis = $r_player7[pu_count]; }
+		IF ($r_player7['col2'] == "Thigh Pads") { $pu_pads = $r_player7['pu_count']; }
+		IF ($r_player7['col2'] == "Body Armor") { $pu_armour = $r_player7['pu_count']; }
+		IF ($r_player7['col2'] == "Super Health Pack") { $pu_keg = $r_player7['pu_count']; }
+		IF ($r_player7['col2'] == "ShieldBelt") { $pu_belt = $r_player7['pu_count']; }
+		IF ($r_player7['col2'] == "Damage Amplifier") { $pu_amp = $r_player7['pu_count']; }
+		IF ($r_player7['col2'] == "Invisibility") { $pu_invis = $r_player7['pu_count']; }
 	}
 
 	// Get ping information
 	$r_player9 = small_query("SELECT MIN(col4 * 1) AS lowping, MAX(col4 * 1) AS highping, AVG(col4 * 1) AS avgping FROM uts_temp_$uid WHERE col1 = 'Player' AND col2 = 'Ping' AND col3 = $playerid AND col4 > 0");
-	$lowping = $r_player9[lowping];
-	$highping = $r_player9[highping];
-	$avgping = $r_player9[avgping];
+	$lowping = $r_player9['lowping'];
+	$highping = $r_player9['highping'];
+	$avgping = $r_player9['avgping'];
 
 	// People who join at the end error the import, this stops it
 	IF ($lowping == NULL) { $lowping = 0; }
@@ -122,23 +122,23 @@
 	$q_score = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'score' AND col3 = $playerid");
 
 	IF ($teamgame == "True") {
-		$r_kills = $q_kills[col4];
-		$r_teamkills = $q_teamkills[col4];
+		$r_kills = $q_kills['col4'];
+		$r_teamkills = $q_teamkills['col4'];
 	}
 	IF ($teamgame == "False") {
-		$r_kills = $q_kills[col4] + $q_teamkills[col4];
+		$r_kills = $q_kills['col4'] + $q_teamkills['col4'];
 		$r_teamkills = 0;
 	}
 
-	$r_acc = get_dp($q_acc[col4]);
-	$r_efficiency = get_dp($q_efficiency[col4]);
-	$r_deaths = $q_deaths[col4];
-	$r_suicides = $q_suicides[col4];
+	$r_acc = get_dp($q_acc['col4']);
+	$r_efficiency = get_dp($q_efficiency['col4']);
+	$r_deaths = $q_deaths['col4'];
+	$r_suicides = $q_suicides['col4'];
 	$r_frags = $r_kills - $r_suicides - $r_teamkills;
 
-	$r_tos = get_dp($q_tos[col4]);
-	$r_ttl = get_dp($q_ttl[col4]);
-	$r_score = $q_score[col4];
+	$r_tos = get_dp($q_tos['col4']);
+	$r_ttl = get_dp($q_ttl['col4']);
+	$r_score = $q_score['col4'];
 
 	// Generate player record
 	$sql_playerid = "	INSERT 

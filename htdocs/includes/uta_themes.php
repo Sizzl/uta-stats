@@ -6,10 +6,10 @@ session_start();
 $themeselection = "<form method=\"GET\" action=\"".$_SERVER['SCRIPT_NAME']."\">\r\n";
 $currentpage = str_replace("?theme=","?oldtheme=",$_SERVER["QUERY_STRING"]);
 $currentpage = str_replace("&theme=","&oldtheme=",$currentpage);
-$currentarray = split("&",$currentpage); // added section to keep current display page! --// 23/07/05 Timo.
+$currentarray = explode("&",$currentpage); // added section to keep current display page! --// 23/07/05 Timo.
 for ($i=0;$i<count($currentarray);$i++)
 {
-	$currentvar = split("=",$currentarray[$i]);
+	$currentvar = explode("=",$currentarray[$i]);
 	if (count($currentvar) > 1)
 		$themeselection .= "<input type=\"hidden\" name=\"".$currentvar[0]."\" value=\"".$currentvar[1]."\" />\r\n";
 }

@@ -1,9 +1,9 @@
 <?php 
 global $dbversion;
 
-$mid = $_GET[mid];
-$pid = $_GET[pid];
-$r_infos = small_query("SELECT p.playerid, p.country, pi.name, pi.banned, p.gid, g.name AS gamename FROM uts_player p, uts_pinfo pi, uts_games g WHERE p.gid = g.id AND p.pid = pi.id AND p.pid = '$pid'  AND matchid = '$mid' LIMIT 0,1;");
+$mid = $_GET['mid'];
+$pid = $_GET['pid'];
+$r_infos = small_query("SELECT p.playerid, p.country, pi.name, pi.banned, p.gid, g.name AS gamename FROM uts_player p, uts_pinfo pi, uts_games g WHERE p.gid = g.id AND p.pid = pi.id AND p.pid = '".$pid."'  AND matchid = '".$mid."' LIMIT 0,1;");
 
 if (!$r_infos) {
 	echo "Unable to retrieve data!";
@@ -58,12 +58,12 @@ $suicidecount = small_query("SELECT SUM(suicides) AS result FROM uts_match WHERE
 
 echo'
   <tr>
-    <td class="smheading" align="center" width="45">'.$teamscore[result].'</td>
-    <td class="smheading" align="center" width="50">'.$playerscore[result].'</td>
-    <td class="smheading" align="center" width="45">'.$fragcount[result].'</td>
-    <td class="smheading" align="center" width="45">'.$killcount[result].'</td>
-    <td class="smheading" align="center" width="50">'.$deathcount[result].'</td>
-    <td class="smheading" align="center" width="60">'.$suicidecount[result].'</td>
+    <td class="smheading" align="center" width="45">'.$teamscore['result'].'</td>
+    <td class="smheading" align="center" width="50">'.$playerscore['result'].'</td>
+    <td class="smheading" align="center" width="45">'.$fragcount['result'].'</td>
+    <td class="smheading" align="center" width="45">'.$killcount['result'].'</td>
+    <td class="smheading" align="center" width="50">'.$deathcount['result'].'</td>
+    <td class="smheading" align="center" width="60">'.$suicidecount['result'].'</td>
   </tr>
 </tbody></table>
 <br>
@@ -73,10 +73,10 @@ echo'
   </tr>';
 
 $matchinfo = small_query("SELECT m.time, m.servername, g.name AS gamename, m.mapname, m.mapfile, m.serverinfo, m.gameinfo, m.mutators, m.serverip FROM uts_match m, uts_games g WHERE m.gid = g.id AND m.id = $mid");
-$matchdate = mdate($matchinfo[time]);
-$gamename = $matchinfo[gamename];
+$matchdate = mdate($matchinfo['time']);
+$gamename = $matchinfo['gamename'];
 
-$mapname = un_ut($matchinfo[mapfile]);
+$mapname = un_ut($matchinfo['mapfile']);
 $mappic = strtolower("images/maps/".$mapname.".jpg");
 
 if (file_exists($mappic)) {
@@ -91,26 +91,26 @@ if (file_exists($mappic)) {
     <td class="dark" align="center" width="110">Match Date</td>
     <td class="grey" align="center" width="250">'.$matchdate.'</td>
     <td class="dark" align="center" width="110">Server</td>
-    <td class="grey" align="center" width="250"><a class="grey" href="./?p=sinfo&amp;serverip='.$matchinfo[serverip].'">'.$matchinfo[servername].'</a></td>
+    <td class="grey" align="center" width="250"><a class="grey" href="./?p=sinfo&amp;serverip='.$matchinfo['serverip'].'">'.$matchinfo['servername'].'</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Match Type</td>
     <td class="grey" align="center">'.$gamename.'</td>
     <td class="dark" align="center">Map Name</td>
-    <td class="greyhuman" align="center"><a class="grey" href="./?p=minfo&amp;map='.$myurl.'">'.$matchinfo[mapname].'</a></td>
+    <td class="greyhuman" align="center"><a class="grey" href="./?p=minfo&amp;map='.$myurl.'">'.$matchinfo['mapname'].'</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Server Info</td>
-    <td class="grey" align="center">'.$matchinfo[serverinfo].'</td>
+    <td class="grey" align="center">'.$matchinfo['serverinfo'].'</td>
     <td class="dark" align="center" rowspan="4" colspan="2"><img border="0" alt="'.$mapname.'" title="'.$mapname.'" src="'.$mappic.'"></td>
   </tr>
   <tr>
     <td class="dark" align="center">Game Info</td>
-    <td class="grey" align="center">'.$matchinfo[gameinfo].'</td>
+    <td class="grey" align="center">'.$matchinfo['gameinfo'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Mutators</td>
-    <td class="grey" align="center">'.$matchinfo[mutators].'</td>
+    <td class="grey" align="center">'.$matchinfo['mutators'].'</td>
   </tr>
 </tbody></table>
 <br>
@@ -141,22 +141,22 @@ if (isset($dbversion) && floatval($dbversion) > 5.6) {
 			ANY_VALUE(spree_dom) AS `spree_dom`,
 			ANY_VALUE(spree_uns) AS `spree_uns`,
 			ANY_VALUE(spree_god) AS `spree_god`
-		FROM uts_player WHERE `matchid` = '$mid' AND `pid` = '$pid' GROUP BY `pid`;";
+		FROM uts_player WHERE `matchid` = '".$mid."' AND `pid` = '".$pid."' GROUP BY `pid`;";
 } else {
-  $r_gsumq = "SELECT gamescore, frags, SUM(frags+suicides) AS kills, deaths, suicides, teamkills, eff, accuracy, ttl, gametime, spree_kill, spree_rampage, spree_dom, spree_uns, spree_god FROM uts_player WHERE matchid = $mid AND pid = '$pid' GROUP BY pid;";
+  $r_gsumq = "SELECT gamescore, frags, SUM(frags+suicides) AS kills, deaths, suicides, teamkills, eff, accuracy, ttl, gametime, spree_kill, spree_rampage, spree_dom, spree_uns, spree_god FROM uts_player WHERE matchid = $mid AND pid = '".$pid."' GROUP BY pid;";
 }
 $r_gsumm = zero_out(small_query($r_gsumq));
 
   echo'
   <tr>
-	<td class="grey" align="center">'.$r_gsumm[frags].'</td>
-	<td class="grey" align="center">'.$r_gsumm[kills].'</td>
-	<td class="grey" align="center">'.$r_gsumm[deaths].'</td>
-	<td class="grey" align="center">'.$r_gsumm[suicides].'</td>
-	<td class="grey" align="center">'.$r_gsumm[eff].'</td>
-	<td class="grey" align="center">'.$r_gsumm[accuracy].'</td>
-	<td class="grey" align="center">'.$r_gsumm[ttl].'</td>
-	<td class="grey" align="center">'.GetMinutes($r_gsumm[gametime]).'</td>
+	<td class="grey" align="center">'.$r_gsumm['frags'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['kills'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['deaths'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['suicides'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['eff'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['accuracy'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['ttl'].'</td>
+	<td class="grey" align="center">'.GetMinutes($r_gsumm['gametime']).'</td>
   </tr>';
 
 echo'
@@ -191,15 +191,15 @@ if (isset($dbversion) && floatval($dbversion) > 5.6) {
 			ANY_VALUE(spree_dom) AS `spree_dom`,
 			ANY_VALUE(spree_uns) AS `spree_uns`,
 			ANY_VALUE(spree_god) AS `spree_god`
-		FROM uts_player WHERE `matchid` = '$mid' AND `pid` = '$pid' GROUP BY `pid`;";
+		FROM uts_player WHERE `matchid` = '".$mid."' AND `pid` = '".$pid."' GROUP BY `pid`;";
 } else {
-  $r_gsumq = "SELECT spree_double, spree_multi, spree_ultra, spree_monster, spree_kill, spree_rampage, spree_dom, spree_uns, spree_god FROM uts_player WHERE `matchid` = '$mid' AND `pid` = '$pid' GROUP BY `pid`;";
+  $r_gsumq = "SELECT spree_double, spree_multi, spree_ultra, spree_monster, spree_kill, spree_rampage, spree_dom, spree_uns, spree_god FROM uts_player WHERE `matchid` = '".$mid."' AND `pid` = '".$pid."' GROUP BY `pid`;";
 }
 $r_gsumm = zero_out(small_query($r_gsumq));
 
 $sql_firstblood = small_query("SELECT firstblood FROM uts_match WHERE id = $mid");
 
-IF ($sql_firstblood[firstblood] == $pid) {
+IF ($sql_firstblood['firstblood'] == $pid) {
 	$firstblood = "Yes";
 } else {
 	$firstblood = "No";
@@ -209,15 +209,15 @@ IF ($sql_firstblood[firstblood] == $pid) {
   echo'
   <tr>
 	<td class="grey" align="center">'.$firstblood.'</td>
-	<td class="grey" align="center">'.$r_gsumm[spree_double].'</td>
-	<td class="grey" align="center">'.$r_gsumm[spree_multi].'</td>
-	<td class="grey" align="center">'.$r_gsumm[spree_ultra].'</td>
-	<td class="grey" align="center">'.$r_gsumm[spree_monster].'</td>
-	<td class="grey" align="center">'.$r_gsumm[spree_kill].'</td>
-	<td class="grey" align="center">'.$r_gsumm[spree_rampage].'</td>
-	<td class="grey" align="center">'.$r_gsumm[spree_dom].'</td>
-	<td class="grey" align="center">'.$r_gsumm[spree_uns].'</td>
-	<td class="grey" align="center">'.$r_gsumm[spree_god].'</td>
+	<td class="grey" align="center">'.$r_gsumm['spree_double'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['spree_multi'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['spree_ultra'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['spree_monster'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['spree_kill'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['spree_rampage'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['spree_dom'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['spree_uns'].'</td>
+	<td class="grey" align="center">'.$r_gsumm['spree_god'].'</td>
   </tr>
   </tbody></table>
 <br>';
