@@ -55,36 +55,45 @@ $options['vars'][$i]['initialvalue'] = 'ip_from';
 */
 
 
-function adminselect(&$options) {
+function adminselect(&$options)
+{
 	global $dbversion;
 	$i = !empty($_REQUEST['step']) ? $_REQUEST['step'] : 0;
 
 	if (!isset($options['showlist'])) $options['showlist']==true; // Display list of players --// Default to true - Timo 01/05/07
 
-	if (isset($_REQUEST['back'])) {
+	if (isset($_REQUEST['back']))
+	{
 		if (isset($_REQUEST['cur_var'])) unset($_REQUEST[$_REQUEST['cur_var']]);
 		$i -= 2;
 	}
-	if (isset($_REQUEST['noop'])) {
+	if (isset($_REQUEST['noop']))
+	{
 		if (isset($_REQUEST['cur_var'])) unset($_REQUEST[$_REQUEST['cur_var']]);
 		$i -= 1;
 	}
-	if (!isset($_REQUEST['noop'])) {
+	if (!isset($_REQUEST['noop']))
+	{
 		if (isset($_REQUEST['playerfilter'])) unset($_REQUEST['playerfilter']);
 	}
 	$step = $i + 1;
 	$maxsteps = count($options['vars']);
 	if (!isset($options['requireconfirmation']) or $options['requireconfirmation']) $maxsteps++;
-	if (!isset($_REQUEST['values']) or empty($_REQUEST['values'])) {
+	if (!isset($_REQUEST['values']) or empty($_REQUEST['values']))
+	{
 		$values = array();
-	} else {
+	}
+	else
+	{
 		$valtmp = explode(',', $_REQUEST['values']);
-		foreach($valtmp as $valtmp2) {
+		foreach($valtmp as $valtmp2)
+		{
 			$valtmp3 = explode('=>', $valtmp2);
 			$values[$valtmp3[0]] = $valtmp3[1];
 		}
 	}
-	if (isset($_REQUEST['submit']) and isset($_REQUEST['cur_var'])) {
+	if (isset($_REQUEST['submit']) and isset($_REQUEST['cur_var']))
+	{
 		$values[$_REQUEST['cur_var']] = $_REQUEST[$_REQUEST['cur_var']];
 		unset($_REQUEST[$_REQUEST['cur_var']]);
 		if (isset($options['vars'][$i - 1]['exitif']) and $options['vars'][$i - 1]['exitif'] == $values[$_REQUEST['cur_var']]) $i = $maxsteps;
@@ -100,28 +109,38 @@ function adminselect(&$options) {
 	echo '<form action="'. $_SERVER['PHP_SELF'] .'" method="POST">';
 
 	echo '<table border="0" cellpadding="1" cellspacing="2" width="600">';
-	if ($step == $maxsteps) {
+	if ($step == $maxsteps)
+	{
 		echo '<tr><td colspan="2" class="medheading">Please Confirm!</td></tr>';
 	}
 
-	foreach($options['vars'] as $num => $var) {	
+	foreach($options['vars'] as $num => $var)
+	{
 		if ((!isset($values[$var['name']]) and $num != $i) or $num > $i) continue;
 		echo '<tr><td class="smheading" width="150">';
 		
-		if ($num == $i or !isset($var['caption'])) {
+		if ($num == $i or !isset($var['caption']))
+		{
 			echo htmlentities($var['prompt']);
-		} else {
+		}
+		else
+		{
 			echo htmlentities($var['caption']);
 		}
 		
 		echo '</td>';
 		
 		echo '<td class="grey" width="400">';
-		if ($num != $i) {
-			if (isset($var['extraoption']) and $values[$var['name']] == $var['extraoption']) {
+		if ($num != $i)
+		{
+			if (isset($var['extraoption']) and $values[$var['name']] == $var['extraoption'])
+			{
 				echo htmlentities($values[$var['name']]);
-			} else {
-				switch($var['type']) {
+			}
+			else
+			{
+				switch($var['type'])
+				{
 					case 'game':
 						$r_game = small_query("SELECT gamename, name FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '". $values[$var['name']] ."'");
 						echo htmlentities($r_game['name']) .' ('. htmlentities($r_game['gamename']) .')';
@@ -146,22 +165,30 @@ function adminselect(&$options) {
 						echo 'Show: Don\'tknow what to do with type '. $var['type'];
 				}
 			}
-		} else {
+		}
+		else
+		{
 			if (isset($var['initialvalue']) and isset($values[$var['initialvalue']])) $values[$var['name']] = $values[$var['initialvalue']];
 			echo '<input type="hidden" name="cur_var" value="'.$var['name'].'">';
-			switch($var['type']) {
+			switch($var['type'])
+			{
 				case 'game':
 					echo '<select class="searchform" name="'. $var['name'] .'">';
-					if (isset($var['extraoption'])) {
-						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']]) {
-						} else {
+					if (isset($var['extraoption']))
+					{
+						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+						{
+						}
+						else
+						{
 							echo '<option value="'.$var['extraoption'].'">'.$var['extraoption'].'</option>';
 						}
 					}
 					
 					$sql_game = "SELECT id, gamename, name FROM ".(isset($t_games) ? $t_games : "uts_games")." ORDER BY name ASC";
 					$q_game = mysql_query($sql_game) or die(mysql_error());
-					while ($r_game = mysql_fetch_array($q_game)) {
+					while ($r_game = mysql_fetch_array($q_game))
+					{
 						if (isset($var['exclude']) and $r_game['id'] == $values[$var['exclude']]) continue;
 						$selected = (isset($values[$var['name']]) and $r_game['id'] == $values[$var['name']]) ? 'selected' : '';
 						echo '<option '.$selected.' value="'.$r_game['id'].'">'. htmlentities($r_game['name'] .' ('. $r_game['gamename'] .')') .'</option>';
@@ -172,23 +199,38 @@ function adminselect(&$options) {
 				
 				case 'server':
 					echo '<select class="searchform" name="'. $var['name'] .'">';
-					if (isset($var['extraoption'])) {
-						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']]) {
-						} else {
+					if (isset($var['extraoption']))
+					{
+						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+						{
+						}
+						else
+						{
 							echo '<option value="'.$var['extraoption'].'">'.$var['extraoption'].'</option>';
 						}
 					}
-					
-					$sql_server = "SELECT id, servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." GROUP BY servername, serverip ORDER BY servername ASC";
-					if (isset($var['wheregid'])) {
-						if (isset($dbversion) && floatval($dbversion) > 5.6) {
+					if (isset($dbversion) && floatval($dbversion) > 5.6)
+					{
+						$sql_server = "SELECT ANY_VALUE(id), servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." GROUP BY servername, serverip ORDER BY servername ASC";
+					}
+					else
+					{
+						$sql_server = "SELECT id, servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." GROUP BY servername, serverip ORDER BY servername ASC";
+					}
+					if (isset($var['wheregid']))
+					{
+						if (isset($dbversion) && floatval($dbversion) > 5.6)
+						{
 							$sql_server = "SELECT ANY_VALUE(id), servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE gid = '". $values[$var['wheregid']] ."' GROUP BY servername, serverip ORDER BY servername ASC";
-						} else {
+						}
+						else
+						{
 							$sql_server = "SELECT id, servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE gid = '". $values[$var['wheregid']] ."' GROUP BY servername, serverip ORDER BY servername ASC";
 						}
 					}
 					$q_server = mysql_query($sql_server) or die(mysql_error());
-					while ($r_server = mysql_fetch_array($q_server)) {
+					while ($r_server = mysql_fetch_array($q_server))
+					{
 						if (isset($var['exclude']) and $r_server['id'] == $values[$var['exclude']]) continue;
 						$selected = (isset($values[$var['name']]) and $r_server['id'] == $values[$var['name']]) ? 'selected' : '';
 						echo '<option '.$selected.' value="'.$r_server['id'].'">'. htmlentities($r_server['servername'] .' ('. $r_server['serverip'] .')',ENT_SUBSTITUTE,"cp1252").'</option>';
@@ -200,38 +242,63 @@ function adminselect(&$options) {
 					if ($options['showlist']) // Altered to keep/remove player list --// Timo 01/05/07
 					{
 						echo '<select class="searchform" name="'. $var['name'] .'">';
-						if (isset($var['extraoption'])) {
-							if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']]) {
-							} else {
+						if (isset($var['extraoption']))
+						{
+							if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+							{
+							}
+							else
+							{
 								echo '<option value="'.$var['extraoption'].'">'.$var['extraoption'].'</option>';
 							}
 						}
 				
 						$where_extra = '';
-						if (isset($var['whereisbanned'])) {
+						if (isset($var['whereisbanned']))
+						{
 							$where_extra .= " AND pi.banned = '". $var['whereisbanned'] ."' ";
 						}
-						if (!empty($_REQUEST['playerfilter'])) {
+						if (!empty($_REQUEST['playerfilter']))
+						{
 							$where_extra .= " AND pi.name LIKE '%". my_addslashes($_REQUEST['playerfilter']) ."%' ";
 						}
 						$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE 1 $where_extra ORDER BY pi.name ASC";
-						if (isset($var['wherematch'])) {
-							if (isset($dbversion) && floatval($dbversion) > 5.6) {
+						if (isset($var['wherematch']))
+						{
+							if (isset($dbversion) && floatval($dbversion) > 5.6)
+							{
 								$sql_player = "SELECT pi.id, ANY_VALUE(pi.name) FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.matchid = '". $values[$var['wherematch']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
 							} else {
 								$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.matchid = '". $values[$var['wherematch']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
 							}
 						}
-						if (isset($var['whereserver'])) {
+						if (isset($var['whereserver']))
+						{
 							$r_server = small_query("SELECT servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '". $values[$var['whereserver']] ."'");
-							$sql_player = "SELECT DISTINCT pi.id, pi.name FROM ".(isset($t_match) ? $t_match : "uts_match")." m, ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE m.serverip = '".$r_server['serverip']."' AND  p.matchid = m.id AND  p.pid = pi.id $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+							if (isset($dbversion) && floatval($dbversion) > 5.6)
+							{
+								$sql_player = "SELECT DISTINCT pi.id, ANY_VALUE(pi.name) FROM ".(isset($t_match) ? $t_match : "uts_match")." m, ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE m.serverip = '".$r_server['serverip']."' AND  p.matchid = m.id AND  p.pid = pi.id $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+							}
+							else
+							{
+								$sql_player = "SELECT DISTINCT pi.id, pi.name FROM ".(isset($t_match) ? $t_match : "uts_match")." m, ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE m.serverip = '".$r_server['serverip']."' AND  p.matchid = m.id AND  p.pid = pi.id $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+							}
 						}
-						if (isset($var['wheregid'])) {
-							$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.gid = '". $values[$var['wheregid']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+						if (isset($var['wheregid']))
+						{
+							if (isset($dbversion) && floatval($dbversion) > 5.6)
+							{
+								$sql_player = "SELECT pi.id, ANY_VALUE(pi.name) FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.gid = '". $values[$var['wheregid']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+							}
+							else
+							{
+								$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.gid = '". $values[$var['wheregid']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";	
+							}
 						}
 
 						$q_player = mysql_query($sql_player) or die(mysql_error());
-						while ($r_player = mysql_fetch_array($q_player)) {
+						while ($r_player = mysql_fetch_array($q_player))
+						{
 							if (isset($var['exclude']) and $r_player['id'] == $values[$var['exclude']]) continue;
 							$selected = (isset($values[$var['name']]) and $r_player['id'] == $values[$var['name']]) ? 'selected' : '';
 							echo '<option '.$selected.' value="'.$r_player['id'].'">'. htmlentities($r_player['name'],ENT_SUBSTITUTE,"cp1252") .'</option>';
@@ -247,26 +314,34 @@ function adminselect(&$options) {
 				
 				case 'match':
 					echo '<select class="searchform" name="'. $var['name'] .'">';
-					if (isset($var['extraoption'])) {
-						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']]) {
-						} else {
+					if (isset($var['extraoption']))
+					{
+						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+						{
+						}
+						else
+						{
 							echo '<option value="'.$var['extraoption'].'">'.$var['extraoption'].'</option>';
 						}
 					}
 					
 					$sql_match = "SELECT id, time, serverip, mapfile FROM ".(isset($t_match) ? $t_match : "uts_match")." ORDER BY time DESC";
-					if (isset($var['whereserver'])) {
+					if (isset($var['whereserver']))
+					{
 						$r_server = small_query("SELECT servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '". $values[$var['whereserver']] ."'");
 						$sql_match = "SELECT id, time, serverip, mapfile FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE serverip = '".$r_server['serverip']."' ORDER BY time DESC";
 					}
-					if (isset($var['wheregid'])) {
+					if (isset($var['wheregid']))
+					{
 						$sql_match = "SELECT id, time, serverip, mapfile FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE gid = '". $values[$var['wheregid']] ."' ORDER BY time DESC";
 					}
-					if (isset($var['whereplayer'])) {
+					if (isset($var['whereplayer']))
+					{
 						$sql_match = "SELECT m.id AS id, m.time AS time, m.serverip AS serverip, m.mapfile AS mapfile FROM ".(isset($t_match) ? $t_match : "uts_match")." m, ".(isset($t_player) ? $t_player : "uts_player")." p WHERE pid = '". $values[$var['whereplayer']] ."' AND p.matchid = m.id ORDER BY time DESC";
 					}
 					$q_match = mysql_query($sql_match) or die(mysql_error());
-					while ($r_match = mysql_fetch_array($q_match)) {
+					while ($r_match = mysql_fetch_array($q_match))
+					{
 						if (isset($var['exclude']) and $r_match['id'] == $values[$var['exclude']]) continue;
 						$selected = (isset($values[$var['name']]) and $r_match['id'] == $values[$var['name']]) ? 'selected' : '';
 						echo '<option '.$selected.' value="'.$r_match['id'].'">'. htmlentities($r_match['id'].': '.mdate2($r_match['time']).' ('.un_ut($r_match['mapfile']).' on '.$r_match['serverip'].')',ENT_SUBSTITUTE,"cp1252").'</option>';
@@ -276,15 +351,20 @@ function adminselect(&$options) {
 					
 				case 'static':
 					echo '<select class="searchform" name="'. $var['name'] .'">';
-					if (isset($var['extraoption'])) {
-						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']]) {
-						} else {
+					if (isset($var['extraoption']))
+					{
+						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+						{
+						}
+						else
+						{
 							echo '<option value="'.$var['extraoption'].'">'.$var['extraoption'].'</option>';
 						}
 					}
 					
 					$sopts = explode('|', $var['options']);
-					foreach($sopts as $sval) {
+					foreach($sopts as $sval)
+					{
 						$selected = (isset($values[$var['name']]) and $sval == $values[$var['name']]) ? 'selected' : '';
 						echo '<option '.$selected.' value="'.$sval.'">'. htmlentities($sval) .'</option>';
 					}
@@ -305,7 +385,8 @@ function adminselect(&$options) {
 	}
 	
 	$valstr = '';
-	foreach($values as $key => $value) {
+	foreach($values as $key => $value)
+	{
 		if (empty($key)) continue;
 		if (!empty($valstr)) $valstr .= ',';
 		$valstr .= "$key=>$value";
@@ -314,9 +395,11 @@ function adminselect(&$options) {
 	
 	$_REQUEST['step'] = '';
 	$_REQUEST['values'] = '';
-	foreach($_REQUEST as $key => $value) {
+	foreach($_REQUEST as $key => $value)
+	{
 		if (isset($_COOKIE[$key])) continue;
-		switch($key){
+		switch($key)
+		{
 			case 'step':
 				$value = $step; break;
 			case 'values':
@@ -344,6 +427,4 @@ function adminselect(&$options) {
 	require('includes/footer.php');
 	exit;
 }
-
-
 ?>
