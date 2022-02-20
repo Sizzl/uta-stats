@@ -35,9 +35,9 @@ echo'<table border="0" cellpadding="1" cellspacing="2" width="600">
 
 <tr>
 	<td class="smheading" align="left" width="300">Removing Player Info:</td>';
-$r_pinfo = small_query("SELECT banned FROM uts_pinfo WHERE id = $playerid");
+$r_pinfo = small_query("SELECT banned FROM uts_pinfo WHERE id = '".$playerid."';");
 if ($r_pinfo['banned'] != 'Y') { 
-	mysql_query("DELETE FROM uts_pinfo WHERE id = $playerid") or die(mysql_error());
+	mysql_query("DELETE FROM uts_pinfo WHERE id = '".$playerid."';") or die(mysql_error());
 	echo'<td class="grey" align="left" width="300">Done</td>';
 } else {
 	echo'<td class="grey" align="left" width="300">No (player banned)</td>';
@@ -46,17 +46,17 @@ echo '
 </tr>
 <tr>
 	<td class="smheading" align="left">Removing Player Match Records:</td>';
-mysql_query("DELETE FROM uts_player WHERE pid = $playerid") or die(mysql_error());
+mysql_query("DELETE FROM uts_player WHERE pid = '".$playerid."';") or die(mysql_error());
 	echo'<td class="grey" align="left">Done</td>
 </tr>
 <tr>
 	<td class="smheading" align="left">Removing Player Rank:</td>';
-mysql_query("DELETE FROM uts_rank WHERE pid = $playerid") or die(mysql_error());
+mysql_query("DELETE FROM uts_rank WHERE pid = '".$playerid."';") or die(mysql_error());
 	echo'<td class="grey" align="left">Done</td>
 </tr>
 <tr>
 	<td class="smheading" align="left">Removing Player Weapon Stats:</td>';
-mysql_query("DELETE FROM uts_weaponstats WHERE pid = $playerid") or die(mysql_error());
+mysql_query("DELETE FROM uts_weaponstats WHERE pid = '".$playerid."';") or die(mysql_error());
 	echo'<td class="grey" align="left">Done</td>
 </tr>';
 
@@ -65,7 +65,7 @@ mysql_query("DELETE FROM uts_weaponstats WHERE pid = $playerid") or die(mysql_er
 echo'
 <tr>
 	<td class="smheading" align="left">Removing Player Assault Objectives:</td>';
-mysql_query("DELETE FROM uts_smartass_objstats WHERE pid = $playerid") or die(mysql_error());
+mysql_query("DELETE FROM uts_smartass_objstats WHERE pid = '".$playerid."';") or die(mysql_error());
 	echo'<td class="grey" align="left">Done</td>
 </tr>';
 

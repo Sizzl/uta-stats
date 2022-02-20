@@ -2,7 +2,7 @@
 	$sql_killmatrix = "SELECT 	col2 AS killer, 
 										col4 AS killed, 
 										COUNT(*) AS kills 
-							FROM 		uts_temp_$uid 
+							FROM 		uts_temp_".$uid." 
 							WHERE 	col1 = 'kill' 
 								OR		col1 = 'teamkill'
 							GROUP BY col2, col4";

@@ -17,8 +17,7 @@ $i++;
 
 $results = adminselect($options);
 
-
-$matchid = $results['mid'];
+ '".$matchid."' = $results['mid'];
 $pid = $results['pid'];
 
 echo'<br><table border="0" cellpadding="1" cellspacing="2" width="600">
@@ -29,7 +28,7 @@ echo'<br><table border="0" cellpadding="1" cellspacing="2" width="600">
 echo'<tr>
 	<td class="smheading" align="left" width="200">Amending Players Rank:</td>';
 
-$q_radjust = small_query("SELECT pid, gid, rank FROM uts_player WHERE id = $pid");
+$q_radjust = small_query("SELECT pid, gid, rank FROM uts_player WHERE id = '".$pid."';");
 if (!$q_radjust) {
 	$sql_crank = false;
 } else {
@@ -65,7 +64,7 @@ echo'</tr>
 
 <tr>
 	<td class="smheading" align="left" width="200">Removing Player Weapon Stats:</td>';
-mysql_query("DELETE FROM uts_weaponstats WHERE matchid = $matchid AND pid = $pid") or die(mysql_error());
+mysql_query("DELETE FROM uts_weaponstats WHERE matchid = '".$matchid."' AND pid = '".$pid."';") or die(mysql_error());
 	echo'<td class="grey" align="left" width="400">Done</td>
 </tr>';
 
@@ -74,7 +73,7 @@ mysql_query("DELETE FROM uts_weaponstats WHERE matchid = $matchid AND pid = $pid
 echo'
 <tr>
 	<td class="smheading" align="left" width="200">Removing Objective Stats:</td>';
-mysql_query("DELETE FROM uts_smartass_objstats WHERE matchid = $matchid AND pid = $pid") or die(mysql_error());
+mysql_query("DELETE FROM uts_smartass_objstats WHERE matchid = '".$matchid."' AND pid = '".$pid."';") or die(mysql_error());
 	echo'<td class="grey" align="left" width="400">Done</td>
 </tr>';
 
@@ -82,7 +81,7 @@ mysql_query("DELETE FROM uts_smartass_objstats WHERE matchid = $matchid AND pid 
 echo'
 <tr>
 	<td class="smheading" align="left" width="200">Removing Player From Match:</td>';
-mysql_query("DELETE FROM uts_player WHERE id = $pid") or die(mysql_error());
+mysql_query("DELETE FROM uts_player WHERE id = '".$pid."';") or die(mysql_error());
 	echo'<td class="grey" align="left" width="400">Done</td>
 </tr>
 <tr>

@@ -29,7 +29,7 @@
 			else
 				$dcap = min($r_killdata['vphealth']+$r_killdata['vparmour'],$r_killdata['damage']); // doesn't take into account ArmorAbsorption ratios, but is good enough
 		}
-		$sql =	"INSERT INTO uts_killsdetail (`matchid`,`victim`,`instigator`,`weapon`,`hit_time`,`hit_time_final`,`damage`,`damage_hp`,`damage_capped`,`victim_armour`,`victim_health`)
+		$sql =	"INSERT INTO uts_killsdetail (`matchid`,`victim`,`instigator`,`weapon`,`hit_time`,`hit_time_final`,`damage`,`damage_hp`,`damage_capped`,`victim_armour`,`victim_health`,`frag`)
 			VALUES ('".$matchid."',
 				'".$r_killdata['victim']."',
 				'".$r_killdata['instigator']."',
@@ -40,9 +40,9 @@
 				'".$r_killdata['damagehp']."',
 				'".$dcap."',
 				'".$r_killdata['varmour']."',
-				'".$r_killdata['vhealth']."'),
-				'".$frag."';";
-		mysql_query($sql) or die("import_kd ".mysql_error());
+				'".$r_killdata['vhealth']."',
+				'".$frag."');";
+		mysql_query($sql) or die("import_kd: ".mysql_error()."\n".$sql);
 	}
 ?>
 

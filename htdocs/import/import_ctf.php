@@ -2,22 +2,22 @@
 
 	// Cratos - EUT stuff ---start---
 
-    $q_matchmode = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'eut_matchmode' LIMIT 0,1");
+    $q_matchmode = small_query("SELECT col2 FROM uts_temp_".$uid." WHERE col1 = 'eut_matchmode' LIMIT 0,1");
 	if ($q_matchmode != NULL) $matchmode = ($q_matchmode['col2'] == "True") ? 1 : 0;
 	else $matchmode = 0; 	
-	$q_matchcode = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'eut_matchcode' LIMIT 0,1");
+	$q_matchcode = small_query("SELECT col2 FROM uts_temp_".$uid." WHERE col1 = 'eut_matchcode' LIMIT 0,1");
 	if ($q_matchcode != NULL) $matchcode = $q_matchcode['col2'];
 	else $matchcode = ""; 	
-	$q_matchlength = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'eut_matchlenth' LIMIT 0,1");
+	$q_matchlength = small_query("SELECT col2 FROM uts_temp_".$uid." WHERE col1 = 'eut_matchlenth' LIMIT 0,1");
 	if ($q_matchlength != NULL) $matchlength = $q_matchlength['col2'];
 	else $matchlength = 3;
-	$q_mapsleft = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'eut_mapsleft' LIMIT 0,1");
+	$q_mapsleft = small_query("SELECT col2 FROM uts_temp_".$uid." WHERE col1 = 'eut_mapsleft' LIMIT 0,1");
 	if ($q_mapsleft != NULL) $mapsleft = $q_mapsleft['col2'];
 	else $mapsleft = 0;
-	$q_teamnames = small_query("SELECT col2, col3 FROM uts_temp_$uid WHERE col1 = 'eut_teamnames_end' LIMIT 0,1");
+	$q_teamnames = small_query("SELECT col2, col3 FROM uts_temp_".$uid." WHERE col1 = 'eut_teamnames_end' LIMIT 0,1");
 	if ($q_teamnames != NULL) { $teamname0 = $q_teamnames['col2']; $teamname1 = $q_teamnames['col3']; }
 	else { $teamname0 = "RED"; $teamname1 = "BLUE"; }
-	$q_score = small_query("SELECT col4, col5 FROM uts_temp_$uid WHERE col1 = 'eut_teamscore_end' LIMIT 0,1");
+	$q_score = small_query("SELECT col4, col5 FROM uts_temp_".$uid." WHERE col1 = 'eut_teamscore_end' LIMIT 0,1");
 	if ($q_score != NULL) { $score0 = $q_score['col4']; $score1 = $q_score['col5']; }
 	else { $score0 = -1; $score1 = -1; }
 	
@@ -39,7 +39,7 @@
 
 
 // Get Player Flag Events Count
-	$sql_playerctf = "SELECT col1, COUNT(col1) AS flag_count FROM uts_temp_$uid WHERE col1 LIKE 'flag_%' AND col2 = $playerid GROUP BY col1";
+	$sql_playerctf = "SELECT col1, COUNT(col1) AS flag_count FROM uts_temp_".$uid." WHERE col1 LIKE 'flag_%' AND col2 = '".$playerid."' GROUP BY col1";
 	$q_playerctf = mysql_query($sql_playerctf);
 
 	$flag_taken = 0;

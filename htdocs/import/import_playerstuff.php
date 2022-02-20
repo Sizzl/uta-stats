@@ -1,13 +1,13 @@
 <?php 
 	// Get the unique ID of this player.
 	// Create a new one if he has none yet.
-	$r_pid = small_query("SELECT id, country, banned FROM uts_pinfo WHERE name = '".$playername."'");
+	$r_pid = small_query("SELECT id, country, banned FROM uts_pinfo WHERE name = '".$playername."';");
 	if ($r_pid) {
 		$pid = $r_pid['id'];
 		$pid_country = $r_pid['country'];
 		$playerbanned = ($r_pid['banned'] == 'Y') ? true : false;
 	} else {
-		mysql_query("INSERT INTO uts_pinfo SET name = '".$playername."'") or die("import_playerstuff pinfo INSERT; ".mysql_error());
+		mysql_query("INSERT INTO uts_pinfo SET name = '".$playername."';") or die("import_playerstuff pinfo INSERT; ".mysql_error());
 		$pid = mysql_insert_id();
 		$pid_country = false;
 		$playerbanned = false;
@@ -20,12 +20,12 @@
 	
 	// Did the player do first blood?
 	if ($playerid == $firstblood) {
-		$upd_firstblood = "UPDATE uts_match SET firstblood = '".$pid."' WHERE id = '".$matchid."'";
+		$upd_firstblood = "UPDATE uts_match SET firstblood = '".$pid."' WHERE id = '".$matchid."';";
 		mysql_query($upd_firstblood) or die("import_playerstuff FB; ".mysql_error());
 	}
 
 	// Get player's IP
-	$q_playerip = small_query("SELECT INET_ATON(col4) AS ip FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'IP' and col3 = '".$playerid."' ORDER BY id ASC LIMIT 0,1");
+	$q_playerip = small_query("SELECT INET_ATON(col4) AS ip FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'IP' and col3 = '".$playerid."' ORDER BY id ASC LIMIT 0,1;");
 	$playerip = $q_playerip['ip'];
 
 	// Check if player is in $ignored array (excludes ®egistered players [pug/league]) --// Added 29/04/07 Timo.
@@ -49,27 +49,27 @@
 	}
 	
 	if ($playercountry != $pid_country) {
-		mysql_query("UPDATE uts_pinfo SET country = '".$playercountry."', banned = '".($playerbanned==true ? 'Y' : 'N')."' WHERE id = '".$pid."'") or die(mysql_error());
+		mysql_query("UPDATE uts_pinfo SET country = '".$playercountry."', banned = '".($playerbanned==true ? 'Y' : 'N')."' WHERE id = '".$pid."';") or die(mysql_error());
 	}
 
 	// Do we import banned players? --// recheck by Timo 29/04/07
 	if ($playerbanned and $import_ban_type == 2) return;
 
 	// Get Sprees
-	$q_spree_dbl = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_dbl' AND col3 = '".$playerid."'");
-	$q_spree_mult = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_mult' AND col3 = '".$playerid."'");
-	$q_spree_ult = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_ult' AND col3 = '".$playerid."'");
-	$q_spree_mon = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_mon' AND col3 = '".$playerid."'");
+	$q_spree_dbl = small_count("SELECT id FROM uts_temp_".$uid." WHERE col1 = 'spree' AND col2 = 'spree_dbl' AND col3 = '".$playerid."';");
+	$q_spree_mult = small_count("SELECT id FROM uts_temp_".$uid." WHERE col1 = 'spree' AND col2 = 'spree_mult' AND col3 = '".$playerid."';");
+	$q_spree_ult = small_count("SELECT id FROM uts_temp_".$uid." WHERE col1 = 'spree' AND col2 = 'spree_ult' AND col3 = '".$playerid."';");
+	$q_spree_mon = small_count("SELECT id FROM uts_temp_".$uid." WHERE col1 = 'spree' AND col2 = 'spree_mon' AND col3 = '".$playerid."';");
 
-	$q_spree_kill = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_kill' AND col3 = '".$playerid."'");
-	$q_spree_rampage = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_rampage' AND col3 = '".$playerid."'");
-	$q_spree_dom = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_dom' AND col3 = '".$playerid."'");
-	$q_spree_uns = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_uns' AND col3 = '".$playerid."'");
-	$q_spree_god = small_count("SELECT id FROM uts_temp_$uid WHERE col1 = 'spree' AND col2 = 'spree_god' AND col3 = '".$playerid."'");
+	$q_spree_kill = small_count("SELECT id FROM uts_temp_".$uid." WHERE col1 = 'spree' AND col2 = 'spree_kill' AND col3 = '".$playerid."';");
+	$q_spree_rampage = small_count("SELECT id FROM uts_temp_".$uid." WHERE col1 = 'spree' AND col2 = 'spree_rampage' AND col3 = '".$playerid."';");
+	$q_spree_dom = small_count("SELECT id FROM uts_temp_".$uid." WHERE col1 = 'spree' AND col2 = 'spree_dom' AND col3 = '".$playerid."';");
+	$q_spree_uns = small_count("SELECT id FROM uts_temp_".$uid." WHERE col1 = 'spree' AND col2 = 'spree_uns' AND col3 = '".$playerid."';");
+	$q_spree_god = small_count("SELECT id FROM uts_temp_".$uid." WHERE col1 = 'spree' AND col2 = 'spree_god' AND col3 = '".$playerid."';");
 
 
 	// Get Count of Pickups
-	$sql_player7 = "SELECT col2, COUNT(col2) AS pu_count FROM uts_temp_$uid WHERE col1 = 'item_get' AND col3 = $playerid GROUP BY col2";
+	$sql_player7 = "SELECT col2, COUNT(col2) AS pu_count FROM uts_temp_".$uid." WHERE col1 = 'item_get' AND col3 = '".$playerid."' GROUP BY col2;";
 	$q_player7 = mysql_query($sql_player7);
 
 	$pu_pads = 0;
@@ -90,7 +90,7 @@
 	}
 
 	// Get ping information
-	$r_player9 = small_query("SELECT MIN(col4 * 1) AS lowping, MAX(col4 * 1) AS highping, AVG(col4 * 1) AS avgping FROM uts_temp_$uid WHERE col1 = 'Player' AND col2 = 'Ping' AND col3 = $playerid AND col4 > 0");
+	$r_player9 = small_query("SELECT MIN(col4 * 1) AS lowping, MAX(col4 * 1) AS highping, AVG(col4 * 1) AS avgping FROM uts_temp_".$uid." WHERE col1 = 'Player' AND col2 = 'Ping' AND col3 = '".$playerid."' AND col4 > 0");
 	$lowping = $r_player9['lowping'];
 	$highping = $r_player9['highping'];
 	$avgping = $r_player9['avgping'];
@@ -111,34 +111,110 @@
 	$r_tos = 0;
 	$r_ttl = 0;
 
-	$q_acc = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'accuracy' AND col3 = $playerid");
-	$q_deaths = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'deaths' AND col3 = $playerid");
-	$q_kills = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'kills' AND col3 = $playerid");
-	$q_teamkills = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'teamkills' AND col3 = $playerid");
-	$q_efficiency = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'efficiency' AND col3 = $playerid");
-	$q_suicides = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'suicides' AND col3 = $playerid");
-	$q_tos = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = $playerid");
-	$q_ttl = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'ttl' AND col3 = $playerid");
-	$q_score = small_query("SELECT `col4` FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'score' AND col3 = $playerid");
+	$q_acc = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'accuracy' AND col3 = '".$playerid."';");
+	$q_deaths = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'deaths' AND col3 = '".$playerid."';");
+	$q_kills = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'kills' AND col3 = '".$playerid."';");
+	$q_teamkills = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'teamkills' AND col3 = '".$playerid."';");
+	$q_efficiency = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'efficiency' AND col3 = '".$playerid."';");
+	$q_suicides = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'suicides' AND col3 = '".$playerid."';");
+	$q_tos = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = '".$playerid."';");
+	$q_ttl = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'ttl' AND col3 = '".$playerid."';");
+	$q_score = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'score' AND col3 = '".$playerid."';");
 
-	IF ($teamgame == "True") {
-		$r_kills = $q_kills['col4'];
-		$r_teamkills = $q_teamkills['col4'];
+	if (strlen($q_kills['col4']))
+    	$r_kills = $q_kills['col4'];
+	else
+	{
+		$q_kills = small_query("SELECT COUNT(`id`) AS `col4` FROM `uts_temp_".$uid."` WHERE `col1` = 'kill' AND `col2` = '".$playerid."';");
+		if (strlen($q_kills['col4']))
+			$r_kills = $q_kills['col4'];
 	}
-	IF ($teamgame == "False") {
-		$r_kills = $q_kills['col4'] + $q_teamkills['col4'];
+	if (strlen($q_teamkills['col4']))
+		$r_teamkills = $q_teamkills['col4'];
+	else
+	{
+		$q_teamkills = small_query("SELECT COUNT(`id`) AS `col4` FROM `uts_temp_".$uid."` WHERE `col1` = 'teamkill' AND `col2` = '".$playerid."';");
+		if (strlen($q_teamkills['col4']))
+			$r_teamkills = $q_teamkills['col4'];
+	}
+	if ($teamgame == "False") {
+		$r_kills = $r_kills + $r_teamkills;
 		$r_teamkills = 0;
 	}
 
-	$r_acc = get_dp($q_acc['col4']);
-	$r_efficiency = get_dp($q_efficiency['col4']);
-	$r_deaths = $q_deaths['col4'];
-	$r_suicides = $q_suicides['col4'];
+	if (strlen($q_deaths['col4']))
+		$r_deaths = $q_deaths['col4'];
+	else
+	{
+		$q_deaths = small_query("SELECT COUNT(`id`) AS `col4` FROM `uts_temp_".$uid."` WHERE (`col1` = 'kill' OR `col1` = 'teamkill') AND `uts_temp_".$uid."`.`col4` = '".$playerid."';");
+		if (strlen($q_deaths['col4']))
+			$r_deaths = $q_deaths['col4'];
+	}
+
+	if (strlen($q_suicides['col4']))
+		$r_suicides = $q_suicides['col4'];
+	else
+	{
+		$q_suicides = small_query("SELECT COUNT(`id`) AS `col4` FROM `uts_temp_".$uid."` WHERE `col1` = 'suicide' AND `col2` = '".$playerid."';");
+		if (strlen($q_suicides['col4']))
+			$r_suicides = $q_suicides['col4'];
+	}
+
 	$r_frags = $r_kills - $r_suicides - $r_teamkills;
 
-	$r_tos = get_dp($q_tos['col4']);
-	$r_ttl = get_dp($q_ttl['col4']);
-	$r_score = $q_score['col4'];
+	if (strlen($q_acc['col4']))
+		$r_acc = get_dp($q_acc['col4']);
+	else
+	{
+		$q_acc = small_query("SELECT AVG(`eff`) AS `eff`, AVG(`accuracy`) AS `accuracy`, `pid` FROM `uts_player` WHERE `pid` = '".$playerid2pid[$playerid]."' ORDER BY `matchid` DESC LIMIT 0, 10;");
+		if (strlen($q_acc['accuracy']))
+			$r_acc = get_dp($q_acc['accuracy']);
+		else
+			$r_acc = 10;
+		if (strlen($q_acc['eff']))
+			$r_efficiency = get_dp($q_efficiency['eff']);
+		else
+			$r_efficiency = 40;
+	}
+	if (strlen($q_efficiency['col4']))
+		$r_efficiency = get_dp($q_efficiency['col4']);
+
+	if (strlen($q_tos['col4']))
+		$r_tos = get_dp($q_tos['col4']);
+	else
+	{
+		$r_tos = 0;
+		$q_tos = small_query("SELECT col0 AS `pcon`,
+					(SELECT `col0` FROM `uts_temp_".$uid."` WHERE `col1` = 'player' AND `col2` = 'Disconnect' and `col4` = '".$playerid."') AS `pdis`,
+					(SELECT `col0` FROM `uts_temp_".$uid."` WHERE `col1` = 'game_end') AS `gmend`,
+					(SELECT `col0` FROM `uts_temp_".$uid."` WHERE `col1` = 'game_start') AS `gstrt`
+					FROM `uts_temp_".$uid."`
+					WHERE `col1` = 'player' AND `col2` = 'Connect' and `col4` = '".$playerid."';");
+		if (strlen($q_tos['pdis']) && strlen($q_tos['pcon']))
+		{
+			$r_tos = get_dp($q_tos['pdis']-$q_tos['pcon']);
+		}
+		elseif (strlen($q_tos['pcon']) && strlen($q_tos['gmend']))
+		{
+			if ($q_tos['gmend']-$q_tos['pcon'] > 0)
+				$r_tos = get_dp($q_tos['gmend']-$q_tos['pcon']);
+		}
+		if (strlen($q_tos['pcon']) && strlen($q_tos['gstrt']))
+		{
+			if (($q_tos['pcon'] > $q_tos['gstrt']) || strlen($q_tos['pdis']))
+				$r_ttl = $r_tos;
+			elseif ($q_tos['pcon'] < $q_tos['gstrt'] && strlen($q_tos['gmend']))
+				$r_ttl = get_dp($q_tos['gmend']-$q_tos['gstrt']);
+		}
+	}
+
+	if (strlen($q_ttl['col4']))
+		$r_ttl = get_dp($q_ttl['col4']);
+
+	if (strlen($q_score['col4']))
+		$r_score = $q_score['col4'];
+	else
+		$r_score = $r_kills;
 
 	// Generate player record
 	$sql_playerid = "	INSERT 

@@ -140,10 +140,20 @@ if ($ftp_use and !isset($_GET['no_ftp']))
 	$elapsed = $elapsed - (time() - $start_time);
 }
 
-
 $logdir = opendir('logs');
+$logfiles = array();
+echo "Looking for logs...  \n";
+while (false !== ($filename = readdir($logdir))) {
+        if ($filename != ".." && $filename != ".")
+                $logfiles[] = $filename;
+}
+unset($filename);
+echo count($logfiles)." logs found. \n";
+sort($logfiles);
+echo "Log files sorted alphabetically.\n";
 
-while (false !== ($filename = readdir($logdir)))
+// while (false !== ($filename = readdir($logdir)))
+foreach ($logfiles as $filename)
 {
 // Our (self set) timelimit exceeded => reload the page to prevent srcipt abort
 	if (!empty($import_reload_after) and $start_time + $import_reload_after <= time())
@@ -208,7 +218,7 @@ while (false !== ($filename = readdir($logdir)))
 
 	for (;;)
 	{
-		$sql = "CREATE ". ($import_use_temporary_tables ? 'TEMPORARY ' : '') ."TABLE `uts_temp_$uid` (`id` mediumint(5) NOT NULL, `col0` char(20) NOT NULL default '',";
+		$sql = "CREATE ". ($import_use_temporary_tables ? 'TEMPORARY ' : '') ."TABLE `uts_temp_".$uid."` (`id` mediumint(5) NOT NULL, `col0` char(20) NOT NULL default '',";
 		for ($c=1; $c < 21; $c++)
 		{
 			$sql = $sql."\n		`col".$c."` char(120) NULL default '',";
@@ -227,6 +237,7 @@ while (false !== ($filename = readdir($logdir)))
 		}
 		die("<br><strong>Unable to create the temporary table - are you allowed to create tables in this database?<br><br></strong><pre>".$sql."</pre>");
 	}
+	mysql_query("ALTER TABLE `uts_temp_".$uid."` ADD UNIQUE(`id`);");
 	$id = 0;
 
 	if ($html)
@@ -244,7 +255,7 @@ while (false !== ($filename = readdir($logdir)))
 	}
 	echo 'Creating Temp MySQL Table: ';
 	if ($html) echo '</td><td class="grey" align="left" width="200">';
-	echo "uts_temp_$uid\n";
+	echo "uts_temp_".$uid."\n";
 	if ($html) echo '</td></tr><tr><td class="smheading" align="left" width="350">';
 	echo 'Backing Up Log File: ';
 	if ($html) echo '</td><td class="grey" align="left" width="200">';
@@ -371,34 +382,34 @@ while (false !== ($filename = readdir($logdir)))
 	if ($html) echo '</td><td class="grey" align="left" width="200">';
 
 	// Get the match table info
-	$qm_time = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Absolute_Time'");
-	$qm_zone = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'GMT_Offset'");
-	$qm_servername = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_ServerName'");
-	$qm_serverip = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'True_Server_IP'");
-	$qm_serverport = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_Port'");
-	$qm_gamename = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GameName'");
+	$qm_time = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Absolute_Time'");
+	$qm_zone = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'GMT_Offset'");
+	$qm_servername = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_ServerName'");
+	$qm_serverip = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'True_Server_IP'");
+	$qm_serverport = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_Port'");
+	$qm_gamename = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'GameName'");
 
-	$qm_gamestart = small_query("SELECT col0 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'realstart'");
-	$qm_gameend = small_query("SELECT col0 FROM uts_temp_$uid WHERE col1 = 'game_end'");
+	$qm_gamestart = small_query("SELECT col0 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'realstart'");
+	$qm_gameend = small_query("SELECT col0 FROM uts_temp_".$uid." WHERE col1 = 'game_end'");
 
-	$qm_insta = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'insta'");
-// 	$qm_tournament = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'TournamentMode'");
-	$qm_teamgame = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'TeamGame'");
-	$qm_mapname = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'map' AND col2 = 'Title'");
-	$qm_mapfile = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'map' AND col2 = 'Name'");
-	$qm_frags = small_query("SELECT SUM(col4) AS frags FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'frags'");
-	$qm_kills = small_query("SELECT SUM(col4) AS kills FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'kills'");
-	$qm_suicides = small_query("SELECT SUM(col4) AS suicides FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'suicides'");
-	$qm_deaths = small_query("SELECT SUM(col4) AS deaths FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'deaths'");
-	$qm_teamkills = small_query("SELECT SUM(col4) AS teamkills FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'teamkills'");
+	$qm_insta = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'insta'");
+// 	$qm_tournament = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'TournamentMode'");
+	$qm_teamgame = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'TeamGame'");
+	$qm_mapname = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'map' AND col2 = 'Title'");
+	$qm_mapfile = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'map' AND col2 = 'Name'");
+	$qm_frags = small_query("SELECT SUM(col4) AS frags FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'frags'");
+	$qm_kills = small_query("SELECT SUM(col4) AS kills FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'kills'");
+	$qm_suicides = small_query("SELECT SUM(col4) AS suicides FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'suicides'");
+	$qm_deaths = small_query("SELECT SUM(col4) AS deaths FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'deaths'");
+	$qm_teamkills = small_query("SELECT SUM(col4) AS teamkills FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'teamkills'");
 
-	$qm_playercount = small_count("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'rename' GROUP BY col3");
+	$qm_playercount = small_count("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'rename' GROUP BY col3");
 
 	$s_frags = $qm_frags['frags'];
 	$s_suicides = $qm_suicides['suicides'];
 	$s_deaths = $qm_deaths['deaths'];
 
-	$sql_mutators = "SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GoodMutator'";
+	$sql_mutators = "SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'GoodMutator'";
 	$qm_mutators = "";
 	$q_mutators = mysql_query($sql_mutators);
 	while ($r_mutators = mysql_fetch_array($q_mutators))
@@ -442,22 +453,22 @@ while (false !== ($filename = readdir($logdir)))
 	else
 	{
 
-		$qm_serveran = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_AdminName'");
-		$qm_serverae = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_AdminEmail'");
-		$qm_serverm1 = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_MOTDLine1'");
-		$qm_serverm2 = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_MOTDLine2'");
-		$qm_serverm3 = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_MOTDLine3'");
-		$qm_serverm4 = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Server_MOTDLine4'");
+		$qm_serveran = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_AdminName'");
+		$qm_serverae = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_AdminEmail'");
+		$qm_serverm1 = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_MOTDLine1'");
+		$qm_serverm2 = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_MOTDLine2'");
+		$qm_serverm3 = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_MOTDLine3'");
+		$qm_serverm4 = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_MOTDLine4'");
 
-		$qm_gameinfotl = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'TimeLimit'");
-		$qm_gameinfofl = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'FragLimit'");
-		$qm_gameinfogt = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GoalTeamScore'");
-		$qm_gameinfomp = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'MaxPlayers'");
-		$qm_gameinfoms = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'MaxSpectators'");
-		$qm_gameinfogs = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'GameSpeed'");
-		$qm_gameinfout = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'UseTranslocator'");
-		$qm_gameinfoff = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'FriendlyFireScale' LIMIT 0,1");
-		$qm_gameinfows = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'WeaponsStay'");
+		$qm_gameinfotl = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'TimeLimit'");
+		$qm_gameinfofl = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'FragLimit'");
+		$qm_gameinfogt = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'GoalTeamScore'");
+		$qm_gameinfomp = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'MaxPlayers'");
+		$qm_gameinfoms = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'MaxSpectators'");
+		$qm_gameinfogs = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'GameSpeed'");
+		$qm_gameinfout = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'UseTranslocator'");
+		$qm_gameinfoff = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'FriendlyFireScale' LIMIT 0,1");
+		$qm_gameinfows = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'WeaponsStay'");
 		
 		$gametime = $qm_time['col3'];
 		$offset = $qm_zone['col3']; // --// Timo: 18/09/05
@@ -475,7 +486,7 @@ while (false !== ($filename = readdir($logdir)))
 		// ************************************************************************************
 		// CRATOS: Fix Servername
 		// ************************************************************************************
-		$q_sname = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'ass_servername'");
+		$q_sname = small_query("SELECT col2 FROM uts_temp_".$uid." WHERE col1 = 'ass_servername'");
 		if ($q_sname!=NULL)
 		{
 			$servername = trim($q_sname['col2']);	
@@ -506,7 +517,7 @@ while (false !== ($filename = readdir($logdir)))
 		// *******************************************************************************************************
 		// CRATOS: Fix GameStart/RealGameStart thingy		
 		// *******************************************************************************************************
-		$qm_gamestartreg = small_query("SELECT col0 FROM uts_temp_$uid WHERE col1 = 'game_start'");	
+		$qm_gamestartreg = small_query("SELECT col0 FROM uts_temp_".$uid." WHERE col1 = 'game_start'");	
 		if ($qm_gamestartreg!=NULL)
 			if ($qm_gamestart['col0'] < $qm_gamestartreg['col0'])
 				$servergametime = get_dp($qm_gameend['col0'] - $qm_gamestartreg['col0']);
@@ -553,7 +564,7 @@ while (false !== ($filename = readdir($logdir)))
 			if ($html) echo'<tr><td class="smheading" align="left" width="350">';
 			echo "Deleting Temp MySQL Table: ";
 			if ($html) echo '</td><td class="grey" align="left" width="200">';
-			echo "uts_temp_$uid\n";
+			echo "uts_temp_".$uid."\n";
 			if ($html) echo '</td></tr></table><br />';
 			echo "\n\n";		
 			// Delete log file
@@ -624,14 +635,13 @@ while (false !== ($filename = readdir($logdir)))
 		}
 
 
-		$qm_firstblood = small_query("SELECT col2 FROM uts_temp_$uid WHERE col1 = 'first_blood'");
+		$qm_firstblood = small_query("SELECT col2 FROM uts_temp_".$uid." WHERE col1 = 'first_blood'");
 
 		$firstblood = addslashes($qm_firstblood['col2']);
 
 
-		$serverinfo = addslashes("Admin: $qm_serveran['col3']<br />Email: $qm_serverae['col3'] <br /><br />
-		<u>MOTD</u><br />$qm_serverm1['col3']<br />$qm_serverm2['col3']<br />$qm_serverm3['col3']<br />$qm_serverm4['col3']");
-
+		$serverinfo = addslashes("Admin: ".$qm_serveran['col3']."<br />Email: ".$qm_serverae['col3']." <br /><br />
+		<u>MOTD</u><br />".$qm_serverm1['col3']."<br />".$qm_serverm2['col3']."<br />".$qm_serverm3['col3']."<br />".$qm_serverm4['col3']);
 
 		$gameinfo = addslashes(	add_info('Time Limit:', $qm_gameinfotl['col3']) .
 										add_info('Frag Limit:', $qm_gameinfofl['col3']) .
@@ -645,11 +655,12 @@ while (false !== ($filename = readdir($logdir)))
 										add_info('UTStats Actor Version:', $actor_version));
 
 		// Tidy Up The Info
-
-		$mutators = substr("$qm_mutators", 0, -2);		// remove trailing ,
-		$mutators = un_ut($mutators);				// Remove Class and BotPack. etc
-		$mutators = addslashes($mutators);
-
+		if (strlen($qm_mutators))
+		{
+			$mutators = substr($qm_mutators, 0, -2);		// remove trailing ,
+			$mutators = un_ut($mutators);				// Remove Class and BotPack. etc
+			$mutators = addslashes($mutators);
+		}
 		//$gametime = utdate($gametime);
 		
 		
@@ -675,7 +686,7 @@ while (false !== ($filename = readdir($logdir)))
 		}
 
 		// Get Teamscores
-		$sql_tscore = "SELECT col2 AS team, col3 AS score FROM uts_temp_$uid WHERE col1 = 'teamscore'";
+		$sql_tscore = "SELECT col2 AS team, col3 AS score FROM uts_temp_".$uid." WHERE col1 = 'teamscore'";
 		$q_tscore = mysql_query($sql_tscore) or die(mysql_error());
 
 		$t0score = 0;
@@ -759,7 +770,7 @@ while (false !== ($filename = readdir($logdir)))
 		
 
 		// Process Player Stuff
-		$playerid2pid = array();
+		$playerid2pid = array(); // set in import_playerstuff.php
 		$ignored_players = array();
 		$imported_players = array();
 
@@ -768,45 +779,45 @@ while (false !== ($filename = readdir($logdir)))
 		if ($html) echo '</td><td class="grey" align="left" width="200">';
 
 		// Get List of Player IDs and Process What They Have Done
-		$sql_player = "SELECT DISTINCT col4 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'rename' AND col4 <> ''";
+		$sql_player = "SELECT DISTINCT col4 FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'rename' AND col4 <> ''";
 		$q_player = mysql_query($sql_player) or die(mysql_error());
 		while ($r_player = mysql_fetch_array($q_player))
 		{
 			$playerid = $r_player['col4'];
 
 			// Get players last name used
-			$r_player2 = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'rename' AND col4 = $playerid ORDER BY id DESC LIMIT 0,1");
+			$r_player2 = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'rename' AND col4 = '".$playerid."' ORDER BY id DESC LIMIT 0,1");
 			$playername = addslashes($r_player2['col3']);
 
 
 			// Are they a Bot
-			$r_player1 = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'IsABot' AND col3 = $playerid ORDER BY id DESC LIMIT 0,1");
+			$r_player1 = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'IsABot' AND col3 = '".$playerid."' ORDER BY id DESC LIMIT 0,1");
 			$playertype = $r_player1['col4'];
 			// This player is a bot
 			if ($playertype == 'True' and $import_ignore_bots) {
 				$ignored_players[] = $playername;
 				// We do not want to know who killed and who was killed by this bot...
-				mysql_query("DELETE FROM uts_temp_$uid WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '".$playerid."' OR col4 = '".$playerid."');") or die(mysql_error());
+				mysql_query("DELETE FROM uts_temp_".$uid." WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '".$playerid."' OR col4 = '".$playerid."');") or die(mysql_error());
 				if ($html) echo "<span style='text-decoration: line-through;'>";
-				echo "Bot:$playername ";
+				echo "Bot:".$playername." ";
 				if ($html) echo "</span>";
 				continue;
 			}
 
 			// Get players last team
-			$r_player3 = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'player' AND col2 = 'TeamChange' AND col3 = $playerid ORDER BY id DESC LIMIT 0,1");
+			$r_player3 = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'TeamChange' AND col3 = '".$playerid."' ORDER BY id DESC LIMIT 0,1");
 			$playerteam = $r_player3['col4'];
 
-			$qc_kills = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'kills'AND col3 = $playerid");
-			$qc_teamkills = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'teamkills' AND col3 = $playerid");
-			$qc_deaths = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'deaths' AND col3 = $playerid");
-			$qc_objs = small_query("SELECT count(id) AS assobjcount FROM uts_temp_$uid WHERE col1 = 'assault_obj' AND col2 = $playerid");
+			$qc_kills = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'kills'AND col3 = '".$playerid."';");
+			$qc_teamkills = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'teamkills' AND col3 = '".$playerid."';");
+			$qc_deaths = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'deaths' AND col3 = '".$playerid."';");
+			$qc_objs = small_query("SELECT count(id) AS assobjcount FROM uts_temp_".$uid." WHERE col1 = 'assault_obj' AND col2 = '".$playerid."';");
 			
 			// Player had no kills, deaths or teamkills, or objectives! => ignore 
 			// 
 			// CRATOS: only ignore him if his TimeOnServer is < 30sec
 			// 
-			$qc_time = small_query("SELECT col4 FROM uts_temp_$uid WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = $playerid LIMIT 0,1");
+			$qc_time = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = '".$playerid."' LIMIT 0,1");
 			if ($qc_time != NULL) $timeonserver = intval($qc_time['col4']);
 			else $timeonserver = 0; 
 	
@@ -844,7 +855,7 @@ while (false !== ($filename = readdir($logdir)))
 				{
 					// We do not want to know who killed and who was killed by this banned player
 					$ignored_players[] = $playername;
-					mysql_query("DELETE FROM uts_temp_$uid WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '".$playerid."' OR col4 = '".$playerid."');") or die(mysql_error());
+					mysql_query("DELETE FROM uts_temp_".$uid." WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '".$playerid."' OR col4 = '".$playerid."');") or die(mysql_error());
 					if ($html) echo "<span style='text-decoration: line-through;'>";
 					echo "Banned:$playername ";
 					if ($html) echo "</span>";
@@ -990,7 +1001,7 @@ while (false !== ($filename = readdir($logdir)))
 	if ($html) echo'<tr><td class="smheading" align="left" width="350">';
 	echo "Deleting Temp MySQL Table: ";
 	if ($html) echo '</td><td class="grey" align="left" width="200">';
-	echo "uts_temp_$uid\n";
+	echo "uts_temp_".$uid."\n";
 	if ($html) echo '</td></tr></table><br />';
 	echo "\n\n";
 

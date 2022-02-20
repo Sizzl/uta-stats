@@ -20,13 +20,13 @@ foreach (array_keys($pickupnames) as &$pickup) {
 }
 
 if (!isset($qm_gamestart)) {
-	// $qm_gamestart = small_query("SELECT col0 FROM uts_temp_$uid WHERE col1 = 'game' AND col2 = 'realstart';");
-	$qm_gamestart = small_query("SELECT col0 FROM uts_temp_$uid WHERE col1 = 'game_start';");
+	// $qm_gamestart = small_query("SELECT col0 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'realstart';");
+	$qm_gamestart = small_query("SELECT col0 FROM uts_temp_".$uid." WHERE col1 = 'game_start';");
 }
 
 if (!isset($gametime)) {
-	$qm_time = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'Absolute_Time'");
-	$qm_zone = small_query("SELECT col3 FROM uts_temp_$uid WHERE col1 = 'info' AND col2 = 'GMT_Offset'");
+	$qm_time = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Absolute_Time'");
+	$qm_zone = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'GMT_Offset'");
 	$gametime = $qm_time['col3'];
 	$offset = $qm_zone['col3'];
 	if ($offset)
@@ -36,7 +36,7 @@ if (!isset($gametime)) {
 }
 
 // Track only known pickups
-$sql_pickupstats = "SELECT col0, col2 FROM uts_temp_$uid WHERE col1 = 'item_get' AND col3 = '".$playerid."';";
+$sql_pickupstats = "SELECT col0, col2 FROM uts_temp_".$uid." WHERE col1 = 'item_get' AND col3 = '".$playerid."';";
 $q_pickupstats = mysql_query($sql_pickupstats);
 
 while ($r_pickupstats = mysql_fetch_array($q_pickupstats)) {
@@ -68,9 +68,7 @@ while ($r_pickupstats = mysql_fetch_array($q_pickupstats)) {
 
 if (!isset($pid)) {
 	// Get the unique pid of this player
-	if (!isset($playerid2pid[$playerid])) {
-		continue;
-	} else {
+	if (isset($playerid2pid[$playerid])) {
 		$pid = $playerid2pid[$playerid];
 	}
 }
@@ -86,32 +84,34 @@ if (!isset($rank_year) || $rank_year == 0)
 		$rank_year = date("Y");
 }
 
-// Record the pickup statistics for this match
-foreach ($pickupnames as $pickupname => $pickupid) {
-	if (!empty($pickupstats[$pickupid])) {
-		// Loop through every pickup recorded for this player
-		foreach ($pickupstats[$pickupid] as &$pickup) {
-			// echo "PU: ".$pid."-".$pickupid."-".$pickup['act']."; ";
-			// Check for entry before inserting
-			$dupepickup = small_count("SELECT matchid, year, pid, pickup, timestamp FROM uts_pickupstats WHERE matchid='".$matchid."' AND year = '".$rank_year."' AND pid = '".$pid."' AND pickup = '".$pickupid."' AND time_logged = '".$pickup['act']."';");
-			if ($dupepickup > 0) {
-				mysql_query("	UPDATE	uts_pickupstats
-						SET	time_logged = '".$pickup['act']."',
-							time_relative= '".$pickup['rel']."',
-							timestamp= '".$pickup['rwt']."'
-						WHERE	matchid = '".$matchid."' AND year = '".$rank_year."' AND pid = '".$pid."' AND pickup = '".$pickupid."' AND time_logged = '".$pickup['act']."';") or die(mysql_error());
-			} else {
-				mysql_query("	INSERT	
-						INTO	uts_pickupstats
-						SET	matchid = '".$matchid."',
-							year = '".$rank_year."',
-							pid = '".$pid."',
-							pickup = '".$pickupid."',
-							timestamp = '".$pickup['rwt']."',
-							time_logged = '".$pickup['act']."',
-							time_relative= '".$pickup['rel']."';") or die(mysql_error());
+if (isset($pid)) {
+	// Record the pickup statistics for this match
+	foreach ($pickupnames as $pickupname => $pickupid) {
+		if (!empty($pickupstats[$pickupid])) {
+			// Loop through every pickup recorded for this player
+			foreach ($pickupstats[$pickupid] as &$pickup) {
+				// echo "PU: ".$pid."-".$pickupid."-".$pickup['act']."; ";
+				// Check for entry before inserting
+				$dupepickup = small_count("SELECT matchid, year, pid, pickup, timestamp FROM uts_pickupstats WHERE matchid='".$matchid."' AND year = '".$rank_year."' AND pid = '".$pid."' AND pickup = '".$pickupid."' AND time_logged = '".$pickup['act']."';");
+				if ($dupepickup > 0) {
+					mysql_query("	UPDATE	uts_pickupstats
+							SET	time_logged = '".$pickup['act']."',
+								time_relative= '".$pickup['rel']."',
+								timestamp= '".$pickup['rwt']."'
+							WHERE	matchid = '".$matchid."' AND year = '".$rank_year."' AND pid = '".$pid."' AND pickup = '".$pickupid."' AND time_logged = '".$pickup['act']."';") or die(mysql_error());
+				} else {
+					mysql_query("	INSERT	
+							INTO	uts_pickupstats
+							SET	matchid = '".$matchid."',
+								year = '".$rank_year."',
+								pid = '".$pid."',
+								pickup = '".$pickupid."',
+								timestamp = '".$pickup['rwt']."',
+								time_logged = '".$pickup['act']."',
+								time_relative= '".$pickup['rel']."';") or die(mysql_error());
+				}
 			}
 		}
 	}
-}	
+}
 ?>

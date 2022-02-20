@@ -1,11 +1,11 @@
 <?php 
 // Get team releases
-	$q_releases = small_query("SELECT COUNT(*) AS releases FROM uts_temp_$uid WHERE col1 = 'team_released' AND col3 = $playerid");
+	$q_releases = small_query("SELECT COUNT(*) AS releases FROM uts_temp_".$uid." WHERE col1 = 'team_released' AND col3 = ".$playerid.";");
 	$r_releases = $q_releases['releases'];
 
 // Get the real suicide count 
 //	(Jail releases should not be counted as suicides)
-	$q_suicides = small_query("SELECT COUNT(*) AS suicides FROM uts_temp_$uid WHERE col1 = 'suicide' AND col2 = $playerid and col4 <> 'RedeemerDeath' and col4 <> 'JailRelease'");
+	$q_suicides = small_query("SELECT COUNT(*) AS suicides FROM uts_temp_".$uid." WHERE col1 = 'suicide' AND col2 = ".$playerid." and col4 <> 'RedeemerDeath' and col4 <> 'JailRelease'");
 	$r_suicides = $q_suicides['suicides'];
 	
 	$r_frags = $r_kills - $r_suicides;
@@ -17,6 +17,6 @@
 									suicides = '".$r_suicides."',
 									frags = '".$r_frags."',
 									eff = '".$r_efficiency."'
-						WHERE 	id = $playerecordid;") or die(mysql_error());	
+						WHERE id = ".$playerecordid.";") or die(mysql_error());	
 		
 ?>

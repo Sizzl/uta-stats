@@ -4,7 +4,7 @@
 	// Headshots
 	// ************************************************************************************
 	
-	$qm_headshots = small_query("SELECT count(col1) as headshots FROM uts_temp_$uid WHERE col1 = 'headshot' AND col2 = $playerid");
+	$qm_headshots = small_query("SELECT count(col1) as headshots FROM uts_temp_".$uid." WHERE col1 = 'headshot' AND col2 = '".$playerid."';");
 	if ($qm_headshots!=Null) 
 	{	
 		$headshots = $qm_headshots['headshots'];
@@ -20,7 +20,7 @@
 	// Get Assault Objectives
 	// ************************************************************************************
 	
-	$sql_obj = "SELECT col0, col1, col2, col3, col4 FROM uts_temp_$uid WHERE col1 LIKE 'assault_obj' AND col2 = $playerid";
+	$sql_obj = "SELECT col0, col1, col2, col3, col4 FROM uts_temp_".$uid." WHERE col1 LIKE 'assault_obj' AND col2 = '".$playerid."';";
 	$q_obj = mysql_query($sql_obj);
 	while ($r_obj = mysql_fetch_array($q_obj)) {
 				
@@ -32,21 +32,21 @@
 		
 		// get objective
 		$objnum = $r_obj['col4'];						
-		$objid = small_query("SELECT id FROM uts_smartass_objs WHERE mapfile like '".$mapfile."' AND objnum = $objnum");
+		$objid = small_query("SELECT id FROM uts_smartass_objs WHERE mapfile like '".$mapfile."' AND objnum = '".$objnum."';");
 		
 		// get final obj
 		$final = ($r_obj['col3'] == "True") ? 1 : 0; 
 	
 		// get teamsize
-		$objteams = small_query("SELECT col3, col4 FROM uts_temp_$uid WHERE col1 = 'assault_obj_teams' AND col2 = $objnum");
+		$objteams = small_query("SELECT col3, col4 FROM uts_temp_".$uid." WHERE col1 = 'assault_obj_teams' AND col2 = '".$objnum."';");
 		$att_teamsize = -1; $def_teamsize = -1; 
 		if ($objteams!=NULL)
 		{
 			$att_teamsize = $objteams['col3'];
 			$def_teamsize = $objteams['col4'];
 		}			
-		$objSQL = "INSERT INTO uts_smartass_objstats (matchid,objid,final,pid,playerid,timestamp,att_teamsize,def_teamsize) VALUES
-			   ($matchid,$objid['id'],$final,$pid,$playerid,$timestamp,$att_teamsize,$def_teamsize)";
+		$objSQL = "INSERT INTO uts_smartass_objstats (matchid,objid,final,pid,playerid,timestamp,att_teamsize,def_teamsize)
+					VALUES ('".$matchid."','".$objid['id']."','".$final."','".$pid."','".$playerid."','".$timestamp."','".$att_teamsize."','".$def_teamsize."');";
 		mysql_query($objSQL) or die(mysql_error());	
 	}		
 
@@ -60,7 +60,7 @@
 	//
 	//	Get INSTIGATORS
 	//
-	$sql_playerass = "SELECT col1, COUNT(col1) AS ass_events FROM uts_temp_$uid WHERE 
+	$sql_playerass = "SELECT col1, COUNT(col1) AS ass_events FROM uts_temp_".$uid." WHERE 
 		(col1 LIKE 'ass_%' AND col2 = '".$playerid."') OR
 		(col1 LIKE 'ass_assist' AND col4 = '".$playerid."')
 		GROUP BY col1";
@@ -96,7 +96,7 @@
 	//
 	//	Get VICTIMS
 	//
-	$sql_playerass = "SELECT col1, COUNT(col1) AS ass_events FROM uts_temp_$uid WHERE col1 LIKE 'ass_%' AND col3 = '".$playerid."' GROUP BY col1";
+	$sql_playerass = "SELECT col1, COUNT(col1) AS ass_events FROM uts_temp_".$uid." WHERE col1 LIKE 'ass_%' AND col3 = '".$playerid."' GROUP BY col1";
 	$q_playerass = mysql_query($sql_playerass);
 
 	$ass_h_launched = 0;

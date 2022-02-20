@@ -25,7 +25,7 @@ $r_matchcount = small_query("SELECT COUNT(*) AS result FROM uts_match");
 $matchcount= $r_matchcount['result'];
 $hourscount = small_query("SELECT SUM(gametime) AS result FROM uts_player");	
 
-$gametime = sec2hour($hourscount[result]);
+$gametime = sec2hour($hourscount['result']);
 
 echo'
   <tr>
@@ -71,24 +71,24 @@ if (isset($dbversion) && floatval($dbversion) > 5.6) {
 $q_gamesummary = mysql_query($sql_gamesummary) or die(mysql_error());
 while ($r_gamesummary = mysql_fetch_array($q_gamesummary)) {
 
-	$gid = $r_gamesummary[gid];
+	$gid = $r_gamesummary['gid'];
 
 	$q_gametime = small_query("SELECT SUM(gametime) AS gametime FROM uts_match WHERE gid = '".$gid."'");
-	$gametime = sec2hour($q_gametime[gametime]);
+	$gametime = sec2hour($q_gametime['gametime']);
 	
-	$sumfrags+=$r_gamesummary[frags];
-	$sumkills+=$r_gamesummary[kills];
-	$sumsuicides+=$r_gamesummary[suicides];
-	$sumteamkills+=$r_gamesummary[teamkills];
-	$summatchcount+=$r_gamesummary[matchcount];
+	$sumfrags+=$r_gamesummary['frags'];
+	$sumkills+=$r_gamesummary['kills'];
+	$sumsuicides+=$r_gamesummary['suicides'];
+	$sumteamkills+=$r_gamesummary['teamkills'];
+	$summatchcount+=$r_gamesummary['matchcount'];
 	$sumgametime+=$gametime;
 
-	echo'<tr><td class="dark" align="center">'.$r_gamesummary[gamename].'</td>
-		<td class="grey" align="center">'.$r_gamesummary[frags].'</td>
-		<td class="grey" align="center">'.$r_gamesummary[kills].'</td>
-		<td class="grey" align="center">'.$r_gamesummary[suicides].'</td>
-		<td class="grey" align="center">'.$r_gamesummary[teamkills].'</td>
-		<td class="grey" align="center">'.$r_gamesummary[matchcount].'</td>
+	echo'<tr><td class="dark" align="center">'.$r_gamesummary['gamename'].'</td>
+		<td class="grey" align="center">'.$r_gamesummary['frags'].'</td>
+		<td class="grey" align="center">'.$r_gamesummary['kills'].'</td>
+		<td class="grey" align="center">'.$r_gamesummary['suicides'].'</td>
+		<td class="grey" align="center">'.$r_gamesummary['teamkills'].'</td>
+		<td class="grey" align="center">'.$r_gamesummary['matchcount'].'</td>
 		<td class="grey" align="center">'.$gametime.'</td>';
 }
 
@@ -96,7 +96,7 @@ while ($r_gamesummary = mysql_fetch_array($q_gamesummary)) {
 //FROM uts_player AS p, uts_games AS g WHERE p.gid = g.id");	// 5sec
 
 //$q_gametime = small_query("SELECT SUM(gametime) AS gametime FROM uts_match");
-//$gametime = sec2hour($q_gametime[gametime]);	
+//$gametime = sec2hour($q_gametime['gametime']);	
 
 echo'  <tr>
 		<td class="dark" align="center"><b>Totals for All Players</b></td>

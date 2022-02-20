@@ -1,7 +1,7 @@
 <?php 	// Cratos: Importing Authuser
 
 	$qm_auth = small_query("SELECT col2 as pid, col3 as authuser, col4 as vcode 
-							FROM uts_temp_$uid WHERE col1 = 'uta_auth_user' AND col2 = $playerid 
+							FROM uts_temp_".$uid." WHERE col1 = 'uta_auth_user' AND col2 = '".$playerid."' 
 							ORDER BY vcode DESC LIMIT 0,1");
 	
 	$authuser = ""; $authpid=0; $vcode=0;  

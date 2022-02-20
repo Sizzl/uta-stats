@@ -215,8 +215,8 @@ foreach ($rank_years as $rank_year) {
 					inner join ".(isset($t_match) ? $t_match : "uts_match")." m on stats.matchid = m.id 
 					inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." p on p.id = stats.pid 
 					INNER JOIN ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." o ON stats.objid = o.id
-					WHERE p.id = $pid 
-						and m.gid = $gid
+					WHERE p.id = '".$pid."'
+						and m.gid = '".$gid."'
 					AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
 					AND m.id <= '".$matchid."' ".$where."
 					and stats.def_teamsize >= 2 

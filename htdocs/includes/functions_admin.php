@@ -60,7 +60,7 @@ function adminselect(&$options)
 	global $dbversion;
 	$i = !empty($_REQUEST['step']) ? $_REQUEST['step'] : 0;
 
-	if (!isset($options['showlist'])) $options['showlist']==true; // Display list of players --// Default to true - Timo 01/05/07
+	if (!isset($options['showlist'])) $options['showlist'] = true; // Display list of players --// Default to true - Timo 01/05/07
 
 	if (isset($_REQUEST['back']))
 	{
@@ -211,7 +211,7 @@ function adminselect(&$options)
 					}
 					if (isset($dbversion) && floatval($dbversion) > 5.6)
 					{
-						$sql_server = "SELECT ANY_VALUE(id), servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." GROUP BY servername, serverip ORDER BY servername ASC";
+						$sql_server = "SELECT ANY_VALUE(id) AS id, servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." GROUP BY servername, serverip ORDER BY servername ASC";
 					}
 					else
 					{
@@ -221,7 +221,7 @@ function adminselect(&$options)
 					{
 						if (isset($dbversion) && floatval($dbversion) > 5.6)
 						{
-							$sql_server = "SELECT ANY_VALUE(id), servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE gid = '". $values[$var['wheregid']] ."' GROUP BY servername, serverip ORDER BY servername ASC";
+							$sql_server = "SELECT ANY_VALUE(id) AS id, servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE gid = '". $values[$var['wheregid']] ."' GROUP BY servername, serverip ORDER BY servername ASC";
 						}
 						else
 						{
@@ -239,7 +239,7 @@ function adminselect(&$options)
 					break;
 				
 				case 'player':
-					if ($options['showlist']) // Altered to keep/remove player list --// Timo 01/05/07
+					if ($options['showlist'])
 					{
 						echo '<select class="searchform" name="'. $var['name'] .'">';
 						if (isset($var['extraoption']))
@@ -262,14 +262,14 @@ function adminselect(&$options)
 						{
 							$where_extra .= " AND pi.name LIKE '%". my_addslashes($_REQUEST['playerfilter']) ."%' ";
 						}
-						$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE 1 $where_extra ORDER BY pi.name ASC";
+						$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE 1 ".$where_extra." ORDER BY pi.name ASC";
 						if (isset($var['wherematch']))
 						{
 							if (isset($dbversion) && floatval($dbversion) > 5.6)
 							{
-								$sql_player = "SELECT pi.id, ANY_VALUE(pi.name) FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.matchid = '". $values[$var['wherematch']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+								$sql_player = "SELECT pi.id, ANY_VALUE(pi.name) FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.matchid = '". $values[$var['wherematch']] ."' ".$where_extra." GROUP BY p.id ORDER BY pi.name ASC";
 							} else {
-								$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.matchid = '". $values[$var['wherematch']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+								$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.matchid = '". $values[$var['wherematch']] ."' ".$where_extra." GROUP BY p.id ORDER BY pi.name ASC";
 							}
 						}
 						if (isset($var['whereserver']))
@@ -277,22 +277,22 @@ function adminselect(&$options)
 							$r_server = small_query("SELECT servername, serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE id = '". $values[$var['whereserver']] ."'");
 							if (isset($dbversion) && floatval($dbversion) > 5.6)
 							{
-								$sql_player = "SELECT DISTINCT pi.id, ANY_VALUE(pi.name) FROM ".(isset($t_match) ? $t_match : "uts_match")." m, ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE m.serverip = '".$r_server['serverip']."' AND  p.matchid = m.id AND  p.pid = pi.id $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+								$sql_player = "SELECT DISTINCT pi.id, ANY_VALUE(pi.name) AS name FROM ".(isset($t_match) ? $t_match : "uts_match")." m, ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE m.serverip = '".$r_server['serverip']."' AND  p.matchid = m.id AND  p.pid = pi.id ".$where_extra." GROUP BY p.id ORDER BY pi.name ASC";
 							}
 							else
 							{
-								$sql_player = "SELECT DISTINCT pi.id, pi.name FROM ".(isset($t_match) ? $t_match : "uts_match")." m, ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE m.serverip = '".$r_server['serverip']."' AND  p.matchid = m.id AND  p.pid = pi.id $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+								$sql_player = "SELECT DISTINCT pi.id, pi.name FROM ".(isset($t_match) ? $t_match : "uts_match")." m, ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE m.serverip = '".$r_server['serverip']."' AND  p.matchid = m.id AND  p.pid = pi.id ".$where_extra." GROUP BY p.id ORDER BY pi.name ASC";
 							}
 						}
 						if (isset($var['wheregid']))
 						{
 							if (isset($dbversion) && floatval($dbversion) > 5.6)
 							{
-								$sql_player = "SELECT pi.id, ANY_VALUE(pi.name) FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.gid = '". $values[$var['wheregid']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";
+								$sql_player = "SELECT pi.id, ANY_VALUE(pi.name) AS name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.gid = '". $values[$var['wheregid']] ."' ".$where_extra." GROUP BY p.id ORDER BY pi.name ASC";
 							}
 							else
 							{
-								$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.gid = '". $values[$var['wheregid']] ."' $where_extra GROUP BY p.id ORDER BY pi.name ASC";	
+								$sql_player = "SELECT pi.id, pi.name FROM ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." pi WHERE p.pid = pi.id AND p.gid = '". $values[$var['wheregid']] ."' ".$where_extra." GROUP BY p.id ORDER BY pi.name ASC";	
 							}
 						}
 
@@ -424,7 +424,15 @@ function adminselect(&$options)
 
 	
 	echo '</form>';
-	require('includes/footer.php');
+	if ($_SESSION["themelocation"]) // Themed footer --// 19/07/05 Timo: Added customisable footer
+	{
+	        if (file_exists($_SESSION["themelocation"]."footer.php"))
+	                include($_SESSION["themelocation"]."footer.php");
+	        else
+	                include("includes/footer.php");
+	}
+	else
+	        include("includes/footer.php");
 	exit;
 }
 ?>

@@ -26,17 +26,17 @@ FROM uts_player AS p, uts_games AS g WHERE p.gid = g.id GROUP BY gamename ORDER 
 $q_totsumm = mysql_query($sql_totsumm) or die(mysql_error());
 while ($r_totsumm = zero_out(mysql_fetch_array($q_totsumm))) {
 
-	$gametime = sec2hour($r_totsumm[sumgametime]);
+	$gametime = sec2hour($r_totsumm['sumgametime']);
 
 	echo'
 	  <tr>
-	    <td class="dark" align="center">'.$r_totsumm[gamename].'</td>
-	    <td class="grey" align="center">'.$r_totsumm[gamescore].'</td>
-	    <td class="grey" align="center">'.$r_totsumm[frags].'</td>
-	    <td class="grey" align="center">'.$r_totsumm[kills].'</td>
-	    <td class="grey" align="center">'.$r_totsumm[suicides].'</td>
-	    <td class="grey" align="center">'.$r_totsumm[teamkills].'</td>
-	    <td class="grey" align="center">'.$r_totsumm[matchcount].'</td>
+	    <td class="dark" align="center">'.$r_totsumm['gamename'].'</td>
+	    <td class="grey" align="center">'.$r_totsumm['gamescore'].'</td>
+	    <td class="grey" align="center">'.$r_totsumm['frags'].'</td>
+	    <td class="grey" align="center">'.$r_totsumm['kills'].'</td>
+	    <td class="grey" align="center">'.$r_totsumm['suicides'].'</td>
+	    <td class="grey" align="center">'.$r_totsumm['teamkills'].'</td>
+	    <td class="grey" align="center">'.$r_totsumm['matchcount'].'</td>
 	    <td class="grey" align="center">'.$gametime.'</td>
 	  </tr>';
 }
@@ -44,17 +44,17 @@ while ($r_totsumm = zero_out(mysql_fetch_array($q_totsumm))) {
 $sql_summtot = zero_out(small_query("SELECT SUM(gamescore) AS gamescore, SUM(frags) AS frags, SUM(kills) AS kills, SUM(suicides) AS suicides, SUM(teamkills) AS teamkills, COUNT(id) AS matchcount, SUM(gametime) AS sumgametime
 FROM uts_player"));
 
-$gametime2 = sec2hour($sql_summtot[sumgametime]);
+$gametime2 = sec2hour($sql_summtot['sumgametime']);
 
 echo'
     <tr>
     <td class="dark" align="center"><b>Totals</b></td>
-	    <td class="grey" align="center">'.$sql_summtot[gamescore].'</td>
-	    <td class="grey" align="center">'.$sql_summtot[frags].'</td>
-	    <td class="grey" align="center">'.$sql_summtot[kills].'</td>
-	    <td class="grey" align="center">'.$sql_summtot[suicides].'</td>
-	    <td class="grey" align="center">'.$sql_summtot[teamkills].'</td>
-	    <td class="grey" align="center">'.$sql_summtot[matchcount].'</td>
+	    <td class="grey" align="center">'.$sql_summtot['gamescore'].'</td>
+	    <td class="grey" align="center">'.$sql_summtot['frags'].'</td>
+	    <td class="grey" align="center">'.$sql_summtot['kills'].'</td>
+	    <td class="grey" align="center">'.$sql_summtot['suicides'].'</td>
+	    <td class="grey" align="center">'.$sql_summtot['teamkills'].'</td>
+	    <td class="grey" align="center">'.$sql_summtot['matchcount'].'</td>
 	    <td class="grey" align="center">'.$gametime2.'</td>
   </tr>
 </tbody></table>
@@ -86,7 +86,7 @@ echo'
  $q_assgids = mysql_query("SELECT id FROM uts_games WHERE gamename LIKE '%Assault%';") or die(mysql_error());
  $assgids = array();
  while ($r_assgids = mysql_fetch_array($q_assgids)) {
- 	$assgids[] = $r_assgids['id'];
+ 	$assgids[''] = $r_assgids['id'];
  }
  $assquery = (count($assgids) > 0) ? 'SUM(IF (gid IN ('. implode(',', $assgids) .'), ass_obj, 0)) AS ass_obj' : '0 AS ass_obj';
 
@@ -97,17 +97,17 @@ echo'
 
   echo'
   <tr>
-    <td class="grey" align="center">'.$sql_cdatot[ass_obj].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[dom_cp].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_taken].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_pickedup].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_dropped].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_assist].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_cover].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_seal].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_capture].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_kill].'</td>
-    <td class="grey" align="center">'.$sql_cdatot[flag_return].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['ass_obj'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['dom_cp'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_taken'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_pickedup'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_dropped'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_assist'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_cover'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_seal'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_capture'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_kill'].'</td>
+    <td class="grey" align="center">'.$sql_cdatot['flag_return'].'</td>
   </tr>
 </tbody></table>
 <br>';
@@ -148,14 +148,14 @@ echo'
 	
 	  echo'
 	  <tr>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_obj].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_assist].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_h_jump].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_h_launch].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_r_launch].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_h_launched].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_r_launched].'</td>
-	    <td class="grey" align="center">'.$sql_cdatot[ass_suicide_coop].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_obj'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_assist'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_h_jump'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_h_launch'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_r_launch'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_h_launched'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_r_launched'].'</td>
+	    <td class="grey" align="center">'.$sql_cdatot['ass_suicide_coop'].'</td>
 	  </tr>
 </tbody></table>
 <br>';
@@ -182,31 +182,31 @@ $sql_sprees = zero_out(small_query("SELECT SUM(spree_kill) AS spree_kill, SUM(sp
     <td class="dark" align="center" width="150">First Blood</td>
     <td class="grey" align="center" width="100">'.$sql_firstblood.'</td>
     <td class="dark" align="center" width="150">Killing Spree</td>
-    <td class="grey" align="center" width="100">'.$sql_sprees[spree_kill].'</td>
+    <td class="grey" align="center" width="100">'.$sql_sprees['spree_kill'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Double Kills</td>
-    <td class="grey" align="center">'.$sql_multis[spree_double].'</td>
+    <td class="grey" align="center">'.$sql_multis['spree_double'].'</td>
     <td class="dark" align="center">Rampage</td>
-    <td class="grey" align="center">'.$sql_sprees[spree_rampage].'</td>
+    <td class="grey" align="center">'.$sql_sprees['spree_rampage'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Multi Kills</td>
-    <td class="grey" align="center">'.$sql_multis[spree_multi].'</td>
+    <td class="grey" align="center">'.$sql_multis['spree_multi'].'</td>
     <td class="dark" align="center">Dominating</td>
-    <td class="grey" align="center">'.$sql_sprees[spree_dom].'</td>
+    <td class="grey" align="center">'.$sql_sprees['spree_dom'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Ultra Kills</td>
-    <td class="grey" align="center">'.$sql_multis[spree_ultra].'</td>
+    <td class="grey" align="center">'.$sql_multis['spree_ultra'].'</td>
     <td class="dark" align="center">Unstoppable</td>
-    <td class="grey" align="center">'.$sql_sprees[spree_uns].'</td>
+    <td class="grey" align="center">'.$sql_sprees['spree_uns'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Monster Kills</td>
-    <td class="grey" align="center">'.$sql_multis[spree_monster].'</td>
+    <td class="grey" align="center">'.$sql_multis['spree_monster'].'</td>
     <td class="dark" align="center">Godlike</td>
-    <td class="grey" align="center">'.$sql_sprees[spree_god].'</td>
+    <td class="grey" align="center">'.$sql_sprees['spree_god'].'</td>
   </tr>
 </tbody></table>
 <br>';
@@ -239,7 +239,7 @@ $sql_chighflag_kill = small_query("SELECT p.pid, pi.name, p.country, SUM(flag_ki
 $sql_chighdom_cp = small_query("SELECT p.pid, pi.name, p.country, SUM(dom_cp) AS dom_cp , SUM(gametime) AS sumgametime, COUNT(matchid) AS mcount FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND dom_cp > 0 GROUP BY pid HAVING sumgametime > 1800 ORDER BY dom_cp DESC LIMIT 0,1");
 
 $ass_obj_check = small_query("SELECT COUNT(id) AS idcount FROM uts_games WHERE gamename LIKE '%Assault%';") or die(mysql_error());
-IF ($ass_obj_check[idcount] > 0 ) {
+IF ($ass_obj_check['idcount'] > 0 ) {
 	$sql_chighass_obj = small_query("SELECT p.pid, pi.name, p.country, SUM(ass_obj) AS ass_obj , SUM(gametime) AS sumgametime, COUNT(matchid) AS mcount FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND ass_obj > 0 GROUP BY pid HAVING sumgametime > 1800 ORDER BY ass_obj DESC LIMIT 0,1");
 } else {
 	$sql_chighass_obj = "";
@@ -265,108 +265,108 @@ echo'<br>
   </tr>
   <tr>
     <td class="dark" align="center">Frags</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighfrags[pid].'">'.FlagImage($sql_chighfrags['country'], false).' '.htmlentities($sql_chighfrags[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighfrags[frags].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighfrags[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighfrags[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighfrags['pid'].'">'.FlagImage($sql_chighfrags['country'], false).' '.htmlentities($sql_chighfrags['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighfrags['frags'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighfrags['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighfrags['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Deaths</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighdeaths[pid].'">'.FlagImage($sql_chighdeaths['country'], false).' '.htmlentities($sql_chighdeaths[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighdeaths[deaths].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighdeaths[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighdeaths[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighdeaths['pid'].'">'.FlagImage($sql_chighdeaths['country'], false).' '.htmlentities($sql_chighdeaths['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighdeaths['deaths'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighdeaths['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighdeaths['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Kills</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighkills[pid].'">'.FlagImage($sql_chighkills['country'], false).' '.htmlentities($sql_chighkills[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighkills[kills].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighkills[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighkills[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighkills['pid'].'">'.FlagImage($sql_chighkills['country'], false).' '.htmlentities($sql_chighkills['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighkills['kills'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighkills['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighkills['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Suicides</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighsuicides[pid].'">'.FlagImage($sql_chighsuicides['country'], false).' '.htmlentities($sql_chighsuicides[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighsuicides[suicides].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighsuicides[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighsuicides[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighsuicides['pid'].'">'.FlagImage($sql_chighsuicides['country'], false).' '.htmlentities($sql_chighsuicides['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighsuicides['suicides'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighsuicides['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighsuicides['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Team Kills</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighteamkills[pid].'">'.FlagImage($sql_chighteamkills['country'], false).' '.htmlentities($sql_chighteamkills[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighteamkills[teamkills].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighteamkills[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighteamkills[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighteamkills['pid'].'">'.FlagImage($sql_chighteamkills['country'], false).' '.htmlentities($sql_chighteamkills['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighteamkills['teamkills'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighteamkills['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighteamkills['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Efficiency</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chigheff[pid].'">'.FlagImage($sql_chigheff['country'], false).' '.htmlentities($sql_chigheff[name]).'</a></td>
-    <td class="grey" align="center">'.get_dp($sql_chigheff[eff]).'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chigheff[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chigheff[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chigheff['pid'].'">'.FlagImage($sql_chigheff['country'], false).' '.htmlentities($sql_chigheff['name']).'</a></td>
+    <td class="grey" align="center">'.get_dp($sql_chigheff['eff']).'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chigheff['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chigheff['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Accuracy</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighaccuracy[pid].'">'.FlagImage($sql_chighaccuracy['country'], false).' '.htmlentities($sql_chighaccuracy[name]).'</a></td>
-    <td class="grey" align="center">'.get_dp($sql_chighaccuracy[accuracy]).'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighaccuracy[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighaccuracy[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighaccuracy['pid'].'">'.FlagImage($sql_chighaccuracy['country'], false).' '.htmlentities($sql_chighaccuracy['name']).'</a></td>
+    <td class="grey" align="center">'.get_dp($sql_chighaccuracy['accuracy']).'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighaccuracy['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighaccuracy['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">TTL</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighttl[pid].'">'.FlagImage($sql_chighttl['country'], false).' '.htmlentities($sql_chighttl[name]).'</a></td>
-    <td class="grey" align="center">'.get_dp($sql_chighttl[ttl]).'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighttl[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighttl[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighttl['pid'].'">'.FlagImage($sql_chighttl['country'], false).' '.htmlentities($sql_chighttl['name']).'</a></td>
+    <td class="grey" align="center">'.get_dp($sql_chighttl['ttl']).'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighttl['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighttl['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Flag Caps</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighflag_capture[pid].'">'.FlagImage($sql_chighflag_capture['country'], false).' '.htmlentities($sql_chighflag_capture[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighflag_capture[flag_capture].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighflag_capture[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighflag_capture[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighflag_capture['pid'].'">'.FlagImage($sql_chighflag_capture['country'], false).' '.htmlentities($sql_chighflag_capture['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighflag_capture['flag_capture'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighflag_capture['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighflag_capture['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Flag Kills</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighflag_kill[pid].'">'.FlagImage($sql_chighflag_kill['country'], false).' '.htmlentities($sql_chighflag_kill[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighflag_kill[flag_kill].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighflag_kill[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighflag_kill[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighflag_kill['pid'].'">'.FlagImage($sql_chighflag_kill['country'], false).' '.htmlentities($sql_chighflag_kill['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighflag_kill['flag_kill'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighflag_kill['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighflag_kill['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Domination Control Points</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighdom_cp[pid].'">'.FlagImage($sql_chighdom_cp['country'], false).' '.htmlentities($sql_chighdom_cp[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighdom_cp[dom_cp].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighdom_cp[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighdom_cp[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighdom_cp['pid'].'">'.FlagImage($sql_chighdom_cp['country'], false).' '.htmlentities($sql_chighdom_cp['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighdom_cp['dom_cp'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighdom_cp['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighdom_cp['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Assault Objectives</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighass_obj[pid].'">'.FlagImage($sql_chighass_obj['country'], false).' '.htmlentities($sql_chighass_obj[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighass_obj[ass_obj].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighass_obj[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighass_obj[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighass_obj['pid'].'">'.FlagImage($sql_chighass_obj['country'], false).' '.htmlentities($sql_chighass_obj['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighass_obj['ass_obj'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighass_obj['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighass_obj['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Monster Kills</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighspree_monster[pid].'">'.FlagImage($sql_chighspree_monster['country'], false).' '.htmlentities($sql_chighspree_monster[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighspree_monster[spree_monster].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighspree_monster[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighspree_monster[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighspree_monster['pid'].'">'.FlagImage($sql_chighspree_monster['country'], false).' '.htmlentities($sql_chighspree_monster['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighspree_monster['spree_monster'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighspree_monster['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighspree_monster['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Godlikes</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighspree_god[pid].'">'.FlagImage($sql_chighspree_god['country'], false).' '.htmlentities($sql_chighspree_god[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_chighspree_god[spree_god].'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighspree_god[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighspree_god[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighspree_god['pid'].'">'.FlagImage($sql_chighspree_god['country'], false).' '.htmlentities($sql_chighspree_god['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_chighspree_god['spree_god'].'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighspree_god['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighspree_god['mcount'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Rank Points</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighrank[pid].'">'.FlagImage($sql_chighrank['country'], false).' '.htmlentities($sql_chighrank[name]).'</a></td>
-    <td class="grey" align="center">'.get_dp($sql_chighrank[rank]).'</td>
-    <td class="grey" align="center">'.sec2hour($sql_chighrank[sumgametime]).'</td>
-    <td class="grey" align="center">'.$sql_chighrank[mcount].'</td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_chighrank['pid'].'">'.FlagImage($sql_chighrank['country'], false).' '.htmlentities($sql_chighrank['name']).'</a></td>
+    <td class="grey" align="center">'.get_dp($sql_chighrank['rank']).'</td>
+    <td class="grey" align="center">'.sec2hour($sql_chighrank['sumgametime']).'</td>
+    <td class="grey" align="center">'.$sql_chighrank['mcount'].'</td>
   </tr>
 </tbody></table>
 <br>';
@@ -387,7 +387,7 @@ $sql_mhighflag_kill = small_query("SELECT p.matchid, p.pid, pi.name, p.country, 
 $sql_mhighdom_cp = small_query("SELECT p.matchid, p.pid, pi.name, p.country, SUM(dom_cp) AS dom_cp , SUM(gametime) AS sumgametime FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND dom_cp > 0 GROUP BY matchid, pid HAVING sumgametime > 600 ORDER BY dom_cp DESC LIMIT 0,1");
 
 $ass_obj_check = small_query("SELECT COUNT(id) AS idcount FROM uts_games WHERE gamename LIKE '%Assault%';") or die(mysql_error());
-IF ($ass_obj_check[idcount] > 0 ) {
+IF ($ass_obj_check['idcount'] > 0 ) {
 	$sql_mhighass_obj = small_query("SELECT p.matchid, p.pid, pi.name, p.country, SUM(ass_obj) AS ass_obj , SUM(gametime) AS sumgametime FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND ass_obj > 0 GROUP BY matchid, pid HAVING sumgametime > 600 ORDER BY ass_obj DESC LIMIT 0,1");
 } else {
 	$sql_mhighass_obj = "";
@@ -410,93 +410,93 @@ echo'<table border="0" cellpadding="1" cellspacing="2" width="500">
   </tr>
   <tr>
     <td class="dark" align="center">Frags</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighfrags[pid].'">'.FlagImage($sql_mhighfrags['country'], false).' '.htmlentities($sql_mhighfrags[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighfrags[frags].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighfrags[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighfrags['pid'].'">'.FlagImage($sql_mhighfrags['country'], false).' '.htmlentities($sql_mhighfrags['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighfrags['frags'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighfrags['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Deaths</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighdeaths[pid].'">'.FlagImage($sql_mhighdeaths['country'], false).' '.htmlentities($sql_mhighdeaths[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighdeaths[deaths].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighdeaths[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighdeaths['pid'].'">'.FlagImage($sql_mhighdeaths['country'], false).' '.htmlentities($sql_mhighdeaths['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighdeaths['deaths'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighdeaths['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Kills</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighkills[pid].'">'.FlagImage($sql_mhighkills['country'], false).' '.htmlentities($sql_mhighkills[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighkills[kills].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighkills[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighkills['pid'].'">'.FlagImage($sql_mhighkills['country'], false).' '.htmlentities($sql_mhighkills['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighkills['kills'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighkills['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Suicides</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighsuicides[pid].'">'.FlagImage($sql_mhighsuicides['country'], false).' '.htmlentities($sql_mhighsuicides[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighsuicides[suicides].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighsuicides[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighsuicides['pid'].'">'.FlagImage($sql_mhighsuicides['country'], false).' '.htmlentities($sql_mhighsuicides['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighsuicides['suicides'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighsuicides['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Team Kills</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighteamkills[pid].'">'.FlagImage($sql_mhighteamkills['country'], false).' '.htmlentities($sql_mhighteamkills[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighteamkills[teamkills].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighteamkills[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighteamkills['pid'].'">'.FlagImage($sql_mhighteamkills['country'], false).' '.htmlentities($sql_mhighteamkills['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighteamkills['teamkills'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighteamkills['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Efficiency</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhigheff[pid].'">'.FlagImage($sql_mhigheff['country'], false).' '.htmlentities($sql_mhigheff[name]).'</a></td>
-    <td class="grey" align="center">'.get_dp($sql_mhigheff[eff]).'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhigheff[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhigheff['pid'].'">'.FlagImage($sql_mhigheff['country'], false).' '.htmlentities($sql_mhigheff['name']).'</a></td>
+    <td class="grey" align="center">'.get_dp($sql_mhigheff['eff']).'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhigheff['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Accuracy</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighaccuracy[pid].'">'.FlagImage($sql_mhighaccuracy['country'], false).' '.htmlentities($sql_mhighaccuracy[name]).'</a></td>
-    <td class="grey" align="center">'.get_dp($sql_mhighaccuracy[accuracy]).'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighaccuracy[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighaccuracy['pid'].'">'.FlagImage($sql_mhighaccuracy['country'], false).' '.htmlentities($sql_mhighaccuracy['name']).'</a></td>
+    <td class="grey" align="center">'.get_dp($sql_mhighaccuracy['accuracy']).'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighaccuracy['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">TTL</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighttl[pid].'">'.FlagImage($sql_mhighttl['country'], false).' '.htmlentities($sql_mhighttl[name]).'</a></td>
-    <td class="grey" align="center">'.get_dp($sql_mhighttl[ttl]).'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighttl[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighttl['pid'].'">'.FlagImage($sql_mhighttl['country'], false).' '.htmlentities($sql_mhighttl['name']).'</a></td>
+    <td class="grey" align="center">'.get_dp($sql_mhighttl['ttl']).'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighttl['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Flag Caps</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighflag_capture[pid].'">'.FlagImage($sql_mhighflag_capture['country'], false).' '.htmlentities($sql_mhighflag_capture[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighflag_capture[flag_capture].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighflag_capture[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighflag_capture['pid'].'">'.FlagImage($sql_mhighflag_capture['country'], false).' '.htmlentities($sql_mhighflag_capture['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighflag_capture['flag_capture'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighflag_capture['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Flag Kills</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighflag_kill[pid].'">'.FlagImage($sql_mhighflag_kill['country'], false).' '.htmlentities($sql_mhighflag_kill[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighflag_kill[flag_kill].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighflag_kill[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighflag_kill['pid'].'">'.FlagImage($sql_mhighflag_kill['country'], false).' '.htmlentities($sql_mhighflag_kill['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighflag_kill['flag_kill'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighflag_kill['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Domination Control Points</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighdom_cp[pid].'">'.FlagImage($sql_mhighdom_cp['country'], false).' '.htmlentities($sql_mhighdom_cp[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighdom_cp[dom_cp].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighdom_cp[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighdom_cp['pid'].'">'.FlagImage($sql_mhighdom_cp['country'], false).' '.htmlentities($sql_mhighdom_cp['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighdom_cp['dom_cp'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighdom_cp['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Assault Objectives</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighass_obj[pid].'">'.FlagImage($sql_mhighass_obj['country'], false).' '.htmlentities($sql_mhighass_obj[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighass_obj[ass_obj].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighass_obj[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighass_obj['pid'].'">'.FlagImage($sql_mhighass_obj['country'], false).' '.htmlentities($sql_mhighass_obj['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighass_obj['ass_obj'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighass_obj['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Monster Kills</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighspree_monster[pid].'">'.FlagImage($sql_mhighspree_monster['country'], false).' '.htmlentities($sql_mhighspree_monster[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighspree_monster[spree_monster].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighspree_monster[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighspree_monster['pid'].'">'.FlagImage($sql_mhighspree_monster['country'], false).' '.htmlentities($sql_mhighspree_monster['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighspree_monster['spree_monster'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighspree_monster['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Godlikes</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighspree_god[pid].'">'.FlagImage($sql_mhighspree_god['country'], false).' '.htmlentities($sql_mhighspree_god[name]).'</a></td>
-    <td class="grey" align="center">'.$sql_mhighspree_god[spree_god].'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighspree_god[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighspree_god['pid'].'">'.FlagImage($sql_mhighspree_god['country'], false).' '.htmlentities($sql_mhighspree_god['name']).'</a></td>
+    <td class="grey" align="center">'.$sql_mhighspree_god['spree_god'].'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighspree_god['matchid'].'">(click)</a></td>
   </tr>
   <tr>
     <td class="dark" align="center">Rank Points</td>
-    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighrank[pid].'">'.FlagImage($sql_mhighrank['country'], false).' '.htmlentities($sql_mhighrank[name]).'</a></td>
-    <td class="grey" align="center">'.get_dp($sql_mhighrank[rank]).'</td>
-    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighrank[matchid].'">(click)</a></td>
+    <td nowrap class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$sql_mhighrank['pid'].'">'.FlagImage($sql_mhighrank['country'], false).' '.htmlentities($sql_mhighrank['name']).'</a></td>
+    <td class="grey" align="center">'.get_dp($sql_mhighrank['rank']).'</td>
+    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$sql_mhighrank['matchid'].'">(click)</a></td>
   </tr>
 </tbody></table>
 <br>';
@@ -520,16 +520,16 @@ $sql_mweapons = "SELECT id, name, image FROM uts_weapons WHERE hide <> 'Y' ORDER
 $q_mweapons = mysql_query($sql_mweapons) or die(mysql_error());
 while ($r_mweapons = mysql_fetch_array($q_mweapons)) {
 
-	$wid =  $r_mweapons[id];
+	$wid =  $r_mweapons['id'];
 	$sql_mweaponsl = "SELECT w.pid AS playerid, pi.name AS name, pi.country AS country, w.kills, COUNT(DISTINCT w.matchid) AS mcount FROM uts_weaponstats AS w LEFT JOIN uts_pinfo AS pi ON w.pid = pi.id WHERE w.weapon = '".$wid."' AND w.pid > 0 AND pi.banned <> 'Y' GROUP BY id, name ORDER BY w.kills DESC LIMIT 0,1";
 	$q_mweaponsl = mysql_query($sql_mweaponsl) or die(mysql_error());
 	while ($r_mweaponsl = mysql_fetch_array($q_mweaponsl)) {
 
 	      echo '<tr>
-		    <td class="dark" align="center">'.$r_mweapons[name].'</td>
-		    <td class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$r_mweaponsl[playerid].'">'.FlagImage($r_mweaponsl[country], false).' '.htmlentities($r_mweaponsl[name]).'</a></td>
-		    <td class="grey" align="center">'.$r_mweaponsl[kills].'</td>
-		    <td class="grey" align="center">'.$r_mweaponsl[mcount].'</td>
+		    <td class="dark" align="center">'.$r_mweapons['name'].'</td>
+		    <td class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$r_mweaponsl['playerid'].'">'.FlagImage($r_mweaponsl['country'], false).' '.htmlentities($r_mweaponsl['name']).'</a></td>
+		    <td class="grey" align="center">'.$r_mweaponsl['kills'].'</td>
+		    <td class="grey" align="center">'.$r_mweaponsl['mcount'].'</td>
  		    </tr>';
 
 	}
@@ -558,16 +558,16 @@ $sql_mweapons = "SELECT id, name, image FROM uts_weapons WHERE hide <> 'Y' ORDER
 $q_mweapons = mysql_query($sql_mweapons) or die(mysql_error());
 while ($r_mweapons = mysql_fetch_array($q_mweapons)) {
 
-	$wid =  $r_mweapons[id];
+	$wid =  $r_mweapons['id'];
 	$sql_mweaponsl = "SELECT w.matchid, w.pid AS playerid, pi.name AS name, pi.country AS country, w.kills FROM uts_weaponstats AS w LEFT JOIN uts_pinfo AS pi ON w.pid = pi.id WHERE w.weapon = '".$wid."' AND w.pid > 0 AND w.matchid > 0 AND pi.banned <> 'Y' ORDER BY w.kills DESC LIMIT 0,1";
 	$q_mweaponsl = mysql_query($sql_mweaponsl) or die(mysql_error());
 	while ($r_mweaponsl = mysql_fetch_array($q_mweaponsl)) {
 
 	      echo '<tr>
-		    <td class="dark" align="center">'.$r_mweapons[name].'</td>
-		    <td class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$r_mweaponsl[playerid].'">'.FlagImage($r_mweaponsl[country], false).' '.htmlentities($r_mweaponsl[name]).'</a></td>
-		    <td class="grey" align="center">'.$r_mweaponsl[kills].'</td>
-		    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$r_mweaponsl[matchid].'">(click)</a></td>
+		    <td class="dark" align="center">'.$r_mweapons['name'].'</td>
+		    <td class="greyhuman" align="center"><a class="greyhuman" href="./?p=pinfo&amp;pid='.$r_mweaponsl['playerid'].'">'.FlagImage($r_mweaponsl['country'], false).' '.htmlentities($r_mweaponsl['name']).'</a></td>
+		    <td class="grey" align="center">'.$r_mweaponsl['kills'].'</td>
+		    <td class="grey" align="center"><a class="greyhuman" href="./?p=match&amp;mid='.$r_mweaponsl['matchid'].'">(click)</a></td>
  		    </tr>';
 	}
 }

@@ -35,12 +35,12 @@ if ($ban) {
 	</tr>
 	<tr>
 		<td class="smheading" align="left">Removing Player Rank:</td>';
-	mysql_query("DELETE FROM uts_rank WHERE pid = $pid") or die(mysql_error());
+	mysql_query("DELETE FROM uts_rank WHERE pid = '".$pid."';") or die(mysql_error());
 		echo'<td class="grey" align="left">Done</td>
 	</tr>
 	<tr>
 		<td class="smheading" align="left">Updating Player Record:</td>';
-	mysql_query("UPDATE uts_pinfo SET banned = 'Y' WHERE id = $pid") or die(mysql_error());
+	mysql_query("UPDATE uts_pinfo SET banned = 'Y' WHERE id = '".$pid."';") or die(mysql_error());
 		echo'<td class="grey" align="left">Done</td>
 	</tr>
 	
@@ -54,7 +54,7 @@ if ($ban) {
 	</tr>
 	<tr>
 		<td class="smheading" align="left">Updating Player Record:</td>';
-	mysql_query("UPDATE uts_pinfo SET banned = 'N' WHERE id = $pid") or die(mysql_error());
+	mysql_query("UPDATE uts_pinfo SET banned = 'N' WHERE id = '".$pid."';") or die(mysql_error());
 		echo'<td class="grey" align="left">Done</td>
 	</tr>
 	<tr>

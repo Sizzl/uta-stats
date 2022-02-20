@@ -33,7 +33,7 @@ if (isset($_GET['togglewatch'])) {
 		echo htmlentities($playername,ENT_SUBSTITUTE,$htmlcp) ." has been removed from your watchlist";
 	}
 	echo "<br>";
-	$target = $PHP_SELF .'?p=pinfo&amp;pid='. $pid;
+	$target = $PHP_SELF.'?p=pinfo&amp;pid='.$pid;
 	echo 'You will be taken back to the <a href="'. $target .'">'. htmlentities($playername,ENT_SUBSTITUTE,$htmlcp) .'\'s page</a> in a moment.';
 	echo '<meta http-equiv="refresh" content="2;URL='. $target .'">';
 	return;
@@ -360,7 +360,7 @@ while ($r_rank = mysql_fetch_array($q_rank)) {
 echo '</tbody></table>';
 
 
-$r_pings = small_query("SELECT MIN(lowping * 1) AS lowping, AVG(avgping * 1) AS avgping, MAX(highping * 1) AS highping FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = $pid and lowping > 0");
+$r_pings = small_query("SELECT MIN(lowping * 1) AS lowping, AVG(avgping * 1) AS avgping, MAX(highping * 1) AS highping FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = ".$pid." and lowping > 0");
 if ($r_pings and $r_pings['lowping']) {
 echo '
 	<br>
