@@ -184,12 +184,24 @@
 	else
 	{
 		$r_tos = 0;
-		$q_tos = small_query("SELECT col0 AS `pcon`,
-					(SELECT `col0` FROM `uts_temp_".$uid."` WHERE `col1` = 'player' AND `col2` = 'Disconnect' and `col4` = '".$playerid."') AS `pdis`,
-					(SELECT `col0` FROM `uts_temp_".$uid."` WHERE `col1` = 'game_end') AS `gmend`,
-					(SELECT `col0` FROM `uts_temp_".$uid."` WHERE `col1` = 'game_start') AS `gstrt`
-					FROM `uts_temp_".$uid."`
-					WHERE `col1` = 'player' AND `col2` = 'Connect' and `col4` = '".$playerid."';");
+		$q_tos = array('pcon'=>'','pdis'=>'','gstrt'=>'','gmend'=>''); // Build this from other data we have
+
+		$q_nfo = small_query("SELECT `col0` AS `pcon` FROM `uts_temp_".$uid."` WHERE `col1` = 'player' AND `col2` = 'Connect' AND `col4` = '".$playerid."';");
+		if (strlen($q_nfo['pcon']))
+			$q_tos['pcon'] = $q_nfo['pcon'];
+
+		$q_nfo = small_query("SELECT `col0` AS `pdis` FROM `uts_temp_".$uid."` WHERE `col1` = 'player' AND `col2` = 'Disconnect' AND `col4` = '".$playerid."';");
+		if (strlen($q_nfo['pdis']))
+			$q_tos['pdis'] = $q_nfo['pdis'];
+
+		$q_nfo = small_query("SELECT `col0` AS `gstrt` FROM `uts_temp_".$uid."` WHERE `col1` = 'game_start';");
+		if (strlen($q_nfo['gstrt']))
+			$q_tos['gstrt'] = $q_nfo['gstrt'];
+
+		$q_nfo = small_query("SELECT `col0` AS `gmend` FROM `uts_temp_".$uid."` WHERE `col1` = 'game_end';");
+		if (strlen($q_nfo['gmend']))
+			$q_tos['gmend'] = $q_nfo['gmend'];
+
 		if (strlen($q_tos['pdis']) && strlen($q_tos['pcon']))
 		{
 			$r_tos = get_dp($q_tos['pdis']-$q_tos['pcon']);
