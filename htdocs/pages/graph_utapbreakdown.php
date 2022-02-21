@@ -40,7 +40,7 @@ while ($r_gyears = mysql_fetch_array($q_gyears)) {
 			$year_first = $year_last;
 		$gb_year[$r_gyears['res_year']] = $r_gyears['res_count'];
 		if ($r_gyears['res_count'] > $year_max) $year_max = $r_gyears['res_count'];
-		$year_sum += $r_years['res_count'];
+		$year_sum += $r_gyears['res_count'];
 }
 if (strlen($gtitle)==0) {
 	if ($year_first == $year_last)
@@ -118,4 +118,46 @@ echo'</tr><tr>
 </tr>
 </tbody></table>
 <br>';
+
+$total_years = intval(($year_last)-($year_first));
+echo'<table border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+  <tr>
+    <td class="heading" align="center" colspan="'.intval(3+$total_years).'">Yearly Activity '.$gtitle.'</td>
+  </tr>
+  <tr>
+    <td class="dark" align="center" colspan="'.intval(3+$total_years).'" height="10"></td>
+  </tr>
+  <tr>
+	<td class="dark" align="center" width="15"></td>';
+// Yearly
+for ($i = $year_first; $i <= $year_last; $i++) {
+	if (!isset($gb_year[$i])) $gb_year[$i] = 0;
+	if ($year_sum > 0)
+		$title = $gb_year[$i] .' ('. get_dp($gb_year[$i] / $year_sum * 100) .' %)';
+	else
+		$title = $gb_year[$i] .' (0%)';
+	echo '<td class="dark" align="center" valign="bottom" width="25"><img border="0" src="images/bars/v_bar'. (($i + 8) % 16 + 1) .'.png" width="30" height="'.(int)($gb_year[$i] / $year_max * $max_height).'" alt="'. $title .'" title="'. $title .'"></td>';
+}
+echo '
+        <td class="dark" align="center" width="15"></td>
+   </tr>
+   <tr>
+        <td class="grey" align="center" width="25"></td>';
+for ($i = $year_first; $i <= $year_last; $i++) {
+	if (!isset($gb_year[$i])) $gb_year[$i] = 0;
+	if ($year_sum > 0)
+		$title = $gb_year[$i] .' ('. get_dp($gb_year[$i] / $year_sum * 100) .' %)';
+	else
+		$title = $gb_year[$i] .' (0%)';
+	echo '
+	<td class="grey" align="center" '.OverlibPrintHint("", $title,"Games logged in ".$i).'>'.$i.'</td>';
+}
+echo'
+        <td class="grey" align="center" width="15"></td>
+  </tr>
+ </tbody>
+</table><br />';
+
+
 ?>
