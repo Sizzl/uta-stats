@@ -394,9 +394,12 @@ if ($ShowNGStatsTotals)
 	$sql_mhighdom_cp = small_query("SELECT p.matchid, p.pid, pi.name, p.country, SUM(dom_cp) AS dom_cp , SUM(gametime) AS sumgametime FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND dom_cp > 0 GROUP BY matchid, pid HAVING sumgametime > 600 ORDER BY dom_cp DESC LIMIT 0,1");
 	
 	$ass_obj_check = small_query("SELECT COUNT(id) AS idcount FROM uts_games WHERE gamename LIKE '%Assault%';") or die(mysql_error());
-	IF ($ass_obj_check['idcount'] > 0 ) {
+	if ($ass_obj_check['idcount'] > 0 )
+	{
 		$sql_mhighass_obj = small_query("SELECT p.matchid, p.pid, pi.name, p.country, SUM(ass_obj) AS ass_obj , SUM(gametime) AS sumgametime FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND ass_obj > 0 GROUP BY matchid, pid HAVING sumgametime > 600 ORDER BY ass_obj DESC LIMIT 0,1");
-	} else {
+	}
+	else
+	{
 		$sql_mhighass_obj = "";
 	}
 	

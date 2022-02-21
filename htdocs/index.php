@@ -60,7 +60,8 @@ switch ($pagehandler)
 	case "maps": maps(); break;			// Maps list
 	case "minfo": minfo(); break;		// Map info
 
-	case "totals": totals(); break;		// Totals summary
+	case "totals": totals(false); break;		// Totals summary
+	case "totalslive": totals(true); break;		// Totals summary
 
 	case "watchlist": watchlist(); break;		// The viewer's watchlist
 	
@@ -200,17 +201,27 @@ function minfo()
 	include("pages/maps_info.php");
 }
 
-function totals()
+function totals($live=false)
 {
-	if (is_file("pages/totals.php") && filesize("pages/totals.php") > 1024) {
-		include("pages/totals.php");
-	} else {
-		echo "<meta http-equiv=\"refresh\" content=\"4; URL='index.php?p=utapugrecent'\" /> 
-<table border=\"0\" cellpadding=\"1\" cellspacing=\"2\" width=\"710\">
-  <tbody><tr>
-    <td class=\"heading\" align=\"center\">Totals Summary - Currently Unavailable</td>
-  </tr>
-</tbody></table>";
+	if ($live)
+	{
+		include("pages/totals_live.php");
+	}
+	else
+	{
+		if (is_file("pages/totals.php") && filesize("pages/totals.php") > 1024)
+		{
+			include("pages/totals.php");
+		}
+		else
+		{
+			echo "<meta http-equiv=\"refresh\" content=\"4; URL='index.php?p=utapugrecent'\" /> 
+	<table border=\"0\" cellpadding=\"1\" cellspacing=\"2\" width=\"710\">
+	  <tbody><tr>
+	    <td class=\"heading\" align=\"center\">Totals Summary - Currently Unavailable</td>
+	  </tr>
+	</tbody></table>";
+		}		
 	}
 }
 

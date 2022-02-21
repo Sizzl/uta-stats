@@ -3,7 +3,7 @@
 if (isset($_GET['serverip']) != 1) return;
 
 // Get server IP info
-list($serverip, $serverport) = explode(":", $_GET[serverip]);
+list($serverip, $serverport) = explode(":", $_GET['serverip']);
 $queryport = $serverport+1;
 
 //If there is no IP, return (exit)
@@ -55,7 +55,7 @@ fclose ($sock);
 
 
 //Split chunks by \
-$chunks = split('[\]', $data);
+$chunks = explode('\\', $data);
 
 $mappic = strtolower("images/maps/".$map.".jpg");
 

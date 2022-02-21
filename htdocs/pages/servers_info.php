@@ -1,6 +1,6 @@
 <?php 
-if (isset($_GET["serverip"])) {
-	$serverip = $_GET["serverip"];
+if (isset($_GET['serverip'])) {
+	$serverip = $_GET['serverip'];
 } else {
 	$serverip = 0;
 }
@@ -18,8 +18,8 @@ IF($ecount > $ecount2) {
 $fpage = 0;
 IF($ecount < 1) { $lpage = 0; }
 else { $lpage = $ecount2-1; }
-if (isset($_GET["page"])) {
-	$cpage = $_GET["page"];
+if (isset($_GET['page'])) {
+	$cpage = $_GET['page'];
 } else {
 	$cpage = 0;
 }
@@ -46,12 +46,12 @@ if ($cpage == "$lpage") { $lpageurl = "[Last]"; }
 // Get the last match entry for this server
 
 $serverinfo = small_query("SELECT time, servername, serverinfo, gameinfo, mutators FROM uts_match WHERE serverip = '".$serverip."' ORDER BY time DESC LIMIT 0,1");
-$matchdate = mdate($serverinfo[time]);
+$matchdate = mdate($serverinfo['time']);
 
 echo'
 <table border="0" cellpadding="1" cellspacing="2" width="720">
   <tbody><tr>
-    <td class="heading" align="center" colspan="4">'.$serverinfo[servername].'</td>
+    <td class="heading" align="center" colspan="4">'.$serverinfo['servername'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center" width="110">Last Match</td>
@@ -60,12 +60,12 @@ echo'
   </tr>
   <tr>
     <td class="dark" align="center">Server Info</td>
-    <td class="grey" align="center">'.$serverinfo[serverinfo].'</td>
-    <td class="grey" align="center" rowspan="2">'.$serverinfo[gameinfo].'</td>
+    <td class="grey" align="center">'.$serverinfo['serverinfo'].'</td>
+    <td class="grey" align="center" rowspan="2">'.$serverinfo['gameinfo'].'</td>
   </tr>
   <tr>
     <td class="dark" align="center">Mutators</td>
-    <td class="grey" align="center">'.$serverinfo[mutators].'</td>
+    <td class="grey" align="center">'.$serverinfo['mutators'].'</td>
   </tr>
 </tbody></table>
 <br>';
@@ -86,7 +86,7 @@ echo'<div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl
     <td class="smheading" align="center" width="40">Time</td>
   </tr>';
 
-$sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.mapfile, m.gametime FROM uts_match AS m, uts_games AS g  WHERE g.id = m.gid AND m.serverip = '".$serverip."' ORDER BY m.time DESC LIMIT $qpage,25";
+$sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.mapfile, m.gametime FROM uts_match AS m, uts_games AS g  WHERE g.id = m.gid AND m.serverip = '".$serverip."' ORDER BY m.time DESC LIMIT ".$qpage.",25";
 $q_recent = mysql_query($sql_recent) or die(mysql_error());
 while ($r_recent = mysql_fetch_array($q_recent)) {
 

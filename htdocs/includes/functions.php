@@ -24,16 +24,16 @@ $charimg = $charimages[rand(0, count($charimages)-1)];
 // Two letter codes and their correspionding country names
 require_once(dirname(__FILE__) .'/countries.php');
 
-// Addslashes if magic_quotes are off
+// Addslashes if magic_quotes are off --// updated Feb 2022, temporary adjustment since the get_magic_quotes_gpc is deprecated
 function my_addslashes($data) {
-	if (!get_magic_quotes_gpc()) {
+	if (!false) {
 	   $data = addslashes($data);
 	}
 	return $data;
 }
 
 function my_stripslashes($data) {
-	if (!get_magic_quotes_gpc()) {
+	if (!false) {
 	   $data = $data;
 	} else {
 	   $data = stripslashes($data);

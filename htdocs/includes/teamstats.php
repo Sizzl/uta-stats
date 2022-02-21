@@ -28,7 +28,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 
 	$sql_players = "SELECT  pi.name, pi.banned, p.pid, p.lowping, p.highping, p.avgping, p.team, p.country, p.gamescore, p.frags, p.deaths, p.suicides, p.teamkills, p.eff, p.accuracy, p.ttl, p.rank".(($extra) ? ', p.'.$extra.' AS '.$extra  : '')."
 	FROM ".(isset($t_player) ? $t_player : "uts_player")." AS p, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE p.pid = pi.id AND matchid = $mid
-	ORDER BY".(($teams) ? ' team ASC,' : '')." $order";
+	ORDER BY".(($teams) ? ' team ASC,' : '')." ".$order.";";
 	$q_players = mysql_query($sql_players) or die(mysql_error());
 	$header = true;
 	teamstats_init_totals($totals, $num);
@@ -73,22 +73,28 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 		$acc = get_dp($r_players['accuracy']);
 		$ttl = GetMinutes($r_players['ttl']);
 		$ping = $r_players['avgping'];
-		$kills = $r_players['frags'] + $r_players['suicides'];
+		if (strlen($r_players['suicides']))
+			$suis = $r_players['suicides'];
+		else
+			$suis = 0;
+		$kills = $r_players['frags'] + $suis;
 		$pname = $r_players['name'];
 
 		$totals['gamescore'] += $r_players['gamescore'];
-		if ($extra) $totals[$extra] += $r_players[$extra];
+		if ($extra && strlen($r_players[$extra]))
+			$totals[$extra] += $r_players[$extra];
 		$totals['frags'] += $r_players['frags'];
 		$totals['kills'] += $kills;
 		$totals['deaths'] += $r_players['deaths'];
-		$totals['suicides'] += $r_players['suicides'];
-		$totals['teamkills'] += $r_players['teamkills'];
+		$totals['suicides'] += $suis;
+		if (strlen($r_players['teamkills']))
+			$totals['teamkills'] += $r_players['teamkills'];
 		$totals['eff'] += $r_players['eff'];
 		$totals['acc'] += $r_players['accuracy'];
 		$totals['ttl'] += $r_players['ttl'];
                 $totals['ping'] += $r_players['avgping'];
 		$num++;
-		
+
 		if ($r_players['banned'] == 'Y') {
 			$eff = '-';
 			$acc = '-';

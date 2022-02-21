@@ -13,11 +13,11 @@
 		$playerbanned = false;
 	}
 	$playerid2pid[$playerid] = $pid;
-	
+
 	// Do we import banned players?
 	if ($playerbanned and $import_ban_type == 2) return;
-	
-	
+
+
 	// Did the player do first blood?
 	if ($playerid == $firstblood) {
 		$upd_firstblood = "UPDATE uts_match SET firstblood = '".$pid."' WHERE id = '".$matchid."';";
@@ -28,7 +28,7 @@
 	$q_playerip = small_query("SELECT INET_ATON(col4) AS ip FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'IP' and col3 = '".$playerid."' ORDER BY id ASC LIMIT 0,1;");
 	$playerip = $q_playerip['ip'];
 
-	// Check if player is in $ignored array (excludes ®egistered players [pug/league]) --// Added 29/04/07 Timo.
+	// Check if player is in $ignored array (excludes ï¿½egistered players [pug/league]) --// Added 29/04/07 Timo.
 	if (in_array($playerip,$ignored) && ord(substr($playername,-1,1))<>174)
 		$playerbanned = true;
 
@@ -47,7 +47,7 @@
 	} else {
 		$playercountry = "xx";
 	}
-	
+
 	if ($playercountry != $pid_country) {
 		mysql_query("UPDATE uts_pinfo SET country = '".$playercountry."', banned = '".($playerbanned==true ? 'Y' : 'N')."' WHERE id = '".$pid."';") or die(mysql_error());
 	}
@@ -91,9 +91,9 @@
 
 	// Get ping information
 	$r_player9 = small_query("SELECT MIN(col4 * 1) AS lowping, MAX(col4 * 1) AS highping, AVG(col4 * 1) AS avgping FROM uts_temp_".$uid." WHERE col1 = 'Player' AND col2 = 'Ping' AND col3 = '".$playerid."' AND col4 > 0");
-	$lowping = $r_player9['lowping'];
-	$highping = $r_player9['highping'];
-	$avgping = $r_player9['avgping'];
+	$lowping = min($r_player9['lowping'],30000);
+	$highping = min($r_player9['highping'],30000);
+	$avgping = min($r_player9['avgping'],30000);
 
 	// People who join at the end error the import, this stops it
 	IF ($lowping == NULL) { $lowping = 0; }
@@ -239,7 +239,7 @@
 										`insta` = '".$gameinsta."',
 										`country` = '".$playercountry."',
 										`ip` = '".$playerip."',
-																				
+
 										`spree_double` = '".$q_spree_dbl."',
 										`spree_multi` = '".$q_spree_mult."',
 										`spree_ultra` = '".$q_spree_ult."',
@@ -249,29 +249,29 @@
 										`spree_dom` = '".$q_spree_dom."',
 										`spree_uns` = '".$q_spree_uns."',
 										`spree_god` = '".$q_spree_god."',
-											
+
 										`pu_pads` = '".$pu_pads."',
 										`pu_armour` = '".$pu_armour."',
 										`pu_keg` = '".$pu_keg."',
 										`pu_belt` = '".$pu_belt."',
 										`pu_amp` = '".$pu_amp."',
 										`pu_invis` = '".$pu_invis."',
-										
+
 										`lowping` = '".$lowping."',
 										`highping` = '".$highping."',
 										`avgping` = '".$avgping."',
-						
-										`accuracy` = '".$r_acc."', 
-										`frags` = '".$r_frags."', 
-										`deaths` = '".$r_deaths."', 
-										`kills` = '".$r_kills."', 
+
+										`accuracy` = '".$r_acc."',
+										`frags` = '".$r_frags."',
+										`deaths` = '".$r_deaths."',
+										`kills` = '".$r_kills."',
 										`suicides` = '".$r_suicides."',
-										`teamkills` = '".$r_teamkills."', 
-										`eff` = '".$r_efficiency."', 
-										`gametime` = '".$r_tos."', 
-										`ttl` = '".$r_ttl."', 
-										`gamescore` = '".$r_score."';"; 
-	
+										`teamkills` = '".$r_teamkills."',
+										`eff` = '".$r_efficiency."',
+										`gametime` = '".$r_tos."',
+										`ttl` = '".$r_ttl."',
+										`gamescore` = '".$r_score."';";
+
 	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff final; (f=".$r_frags."; s=\n".$sql_playerid.")\n".mysql_error()."\n");
 	$playerecordid = mysql_insert_id();
 

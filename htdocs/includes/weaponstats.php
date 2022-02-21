@@ -6,13 +6,14 @@ function weaponstats($_mid, $_pid, $title = 'Weapons Summary')
 	if (!isset($rank_year))
 		$rank_year = 0;
 
-	$sql_weapons = "SELECT	w.matchid, w.pid AS playerid, w.weapon, w.kills, w.shots, w.hits, w.damage, w.acc,
-				pi.name AS playername, pi.country AS country, pi.banned AS banned,
+	$sql_weapons = "SELECT w.weapon, SUM(w.kills) AS kills, SUM(w.shots) AS shots, SUM(w.hits) AS hits, SUM(w.damage) AS damage, AVG(w.acc) AS acc,
 				wn.id AS weaponid, wn.name AS weaponname, wn.image AS weaponimg, wn.sequence AS sequence
 				FROM ".(isset($t_weapons) ? $t_weapons : "uts_weapons")." AS wn,
 				".(isset($t_weaponstats) ? $t_weaponstats : "uts_weaponstats")." AS w
 				LEFT JOIN (".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi) ON w.pid = pi.id
-				WHERE w.matchid = '".$_mid."' AND w.pid = '".$_pid."' AND w.year = '".$rank_year."' AND (wn.id = w.weapon) AND wn.hide <> 'Y'";
+				WHERE w.matchid = '".$_mid."' AND w.pid = '".$_pid."' AND w.year = '".$rank_year."' AND (wn.id = w.weapon) AND wn.hide <> 'Y'
+				GROUP BY w.weapon
+                ORDER BY sequence;";
 
 	if ($_pid == 0 and $_mid != 0)
 	{
@@ -72,6 +73,38 @@ function weaponstats($_mid, $_pid, $title = 'Weapons Summary')
 			$weapons[$weaponid]['sequence']	= $r_weapons['sequence'];
 		}
 	}
+	$sql = "SELECT SUM(w.kills) AS kills, SUM(w.shots) AS shots, SUM(w.hits) AS hits, SUM(w.damage) AS damage, AVG(w.acc) AS acc, 'Other' AS weaponname, 'blank.jpg' AS weaponimg
+            FROM ".(isset($t_weapons) ? $t_weapons : "uts_weapons")." AS wn,
+            ".(isset($t_weaponstats) ? $t_weaponstats : "uts_weaponstats")." AS w
+            LEFT JOIN (".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi) ON w.pid = pi.id
+            WHERE w.matchid = '".$_mid."' AND w.pid = '".$_pid."' AND w.year = '".$rank_year."' AND wn.hide = 'Y' AND (wn.id = w.weapon)
+            GROUP BY wn.hide";
+
+	$q_hiddenkills = small_query($sql);
+	if ($q_hiddenkills && strlen($q_hiddenkills['weaponname']))
+	{
+		if (isset($weaponid))
+			$weaponid++;
+		else
+			$weaponid = 99;
+
+		$wsort[$weaponid] = 999;
+		$weapons[$weaponid]['name'] = $q_hiddenkills['weaponname'];
+		$weapons[$weaponid]['image'] = "";
+		$weapons[$weaponid]['sequence'] = 999;
+
+		$wd[$playerid][$weaponid]['kills']      = $q_hiddenkills['kills'];
+
+		if (!empty($q_hiddenkills['shots']) && intval($q_hiddenkills['shots']) > 0)
+			$wd[$playerid][$weaponid]['shots']      = $q_hiddenkills['shots'];
+		if (!empty($q_hiddenkills['hits']) && intval($q_hiddenkills['hits']) > 0)
+			$wd[$playerid][$weaponid]['hits']       = $q_hiddenkills['hits'];
+		if (!empty($q_hiddenkills['damage']) && intval($q_hiddenkills['damage']) > 0)
+			$wd[$playerid][$weaponid]['damage']     = $q_hiddenkills['damage'];
+		if (!empty($q_hiddenkills['acc']) && intval($q_hiddenkills['acc']) > 0)
+			$wd[$playerid][$weaponid]['acc']        = ((!empty($q_hiddenkills['acc'])) ? get_dp($q_hiddenkills['acc']) : '');
+	}
+
 	if (!isset($psort)) return;
 
 	asort($psort);
