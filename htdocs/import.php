@@ -539,12 +539,12 @@ foreach ($logfiles as $filename)
 				
 		// Fix Servergametime
 		$servergametime	= $servergametime / $timedilation;
-						
+
 		// ************************************************************************************
 		// CRATOS: Fix Mapfile name 
 		// ************************************************************************************
 		if (substr($mapfile,-4) != ".unr") $mapfile = $mapfile . ".unr";
-		
+
 		// ************************************************************************************
 		// Cratos: Check for duplicate logfile import
 		// ************************************************************************************
@@ -554,19 +554,19 @@ foreach ($logfiles as $filename)
 			$gametime = utdate($gametime);
 
 		$duplicate = small_count("SELECT id FROM uts_match WHERE serverip='$serverip:$serverport' AND time='".$gametime."' AND mapfile='".$mapfile."'");
-		if ($duplicate > 0 && !isset($processdupes))	
-		{			
+		if ($duplicate > 0 && !isset($processdupes))
+		{
 			echo "ERROR: DUPLICATE LOGFILE \nServer: $servername\nGame: $gametime \nIgnoring...";
-			if ($html) echo '</td></tr>';							
+			if ($html) echo '</td></tr>';
 			// Delete Temp MySQL Table
 			$droptable = "DROP TABLE `uts_temp_".$uid."`;";
-			mysql_query($droptable) or die("tmp drop ".mysql_error());		
+			mysql_query($droptable) or die("tmp drop ".mysql_error());
 			if ($html) echo'<tr><td class="smheading" align="left" width="350">';
 			echo "Deleting Temp MySQL Table: ";
 			if ($html) echo '</td><td class="grey" align="left" width="200">';
 			echo "uts_temp_".$uid."\n";
 			if ($html) echo '</td></tr></table><br />';
-			echo "\n\n";		
+			echo "\n\n";
 			// Delete log file
 			unlink($filename);
 			continue;
@@ -574,7 +574,7 @@ foreach ($logfiles as $filename)
 		elseif ($duplicate > 0 && isset($processdupes))
 		{
 			$dupe_m = small_query("SELECT id FROM uts_match WHERE serverip='$serverip:$serverport' AND time='".$gametime."' AND mapfile='".$mapfile."'");
-			$matchid = $dupe_m["id"];	
+			$matchid = $dupe_m["id"];
 		}
 
 		// Lazy Hack for unknown gametypes
@@ -589,9 +589,9 @@ foreach ($logfiles as $filename)
 		// Append insta to game if it was an insta game
 		$gameinsta = 0;
 		if ($qm_insta['col3'] == "True") { $gameinsta = 1; $gamename = "$gamename (insta)"; } else { $gameinsta = 0; }
-		
+
 		// CRATOS: Check for PRO matches
-		if (intval($qm_gameinfoff['col3']) != 0) { $gamename = "$gamename (pro)"; }		
+		if (intval($qm_gameinfoff['col3']) != 0) { $gamename = "$gamename (pro)"; }
 
 		// Get the unique ID of this gametype.
 		// Create a new one if it has none yet.

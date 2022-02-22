@@ -3,7 +3,7 @@ $max_height = 80;
 
 // Hourly Breakdown
 $sql_ghours = "SELECT HOUR(m.time) AS res_hour, COUNT(p.id) AS res_count
-FROM uts_match m, uts_player p WHERE $bgwhere AND m.id = p.matchid GROUP by res_hour";
+FROM uts_match m, uts_player p WHERE ".$bgwhere." AND m.id = p.matchid GROUP by res_hour";
 $q_ghours = mysql_query($sql_ghours) or die(mysql_error());
 $hour_max = 0;
 $hour_sum = 0;
@@ -16,7 +16,7 @@ if ($hour_max == 0) return;
 
 // Monthly Breakdown
 $sql_gmonths = "SELECT MONTH(m.time) AS res_month, COUNT(p.id) AS res_count
-FROM uts_match m, uts_player p WHERE $bgwhere AND m.id = p.matchid GROUP by res_month";
+FROM uts_match m, uts_player p WHERE ".$bgwhere." AND m.id = p.matchid GROUP by res_month";
 $q_gmonths = mysql_query($sql_gmonths) or die(mysql_error());
 $month_max = 0;
 $month_sum = 0;
@@ -28,7 +28,7 @@ while ($r_gmonths = mysql_fetch_array($q_gmonths)) {
 
 // Yearly Breakdown
 $sql_gyears = "SELECT YEAR(m.time) AS res_year, COUNT(p.id) AS res_count
-FROM uts_match m, uts_player p WHERE $bgwhere AND m.id = p.matchid GROUP by res_year ORDER BY res_year";
+FROM uts_match m, uts_player p WHERE ".$bgwhere." AND m.id = p.matchid GROUP by res_year ORDER BY res_year";
 $q_gyears = mysql_query($sql_gyears) or die(mysql_error());
 $year_max = 0;
 $year_sum = 0;
@@ -40,7 +40,8 @@ while ($r_gyears = mysql_fetch_array($q_gyears)) {
 			$year_first = $year_last;
 		$gb_year[$r_gyears['res_year']] = $r_gyears['res_count'];
 		if ($r_gyears['res_count'] > $year_max) $year_max = $r_gyears['res_count'];
-		$year_sum += $r_gyears['res_count'];
+		
+		$year_sum = $year_sum + $r_gyears['res_count'];
 }
 if (strlen($gtitle)==0) {
 	if ($year_first == $year_last)
@@ -118,9 +119,10 @@ echo'</tr><tr>
 </tr>
 </tbody></table>
 <br>';
-
 $total_years = intval(($year_last)-($year_first));
-echo'<table border="0" cellpadding="0" cellspacing="0">
+if ($total_years > 1)
+{
+	echo'<table border="0" cellpadding="0" cellspacing="0">
   <tbody>
   <tr>
     <td class="heading" align="center" colspan="'.intval(3+$total_years).'">Yearly Activity '.$gtitle.'</td>
@@ -130,34 +132,34 @@ echo'<table border="0" cellpadding="0" cellspacing="0">
   </tr>
   <tr>
 	<td class="dark" align="center" width="15"></td>';
-// Yearly
-for ($i = $year_first; $i <= $year_last; $i++) {
-	if (!isset($gb_year[$i])) $gb_year[$i] = 0;
-	if ($year_sum > 0)
-		$title = $gb_year[$i] .' ('. get_dp($gb_year[$i] / $year_sum * 100) .' %)';
-	else
-		$title = $gb_year[$i] .' (0%)';
-	echo '<td class="dark" align="center" valign="bottom" width="25"><img border="0" src="images/bars/v_bar'. (($i + 8) % 16 + 1) .'.png" width="30" height="'.(int)($gb_year[$i] / $year_max * $max_height).'" alt="'. $title .'" title="'. $title .'"></td>';
-}
-echo '
-        <td class="dark" align="center" width="15"></td>
+	// Yearly
+	for ($i = $year_first; $i <= $year_last; $i++) {
+		if (!isset($gb_year[$i])) $gb_year[$i] = 0;
+		if ($year_sum > 0)
+			$title = $gb_year[$i] .' ('. get_dp($gb_year[$i] / $year_sum * 100) .' %)';
+		else
+			$title = $gb_year[$i] .' (0%)';
+		echo '<td class="dark" align="center" valign="bottom" width="25"><img border="0" src="images/bars/v_bar'. (($i + 8) % 16 + 1) .'.png" width="30" height="'.(int)($gb_year[$i] / $year_max * $max_height).'" alt="'. $title .'" title="'. $title .'"></td>';
+	}
+	echo '
+	<td class="dark" align="center" width="15"></td>
    </tr>
    <tr>
-        <td class="grey" align="center" width="25"></td>';
-for ($i = $year_first; $i <= $year_last; $i++) {
-	if (!isset($gb_year[$i])) $gb_year[$i] = 0;
-	if ($year_sum > 0)
-		$title = $gb_year[$i] .' ('. get_dp($gb_year[$i] / $year_sum * 100) .' %)';
-	else
-		$title = $gb_year[$i] .' (0%)';
-	echo '
-	<td class="grey" align="center" '.OverlibPrintHint("", $title,"Games logged in ".$i).'>'.$i.'</td>';
-}
-echo'
-        <td class="grey" align="center" width="15"></td>
+	<td class="grey" align="center" width="25"></td>';
+	for ($i = $year_first; $i <= $year_last; $i++) {
+		if (!isset($gb_year[$i])) $gb_year[$i] = 0;
+		if ($year_sum > 0)
+			$title = $gb_year[$i] .' ('. get_dp($gb_year[$i] / $year_sum * 100) .' %)';
+		else
+			$title = $gb_year[$i] .' (0%)';
+		echo '
+	<td class="grey" align="center" '.OverlibPrintHint("", $title,"Games logged in ".$i).'>'.$i.'</td>
+';
+	}
+	echo'
+	<td class="grey" align="center" width="15"></td>
   </tr>
  </tbody>
 </table><br />';
-
-
+}
 ?>

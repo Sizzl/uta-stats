@@ -1,8 +1,8 @@
 <?php
 
-include ("includes/functions.php");
-include ("includes/config.php");
-
+include_once ("includes/functions.php");
+include_once ("includes/config.php");
+global $dbversion;
 echo'
 <table border="0" cellpadding="1" cellspacing="2" width="710">
   <tbody><tr>
@@ -25,7 +25,8 @@ echo'
     <td class="smheading" align="center" width="45">Hours</td>
   </tr>';
 if (isset($dbversion) && floatval($dbversion) > 5.6) {
-	$sql_totsumm = "SELECT `g`.`name` AS `gamename`, SUM(p.gamescore) AS `gamescore`, SUM(`p`.`frags`) AS `frags`, SUM(`p`.`kills`) AS `kills`, SUM(`p`.`suicides`) AS `suicides`, SUM(`p`.`teamkills`) AS `teamkills`, COUNT(DISTINCT `p`.`matchid`) AS `matchcount`, SUM(`p`.`gametime`) AS `sumgametime`
+	$sql_totsumm = "SELECT `g`.`name` AS `gamename`, SUM(p.gamescore) AS `gamescore`, SUM(`p`.`frags`) AS `frags`, SUM(`p`.`kills`) AS `kills`, SUM(`p`.`suicides`) AS `suicides`, SUM(`p`.`teamkills`) AS `teamkills`,
+		COUNT(DISTINCT `p`.`matchid`) AS `matchcount`, SUM(`p`.`gametime`) AS `sumgametime`
 		FROM `uts_player` AS `p`, `uts_games` AS `g` WHERE `p`.`gid` = `g`.`id` GROUP BY `g`.`name` ORDER BY `g`.`name` ASC";
 } else {
 	$sql_totsumm = "SELECT g.name AS gamename, SUM(p.gamescore) AS gamescore, SUM(p.frags) AS frags, SUM(p.kills) AS kills, SUM(p.suicides) AS suicides, SUM(p.teamkills) AS teamkills, COUNT(DISTINCT p.matchid) AS matchcount, SUM(p.gametime) AS sumgametime
@@ -94,7 +95,7 @@ echo'
  $q_assgids = mysql_query("SELECT id FROM uts_games WHERE gamename LIKE '%Assault%';") or die(mysql_error());
  $assgids = array();
  while ($r_assgids = mysql_fetch_array($q_assgids)) {
- 	$assgids[''] = $r_assgids['id'];
+ 	$assgids[] = $r_assgids['id'];
  }
  $assquery = (count($assgids) > 0) ? 'SUM(IF (gid IN ('. implode(',', $assgids) .'), ass_obj, 0)) AS ass_obj' : '0 AS ass_obj';
 
