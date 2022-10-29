@@ -1,5 +1,6 @@
 <?php 
 global $t_rank, $t_match, $t_pinfo, $t_player, $t_games, $dbversion; // fetch table globals.
+global $htmlcp;
 $outerlimit = 25; // Added adjustable record limit --// Timo 20/07/05
 
 $gid = my_addslashes($_GET['gid']);
@@ -9,7 +10,7 @@ $rank_year = 0;
 if (isset($_GET['year']) && strlen($_GET['year'])==4 && is_numeric($_GET['year']))
         $rank_year = intval(my_addslashes($_GET['year']));
 
-$r_gamename = small_query("SELECT name FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '".$gid."'");
+$r_gamename = small_query("SELECT name FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '".$gid."';");
 $gamename = $r_gamename['name'];
 
 if ($_GET['cfilter'] && strlen($_GET['cfilter'])==2)
@@ -27,7 +28,6 @@ else
 
 $ecount = $pcount/$outerlimit;
 $ecount2 = number_format($ecount, 0, '.', '');
-echo "<!-- ".$ecount."/".$ecount2." - ".$pcount."/".$outerlimit." -->";
 if ($ecount > $ecount2)
 	$ecount2 = $ecount2+1;
 
@@ -72,14 +72,18 @@ if ($_GET['cfilter'] && strlen($_GET['cfilter'])==2)
 	$lpageurl = str_replace("&amp;page=","&amp;cfilter=".$_GET['cfilter']."&amp;page=",$lpageurl);
 }
 
-echo'
+if (!isset($format) || (isset($format) && $format != "json"))
+{
+	echo "<!-- ".$ecount."/".$ecount2." - ".$pcount."/".$outerlimit." -->";
+
+	echo'
 <div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>
 <br>';
-// 2006-09-07 brajan 
-// if country filter selected display
-// a link to switch back to all countries
-if(!empty($_GET['cfilter']))
-{ 
+	// 2006-09-07 brajan 
+	// if country filter selected display
+	// a link to switch back to all countries
+	if(!empty($_GET['cfilter']))
+	{ 
  	?>
  <table class="box" border="0" cellpadding="1" cellspacing="1" style="margin-bottom:25px">
 	 <tbody>
@@ -89,56 +93,81 @@ if(!empty($_GET['cfilter']))
 	 </tbody>
 	</table>
 <?php 
-};
-
-global $htmlcp;
-
-echo '
+	};
+	echo '
 <table class="box" border="0" cellpadding="1" cellspacing="1">
   <tbody>
   <tr>
 	<td class="heading" colspan="4" align="center">'.$gamename.' - Ranking Players'.($rank_year == 0 ? "" : " [".$rank_year."]").'</td>
   </tr>
   <tr>
-	<td class="smheading" align="center" width="75">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>
+	<td class="smheading" align="center" width="75">'.htmlentities("Nï¿½",ENT_SUBSTITUTE,$htmlcp).'</td>
 	<td class="smheading" align="center" width="150">Player Name</td>
 	<td class="smheading" align="center" width="75">Rank</td>
 	<td class="smheadingx" align="center" width="75">Matches</td>
   </tr>';
-
-$ranking = $qpage;
+	$ranking = $qpage;
+} else {
+	$outerlimit=5000;
+	$qpage=0;
+	header('Content-Type: application/json; charset=windows-1252');
+	echo "{\r\n  \"rankings\" : [";
+}
 if ($_GET['cfilter'])
 {
 	if (strlen($_GET['cfilter'])==2)
-		$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' AND r.year = '".$rank_year."' ORDER BY `rank` DESC LIMIT $qpage,$outerlimit;";
+		$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' AND r.year = '".$rank_year."' ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
 }
 else
-	$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND `pi`.`banned` <> 'Y' AND `r`.`year` = '".$rank_year."' ORDER BY `rank` DESC LIMIT $qpage,$outerlimit";
+	$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND `pi`.`banned` <> 'Y' AND `r`.`year` = '".$rank_year."' ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
 $q_rplayer = mysql_query($sql_rplayer) or die(mysql_error());
 while ($r_rplayer = mysql_fetch_array($q_rplayer))
 {
 
 	$ranking++;
-	echo'
+	if (!isset($format) || (isset($format) && $format != "json"))
+	{
+		echo'
 	  <tr>
 		<td class="grey" align="center">'.$ranking.'</td>
 		<td nowrap class="dark" align="left">';
 
-	// Modifications to rank by country --// Idea by brajan  20/07/05 : Timo.
-	echo '<a href="./?p='.$_GET['p'].'&gid='.$_GET['gid'];
-	if (!$_GET['cfilter'])
-		echo '&cfilter='.$r_rplayer['country'];
-	if ($rank_year > 0)
-		echo '&year='.$rank_year;
-	echo '">'.FlagImage($r_rplayer['country']).'</a>';
-	echo ' <a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer['pid'].($rank_year > 0 ? "&amp;year=".$rank_year : "").'">'.htmlentities($r_rplayer['name'],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']) .'</a></td>';
-	// End Modifications to rank by country -->
-	echo '
+		// Modifications to rank by country --// Idea by brajan  20/07/05 : Timo.
+		echo '<a href="./?p='.$_GET['p'].'&gid='.$_GET['gid'];
+		if (!$_GET['cfilter'])
+			echo '&cfilter='.$r_rplayer['country'];
+		if ($rank_year > 0)
+			echo '&year='.$rank_year;
+		echo '">'.FlagImage($r_rplayer['country']).'</a>';
+		echo ' <a class="darkhuman" href="./?p=pinfo&amp;pid='.$r_rplayer['pid'].($rank_year > 0 ? "&amp;year=".$rank_year : "").'">'.htmlentities($r_rplayer['name'],ENT_SUBSTITUTE,$htmlcp) .' '. RankMovement($r_rplayer['rank'] - $r_rplayer['prevrank']) .'</a></td>';
+		// End Modifications to rank by country -->
+		echo '
 		<td class="dark" align="center">'.get_dp($r_rplayer['rank']).'</td>
 		<td class="grey" align="center">'.$r_rplayer['matches'].'</td>
 	  </tr>';
+	} else {
+		if ($ranking > 1)
+			echo ",";
+		echo "\r\n    {\r\n";
+		echo "      \"playerid\":\"".$r_rplayer['pid']."\",\r\n";
+		echo "      \"playername\":\"".preg_replace('/[\x{0}-\x{1F}]|[\x{22}]/i','',$r_rplayer['name'])."\",\r\n";
+		echo "      \"country\":\"".$r_rplayer['country']."\",\r\n";
+		echo "      \"position\":".$ranking.",\r\n";
+		echo "      \"matches\":\"".$r_rplayer['matches']."\",\r\n";
+		echo "      \"score\":\"".get_dp($r_rplayer['rank'])."\",\r\n";
+		echo "      \"score_previous\":\"".get_dp($r_rplayer['prevrank'])."\"\r\n";
+		echo "    }";
+	}
 }
-echo'
+if (!isset($format) || (isset($format) && $format != "json"))
+{
+	echo'
 </tbody></table>
 <div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>';
+}
+else
+{
+	echo "\r\n  ]\r\n}";
+
+}
 ?>
