@@ -94,10 +94,10 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 		$totals['suicides'] += $suis;
 		if (is_int($r_players['teamkills']))
 			$totals['teamkills'] += $r_players['teamkills'];
-		$totals['eff'] += $r_players['eff'];
-		$totals['acc'] += $r_players['accuracy'];
-		$totals['ttl'] += $r_players['ttl'];
-                $totals['ping'] += $r_players['avgping'];
+		$totals['eff'] += $eff;
+		$totals['acc'] += $acc;
+		$totals['ttl'] += $ttl;
+		$totals['ping'] += $r_players['avgping'];
 		$num++;
 
 		if ($r_players['banned'] == 'Y') {

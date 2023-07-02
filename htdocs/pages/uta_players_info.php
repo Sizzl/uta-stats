@@ -342,8 +342,12 @@ echo'<table border="0" cellpadding="1" cellspacing="1">
 	 <td class="smheading" align="center" width="50">Explain</td>';
 	 if ($pic_enable and basename($_SERVER['PATH_TRANSLATED']) != 'admin.php') echo '<td class="smheading" align="center" width="50">Pics</td>';
 echo '</tr>';
-
-$sql_rank = "SELECT g.name AS gamename, r.rank, r.prevrank, r.matches, r.gid, r.pid FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE r.gid = g.id AND r.pid = '".$pid."' AND r.year = '0';";
+$q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
+if (mysql_num_rows($q_ytest)) {
+	$where_year = "AND r.year = '0'";
+else
+	$where_year = "";
+$sql_rank = "SELECT g.name AS gamename, r.rank, r.prevrank, r.matches, r.gid, r.pid FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE r.gid = g.id AND r.pid = '".$pid."'".$where_year.";";
 $q_rank = mysql_query($sql_rank) or die(mysql_error());
 while ($r_rank = mysql_fetch_array($q_rank)) {
 	$r_no = small_query("SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE year='0' AND gid= '${r_rank['gid']}' and rank > ". get_dp($r_rank['rank']) ."9");

@@ -113,13 +113,18 @@ if (!isset($format) || (isset($format) && $format != "json"))
 	header('Content-Type: application/json; charset=windows-1252');
 	echo "{\r\n  \"rankings\" : [";
 }
+$q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
+if (mysql_num_rows($q_ytest)) {
+	$where_year = " AND r.year = '".$rank_year."'";
+else
+	$where_year = "";
 if ($_GET['cfilter'])
 {
 	if (strlen($_GET['cfilter'])==2)
-		$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' AND r.year = '".$rank_year."' ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
+		$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y'".$where_year." ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
 }
 else
-	$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND `pi`.`banned` <> 'Y' AND `r`.`year` = '".$rank_year."' ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
+	$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND `pi`.`banned` <> 'Y'".$where_year." ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
 $q_rplayer = mysql_query($sql_rplayer) or die(mysql_error());
 while ($r_rplayer = mysql_fetch_array($q_rplayer))
 {

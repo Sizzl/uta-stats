@@ -31,7 +31,11 @@ else
  	$sql_rgame = "SELECT DISTINCT(p.gid), ".(isset($t_games) ? $t_games : "uts_games").".name FROM ".(isset($t_match) ? $t_match : "uts_match")." as m INNER JOIN ".(isset($t_player) ? $t_player : "uts_player")." AS p ON p.matchid = m.id, ".(isset($t_games) ? $t_games : "uts_games")." WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' AND ".(isset($t_games) ? $t_games : "uts_games").".id = p.gid ORDER BY p.gid"; // slow, need to fix this
 // 	$sql_rgame = "SELECT DISTINCT(p.gid), LEFT(m.time,4) AS year, ".(isset($t_games) ? $t_games : "uts_games").".name FROM ".(isset($t_match) ? $t_match : "uts_match")." as m INNER JOIN ".(isset($t_player) ? $t_player : "uts_player")." AS p ON p.matchid = m.id, ".(isset($t_games) ? $t_games : "uts_games")." WHERE year = '".$rank_year."' AND ".(isset($t_games) ? $t_games : "uts_games").".id = p.gid ORDER BY p.gid"; // slow, need to fix this
 }
-
+$q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
+if (mysql_num_rows($q_ytest)) {
+	$where_year = "r.year = '".$rank_year."' AND ";
+else
+	$where_year = "";
 $q_rgame = mysql_query($sql_rgame) or die(mysql_error());
 while ($r_rgame = mysql_fetch_array($q_rgame))
 {
@@ -43,7 +47,7 @@ while ($r_rgame = mysql_fetch_array($q_rgame))
 		<td class="heading" colspan="4" align="center">Top 10 '.$r_rgame['name'].' Players'.($rank_year == 0 ? "" : " [".$rank_year."]").'</td>
 	  </tr>
 	  <tr>
-		<td class="smheading" align="center" width="75">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>
+		<td class="smheading" align="center" width="75">'.htmlentities("Nï¿½",ENT_SUBSTITUTE,$htmlcp).'</td>
 		<td class="smheading" align="center" width="150">Player Name</td>
 		<td class="smheading" align="center" width="75">Rank</td>
 		<td class="smheadingx" align="center" width="75">Maps/Rounds</td>
@@ -56,10 +60,10 @@ while ($r_rgame = mysql_fetch_array($q_rgame))
 	if (isset($_GET['cfilter']))
 	{
 		if (strlen($_GET['cfilter'])==2)
-		  	$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.year = '".$rank_year."' AND r.pid = pi.id AND r.gid =  '".$r_rgame['gid']."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
+		  	$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE".$where_year." r.pid = pi.id AND r.gid =  '".$r_rgame['gid']."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
 	}
 	else	
-		$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE r.year = '".$rank_year."' AND r.pid = pi.id AND r.gid =  '".$r_rgame['gid']."' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
+		$sql_rplayer = "SELECT pi.id AS pid, pi.name, pi.country, r.rank, r.prevrank, r.matches FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." AS pi WHERE".$where_year." r.pid = pi.id AND r.gid =  '".$r_rgame['gid']."' AND pi.banned <> 'Y' ORDER BY r.rank DESC LIMIT 0,10";
 	// end modifications -->
 
 	$q_rplayer = mysql_query($sql_rplayer) or die(mysql_error());
