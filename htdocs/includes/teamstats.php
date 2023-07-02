@@ -77,17 +77,22 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 			$suis = $r_players['suicides'];
 		else
 			$suis = 0;
-		$kills = $r_players['frags'] + $suis;
+		if (is_int($r_players['frags'])) {
+			$kills = $r_players['frags'] + $suis;
+			$totals['frags'] += $r_players['frags'];
+		} else {
+			$kills = 0 + $suis;
+		}
 		$pname = $r_players['name'];
-
-		$totals['gamescore'] += $r_players['gamescore'];
+		if (is_int($r_players['gamescore']))
+			$totals['gamescore'] += $r_players['gamescore'];
 		if ($extra && strlen($r_players[$extra]))
 			$totals[$extra] += $r_players[$extra];
-		$totals['frags'] += $r_players['frags'];
 		$totals['kills'] += $kills;
-		$totals['deaths'] += $r_players['deaths'];
+		if (is_int($r_players['deaths']))
+			$totals['deaths'] += $r_players['deaths'];
 		$totals['suicides'] += $suis;
-		if (strlen($r_players['teamkills']))
+		if (is_int($r_players['teamkills']))
 			$totals['teamkills'] += $r_players['teamkills'];
 		$totals['eff'] += $r_players['eff'];
 		$totals['acc'] += $r_players['accuracy'];
