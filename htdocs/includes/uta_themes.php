@@ -19,11 +19,11 @@ $themeselection .= "				<option value=\"0\">  </option>\r\n";
 $themesql = "SELECT * FROM x_themes ORDER BY themename";
 $themequery = mysql_query($themesql,$dbconnect);
 if (mysql_num_rows($themequery))
-{	
-	if ($_COOKIE['utaTheme'])
+{
+	if (isset($_COOKIE['utaTheme']))
 		$inputtheme = $_COOKIE['utaTheme'];
 
-	if ($_GET['theme'])
+	if (isset($_GET['theme']))
 		$inputtheme = $_GET['theme'];
 
 	$lasttheme = 0;
@@ -32,7 +32,7 @@ if (mysql_num_rows($themequery))
         while ($rs = mysql_fetch_object($themequery))
         {
 		$lasttheme = $rs->id;
-		if ($inputtheme==$lasttheme)
+		if (isset($inputtheme) && $inputtheme==$lasttheme)
 		{
 			$_SESSION["themeid"] = $lasttheme;
 			$_SESSION["themename"] = $rs->themename;
@@ -49,7 +49,7 @@ if (mysql_num_rows($themequery))
 		if ($rs->default=="1")
 			$majortheme = $lasttheme;
 
-		if ($_SESSION["themeid"]==$lasttheme || (!$_SESSION["themeid"] && $lasttheme==$majortheme))
+		if ((isset($_SESSION["themeid"]) && $_SESSION["themeid"]==$lasttheme) || (!isset($_SESSION["themeid"]) && $lasttheme==$majortheme))
 			$themeselection .= "				<option value=\"".$lasttheme."\" selected=\"SELECTED\"> ".htmlspecialchars($rs->themename)." </option>\r\n";
 		else
 			if ($rs->enabled=="1")
@@ -108,7 +108,9 @@ $footertext = 	  "		  <tr>
 		  </table>";
 
 $anchorprefix = "?p=";
-
+if (!isset($anchorpostfix))
+	$anchorpostfix = "";
+	
 $defaultsidebar = "  <p><a class=\"sidebar\" href=\"./\">Summary</a></p>\r\n";
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."recent".$anchorpostfix."\">Public Games</a></p>\r\n";
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."utarecent".$anchorpostfix."\">League Matches</a></p>\r\n";

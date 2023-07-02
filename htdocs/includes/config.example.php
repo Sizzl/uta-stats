@@ -1,4 +1,5 @@
 <?php
+global $htmlcp, $htmlcs, $dbversion;
 // Server Timezone Offset from GMT
 $timezoneoffset = 1;
 $ftp_add_tz = true; // Add per-ftp offsets to log files
@@ -12,8 +13,14 @@ $uname = "sqluser";
 $upass = "sqlpass";
 
 $dbconnect = mysql_connect($hostname,$uname,$upass);
+$dbversion = floatval(mysql_get_server_info());
+
+// Set up codepage
 mysql_set_charset('latin1',$dbconnect);
 mysql_query('SET NAMES \"latin1\"',$dbconnect);
+$htmlcp = "cp1252";
+$htmlcs = "ISO-8859-1";
+
 $dbconnect2 = mysql_select_db($dbname);
 
 // Admin options --// 20/07/05 Timo: Added $showAllTables for admin/main.php
@@ -54,10 +61,12 @@ $theme_header = "<p align=\"center\">&nbsp; &nbsp; Welcome to utassault.net's UT
 
 // Get lastupdate time --// 10/07/05 Timo: Get the last update time from the ftptimestamp.php file
 $lastupdate = file_get_contents("includes/ftptimestamp.php");
-
-$tzoffsetcalc = mktime(1-$timezoneoffset,0,0,1,1,1970);
-$lastupdate = $lastupdate + $tzoffsetcalc;
-
+if (empty($lastupdate)) {
+	$lastupdate = 0;
+} else {
+	$tzoffsetcalc = mktime(1-$timezoneoffset,0,0,1,1,1970);
+	$lastupdate = $lastupdate + $tzoffsetcalc;
+}
 // Configure table matrix (for archiving purposes)
 $t_prefix = "uts_";
 $d_prefix = $t_prefix;
