@@ -110,7 +110,7 @@ $footertext = 	  "		  <tr>
 $anchorprefix = "?p=";
 if (!isset($anchorpostfix))
 	$anchorpostfix = "";
-	
+
 $defaultsidebar = "  <p><a class=\"sidebar\" href=\"./\">Summary</a></p>\r\n";
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."recent".$anchorpostfix."\">Public Games</a></p>\r\n";
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."utarecent".$anchorpostfix."\">League Matches</a></p>\r\n";
@@ -125,7 +125,7 @@ $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."servers".
 $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."maps".$anchorpostfix."\">Maps</a></p>\r\n";
 $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."totals".$anchorpostfix."\">Totals</a></p>\r\n";
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."watchlist".$anchorpostfix."\">Watchlist</a></p>\r\n";
-if ($_COOKIE["uta_uts_Admin"])
+if (isset($_COOKIE["uta_uts_Admin"]))
 	$defaultsidebar .="  <p><a class=\"sidebar\" href=\"./admin.php\">Admin</a></p>\r\n";
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."credits".$anchorpostfix."\">Credits</a></p>\r\n";
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."help".$anchorpostfix."\">Help</a></p>\r\n";
