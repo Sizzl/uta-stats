@@ -1,4 +1,10 @@
 <?php
+// TO-DO fix ereg->preg
+// https://stackoverflow.com/questions/39469264/fatal-error-uncaught-error-call-to-undefined-function-ereg-replace-php-7
+//
+//
+
+
 // 
 // pemftp - Class by Alexey Dotsenko <alex at paneuromedia dot com>
 // http://www.phpclasses.org/browse/package/1743.html
@@ -458,7 +464,7 @@ class ftp_base {
 // <!-- --------------------------------------------------------------------------------------- -->
 // <!-- Partie : gestion des erreurs                                                            -->
 // <!-- --------------------------------------------------------------------------------------- -->
-// Génère une erreur pour traitement externe à la classe
+// GÃ©nÃ¨re une erreur pour traitement externe Ã  la classe
 	function PushError($fctname,$msg,$desc=false){
 		$error=array();
 		$error['time']=time();
@@ -470,7 +476,7 @@ class ftp_base {
 		return(array_push($this->_error_array,$error));
 	}
 	
-// Récupère une erreur externe
+// RÃ©cupÃ¨re une erreur externe
 	function PopError(){
 		if(count($this->_error_array)) return(array_pop($this->_error_array));
 			else return(false);

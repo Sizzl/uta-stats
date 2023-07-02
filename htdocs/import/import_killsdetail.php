@@ -16,7 +16,7 @@
 			`col13` AS `damagecap`
 		FROM `uts_temp_".$uid."`
 		WHERE `col1` = 'damage_tracker' ORDER BY `col8`, `col7`;";
-						
+
 	$q_killdata = mysql_query($sql_killdata) or die(mysql_error());
 	while ($r_killdata = mysql_fetch_array($q_killdata)) {
 		$frag = 0;
@@ -45,4 +45,3 @@
 		mysql_query($sql) or die("import_kd: ".mysql_error()."\n".$sql);
 	}
 ?>
-

@@ -53,7 +53,7 @@ echo "
 ";
 
 if (!empty($year) and empty($month) and empty($day)) $where .= " AND m.time LIKE '$year%'";
-if (!empty($gid)) $where .= " AND m.gid = '".$gid."'";
+if (!empty($gid)) $where .= " AND m.gid = '$gid'";
  
 $sql = "SELECT 
 		DISTINCT CONCAT(REPLACE(`".(isset($t_match) ? $t_match : "uts_match")."`.`mapname`,'AS-',''),';', `".(isset($t_pickups) ? $t_pickups : "uts_pickups")."`.`name`),
@@ -69,13 +69,14 @@ $sql = "SELECT
 	WHERE `".(isset($t_pickups) ? $t_pickups : "uts_pickups")."`.`name` LIKE '%".$pickup."%' AND year = '".$year."'
 	ORDER BY `mapdisplay`, `pickuptype`, `pickuporder` ASC";
 
-// echo "<!-- ".$sql." -->\n";
-
+$started = microtime(true);
 $r_pucount = mysql_query($sql);
 while($count_row = mysql_fetch_assoc($r_pucount))
 {
 	$pucount[] = $count_row['mapname'];
+	$puids[] = $count_row['pickup'];
 }
+echo "<!-- SQL [".number_format(microtime(true)-$started,4)."] - ".$sql." -->\n";
 
 $mcount = count($pucount);
 $ecount = $mcount/$rowsperpage;
@@ -136,17 +137,21 @@ echo'</div><br /><br />
 if ($cpage > 0)
 {
 	$sql_recent = $sql." LIMIT ".$qpage.",".$rowsperpage.";";
-
+	$started = microtime(true);
 	$q_recent = mysql_query($sql_recent) or die(mysql_error());
+	echo "<!-- SQL_RECENT [".number_format(microtime(true)-$started,4)."] - ".$sql_recent." -->\n";
+
 	while ($r_recent = mysql_fetch_array($q_recent))
 	{
-		$r_mapname = un_ut($r_recent['mapname']);
-		$r_mapfile = un_ut($r_recent['mapdisplay']);
-		$r_pickup = $r_recent['name'];
-		$r_pickupid = $r_recent['pickup'];
+		$r_mapname = un_ut($r_recent[mapname]);
+		$r_mapfile = un_ut($r_recent[mapdisplay]);
+		$r_pickup = $r_recent[name];
+		$r_pickupid = $r_recent[pickup];
 
-		if (isset($lastmap) && $lastmap != $r_mapfile || !isset($lastmap)) {
-			if (isset($lastmap) && strlen($lastmap) > 0) {
+		if (isset($lastmap) && $lastmap != $r_mapfile || !isset($lastmap))
+		{
+			if (isset($lastmap) && strlen($lastmap) > 0)
+			{
 				echo '</tbody></table><br />';
 			}
 			echo '<table width="720" class="box" border="0" cellpadding="3" cellspacing="1">
@@ -160,8 +165,8 @@ if ($cpage > 0)
 		</tr>';
 
 		$lastmap = $r_mapfile;
-	}
-	echo'
+		}
+		echo'
 	  <tr>
 		<td nowrap class="dark" align="center">'.$r_pickup.'</td>
 		<td class="grey" align="center">';
@@ -172,13 +177,15 @@ if ($cpage > 0)
 			INNER JOIN `uts_pinfo` ON (`uts_pinfo`.`id` = `uts_pickupstats`.`pid`)
 			WHERE `uts_pickupstats`.`pickup` = '".$r_pickupid."' AND `uts_match`.`mapname` = '".$r_mapname."'
 			ORDER BY `name`;";
+		$started = microtime(true);
 		$q_hunters = mysql_query($sql_pu) or die(mysql_error());
+		echo "<!-- SQL_PU [".number_format(microtime(true)-$started,4)."] - ".$sql_pu." -->\n";
 		while ($r_hunters = mysql_fetch_array($q_hunters))
 		{
-			$playername = $r_hunters['name'];
+			$playername = $r_hunters[name];
 			echo htmlentities($playername,ENT_SUBSTITUTE,$htmlcp)."; ";
 		}
-	echo '</td>
+		echo '</td>
 	  </tr>';
 
 	}
@@ -198,59 +205,45 @@ else
 			<td class="smheading" align="center">Player Name</td>
 			<td nowrap class="smheading" align="center" width="200">Items Found</td>
 		</tr>';
-	$sql_pickups = "SELECT DISTINCT(`uts_pickupstats`.`pickup`),
-		SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",1) AS pickuptype,
-		CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",-1) AS unsigned) AS pickuporder,
-		`uts_pickups`.`name`
-	FROM `uts_pickupstats`
-	INNER JOIN `uts_pickups` ON (`uts_pickups`.`id` = `uts_pickupstats`.`pickup`)
-	INNER JOIN `uts_match` ON (`uts_match`.`id` = `uts_pickupstats`.`matchid`)
-	WHERE `uts_pickups`.`name` LIKE '%".$pickup."%' AND year = '".$year."'
-	ORDER BY `pickuptype`, `pickuporder` ASC;";
-	$q_pickups = mysql_query($sql_pickups) or die (mysql_error());
 	$leaders = [];
 	$pinfo = [];
-	while ($r_pickups = mysql_fetch_array($q_pickups))
+	if (isset($dbversion) && floatval($dbversion) > 5.6)
 	{
-		if (isset($dbversion) && floatval($dbversion) > 5.6)
-		{
-			$sql_leaders = "SELECT DISTINCT(`uts_pinfo`.`name`) AS playername,ANY_VALUE(`uts_pinfo`.`country`) AS `country`, COUNT(DISTINCT(`uts_match`.`mapname`)) AS pucount,
-			                SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",1) AS pickuptype,
-			                CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",-1) AS unsigned) AS pickuporder,
+		$sql_leaders = "SELECT DISTINCT(`uts_pinfo`.`name`) AS playername,ANY_VALUE(`uts_pinfo`.`country`) AS `country`, COUNT(DISTINCT(CONCAT(`uts_pickups`.`name`,`uts_match`.`mapname`))) AS pucount,
 			                ANY_VALUE(`uts_pickupstats`.`pid`) AS `pid`
 				FROM `uts_pickupstats`
 				INNER JOIN `uts_pickups` ON (`uts_pickups`.`id` = `uts_pickupstats`.`pickup`)
 				INNER JOIN `uts_match` ON (`uts_match`.`id` = `uts_pickupstats`.`matchid`)
 				INNER JOIN `uts_pinfo` ON (`uts_pinfo`.`id` = `uts_pickupstats`.`pid`)
-				WHERE `pickup` = '".$r_pickups['pickup']."'  
+				WHERE `pickup` IN (".join(',',array_unique($puids)).") AND year = '".$year."'
 				GROUP BY `uts_pinfo`.`name`;";
-		}
-		else
-		{		
-			$sql_leaders = "SELECT DISTINCT(`uts_pinfo`.`name`) AS playername,`uts_pinfo`.`country`, COUNT(DISTINCT(`uts_match`.`mapname`)) AS pucount,
-			                SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",1) AS pickuptype,
-			                CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(`uts_pickups`.`name`,\"/\",1),\"(\",-1) AS unsigned) AS pickuporder,
+	}
+	else
+	{
+		$sql_leaders = "SELECT DISTINCT(`uts_pinfo`.`name`) AS playername,`uts_pinfo`.`country`, COUNT(DISTINCT(CONCAT(`uts_pickups`.`name`,`uts_match`.`mapname`))) AS pucount,
 			                `uts_pickupstats`.`pid`
 				FROM `uts_pickupstats`
 				INNER JOIN `uts_pickups` ON (`uts_pickups`.`id` = `uts_pickupstats`.`pickup`)
 				INNER JOIN `uts_match` ON (`uts_match`.`id` = `uts_pickupstats`.`matchid`)
 				INNER JOIN `uts_pinfo` ON (`uts_pinfo`.`id` = `uts_pickupstats`.`pid`)
-				WHERE `pickup` = '".$r_pickups['pickup']."'  
+				WHERE `pickup` IN (".join(',',array_unique($puids)).") AND year = '".$year."'
 				GROUP BY `uts_pinfo`.`name`;";
-		}
-		$q_leaders = mysql_query($sql_leaders) or die(mysql_error());
-		while ($r_leaders = mysql_fetch_array($q_leaders))
+
+	}
+	$started = microtime(true);
+	$q_leaders = mysql_query($sql_leaders) or die(mysql_error());
+	// echo "<!-- SQL_Leaders [".number_format(microtime(true)-$started,4)."] - ".$sql_leaders." -->\n";
+	while ($r_leaders = mysql_fetch_array($q_leaders))
+	{
+		if (array_key_exists($r_leaders['pid'],$leaders))
 		{
-			if (array_key_exists($r_leaders['pid'],$leaders))
-			{
-				$leaders[$r_leaders['pid']] += $r_leaders['pucount'];
-			}
-			else
-			{
-				$leaders[$r_leaders['pid']] = $r_leaders['pucount'];
-				$pinfo[$r_leaders['pid']]['name'] = $r_leaders['playername'];
-				$pinfo[$r_leaders['pid']]['country'] = $r_leaders['country'];
-			}
+			$leaders[$r_leaders['pid']] += $r_leaders['pucount'];
+		}
+		else
+		{
+			$leaders[$r_leaders['pid']] = $r_leaders['pucount'];
+			$pinfo[$r_leaders['pid']]['name'] = $r_leaders['playername'];
+			$pinfo[$r_leaders['pid']]['country'] = $r_leaders['country'];
 		}
 	}
 	arsort($leaders);

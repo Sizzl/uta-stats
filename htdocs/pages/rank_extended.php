@@ -101,7 +101,7 @@ if (!isset($format) || (isset($format) && $format != "json"))
 	<td class="heading" colspan="4" align="center">'.$gamename.' - Ranking Players'.($rank_year == 0 ? "" : " [".$rank_year."]").'</td>
   </tr>
   <tr>
-	<td class="smheading" align="center" width="75">'.htmlentities("N�",ENT_SUBSTITUTE,$htmlcp).'</td>
+	<td class="smheading" align="center" width="75">'.htmlentities("N°",ENT_SUBSTITUTE,$htmlcp).'</td>
 	<td class="smheading" align="center" width="150">Player Name</td>
 	<td class="smheading" align="center" width="75">Rank</td>
 	<td class="smheadingx" align="center" width="75">Matches</td>

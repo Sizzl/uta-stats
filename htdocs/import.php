@@ -50,15 +50,15 @@ if ($html)
 {
 	if (!isset($_GET['noheader']))
 	{
-	        if ($_SESSION["themelocation"]) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
-	        {
-	                if (file_exists($_SESSION["themelocation"]."header.php"))
-	                        include($_SESSION["themelocation"]."header.php");
-	                else
-	                        include ("includes/header.php");
-	        }
-	        else
-	                include ("includes/header.php");
+		if ($_SESSION["themelocation"]) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
+		{
+			if (file_exists($_SESSION["themelocation"]."header.php"))
+				include($_SESSION["themelocation"]."header.php");
+			else
+				include ("includes/header.php");
+		}
+		else
+			include ("includes/header.php");
 	}
 }
 
@@ -109,7 +109,6 @@ if (empty($adminkey))
 	return;
 }
 
-
 if (!@is_dir('logs'))
 {
 	if ($html) echo'<tr><td class="smheading" align="left" width="150">Error:</td><td class="grey" align="left">';
@@ -124,8 +123,6 @@ if (!@is_dir('logs'))
 	}
 	return;
 }
-
-
 
 if ($html) echo'</table><br>';
 echo "\n";
@@ -452,7 +449,6 @@ foreach ($logfiles as $filename)
 	}
 	else
 	{
-
 		$qm_serveran = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_AdminName'");
 		$qm_serverae = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_AdminEmail'");
 		$qm_serverm1 = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'info' AND col2 = 'Server_MOTDLine1'");
@@ -469,7 +465,7 @@ foreach ($logfiles as $filename)
 		$qm_gameinfout = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'UseTranslocator'");
 		$qm_gameinfoff = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'FriendlyFireScale' LIMIT 0,1");
 		$qm_gameinfows = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'WeaponsStay'");
-		
+
 		$gametime = $qm_time['col3'];
 		$offset = $qm_zone['col3']; // --// Timo: 18/09/05
 		$servername = addslashes($qm_servername['col3']);
@@ -481,8 +477,7 @@ foreach ($logfiles as $filename)
 		$teamgame = $qm_teamgame['col3'];
 		$mapname = addslashes($qm_mapname['col3']);
 		$mapfile = addslashes($qm_mapfile['col3']);
-		
-				
+
 		// ************************************************************************************
 		// CRATOS: Fix Servername
 		// ************************************************************************************
@@ -634,25 +629,23 @@ foreach ($logfiles as $filename)
 			break;
 		}
 
-
 		$qm_firstblood = small_query("SELECT col2 FROM uts_temp_".$uid." WHERE col1 = 'first_blood'");
 
 		$firstblood = addslashes($qm_firstblood['col2']);
-
 
 		$serverinfo = addslashes("Admin: ".$qm_serveran['col3']."<br />Email: ".$qm_serverae['col3']." <br /><br />
 		<u>MOTD</u><br />".$qm_serverm1['col3']."<br />".$qm_serverm2['col3']."<br />".$qm_serverm3['col3']."<br />".$qm_serverm4['col3']);
 
 		$gameinfo = addslashes(	add_info('Time Limit:', $qm_gameinfotl['col3']) .
-										add_info('Frag Limit:', $qm_gameinfofl['col3']) .
-										add_info('Goal Team Score:', $qm_gameinfogt['col3']) .
-										add_info('Max Players:', $qm_gameinfomp['col3']) .
-										add_info('Max Specs:', $qm_gameinfoms['col3']) .
-										add_info('Game Speed:', $qm_gameinfogs['col3']) .
-										add_info('Translocator:', $qm_gameinfout['col3']) .
-										add_info('Friendly Fire:', $qm_gameinfoff['col3']) .
-										add_info('Weapon Stay:', $qm_gameinfows['col3']) .
-										add_info('UTStats Actor Version:', $actor_version));
+					add_info('Frag Limit:', $qm_gameinfofl['col3']) .
+					add_info('Goal Team Score:', $qm_gameinfogt['col3']) .
+					add_info('Max Players:', $qm_gameinfomp['col3']) .
+					add_info('Max Specs:', $qm_gameinfoms['col3']) .
+					add_info('Game Speed:', $qm_gameinfogs['col3']) .
+					add_info('Translocator:', $qm_gameinfout['col3']) .
+					add_info('Friendly Fire:', $qm_gameinfoff['col3']) .
+					add_info('Weapon Stay:', $qm_gameinfows['col3']) .
+					add_info('UTStats Actor Version:', $actor_version));
 
 		// Tidy Up The Info
 		if (strlen($qm_mutators))
@@ -662,12 +655,6 @@ foreach ($logfiles as $filename)
 			$mutators = addslashes($mutators);
 		}
 		//$gametime = utdate($gametime);
-		
-		
-		
-		
-		
-
 
 		// Get Teams Info
 		$sql_tinfo = "SELECT `col4` FROM `uts_temp_".$uid."` WHERE `col1` = 'player' AND `col2` = 'TeamName'  GROUP BY `col4` ORDER BY `col4` ASC";
@@ -701,8 +688,7 @@ foreach ($logfiles as $filename)
 			if ($r_tscore['team'] == "2") $t2score = $r_tscore['score'];
 			if ($r_tscore['team'] == "3") $t3score = $r_tscore['score'];
 		}
-							
-			
+
 		if ($duplicate > 0 && isset($processdupes))
 		{
 			echo "Forced dupe processing (ID: $matchid)\n";
@@ -722,7 +708,6 @@ foreach ($logfiles as $filename)
 		}
 		else
 		{
-		
 			// Insert Server Info Into Database
 			if (!isset($s_frags))
 				$s_frags = 0;
@@ -745,9 +730,7 @@ foreach ($logfiles as $filename)
 			echo "Yes (ID: $matchid)\n";
 		}
 		if ($html) echo '</td></tr>';
-		
-		
-		
+
 		// ************************************************************************************
 		// Cratos: Add FriendlyFireScale, Timedilation
 		// ************************************************************************************
@@ -757,8 +740,6 @@ foreach ($logfiles as $filename)
 				timedilation = '".$timedilation."' 
 				WHERE id = '".$matchid."';";
 		mysql_query($sql) or die("FF/TD update; ".mysql_error());		
-
-									
 		
 		// ************************************************************************************
 		// Cratos: Get Gametype specific match stuff done
@@ -767,7 +748,6 @@ foreach ($logfiles as $filename)
 		{
 			include("import/uta_import_ass_match.php"); 
 		}
-		
 
 		// Process Player Stuff
 		$playerid2pid = array(); // set in import_playerstuff.php
@@ -820,7 +800,7 @@ foreach ($logfiles as $filename)
 			$qc_time = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = '".$playerid."' LIMIT 0,1");
 			if ($qc_time != NULL) $timeonserver = intval($qc_time['col4']);
 			else $timeonserver = 0; 
-	
+
 			if ($qc_kills['col4'] == 0 && $qc_deaths['col4'] == 0 && $qc_teamkills['col4'] == 0 && $qc_objs['assobjcount'] <= 0 && $timeonserver < 30)
 			{
 				if ($timeonserver < 10 || $servergametime > 60) 	
@@ -830,15 +810,10 @@ foreach ($logfiles as $filename)
 				}
 			}
 
-			
 			// ************************************************************************************
 			// Cratos: Get Authusers
 			// ************************************************************************************
-			// IF (substr($gamename,0,7) == "Assault")	
-			// { 
-				include("import/uta_import_ass_authplayer.php"); // CRATOS
-			// }
-			
+			include("import/uta_import_ass_authplayer.php"); // CRATOS
 
 			// Process all the other player information
 			include("import/import_playerstuff.php");
@@ -866,24 +841,27 @@ foreach ($logfiles as $filename)
 			// ************************************************************************************
 			// Cratos: Get Gametype specific stuff done
 			// ************************************************************************************
-			if (substr($gamename,0,7) == "Assault")	
+			if (substr($gamename,0,7) == "Assault")
 			{ 
-				include("import/import_ass.php"); 				
+				include("import/import_ass.php");
 				include("import/uta_import_ass_player.php");
 			}
-			
+
 			if ($gamename == "Capture the Flag" || $gamename == "Capture the Flag (insta)") { include("import/import_ctf.php"); }
 			if ($gamename == "Domination" || $gamename == "Domination (insta)") { include("import/import_dom.php"); }
 			if ($gamename == "Tournament Team Game" || $gamename == "Tournament Team Game (insta)") { include("import/import_tdm.php"); }
 			if ($gamename == "JailBreak" || $gamename == "JailBreak (insta)") { include("import/import_jailbreak.php"); }
 
-			// Do the rankings
-			unset($rank_year); // all time ranking
-			echo "(R: All";
-			include("import/import_ranking.php");
-			$rank_year = intval(substr($gametime,0,4));
-			echo "; ".$rank_year.") ";
-			include("import/import_ranking.php"); // repeat just for this year
+			if (!isset($skip_ranking) || $skip_ranking==false)
+			{
+				// Do the rankings
+				unset($rank_year); // all time ranking
+				echo "(R: All";
+				include("import/import_ranking.php");
+				$rank_year = intval(substr($gametime,0,4));
+				echo "; ".$rank_year.") ";
+				include("import/import_ranking.php"); // repeat just for this year
+			}
 
 			if ($playerbanned)
 			{
@@ -897,10 +875,10 @@ foreach ($logfiles as $filename)
 		if ($html) echo '</td></tr>';
 
 		if ($html) echo '<tr><td class="smheading" align="left" width="350">';
-		echo "\nBuilding damage tracking: ";
+		echo "\nBuilding damage tracking:";
 		if ($html) echo '</td><td class="grey" align="left" width="200">';
 		include("import/import_killsdetail.php");
-		echo "Done\n";
+		echo " Done\n";
 		if ($html) echo "</td></tr>";
 
 		// Check if theres any players left, if none or one delete the match (its possible ...)
@@ -917,7 +895,7 @@ foreach ($logfiles as $filename)
 			}
 			else
 			{
-				echo "\nRemoving match info; 1 or less valid players remain. Override with \$allow_sololog\n";
+				echo "Removing match info; 1 or less valid players remain. Override with \$allow_sololog\n";
 			}
 			$sql_radjust = "SELECT `pid`, `gid`, `rank` FROM `uts_player` WHERE `matchid` = '".$matchid."';";
 			$q_radjust = mysql_query($sql_radjust) or die("Rank Sel ".mysql_error());
@@ -949,7 +927,6 @@ foreach ($logfiles as $filename)
 		else
 		{
 			// Make our weapons statistics
-			echo "\n";
 			if ($html) echo '<tr><td class="smheading" align="left" width="350">';
 			echo "Importing weapon statistics: ";
 			if ($html) echo '</td><td class="grey" align="left" width="200">';
@@ -1126,12 +1103,12 @@ if ($html)
 {
 	if ($_SESSION["themelocation"]) // Themed footer --// 19/07/05 Timo: Added customisable footer
 	{
-	        if (file_exists($_SESSION["themelocation"]."footer.php"))
-	                include($_SESSION["themelocation"]."footer.php");
-	        else
-	                include("includes/footer.php");
+		if (file_exists($_SESSION["themelocation"]."footer.php"))
+			include($_SESSION["themelocation"]."footer.php");
+		else
+			include("includes/footer.php");
 	}
 	else
-	        include("includes/footer.php");
+		include("includes/footer.php");
 }
 ?>
