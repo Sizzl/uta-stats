@@ -24,24 +24,36 @@ $where .= " AND (matchcode <> 'HIDDEN') AND ((servername LIKE '%PUG%' OR servern
 // 2006-09-05 changed query to fix clan tags and paging // brajan
 // 2021-05-25 changed to support newer MySQL // timo
 if (isset($dbversion) && floatval($dbversion) > 5.6) {
-  $r_mcount = mysql_query("SELECT COUNT(*) AS result FROM ".(isset($t_match) ? $t_match : "uts_match")." m WHERE matchmode = 1 $where GROUP BY matchcode ORDER BY ANY_VALUE(mapsequence),ANY_VALUE(time);");
+	$r_mcount = mysql_query("SELECT COUNT(*) AS result FROM ".(isset($t_match) ? $t_match : "uts_match")." m WHERE matchmode = 1 $where GROUP BY matchcode ORDER BY ANY_VALUE(mapsequence),ANY_VALUE(time);");
 } else { 
-  $r_mcount = mysql_query("SELECT COUNT(*) AS result FROM ".(isset($t_match) ? $t_match : "uts_match")." m WHERE matchmode = 1 $where GROUP BY matchcode ORDER BY mapsequence,time");
+	$r_mcount = mysql_query("SELECT COUNT(*) AS result FROM ".(isset($t_match) ? $t_match : "uts_match")." m WHERE matchmode = 1 $where GROUP BY matchcode ORDER BY mapsequence,time");
 }
 while($count_row = mysql_fetch_assoc($r_mcount)){
-$mcount[] = $count_row['result'];
+	$mcount[] = $count_row['result'];
 }
-$mcount = count($mcount);
+if (isset($mcount)) {
+	$mcount = count($mcount);
+	$ecount = $mcount/25;
+} else {
+	$mcount = 0;
+	$ecount = 0;
+}
 $ecount = $mcount/25;
 $ecount2 = number_format($ecount, 0, '.', '');
-	if($ecount > $ecount2) {
+	if ($ecount > $ecount2) {
 		$ecount2 = $ecount2+1;
 	}
 $fpage = 0;
-	if($ecount < 1) { $lpage = 0; }
-	else { $lpage = $ecount2-1; }
+if ($ecount < 1) {
+	$lpage = 0;
+}
+else {
+	$lpage = $ecount2-1;
+}
 $cpage = $_REQUEST["page"];
-if($cpage == "") { $cpage = "0"; }
+if($cpage == "") {
+	$cpage = "0";
+}
 $qpage = $cpage*25;
 $tfpage = $cpage+1;
 $tlpage = $lpage+1;

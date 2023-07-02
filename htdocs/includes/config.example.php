@@ -65,7 +65,7 @@ if (empty($lastupdate)) {
 	$lastupdate = 0;
 } else {
 	$tzoffsetcalc = mktime(1-$timezoneoffset,0,0,1,1,1970);
-	$lastupdate = $lastupdate + $tzoffsetcalc;
+	$lastupdate = intval($lastupdate) + $tzoffsetcalc;
 }
 // Configure table matrix (for archiving purposes)
 $t_prefix = "uts_";
