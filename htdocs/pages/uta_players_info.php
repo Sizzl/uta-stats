@@ -343,7 +343,7 @@ echo'<table border="0" cellpadding="1" cellspacing="1">
 	 if ($pic_enable and basename($_SERVER['PATH_TRANSLATED']) != 'admin.php') echo '<td class="smheading" align="center" width="50">Pics</td>';
 echo '</tr>';
 $q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
-if (mysql_num_rows($q_ytest)) {
+if (mysql_num_rows($q_ytest))
 	$where_year = "AND r.year = '0'";
 else
 	$where_year = "";

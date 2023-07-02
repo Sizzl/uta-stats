@@ -114,7 +114,7 @@ if (!isset($format) || (isset($format) && $format != "json"))
 	echo "{\r\n  \"rankings\" : [";
 }
 $q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
-if (mysql_num_rows($q_ytest)) {
+if (mysql_num_rows($q_ytest))
 	$where_year = " AND r.year = '".$rank_year."'";
 else
 	$where_year = "";
