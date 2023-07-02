@@ -98,21 +98,24 @@ while ($r_rgame = mysql_fetch_array($q_rgame))
 	  </tbody></table><br>';
 }
 // $q_ryears = mysql_query("SELECT LEFT(time,4) AS year FROM `".(isset($t_match) ? $t_match : "uts_match")."` GROUP BY year;") or die (mysql_error());
-$q_ryears = mysql_query("SELECT year FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE year > '0' GROUP BY year ORDER BY year ASC;") or die(mysql_error());
-echo "<div class=\"pages\"><b>Filter Rankings:<br /><br />[<a class=\"pages\" href=\"?p=rank&amp\">All-Time</a>";
-$i = 0;
-while ($r_ryear = mysql_Fetch_array($q_ryears))
-{
-	$i++;
-	if ($i==6)
+if (strlen($where_year) > 0) {
+	$q_ryears = mysql_query("SELECT year FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE year > '0' GROUP BY year ORDER BY year ASC;") or die(mysql_error());
+	echo "<div class=\"pages\"><b>Filter Rankings:<br /><br />[<a class=\"pages\" href=\"?p=rank&amp\">All-Time</a>";
+	$i = 0;
+	while ($r_ryear = mysql_Fetch_array($q_ryears))
 	{
-		echo "]<br />[";
-		echo "<a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
-		$i = 0;
+		$i++;
+		if ($i==6)
+		{
+			echo "]<br />[";
+			echo "<a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
+			$i = 0;
+		}
+		else
+			echo " / <a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
 	}
-	else
-		echo " / <a class=\"pages\" href=\"?p=rank&amp;year=".$r_ryear['year']."\">".$r_ryear['year']."</a>";
+	echo "]</b></div><br />";
+} else {
+	echo "<div class=\"pages\"><b>Filter Rankings:<br /><br />[<a class=\"pages\" href=\"?p=rank&amp\">All-Time</a>]";
 }
-echo "]</b></div><br />";
-
 ?>
