@@ -1,0 +1,3 @@
+[submodule "htdocs/includes/mysql-shim"]
+	path = htdocs/includes/mysql-shim
+	url = https://github.com/dshafik/php7-mysql-shim
