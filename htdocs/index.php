@@ -42,7 +42,7 @@ switch ($pagehandler)
 	case "utateams": utateam(); break;		// UTA Team viewer
 	case "utapinfo": utapinfo(); break;		// UTA Player info
 	
-	case "match": match(); break;		// Single Match stats
+	case "match": utmatch(); break;		// Single Match stats
 	case "matchp": matchp(); break;		// Player stats for single match
 	case "report": report(); break;		// Report generator
 
@@ -122,7 +122,7 @@ function uta_match()
 	include("pages/uta_match.php");
 }
 
-function match()
+function utmatch()
 {
 	include("pages/match.php");
 }

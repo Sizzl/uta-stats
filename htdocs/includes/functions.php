@@ -138,7 +138,7 @@ function str_rand($length = 8, $seeds = 'abcdefghijklmnopqrstuvwxyz0123456789')
 
     // Generate
     for ($i = 0; $length > $i; $i++) {
-        $str .= $seeds{mt_rand(0, $seeds_count - 1)};
+        $str .= substr($seeds,mt_rand(0, $seeds_count - 1),1);
     }
 
     return $str;

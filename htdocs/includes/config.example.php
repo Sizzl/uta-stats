@@ -17,7 +17,7 @@ $dbversion = floatval(mysql_get_server_info());
 
 // Set up codepage
 mysql_set_charset('latin1',$dbconnect);
-mysql_query('SET NAMES \"latin1\"',$dbconnect);
+mysql_query('SET NAMES "latin1"',$dbconnect);
 $htmlcp = "cp1252";
 $htmlcs = "ISO-8859-1";
 
