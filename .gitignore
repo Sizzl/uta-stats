@@ -11,6 +11,7 @@ sitemap.xml.gz
 # Logs / temp
 htdocs/pages/home.php
 htdocs/pages/totals.php
+htdocs/data/updateips.php
 *.log
 *.tmp
 *.cache
@@ -33,6 +34,7 @@ pma/
 *.o
 *.lo
 *.la
+*.zip
 
 # Misc
 *.class

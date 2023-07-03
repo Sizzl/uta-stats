@@ -344,7 +344,7 @@ echo'<table border="0" cellpadding="1" cellspacing="1">
 echo '</tr>';
 $q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
 if (mysql_num_rows($q_ytest))
-	$where_year = "AND r.year = '0'";
+	$where_year = " AND r.year = '0'";
 else
 	$where_year = "";
 $sql_rank = "SELECT g.name AS gamename, r.rank, r.prevrank, r.matches, r.gid, r.pid FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE r.gid = g.id AND r.pid = '".$pid."'".$where_year.";";

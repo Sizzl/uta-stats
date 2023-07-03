@@ -2,7 +2,7 @@
 # utassault.net - Stats - Make static files
 #_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 
-localDirectory='/home/utassault/web/utstats/'
+localDirectory='/path/to/uta-stats/htdocs/'
 cd $localDirectory
 
 starttime=`date +%H:%M:%S`

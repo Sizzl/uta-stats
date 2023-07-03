@@ -33,7 +33,7 @@ else
 }
 $q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
 if (mysql_num_rows($q_ytest))
-	$where_year = "r.year = '".$rank_year."' AND ";
+	$where_year = " r.year = '".$rank_year."' AND";
 else
 	$where_year = "";
 $q_rgame = mysql_query($sql_rgame) or die(mysql_error());
