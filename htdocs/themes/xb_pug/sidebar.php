@@ -15,12 +15,12 @@ echo '
                     <li class="topitem"><a href="./?p=maps&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Map Statistics"><span>Map Stats</span></a></li>
                     <li class="topitem"><a href="./?p=totals&amp;'.(isset($a_test) ? "archive=".$a_test : "").'" title="Totals"><span>Totals</span></a></li>
                     <!-- <li class="topitem">
-                        <a href="./?p='.$_GET['p'].'&amp;archive='.intval(date("Y")-1).'" title="Archives">Archives</a>
+                        <a href="./?p='.(isset($_GET['p']) ? $_GET['p'] : "").'&amp;archive='.intval(date("Y")-1).'" title="Archives">Archives</a>
                       <ul>
-                        <li class="subfirst"><a href="./?p='.$_GET['p'].'&amp;pid='.$_GET['pid'].'&amp;gid='.$_GET['gid'].'&amp;archive=0" title="Current">Current season</a></li>';
+                        <li class="subfirst"><a href="./?p='.(isset($_GET['p']) ? $_GET['p'] : "").'&amp;pid='.(isset($_GET['pid']) ? $_GET['pid'] : "").'&amp;gid='.(isset($_GET['gid']) ? $_GET['gid'] : "").'&amp;archive=0" title="Current">Current season</a></li>';
 	for ($i=2012; $i < intval(date("Y")); $i++) {
 		echo '
-                        <li class="subfirst"><a href="./?p='.$_GET['p'].'&amp;pid='.$_GET['pid'].'&amp;gid='.$_GET['gid'].'&amp;archive='.$i.'" title="'.$i.'">'.$i.' season</a></li>';
+                        <li class="subfirst"><a href="./?p='.(isset($_GET['p']) ? $_GET['p'] : "").'&amp;pid='.(isset($_GET['pid']) ? $_GET['pid'] : "").'&amp;gid='.(isset($_GET['gid']) ? $_GET['gid'] : "").'&amp;archive='.$i.'" title="'.$i.'">'.$i.' season</a></li>';
 	}
 echo '
                       </ul>

@@ -27,7 +27,7 @@ setcookie('uts_lastvisit', time(), time()+60*60*24*30*365);
 
 echo'
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+<html lang="en">
 <head>
   <title>Unreal Tournament Stats - Powered by UTStats</title>
   <meta http-equiv="Content-Type" content="text/html; CHARSET=iso-8859-1" />

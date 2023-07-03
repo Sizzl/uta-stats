@@ -2,7 +2,7 @@
   if (isset($_GET['q']))
     $q = $_GET['q'];
 ?>
-<html>
+<html lang="en">
 <head>
 <title>whois info (brajan)</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">

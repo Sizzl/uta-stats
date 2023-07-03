@@ -1,7 +1,9 @@
 <?php 
 
 // include ("includes/uta_functions.php");
-
+if (!isset($_GET['map'])) {
+    break;
+}
 $map = $_GET['map'];
 $realmap = my_addslashes($_GET['map']);
 $realmap = "".$realmap.".unr";
@@ -16,10 +18,7 @@ $map_lastmatch = mdate($map_last['time']);
 // Map pic code
 $mappic = strtolower("images/maps/".$map.".jpg");
 
-if (file_exists($mappic))
-{
-}
-else
+if (!(file_exists($mappic)))
 {
    $mappic = ("images/maps/blank.jpg");
 }
@@ -129,8 +128,11 @@ FROM uts_match AS m, uts_games AS g WHERE m.mapfile = '".$realmap."' AND m.gid =
 $q_maps = mysql_query($sql_maps) or die(mysql_error());
 while ($r_maps = mysql_fetch_array($q_maps))
 {
-
-	  $r_mapfile = un_ut($r_maps['mapfile']);
+    if (isset($r_maps['mapfile'])) {
+	      $r_mapfile = un_ut($r_maps['mapfile']);
+    } else {
+        $r_mapfile = $realmap;
+    }
 	  $r_matchtime = mdate($r_maps['time']);
 	  $r_gametime = GetMinutes($r_maps['gametime']);
 	  $r_servername = get_short_servername($r_maps['servername']);
