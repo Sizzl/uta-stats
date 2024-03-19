@@ -502,6 +502,7 @@ foreach ($logfiles as $filename)
 				$servername = str_replace("| 2v2AS |","",$servername);
 				$servername = str_replace("[LOCKED - PRIVATE]","",$servername);
 				$servername = str_replace("[OPEN - PUBLIC]","",$servername);
+				$servername = str_replace("[iG+] ","",$servername);
 				$servername = trim($servername);
 				$servername = addslashes($servername); // --// Timo 2020-08-23 (Yes, still fixing sh!t 15 years later)
 			}			
@@ -581,24 +582,12 @@ foreach ($logfiles as $filename)
 			$teamgame = 'True';
 		}
 
-		// Append insta to game if it was an insta game
+		// Append insta to game if it was an insta game. Reset gid to re-force lookup.
 		$gameinsta = 0;
-		if ($qm_insta['col3'] == "True") { $gameinsta = 1; $gamename = "$gamename (insta)"; } else { $gameinsta = 0; }
+		if ($qm_insta['col3'] == "True") { $gameinsta = 1; $gamename = "$gamename (insta)"; unset($gid); } else { $gameinsta = 0; }
 
-		// CRATOS: Check for PRO matches
-		if (intval($qm_gameinfoff['col3']) != 0) { $gamename = "$gamename (pro)"; }
-
-		// Get the unique ID of this gametype.
-		// Create a new one if it has none yet.
-		$r_gid = small_query("SELECT id FROM uts_games WHERE gamename = '".$gamename."'");
-		if ($r_gid)
-			$gid = $r_gid['id'];
-		else
-		{
-			mysql_query("INSERT INTO `uts_games` SET `gamename` = '".$gamename."', `name` = '".$gamename."';") or die("game ins - ".mysql_error());
-			$gid = mysql_insert_id();
-		}
-
+		// CRATOS: Check for PRO matches. Reset gid to re-force lookup.
+		if (intval($qm_gameinfoff['col3']) != 0) { $gamename = "$gamename (pro)"; unset($gid); }
 
 		// Check wheter we want to override the gametype for this match
 		// (Useful if we want a server to have separate stats for one server or if we want to
@@ -626,7 +615,26 @@ foreach ($logfiles as $filename)
 			if ($rule['gamename'] != '*' and $rule['gamename'] != $gamename) continue;
 			if ($rule['mutator'] != '*' and stristr($qm_mutators, $rule['mutator']) === false) continue;
 			$gid = $rule['gid'];
+			$r_gid = small_query("SELECT gamename, name FROM uts_games WHERE gid = '".$gid."'"); // Check it's valid.
+			if ($r_gid)
+				$gamename = $r_gid['gamename'];
+			else
+				unset($gid);
 			break;
+		}
+
+		if (!isset($gid))
+		{
+			// Get the unique ID of this gametype.
+			// Create a new one if it has none yet.
+			$r_gid = small_query("SELECT id FROM uts_games WHERE gamename = '".$gamename."'");
+			if ($r_gid)
+				$gid = $r_gid['id'];
+			else
+			{
+				mysql_query("INSERT INTO `uts_games` SET `gamename` = '".$gamename."', `name` = '".$gamename."';") or die("game ins - ".mysql_error());
+				$gid = mysql_insert_id();
+			}
 		}
 
 		$qm_firstblood = small_query("SELECT col2 FROM uts_temp_".$uid." WHERE col1 = 'first_blood'");

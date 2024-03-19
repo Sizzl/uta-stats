@@ -106,6 +106,10 @@ INSERT INTO `uts_games` VALUES (1, 'Assault', 'Assault'),
 (18, 'BunnyTrack', 'BunnyTrack'),
 (19, 'BunnyTrack (insta)', 'BunnyTrack (insta)'),
 (20, 'Rocket Arena (insta)', 'Rocket Arena (insta)');
+(21, 'Assault Plus', 'AS+'),
+(22, 'Assault Plus (insta)', 'AS+ (insta)'),
+(23, 'Assault Plus (pro)', 'AS+ (pro)'),
+(24, 'Assault Plus (insta) (pro)', 'AS+ (insta) (pro)'),
 
 -- --------------------------------------------------------
 
