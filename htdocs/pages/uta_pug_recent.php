@@ -38,7 +38,6 @@ if (isset($mcount)) {
 	$mcount = 0;
 	$ecount = 0;
 }
-$ecount = $mcount/25;
 $ecount2 = number_format($ecount, 0, '.', '');
 	if ($ecount > $ecount2) {
 		$ecount2 = $ecount2+1;

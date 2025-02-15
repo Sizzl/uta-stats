@@ -266,6 +266,66 @@ ALTER TABLE `uts_match`
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `uts_pickups`
+--
+
+DROP TABLE IF EXISTS `uts_pickups`;
+CREATE TABLE IF NOT EXISTS `uts_pickups` (
+  `id` int(10) NOT NULL auto_increment,
+  `name` varchar(100) NOT NULL,
+  `image` varchar(50) NOT NULL,
+  `sequence` tinyint UNSIGNED NOT NULL DEFAULT '100',
+  `hide` enum('N','Y') NOT NULL DEFAULT 'N'
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 ;
+
+--
+-- Dumping data for table `uts_pickups`
+--
+
+INSERT INTO `uts_pickups` (`id`, `name`, `image`, `sequence`, `hide`) VALUES
+(1, 'Thigh Pads', '', 11, 'N'),
+(2, 'Body Armor', '', 12, 'N'),
+(3, 'ShieldBelt', '', 13, 'N'),
+(4, 'Health Vial', '', 1, 'N'),
+(5, 'Health Pack', '', 2, 'N'),
+(6, 'Super Health Pack', '', 3, 'N'),
+(7, 'Nali Healing Fruit', '', 4, 'N'),
+
+--
+-- AUTO_INCREMENT for table `uts_pickups`
+--
+ALTER TABLE `uts_pickups`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- INDEX for table `uts_pickups`
+--
+ALTER TABLE `uts_pickups`
+  ADD PRIMARY KEY (`id`);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uts_pickupstats`
+--
+
+DROP TABLE IF EXISTS `uts_pickupstats`;
+CREATE TABLE IF NOT EXISTS `uts_pickupstats` (
+  `matchid` mediumint UNSIGNED NOT NULL DEFAULT '0',
+  `year` smallint NOT NULL,
+  `pid` int UNSIGNED NOT NULL DEFAULT '0',
+  `pickup` int UNSIGNED NOT NULL DEFAULT '0',
+  `timestamp` varchar(14) NOT NULL,
+  `time_logged` float NOT NULL,
+  `time_relative` float NOT NULL,
+  KEY `full` (`matchid`,`pid`),
+  KEY `pid_w_year` (`pid`,`pickup`,`year`),
+  KEY `timestamp` (`timestamp`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
 -- 
 -- Table structure for table `uts_pinfo`
 -- 
