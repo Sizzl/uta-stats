@@ -1,5 +1,5 @@
 <?php
-
+include_once ("includes/mysql-shim/lib/mysql.php");
 include ("includes/functions.php");
 include ("includes/config.php");
 
