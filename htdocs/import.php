@@ -9,7 +9,7 @@ function add_info($name, $value) {
 if (isset($_REQUEST['rememberkey'])) setcookie('uts_importkey', $_REQUEST['key'], time()+60*60*24*30*365);
 if (isset($_COOKIE['uts_importkey'])) $adminkey = $_COOKIE['uts_importkey'];
 global $rank_year;
-
+include_once ("includes/mysql-shim/lib/mysql.php");
 require ("includes/uta_functions.php");
 require ("includes/functions.php");
 require ("includes/config.php");
