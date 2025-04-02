@@ -159,8 +159,12 @@
 		if (strlen($q_suicides['col4']))
 			$r_suicides = $q_suicides['col4'];
 	}
-
-	$r_frags = $r_kills - $r_suicides - $r_teamkills;
+	if (Null != $r_kills)
+		$r_frags = $r_kills;
+	if (Null != $r_suicides)
+		$r_frags = $r_frags - $r_suicides;
+	if (Null !+ $r_teamkills)
+		$r_frags = $rfrags - $r_teamkills;
 
 	if (strlen($q_acc['col4']))
 		$r_acc = get_dp($q_acc['col4']);
@@ -272,8 +276,8 @@
 										`ttl` = '".$r_ttl."',
 										`gamescore` = '".$r_score."';";
 
-	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff final; (f=".$r_frags."; s=\n".$sql_playerid.")\n".mysql_error()."\n");
-	$playerecordid = mysql_insert_id();
+	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff query; (f=".$r_frags."; s=\n".$sql_playerid.")\n".mysql_error()."\n");
+	$playerecordid = mysql_insert_id() or die("import_playerstuff insert; (f=".$r_frags."; s=\n".$sql_playerid.")\n".mysql_error()."\n");;
 
 
 ?>

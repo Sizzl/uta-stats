@@ -47,7 +47,7 @@ $asclasses[] = array("id"=>"3",
 // $asclasses[] = array("id"=>"6","short"=>"turboAS","desc"=>"turbo Assault","mutators"=>"","insta"=>"0","teamsize"=>"5","friendlyfirescale"=>"0");
 
 // New IP 2 Country table Config --// 20/07/05 Timo: Variable for table name of IP->Country data
-  $iptc = array("table"=>"ipToCountry",
+  $iptc = array("table"=>"ipToCountry2",
 		"cfield"=>"lower(country_code2)",
 		"tfield"=>"ip_to",
 		"ffield"=>"ip_from",

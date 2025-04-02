@@ -7,8 +7,10 @@ if (isset($_GET["debug"]))
 function mks($str)
 {
         global $notallowed, $spec_chars;
-        $str = str_replace($notallowed, '', $str);
-        $str = str_replace($spec_chars, '', $str);
+		if (Null != $notallowed && strlen($notallowed))
+        	$str = str_replace($notallowed, '', $str);
+		if (Null != $spec_chars && strlen($spec_chars))
+        	$str = str_replace($spec_chars, '', $str);
         //if (get_magic_quotes_gpc() == 0) { $str = addslashes(trim($str)); };
         $str = addslashes(trim($str));;
         return $str;
