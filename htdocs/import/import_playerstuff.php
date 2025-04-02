@@ -163,7 +163,7 @@
 		$r_frags = $r_kills;
 	if (Null != $r_suicides)
 		$r_frags = $r_frags - $r_suicides;
-	if (Null !+ $r_teamkills)
+	if (Null != $r_teamkills)
 		$r_frags = $rfrags - $r_teamkills;
 
 	if (strlen($q_acc['col4']))
