@@ -61,9 +61,8 @@ if ($html)
 			include ("includes/header.php");
 	}
 }
-
-$pagehandler = mks($_GET["p"]);
-
+if (isset($_GET['p']))
+	$pagehandler = mks($_GET['p']);
 
 if ($html)
 {
@@ -364,9 +363,13 @@ foreach ($logfiles as $filename)
 			$log_incompatible = true;
 			$actor_version = "League Matches Only (see import.php) - result: ".$qm_matchmode['col2'];
 		}
+		else
+		{
+			$tournament = 'True';
+		}
 		// Exception for Easter
 		$qm_mutatorex = small_query("SELECT `col3` FROM `uts_temp_".$uid."` WHERE `col1` = 'game' AND `col2` = 'GoodMutator' AND (`col3` LIKE '%Easter Egg Hunt%' OR `col3` LIKE '%Halloween Hunt%')");
-		if (isset($qm_mutatorex) && strpos($qm_mutatorex['col3'],"Hunt") > 0)
+		if (isset($qm_mutatorex) && isset($qm_mutatorex['col3']) && strpos($qm_mutatorex['col3'],"Hunt") > 0)
 		{
 			$log_incompatible = false;
 			$allow_solologs = true;
@@ -473,7 +476,10 @@ foreach ($logfiles as $filename)
 		$serverport = $qm_serverport['col3'];
 		$gamename = addslashes($qm_gamename['col3']);
 		$servergametime = get_dp($qm_gameend['col0'] - $qm_gamestart['col0']);
-		$tournament = $qm_tournament['col3'];
+		if (isset($qm_tournament))
+			$tournament = $qm_tournament['col3'];
+		else
+			$tournament = 'True'; // assume match mode if not present
 		$teamgame = $qm_teamgame['col3'];
 		$mapname = addslashes($qm_mapname['col3']);
 		$mapfile = addslashes($qm_mapfile['col3']);
@@ -638,8 +644,8 @@ foreach ($logfiles as $filename)
 		}
 
 		$qm_firstblood = small_query("SELECT col2 FROM uts_temp_".$uid." WHERE col1 = 'first_blood'");
-
-		$firstblood = addslashes($qm_firstblood['col2']);
+		if (isset($qm_firstblood['col2']))
+			$firstblood = addslashes($qm_firstblood['col2']);
 
 		$serverinfo = addslashes("Admin: ".$qm_serveran['col3']."<br />Email: ".$qm_serverae['col3']." <br /><br />
 		<u>MOTD</u><br />".$qm_serverm1['col3']."<br />".$qm_serverm2['col3']."<br />".$qm_serverm3['col3']."<br />".$qm_serverm4['col3']);

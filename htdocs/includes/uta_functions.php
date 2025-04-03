@@ -12,7 +12,8 @@ function mks($str)
 		if (Null != $spec_chars && strlen($spec_chars))
         	$str = str_replace($spec_chars, '', $str);
         //if (get_magic_quotes_gpc() == 0) { $str = addslashes(trim($str)); };
-        $str = addslashes(trim($str));;
+		if (Null != $str)
+        	$str = addslashes(trim($str));;
         return $str;
 }
 

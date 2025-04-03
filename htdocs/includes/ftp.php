@@ -288,7 +288,7 @@ function ftpupdate()
 	if ($html) echo '<tr><td class="" align="center" height="25" width="550" colspan="2"></td></tr>';
 	echo "\n";
 	
-	if (!$ug_ftp_error) {
+	if (!isset($ug_ftp_error) || (isset($ug_ftp_error) && !$ug_ftp_error)) {
 		$file = fopen('./includes/ftptimestamp.php', 'wb+', 1);
 		if ($file)
 		{

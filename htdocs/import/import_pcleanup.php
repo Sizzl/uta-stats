@@ -48,8 +48,8 @@ while ($r_pname = mysql_fetch_array($q_pname)) {
 								INTO 		uts_killsmatrix 
 								SET 		matchid = $matchid, 
 											killer = $newplayerid, 
-											victim = ${r_kmupdate['victim']},
-											kills	= ${r_kmupdate['kills']};");
+											victim = {$r_kmupdate['victim']},
+											kills	= {$r_kmupdate['kills']};");
 		}
 		
 		$sql_kmupdate = "	SELECT 	killer, 
@@ -64,9 +64,9 @@ while ($r_pname = mysql_fetch_array($q_pname)) {
 			mysql_query("	INSERT 	
 								INTO 		uts_killsmatrix 
 								SET 		matchid = $matchid, 
-											killer = ${r_kmupdate['killer']}, 
+											killer = {$r_kmupdate['killer']}, 
 											victim = $newplayerid,
-											kills	= ${r_kmupdate['kills']};");
+											kills	= {$r_kmupdate['kills']};");
 		}
 		
 		mysql_query("	DELETE

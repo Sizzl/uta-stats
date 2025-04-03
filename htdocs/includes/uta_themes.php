@@ -4,7 +4,7 @@
 global $themeselection;
 session_start();
 $themeselection = "<form method=\"GET\" action=\"".$_SERVER['SCRIPT_NAME']."\">\r\n";
-$currentpage = str_replace("?theme=","?oldtheme=",$_SERVER["QUERY_STRING"]);
+$currentpage = str_replace("?theme=","?oldtheme=",$_SERVER['QUERY_STRING']);
 $currentpage = str_replace("&theme=","&oldtheme=",$currentpage);
 $currentarray = explode("&",$currentpage); // added section to keep current display page! --// 23/07/05 Timo.
 for ($i=0;$i<count($currentarray);$i++)

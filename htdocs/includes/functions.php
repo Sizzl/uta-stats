@@ -18,7 +18,7 @@ $charimages[] = "char12.jpg";
 $charimages[] = "char13.jpg";
 $charimages[] = "char14.jpg";
 
-srand(microtime() * 1000);
+srand(microtime(True) * 10000);
 $charimg = $charimages[rand(0, count($charimages)-1)];
 
 // Two letter codes and their correspionding country names

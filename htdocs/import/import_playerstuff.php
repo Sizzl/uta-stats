@@ -96,9 +96,9 @@
 	$avgping = min($r_player9['avgping'],30000);
 
 	// People who join at the end error the import, this stops it
-	IF ($lowping == NULL) { $lowping = 0; }
-	IF ($highping == NULL) { $highping = 0; }
-	IF ($avgping == NULL) { $avgping = 0; }
+	if ($lowping == NULL) { $lowping = 0; }
+	if ($highping == NULL) { $highping = 0; }
+	if ($avgping == NULL) { $avgping = 0; }
 
 	// Get accuracy, ttl etc
 	$r_acc = 0;
@@ -110,6 +110,7 @@
 	$r_suicides = 0;
 	$r_tos = 0;
 	$r_ttl = 0;
+	$r_score = 0;
 
 	$q_acc = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'accuracy' AND col3 = '".$playerid."';");
 	$q_deaths = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'deaths' AND col3 = '".$playerid."';");
@@ -164,7 +165,7 @@
 	if (Null != $r_suicides)
 		$r_frags = $r_frags - $r_suicides;
 	if (Null != $r_teamkills)
-		$r_frags = $rfrags - $r_teamkills;
+		$r_frags = $r_frags - $r_teamkills;
 
 	if (strlen($q_acc['col4']))
 		$r_acc = get_dp($q_acc['col4']);
@@ -227,7 +228,7 @@
 	if (strlen($q_ttl['col4']))
 		$r_ttl = get_dp($q_ttl['col4']);
 
-	if (strlen($q_score['col4']))
+	if (isset($q_score) && isset($q_score['col4']) && strlen($q_score['col4']))
 		$r_score = $q_score['col4'];
 	else
 		$r_score = $r_kills;
@@ -276,8 +277,8 @@
 										`ttl` = '".$r_ttl."',
 										`gamescore` = '".$r_score."';";
 
-	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff query; (f=".$r_frags."; s=\n".$sql_playerid.")\n".mysql_error()."\n");
-	$playerecordid = mysql_insert_id() or die("import_playerstuff insert; (f=".$r_frags."; s=\n".$sql_playerid.")\n".mysql_error()."\n");;
+	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff query; (f=".$r_frags.";sc=".$r_score."; s=\n".$sql_playerid.")\n".mysql_error()."\n");
+	$playerecordid = mysql_insert_id() or die("import_playerstuff insert; (f=".$r_frags.";sc=".$r_score."; s=\n".$sql_playerid.")\n".mysql_error()."\n");;
 
 
 ?>

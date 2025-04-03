@@ -192,8 +192,6 @@ if (isset($results['debugpid']) && $results['debugpid'] == $pid)
 
 $rank_nrank = ($rank_nrank/$r_gametime) * 600; // add checks
 		
-if ($dbg) echo "Nrank: $rank_nrank ";
-		
 // Add rank gametime to previous amount
 $rank_gametime = $r_gametime;
 if (isset($results['debugpid']) && $results['debugpid'] == $pid)
