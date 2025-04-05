@@ -65,7 +65,7 @@ echo'<td class="grey" align="left" width="400">Done</td>
 </tr>
 <tr>
 	<td class="smheading" align="left" width="200">Updating First Blood Records</td>';
-mysql_query("UPDATE `uts_match` SET `firstblood` = '".$mplayer1."' WHERE `firstblood` = ".$mplayer2."';") or die("am8: ".mysql_error());
+mysql_query("UPDATE `uts_match` SET `firstblood` = '".$mplayer1."' WHERE `firstblood` = '".$mplayer2."';") or die("am8: ".mysql_error());
 echo'<td class="grey" align="left" width="400">Done</td>
 </tr>
 <tr>
