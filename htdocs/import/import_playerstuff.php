@@ -122,7 +122,7 @@
 	$q_ttl = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'ttl' AND col3 = '".$playerid."';");
 	$q_score = small_query("SELECT `col4` FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'score' AND col3 = '".$playerid."';");
 
-	if (strlen($q_kills['col4']))
+	if (isset($q_kills) && isset($q_kills['col4']) && strlen($q_kills['col4']))
     	$r_kills = $q_kills['col4'];
 	else
 	{
@@ -130,7 +130,7 @@
 		if (strlen($q_kills['col4']))
 			$r_kills = $q_kills['col4'];
 	}
-	if (strlen($q_teamkills['col4']))
+	if (isset($q_teamkills) && isset($q_teamkills['col4']) && strlen($q_teamkills['col4']))
 		$r_teamkills = $q_teamkills['col4'];
 	else
 	{
@@ -143,7 +143,7 @@
 		$r_teamkills = 0;
 	}
 
-	if (strlen($q_deaths['col4']))
+	if (isset($q_deaths) && isset($q_deaths['col4']) && strlen($q_deaths['col4']))
 		$r_deaths = $q_deaths['col4'];
 	else
 	{
@@ -152,7 +152,7 @@
 			$r_deaths = $q_deaths['col4'];
 	}
 
-	if (strlen($q_suicides['col4']))
+	if (isset($q_suicides) && isset($q_suicides['col4']) && strlen($q_suicides['col4']))
 		$r_suicides = $q_suicides['col4'];
 	else
 	{
@@ -167,7 +167,7 @@
 	if (Null != $r_teamkills)
 		$r_frags = $r_frags - $r_teamkills;
 
-	if (strlen($q_acc['col4']))
+	if (iseet($q_acc) && isset($q_acc['col4']) && strlen($q_acc['col4']))
 		$r_acc = get_dp($q_acc['col4']);
 	else
 	{
@@ -181,10 +181,10 @@
 		else
 			$r_efficiency = 40;
 	}
-	if (strlen($q_efficiency['col4']))
+	if (isset($q_efficiency) && isset($q_efficiency['col4']) && strlen($q_efficiency['col4']))
 		$r_efficiency = get_dp($q_efficiency['col4']);
 
-	if (strlen($q_tos['col4']))
+	if (isset($q_tos) && isset($q_tos['col4']) && strlen($q_tos['col4']))
 		$r_tos = get_dp($q_tos['col4']);
 	else
 	{
@@ -192,40 +192,40 @@
 		$q_tos = array('pcon'=>'','pdis'=>'','gstrt'=>'','gmend'=>''); // Build this from other data we have
 
 		$q_nfo = small_query("SELECT `col0` AS `pcon` FROM `uts_temp_".$uid."` WHERE `col1` = 'player' AND `col2` = 'Connect' AND `col4` = '".$playerid."';");
-		if (strlen($q_nfo['pcon']))
+		if (isset($q_nfo) && isset($q_nfo['pcon']) && strlen($q_nfo['pcon']))
 			$q_tos['pcon'] = $q_nfo['pcon'];
 
 		$q_nfo = small_query("SELECT `col0` AS `pdis` FROM `uts_temp_".$uid."` WHERE `col1` = 'player' AND `col2` = 'Disconnect' AND `col4` = '".$playerid."';");
-		if (strlen($q_nfo['pdis']))
+		if (isset($q_nfo) && isset($q_nfo['pdis']) && strlen($q_nfo['pdis']))
 			$q_tos['pdis'] = $q_nfo['pdis'];
 
 		$q_nfo = small_query("SELECT `col0` AS `gstrt` FROM `uts_temp_".$uid."` WHERE `col1` = 'game_start';");
-		if (strlen($q_nfo['gstrt']))
+		if (isset($q_nfo) && isset($q_nfo['gstrt']) && strlen($q_nfo['gstrt']))
 			$q_tos['gstrt'] = $q_nfo['gstrt'];
 
 		$q_nfo = small_query("SELECT `col0` AS `gmend` FROM `uts_temp_".$uid."` WHERE `col1` = 'game_end';");
-		if (strlen($q_nfo['gmend']))
+		if (isset($q_nfo) && isset($q_nfo['gmend']) && strlen($q_nfo['gmend']))
 			$q_tos['gmend'] = $q_nfo['gmend'];
 
-		if (strlen($q_tos['pdis']) && strlen($q_tos['pcon']))
+		if (isset($q_tos) && isset($q_tos['pdis']) && isset($q_tos['pcon']) && strlen($q_tos['pdis']) && strlen($q_tos['pcon']))
 		{
 			$r_tos = get_dp($q_tos['pdis']-$q_tos['pcon']);
 		}
-		elseif (strlen($q_tos['pcon']) && strlen($q_tos['gmend']))
+		elseif (isset($q_tos) && isset($q_tos['gmend']) && isset($q_tos['pcon']) && strlen($q_tos['pcon']) && strlen($q_tos['gmend']))
 		{
 			if ($q_tos['gmend']-$q_tos['pcon'] > 0)
 				$r_tos = get_dp($q_tos['gmend']-$q_tos['pcon']);
 		}
-		if (strlen($q_tos['pcon']) && strlen($q_tos['gstrt']))
+		if (isset($q_tos) && isset($q_tos['pcon']) && isset($q_tos['gstrt']) && strlen($q_tos['pcon']) && strlen($q_tos['gstrt']))
 		{
-			if (($q_tos['pcon'] > $q_tos['gstrt']) || strlen($q_tos['pdis']))
+			if (($q_tos['pcon'] > $q_tos['gstrt']) || (isset($q_tos['pdis']) && strlen($q_tos['pdis'])))
 				$r_ttl = $r_tos;
 			elseif ($q_tos['pcon'] < $q_tos['gstrt'] && strlen($q_tos['gmend']))
 				$r_ttl = get_dp($q_tos['gmend']-$q_tos['gstrt']);
 		}
 	}
 
-	if (strlen($q_ttl['col4']))
+	if (isset($q_ttl) && isset($q_ttl['col4']) && strlen($q_ttl['col4']))
 		$r_ttl = get_dp($q_ttl['col4']);
 
 	if (isset($q_score) && isset($q_score['col4']) && strlen($q_score['col4']))

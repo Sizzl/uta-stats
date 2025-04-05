@@ -667,16 +667,28 @@ foreach ($logfiles as $filename)
 			$serverinfo = $serverinfo.$qm_serverm4['col3'];
 		
 		$serverinfo = addslashes($serverinfo);
-		$gameinfo = addslashes(	add_info('Time Limit:', $qm_gameinfotl['col3']) .
-					add_info('Frag Limit:', $qm_gameinfofl['col3']) .
-					add_info('Goal Team Score:', $qm_gameinfogt['col3']) .
-					add_info('Max Players:', $qm_gameinfomp['col3']) .
-					add_info('Max Specs:', $qm_gameinfoms['col3']) .
-					add_info('Game Speed:', $qm_gameinfogs['col3']) .
-					add_info('Translocator:', $qm_gameinfout['col3']) .
-					add_info('Friendly Fire:', $qm_gameinfoff['col3']) .
-					add_info('Weapon Stay:', $qm_gameinfows['col3']) .
-					add_info('UTStats Actor Version:', $actor_version));
+		$gameinfo = "";
+		if (isset($qm_gameinfotl) && isset($qm_gameinfotl['col3']))
+			$gameinfo = $gameinfo.add_info('Time Limit:', $qm_gameinfotl['col3']);
+		if (isset($qm_gameinfofl) && isset($qm_gameinfofl['col3']))
+			$gameinfo = $gameinfo.add_info('Frag Limit:', $qm_gameinfofl['col3']);
+		if (isset($qm_gameinfogt) && isset($qm_gameinfogt['col3']))
+			$gameinfo = $gameinfo.add_info('Goal Team Score:', $qm_gameinfogt['col3']);
+		if (isset($qm_gameinfomp) && isset($qm_gameinfomp['col3']))
+			$gameinfo = $gameinfo.add_info('Max Players:', $qm_gameinfomp['col3']);
+		if (isset($qm_gameinfoms) && isset($qm_gameinfoms['col3']))
+			$gameinfo = $gameinfo.add_info('Max Specs:', $qm_gameinfoms['col3']);
+		if (isset($qm_gameinfogs) && isset($qm_gameinfogs['col3']))
+			$gameinfo = $gameinfo.add_info('Game Speed:', $qm_gameinfogs['col3']);
+		if (isset($qm_gameinfout) && isset($qm_gameinfout['col3']))
+			$gameinfo = $gameinfo.add_info('Translocator:', $qm_gameinfout['col3']);
+		if (isset($qm_gameinfoff) && isset($qm_gameinfoff['col3']))
+			$gameinfo = $gameinfo.add_info('Friendly Fire:', $qm_gameinfoff['col3']);
+		if (isset($qm_gameinfows) && isset($qm_gameinfows['col3']))
+			$gameinfo = $gameinfo.add_info('Weapon Stay:', $qm_gameinfows['col3']);
+		if (isset($actor_version))
+			$gameinfo = $gameinfo.add_info('UTStats Actor Version:', $actor_version);
+		$gameinfo = addslashes($gameinfo);
 
 		// Tidy Up The Info
 		if (strlen($qm_mutators))

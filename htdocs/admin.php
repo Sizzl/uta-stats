@@ -2,7 +2,7 @@
 if (isset($_REQUEST['rememberkey'])) setcookie('uts_adminkey', $_REQUEST['key'], time()+60*60*24*30*365);
 if (isset($_COOKIE['uts_adminkey'])) $adminkey = $_COOKIE['uts_adminkey'];
 if (isset($adminkey)) setcookie('uta_uts_Admin', 'utaTrue', time()+60*60*24*30*365);
-
+include_once ("includes/mysql-shim/lib/mysql.php");
 include ("includes/functions.php");
 include ("includes/config.php");
 include ("includes/functions_admin.php");

@@ -1,6 +1,6 @@
 <?php 
 if(empty($_SERVER['SSH_CONNECTION'])){ exit; } // run this script from SSH only!
-
+include_once ("includes/mysql-shim/lib/mysql.php");
 if(!function_exists('adminselect')){
 	include ("includes/functions.php");
 	include ("includes/config.php");
