@@ -132,7 +132,7 @@ if (isset($_COOKIE["uta_uts_Admin"]))
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."credits".$anchorpostfix."\">Credits</a></p>\r\n";
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"./".$anchorprefix."help".$anchorpostfix."\">Help</a></p>\r\n";
 // $defaultsidebar .="  <p><a class=\"sidebar\" href=\"http://www.unrealadmin.org/forums/forumdisplay.php?f=173\" target=\"_blank\">UTStats Forums</a></p>\r\n";
-$defaultsidebar .="  <p><a class=\"sidebar\" href=\"http://forums.utassault.net/forumdisplay.php?f=350\" target=\"_blank\">PUG Forums</a></p>\r\n";
-$defaultsidebar .="  <p><a class=\"sidebar\" href=\"http://forums.utassault.net/\" target=\"_blank\">UTA Forums</a></p>\r\n";
+$defaultsidebar .="  <p><a class=\"sidebar\" href=\"https://forums.utassault.net/index.php?forums/discord-uta-pug-pug-as.350/\" target=\"_blank\">PUG Forums</a></p>\r\n";
+$defaultsidebar .="  <p><a class=\"sidebar\" href=\"https://forums.utassault.net/\" target=\"_blank\">UTA Forums</a></p>\r\n";
 
 ?>

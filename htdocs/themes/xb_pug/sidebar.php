@@ -28,10 +28,10 @@ echo '
                     </li> -->
 
                     <li class="toplast">
-                        <a href="http://forums.utassault.net/forumdisplay.php?f=350" target="_blank" title="Forums">Forums</a>
+                        <a href="https://forums.utassault.net/index.php?forums/discord-uta-pug-pug-as.350/" target="_blank" title="Forums">Forums</a>
                       <ul>
-                        <li class="subfirst"><a href="http://forums.utassault.net/" target="_blank" title="utassault.net">utassault.net</a></li>
-                        <li class="subfirst"><a href="http://forums.utassault.net/forumdisplay.php?f=350" target="_blank" title="utassault.net: Pug:AS">utassault.net: Pug:AS</a></li>
+                        <li class="subfirst"><a href="https://forums.utassault.net/" target="_blank" title="utassault.net">utassault.net</a></li>
+                        <li class="subfirst"><a href="https://forums.utassault.net/index.php?forums/discord-uta-pug-pug-as.350/" target="_blank" title="utassault.net: Pug:AS">utassault.net: Pug:AS</a></li>
                       </ul>
 
                     </li>
