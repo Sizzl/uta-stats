@@ -62,7 +62,7 @@ echo'
 											<td width="148" align="center" valign="middle" style="background: url(\''.$theme.'images/tsidebg.gif\');">
 											<span class="searchformb">
 											Stats Last updated:<br />
-											'.strftime("%d/%m/%Y @ %H:%M:%S",$lastupdate).'
+											'.date("d/m/Y @ H:i:s",$lastupdate).'
 											</span></td>
 											<td width="1" style="background: url(\''.$theme.'images/tgrey.gif\');"><img src="'.$theme.'images/spacer.gif" width="1" height="48" alt=" " /></td>
 										</tr>

@@ -68,7 +68,7 @@ echo'
 							  <TR> 
 								<TD height="54" bgcolor="#2B3455" align="center" width="100%">
 				<p align="center"><font size="5" face="Verdana">Welcome to PUG Stats '.(isset($a_test) ? " (archived ".$a_test." season) " : "").'- <a class="txtbigtitle" href="irc://bacon.utassault.net/utapug" target="_blank"></a>#utapug</font><br />
-				<span class="rangtext">[Stats last updated : '.strftime("%d/%m/%Y @ %H:%M:%S",$lastupdate).']</span></p>
+				<span class="rangtext">[Stats last updated : '.date("d/m/Y @ H:i:s",$lastupdate).']</span></p>
 
 </TD>
 								<TD background="'.$theme.'images/ladderheader-right.gif"></TD>

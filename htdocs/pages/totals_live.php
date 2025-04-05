@@ -588,7 +588,7 @@ if ($ShowNGStatsTotals)
 	<br>
 	<table border="0" cellpadding="1" cellspacing="2" width="450">
 	  <tbody><tr>
-	    <td class="dark" align="center">Updated: ('.strftime("%d/%m/%Y @ %H:%M:%S",time(void)).')</td>
+	    <td class="dark" align="center">Updated: ('.date("d/m/Y @ H:i:s",time()).')</td>
 	  </tr>
 	</tbody></table>';
 }

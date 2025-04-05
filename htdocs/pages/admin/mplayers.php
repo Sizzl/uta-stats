@@ -5,7 +5,7 @@ $options['title'] = 'Merge Players';
 // Adding listing toggle --// Timo 01/05/07
 $list = true;
 $list = ($_GET['list'] == 'hide' && !isset($_POST['list'])) ? false : true;
-if ($_POST['cur_var']=='mplayer1' && $_POST['mplayer1'])
+if (isset($_POST['cur_var']) && $_POST['cur_var']=='mplayer1' && $_POST['mplayer1'])
 	$list=false;
 $options['showlist'] = $list;
 
@@ -32,6 +32,7 @@ $mplayer2 = $results['mplayer2'];
 
 $mp1name = small_query("SELECT `name` FROM `uts_pinfo` WHERE `id` = '".$mplayer1."';");
 $mp2name = small_query("SELECT `name` FROM `uts_pinfo` WHERE `id` = '".$mplayer2."';");
+if (isset($mp2name) && isset($mp2name['name'])) {
 
 echo'<br><table border="0" cellpadding="1" cellspacing="2" width="600">
 <tr>
@@ -90,7 +91,9 @@ while ($r_nrank = mysql_fetch_array($q_nrank)) {
 mysql_query("DELETE FROM `uts_rank` WHERE `pid` = '".$mplayer2."';") or die("am12: ".mysql_error());
 	echo'<td class="grey" align="left" width="400">Done</td>
 </tr>';
-
+} else {
+	echo'Error: Could not find player records to merge from.';
+}
 
 // ==================================================================================
 // Cratos

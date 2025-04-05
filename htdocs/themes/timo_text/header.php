@@ -43,7 +43,7 @@ echo'
 </head>
 <body>
 <div class="pagebody">
-<div id="navbar" style="font-weight: bold;">UTA Stats. Last updated: '.strftime("%d/%m/%Y @ %H:%M:%S",$lastupdate).' </div>
+<div id="navbar" style="font-weight: bold;">UTA Stats. Last updated: '.date("d/m/Y @ H:i:s",$lastupdate).' </div>
 <br /><br />
 <hr />
 <hr />

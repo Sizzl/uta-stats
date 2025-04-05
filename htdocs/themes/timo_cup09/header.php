@@ -65,7 +65,7 @@ echo'
 				<td width="103" valign="top"><img src="'.$theme.'images/spacer.gif" width="103" height="30" border="0" /></td>
 				<td class="txtbigtitle" valign="middle">
 				<p align="center">&nbsp; &nbsp; Welcome to PUG Stats - <a href="irc://bacon.utassault.net/utapug" target="_blank"></a>#utapug<br />
-				<span class="rangtext">[Stats last updated : '.strftime("%d/%m/%Y @ %H:%M:%S",$lastupdate).']</span></p>
+				<span class="rangtext">[Stats last updated : '.date("d/m/Y @ H:i:s",$lastupdate).']</span></p>
 				</td>
 			</tr>
 			</table></td>
