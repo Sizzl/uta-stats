@@ -26,7 +26,7 @@ if (empty($filter)) {
 	$filter = "name";
 }
 
-if (empty($sort) or ($sort != 'ASC' and $sort != 'DESC')) $sort = ($filter == "name") ? "ASC" : "DESC";
+if (empty($sort) or ($sort != 'ASC' && $sort != 'DESC')) $sort = ($filter == "name") ? "ASC" : "DESC";
 
 
 // Work out Prev, Next, First, Last Stuff

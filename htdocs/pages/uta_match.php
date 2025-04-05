@@ -88,7 +88,7 @@ $score1 ='0';
 			sum(".(isset($t_player) ? $t_player : "uts_player").".ass_assist) as ass_assist, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_jump) as ass_h_jump, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_obj) as objs,
 			".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id as pid, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name as pname, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country as pcountry
 			from ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." inner join ".(isset($t_player) ? $t_player : "uts_player")." on ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id = ".(isset($t_player) ? $t_player : "uts_player").".pid
-			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id and ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 and ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
+			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id AND ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
 			group by ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country 
 			ORDER BY ".$sort_by." DESC";
 						
@@ -136,7 +136,7 @@ $score1 ='0';
 			sum(".(isset($t_player) ? $t_player : "uts_player").".ass_assist) as ass_assist, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_jump) as ass_h_jump, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_obj) as objs,
 			ANY_VALUE(".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id) AS pid, ANY_VALUE(".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name) AS pname, ANY_VALUE(".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country) AS pcountry
 			from ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." inner join ".(isset($t_player) ? $t_player : "uts_player")." on ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id = ".(isset($t_player) ? $t_player : "uts_player").".pid
-			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id and ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 and ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
+			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id AND ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
 			group by ".(isset($t_player) ? $t_player : "uts_player").".team
 			order by ".(isset($t_player) ? $t_player : "uts_player").".team";
 	} else {
@@ -149,7 +149,7 @@ $score1 ='0';
 			sum(".(isset($t_player) ? $t_player : "uts_player").".ass_assist) as ass_assist, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_jump) as ass_h_jump, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_obj) as objs,
 			".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id as pid, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name as pname, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country as pcountry
 			from ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." inner join ".(isset($t_player) ? $t_player : "uts_player")." on ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id = ".(isset($t_player) ? $t_player : "uts_player").".pid
-			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id and ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 and ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
+			inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id AND ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
 			group by ".(isset($t_player) ? $t_player : "uts_player").".team
 			order by ".(isset($t_player) ? $t_player : "uts_player").".team";
 	}		

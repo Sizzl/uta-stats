@@ -77,7 +77,7 @@ $out .= '
 			SUM(".(isset($t_player) ? $t_player : "uts_player").".ass_assist) as ass_assist, SUM(".(isset($t_player) ? $t_player : "uts_player").".ass_h_jump) as ass_h_jump, SUM(".(isset($t_player) ? $t_player : "uts_player").".ass_obj) as objs,
 			".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id as pid, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name as pname, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country as pcountry
 			FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." INNER JOIN ".(isset($t_player) ? $t_player : "uts_player")." on ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id = ".(isset($t_player) ? $t_player : "uts_player").".pid
-			INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id and ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 and ".(isset($t_match) ? $t_match : "uts_match").".servername LIKE '%PUG%'	
+			INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id AND ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".servername LIKE '%PUG%'	
 			GROUP BY ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country 
 			ORDER BY ".$sort_by." DESC";
 	$q_sql = mysql_query($sql) or die(mysql_error());
@@ -85,7 +85,7 @@ $out .= '
 $i = 0;
 	while ($p_sql = mysql_fetch_assoc($q_sql)) 
 	{	
-		if(substr($p_sql['pname'], -1) != '®'){ continue; }
+		if(substr($p_sql['pname'], -1) != 'ï¿½'){ continue; }
 		$tr_color = ($i % 2)? "#8F8F8F" : "";
 	
 		$out .=  '<tr class="grey" style="background-color:'.$tr_color.'; height:20px; vertical-align:middle">';
@@ -115,7 +115,7 @@ $i = 0;
 			SUM(".(isset($t_player) ? $t_player : "uts_player").".ass_assist) as ass_assist, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_jump) as ass_h_jump, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_obj) as objs,
 			".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id as pid, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name as pname, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country as pcountry
 			FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." inner join ".(isset($t_player) ? $t_player : "uts_player")." on ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id = ".(isset($t_player) ? $t_player : "uts_player").".pid
-			INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id and ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 and ".(isset($t_match) ? $t_match : "uts_match").".servername LIKE '%PUG%'	
+			INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id AND ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".servername LIKE '%PUG%'	
 			GROUP BY ".(isset($t_player) ? $t_player : "uts_player").".team
 			ORDER BY ".(isset($t_player) ? $t_player : "uts_player").".team";
 $i = 0;

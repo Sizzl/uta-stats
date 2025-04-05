@@ -85,7 +85,7 @@ if (empty($import_adminkey))
 	return;
 }
 
-if (!empty($adminkey) and $adminkey != $import_adminkey)
+if (!empty($adminkey) && $adminkey != $import_adminkey)
 {
 	if ($html) echo'<tr><td class="smheading" align="left" width="150">Error:</td><td class="grey" align="left">';
 	echo "Keys do not match\n";
@@ -130,7 +130,7 @@ $start_time = time();
 $files = isset($_REQUEST['files']) ? $_REQUEST['files'] : 0;
 $elapsed = isset($_REQUEST['elapsed']) ? $_REQUEST['elapsed'] : 0;
 
-if ($ftp_use and !isset($_GET['no_ftp']))
+if ($ftp_use && !isset($_GET['no_ftp']))
 {
 	include("includes/ftp.php");
 	$elapsed = $elapsed - (time() - $start_time);
@@ -152,7 +152,7 @@ echo "Log files sorted alphabetically.\n";
 foreach ($logfiles as $filename)
 {
 // Our (self set) timelimit exceeded => reload the page to prevent srcipt abort
-	if (!empty($import_reload_after) and $start_time + $import_reload_after <= time())
+	if (!empty($import_reload_after) && $start_time + $import_reload_after <= time())
 	{
 		if (!$html) die('Time limit exceeded - unable to reload page (no HTML output)' ."\n");
 
@@ -176,8 +176,8 @@ foreach ($logfiles as $filename)
 
 	// UTDC log: Move to logs/utdc/
 	if ($import_utdc_download_enable
-		and substr($filename, strlen($filename) - strlen($import_utdc_log_extension)) == $import_utdc_log_extension
-		and substr($oldfilename, 0, strlen($import_utdc_log_start)) == $import_utdc_log_start)
+		&& substr($filename, strlen($filename) - strlen($import_utdc_log_extension)) == $import_utdc_log_extension
+		&& substr($oldfilename, 0, strlen($import_utdc_log_start)) == $import_utdc_log_start)
 	{
 		if ($import_utdc_log_compress == 'no') $import_utdc_log_compress = 'yes';
 		if ($html)
@@ -224,7 +224,7 @@ foreach ($logfiles as $filename)
 		$result = mysql_query($sql);
 		if ($result) break;
 
-		if (mysql_errno() == 1044 and $import_use_temporary_tables)
+		if (mysql_errno() == 1044 && $import_use_temporary_tables)
 		{
 			echo "<br><strong>WARNING: Unable to create temporary table (". mysql_error() .")<br>";
 			echo "I'll retry without using MySQL's temporary table feature (see \$import_use_temporary_tables in config.php for details).<br><br></strong>";
@@ -445,7 +445,7 @@ foreach ($logfiles as $filename)
 		echo "No (Logfile incompatible [created by UTStats $actor_version])\n";
 		if ($html) echo '</td></tr>';
 	}
-	elseif ($import_ignore_if_gametime_less_than != 0 and ceil(($qm_gameend['col0'] - $qm_gamestart['col0']) / 60) < $import_ignore_if_gametime_less_than)
+	elseif ($import_ignore_if_gametime_less_than != 0 && ceil(($qm_gameend['col0'] - $qm_gamestart['col0']) / 60) < $import_ignore_if_gametime_less_than)
 	{
 		echo "No (game too short [". ceil(($qm_gameend['col0'] - $qm_gamestart['col0']) / 60) ." &lt; $import_ignore_if_gametime_less_than minutes])\n";
 		if ($html) echo '</td></tr>';
@@ -469,8 +469,10 @@ foreach ($logfiles as $filename)
 		$qm_gameinfoff = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'FriendlyFireScale' LIMIT 0,1");
 		$qm_gameinfows = small_query("SELECT col3 FROM uts_temp_".$uid." WHERE col1 = 'game' AND col2 = 'WeaponsStay'");
 
-		$gametime = $qm_time['col3'];
-		$offset = $qm_zone['col3']; // --// Timo: 18/09/05
+		if (isset($qm_time) && isset($qm_time['col3']))
+			$gametime = $qm_time['col3'];
+		if (isset($qm_zone) && isset($qm_zone['col3']))
+			$offset = $qm_zone['col3']; // --// Timo: 18/09/05
 		$servername = addslashes($qm_servername['col3']);
 		$serverip = $qm_serverip['col3'];
 		$serverport = $qm_serverport['col3'];
@@ -550,7 +552,7 @@ foreach ($logfiles as $filename)
 		// ************************************************************************************
 		// Cratos: Check for duplicate logfile import
 		// ************************************************************************************
-		if ($offset) // --// Timo: 18/09/05
+		if (isset($offset) && isset($gametime)) // --// Timo: 18/09/05
 			$gametime = offsetutdate($gametime,$offset);
 		else
 			$gametime = utdate($gametime);
@@ -617,9 +619,12 @@ foreach ($logfiles as $filename)
 		// Check if one of our overriderules applies to this match
 		foreach($overriderules as $rule)
 		{
-			if ($rule['serverip'] != '*' and $rule['serverip'] != "$serverip:$serverport") continue;
-			if ($rule['gamename'] != '*' and $rule['gamename'] != $gamename) continue;
-			if ($rule['mutator'] != '*' and stristr($qm_mutators, $rule['mutator']) === false) continue;
+			if (isset($rule['serverip']) && strlen($rule['serverip']) > 0)
+				if ($rule['serverip'] != '*' && $rule['serverip'] != "$serverip:$serverport") continue;
+			if (isset($rule['gamename']) && strlen($rule['gamename']) > 0)
+				if ($rule['gamename'] != '*' && $rule['gamename'] != $gamename) continue;
+			if (isset($rule['mutator']) && strlen($rule['mutator']) > 0)
+				if ($rule['mutator'] != '*' && stristr($qm_mutators, $rule['mutator']) === false) continue;
 			$gid = $rule['gid'];
 			$r_gid = small_query("SELECT gamename, name FROM uts_games WHERE gid = '".$gid."'"); // Check it's valid.
 			if ($r_gid)
@@ -647,9 +652,21 @@ foreach ($logfiles as $filename)
 		if (isset($qm_firstblood['col2']))
 			$firstblood = addslashes($qm_firstblood['col2']);
 
-		$serverinfo = addslashes("Admin: ".$qm_serveran['col3']."<br />Email: ".$qm_serverae['col3']." <br /><br />
-		<u>MOTD</u><br />".$qm_serverm1['col3']."<br />".$qm_serverm2['col3']."<br />".$qm_serverm3['col3']."<br />".$qm_serverm4['col3']);
-
+		$serverinfo = "";
+		if (isset($qm_serveran) && isset($qm_serveran['col3']))
+			$serverinfo = $serverinfo."Admin: ".$qm_serveran['col3']."<br />";
+		if (isset($qm_serverae) && isset($qm_serverae['col3']))
+			$serverinfo = $serverinfo."Email: ".$qm_serverae['col3']." <br /><br />";
+		if (isset($qm_serverm1) && isset($qm_serverm1['col3']))
+			$serverinfo = $serverinfo."<u>MOTD</u><br />".$qm_serverm1['col3']."<br />";
+		if (isset($qm_serverm2) && isset($qm_serverm2['col3']))
+			$serverinfo = $serverinfo.$qm_serverm2['col3']."<br />";
+		if (isset($qm_serverm3) && isset($qm_serverm3['col3']))
+			$serverinfo = $serverinfo.$qm_serverm3['col3']."<br />";
+		if (isset($qm_serverm4) && isset($qm_serverm4['col3']))
+			$serverinfo = $serverinfo.$qm_serverm4['col3'];
+		
+		$serverinfo = addslashes($serverinfo);
 		$gameinfo = addslashes(	add_info('Time Limit:', $qm_gameinfotl['col3']) .
 					add_info('Frag Limit:', $qm_gameinfofl['col3']) .
 					add_info('Goal Team Score:', $qm_gameinfogt['col3']) .
@@ -788,7 +805,7 @@ foreach ($logfiles as $filename)
 			$r_player1 = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'IsABot' AND col3 = '".$playerid."' ORDER BY id DESC LIMIT 0,1");
 			$playertype = $r_player1['col4'];
 			// This player is a bot
-			if ($playertype == 'True' and $import_ignore_bots) {
+			if ($playertype == 'True' && $import_ignore_bots) {
 				$ignored_players[] = $playername;
 				// We do not want to know who killed and who was killed by this bot...
 				mysql_query("DELETE FROM uts_temp_".$uid." WHERE (col1 = 'kill' OR col1 = 'teamkill') AND (col2 = '".$playerid."' OR col4 = '".$playerid."');") or die(mysql_error());
@@ -812,10 +829,12 @@ foreach ($logfiles as $filename)
 			// CRATOS: only ignore him if his TimeOnServer is < 30sec
 			// 
 			$qc_time = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'time_on_server' AND col3 = '".$playerid."' LIMIT 0,1");
-			if ($qc_time != NULL) $timeonserver = intval($qc_time['col4']);
-			else $timeonserver = 0; 
+			if (isset($qc_time) && $qc_time != NULL) 
+				$timeonserver = intval($qc_time['col4']);
+			else
+				$timeonserver = 0; 
 
-			if ($qc_kills['col4'] == 0 && $qc_deaths['col4'] == 0 && $qc_teamkills['col4'] == 0 && $qc_objs['assobjcount'] <= 0 && $timeonserver < 30)
+			if (isset($qc_kills) && isset($qc_kills['col4']) && isset($qc_deaths) && isset($qc_deaths['col4']) && isset($qc_teamkills) && isset($qc_teamkills['col4']) && isset($qc_objs) && isset($qc_objs['assobjcount']) && $qc_kills['col4'] == 0 && $qc_deaths['col4'] == 0 && $qc_teamkills['col4'] == 0 && $qc_objs['assobjcount'] <= 0 && $timeonserver < 30)
 			{
 				if ($timeonserver < 10 || $servergametime > 60) 	
 				{			
@@ -883,7 +902,7 @@ foreach ($logfiles as $filename)
 					echo "Banned:";
 			}
 			echo $playername.' ';
-			if ($playerbanned and $html) echo "</span>";
+			if ($playerbanned && $html) echo "</span>";
 			$imported_players[] = $playername;
 		}
 		if ($html) echo '</td></tr>';

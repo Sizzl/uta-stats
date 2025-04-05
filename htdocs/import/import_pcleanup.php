@@ -206,5 +206,5 @@ while ($r_pname = mysql_fetch_array($q_pname)) {
 		$cleaned = true;
 	}
 }
-if ($cleaned and $html) echo "<br />";
+if ($cleaned && $html) echo "<br />";
 ?>

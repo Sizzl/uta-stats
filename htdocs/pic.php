@@ -215,7 +215,7 @@ $pid = isset($_GET['pid']) ? my_addslashes($_GET['pid']) : 0;
 $gid = isset($_GET['gid']) ? my_addslashes($_GET['gid']) : 0;
 
 
-if ($num == 0 and $pid == 0 and $gid == 0 and !empty($_SERVER['PATH_INFO'])) {
+if ($num == 0 && $pid == 0 && $gid == 0 && !empty($_SERVER['PATH_INFO'])) {
 	$pi = explode('/', $_SERVER['PATH_INFO']);
 	list($void, $num, $pid, $gid) = $pi;
 }

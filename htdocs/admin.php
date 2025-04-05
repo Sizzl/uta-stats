@@ -36,7 +36,7 @@ IF (empty($import_adminkey)) {
 }
 
 
-IF (!empty($adminkey) and $adminkey != $import_adminkey) {
+IF (!empty($adminkey) && $adminkey != $import_adminkey) {
 	echo'<tr><td class="smheading" align="left" width="150">Error:</td>
 	<td class="grey" align="left">Keys do not match</td>
 	</tr>';

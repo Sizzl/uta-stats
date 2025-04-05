@@ -34,7 +34,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 	teamstats_init_totals($totals, $num);
 	while ($r_players = zero_out(mysql_fetch_array($q_players))) {
 		$r_players['team'] = intval($r_players['team']);
-		if ($teams and $oldteam != $r_players['team']) {
+		if ($teams && $oldteam != $r_players['team']) {
 			if ($r_players['team'] != 0) teamstats_team_totals($totals, $num, $teams, $extra, $teamscore[$oldteam]);
 			$oldteam = $r_players['team'];
 			teamstats_init_totals($totals, $num);

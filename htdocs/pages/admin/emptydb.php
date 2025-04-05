@@ -21,13 +21,13 @@ $i++;
 $results = adminselect($options);
 
 
-IF ($results['sure'] == "Yes" and $results['really'] == "Yes") {
+IF ($results['sure'] == "Yes" && $results['really'] == "Yes") {
 	echo'<br><table border="0" cellpadding="1" cellspacing="2" width="600">
 	<tr>
 		<td class="smheading" align="center" colspan="2">Empty Database</td>
 	</tr>
 	<tr>
-		<td class="smheading" align="left" width="300">Emptying All Tables but uts_ip2country and uts_weapons</td>';
+		<td class="smheading" align="left" width="300">Emptying All Tables but uts_ip2country AND uts_weapons</td>';
 	mysql_query("TRUNCATE uts_games;") or die(mysql_error());
 	mysql_query("TRUNCATE uts_gamestype;") or die(mysql_error());
 	mysql_query("TRUNCATE uts_killsmatrix;") or die(mysql_error());

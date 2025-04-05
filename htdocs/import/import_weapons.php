@@ -99,7 +99,7 @@ if (!isset($rank_year) || $rank_year == 0)
 $s_weapons = array();
 foreach($weapons as $playerid => $weapon) {
 	foreach($weapon as $weaponid => $infos) {
-		if ($infos['weap_kills'] == 0 and $infos['weap_shotcount'] == 0) continue;
+		if ($infos['weap_kills'] == 0 && $infos['weap_shotcount'] == 0) continue;
 		$ws_sql = "INSERT INTO `uts_weaponstats` SET `matchid` = '".$matchid."',
 				`year` = '".$rank_year."',
 				`pid` = '".$playerid."',
@@ -137,7 +137,7 @@ else
 
 foreach($weapons as $playerid => $weapon) {
 	foreach($weapon as $weaponid => $infos) {
-		if ($infos['weap_kills'] == 0 and $infos['weap_shotcount'] == 0) continue;
+		if ($infos['weap_kills'] == 0 && $infos['weap_shotcount'] == 0) continue;
 		foreach ($rank_years as $year)
 		{
 			// Check whether a record for this player and weapon already exists
@@ -188,7 +188,7 @@ foreach($weapons as $playerid => $weapon) {
 
 // Update the global weapon statistics (matchid 0, playerid 0 );
 foreach($s_weapons as $weaponid => $infos) {
-	if ($infos['weap_kills'] == 0 and $infos['weap_shotcount'] == 0) continue;
+	if ($infos['weap_kills'] == 0 && $infos['weap_shotcount'] == 0) continue;
 	// Check whether the global record for this weapon already exists
 	$r_pstat = small_query("	SELECT	pid
 										FROM		`uts_weaponstats`

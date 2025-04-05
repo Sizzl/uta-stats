@@ -52,7 +52,7 @@ echo "
 </style>
 ";
 
-if (!empty($year) and empty($month) and empty($day)) $where .= " AND m.time LIKE '$year%'";
+if (!empty($year) && empty($month) && empty($day)) $where .= " AND m.time LIKE '$year%'";
 if (!empty($gid)) $where .= " AND m.gid = '$gid'";
  
 $sql = "SELECT 

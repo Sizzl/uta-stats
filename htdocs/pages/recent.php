@@ -9,9 +9,9 @@ $month = !empty($_REQUEST['month']) ? my_addslashes(sprintf("%02d", $_REQUEST['m
 $day = !empty($_REQUEST['day']) ? my_addslashes(sprintf("%02d", $_REQUEST['day'])) : 0;
 $gid  = !empty($_REQUEST['gid']) ?  my_addslashes($_REQUEST['gid']) : 0;
 
-if (!empty($year) and empty($month) and empty($day)) $where .= " AND m.time LIKE '$year%'";
-if (!empty($year) and !empty($month) and empty($day)) $where .= " AND m.time LIKE '$year$month%'";
-if (!empty($year) and !empty($month) and !empty($day)) $where .= " AND m.time LIKE '$year$month$day%'";
+if (!empty($year) && empty($month) && empty($day)) $where .= " AND m.time LIKE '$year%'";
+if (!empty($year) && !empty($month) && empty($day)) $where .= " AND m.time LIKE '$year$month%'";
+if (!empty($year) && !empty($month) && !empty($day)) $where .= " AND m.time LIKE '$year$month$day%'";
 if (!empty($gid)) $where .= " AND m.gid = '".$gid."'";
 $r_mcount = small_query("SELECT COUNT(*) AS result FROM uts_match m WHERE 1 $where");
 $mcount = $r_mcount['result'];

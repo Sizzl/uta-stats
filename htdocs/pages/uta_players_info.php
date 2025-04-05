@@ -13,7 +13,7 @@ if (!$r_info) {
 }
 
 if ($r_info['banned'] == 'Y') {
-	if (isset($is_admin) and $is_admin) {
+	if (isset($is_admin) && $is_admin) {
 		echo "Warning: Banned player - Admin override<br>";
 	} else {
 		echo "Sorry, this player has been banned!";
@@ -54,7 +54,7 @@ if (isset($_GET['pics'])) {
 	$disp = false;
 	foreach($pic as $num => $options) {
 		if	(!$options['enabled']) continue;
-		if ($options['gidrequired'] and empty($gid)) continue;
+		if ($options['gidrequired'] && empty($gid)) continue;
 		$disp = true;
 		$pinfourl = "http://${oururl}?p=pinfo&pid=$pid";
 		$lgid = ($options['gidrequired']) ? $gid : 0;
@@ -340,7 +340,7 @@ echo'<table border="0" cellpadding="1" cellspacing="1">
     <td class="smheading" align="center" width="80">Rank</td>
     <td class="smheading" align="center" width="50">Matches</td>
 	 <td class="smheading" align="center" width="50">Explain</td>';
-	 if ($pic_enable and basename($_SERVER['PATH_TRANSLATED']) != 'admin.php') echo '<td class="smheading" align="center" width="50">Pics</td>';
+	 if ($pic_enable && basename($_SERVER['PATH_TRANSLATED']) != 'admin.php') echo '<td class="smheading" align="center" width="50">Pics</td>';
 echo '</tr>';
 $q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
 if (mysql_num_rows($q_ytest))
@@ -350,22 +350,22 @@ else
 $sql_rank = "SELECT g.name AS gamename, r.rank, r.prevrank, r.matches, r.gid, r.pid FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." AS r, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE r.gid = g.id AND r.pid = '".$pid."'".$where_year.";";
 $q_rank = mysql_query($sql_rank) or die(mysql_error());
 while ($r_rank = mysql_fetch_array($q_rank)) {
-	$r_no = small_query("SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE year='0' AND gid= '${r_rank['gid']}' and rank > ". get_dp($r_rank['rank']) ."9");
+	$r_no = small_query("SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE year='0' AND gid= '${r_rank['gid']}' AND rank > ". get_dp($r_rank['rank']) ."9");
 	echo'<tr>
 				<td class="grey" align="center">'.RankImageOrText($r_rank['pid'], $name, $r_no['no'], $r_rank['gid'], $r_rank['gamename'], false, '%IT%').'</td>
 		<td class="grey" align="center">'.$r_rank['gamename'].'</td>
 		<td class="grey" align="center">'.get_dp($r_rank['rank']) .' '. RankMovement($r_rank['rank'] - $r_rank['prevrank']) . '</td>
 		<td class="grey" align="center">'.$r_rank['matches'].'</td>';
 		echo '<td class="grey" align="center"><a class="grey" href="?p=pexplrank&amp;pid='.$pid.'&amp;gid='.$r_rank['gid'].'">(Click)</a></td>';
-	if ($pic_enable and basename($_SERVER['PATH_TRANSLATED']) != 'admin.php') echo '<td class="grey" align="center"><a class="grey"  href="?p=pinfo&amp;pid='.$pid.'&amp;gid='.$r_rank['gid'].'&amp;pics=1">(Click)</a></td>';
+	if ($pic_enable && basename($_SERVER['PATH_TRANSLATED']) != 'admin.php') echo '<td class="grey" align="center"><a class="grey"  href="?p=pinfo&amp;pid='.$pid.'&amp;gid='.$r_rank['gid'].'&amp;pics=1">(Click)</a></td>';
 	echo '</tr>';
 }
 
 echo '</tbody></table>';
 
 
-$r_pings = small_query("SELECT MIN(lowping * 1) AS lowping, AVG(avgping * 1) AS avgping, MAX(highping * 1) AS highping FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = ".$pid." and lowping > 0");
-if ($r_pings and $r_pings['lowping']) {
+$r_pings = small_query("SELECT MIN(lowping * 1) AS lowping, AVG(avgping * 1) AS avgping, MAX(highping * 1) AS highping FROM ".(isset($t_player) ? $t_player : "uts_player")." WHERE pid = ".$pid." AND lowping > 0");
+if ($r_pings && $r_pings['lowping']) {
 echo '
 	<br>
 	<table border="0" cellpadding="0" cellspacing="2">
@@ -398,7 +398,7 @@ echo'<br><table class="box" border="0" cellpadding="2" cellspacing="1">
     <td class="smheading" align="center" width="100">Match Type</td>
     <td class="smheading" align="center" width="150">Map</td>
     <td class="smheading" align="center" width="150">Server</td>';
-	if (isset($is_admin) and $is_admin) echo '<td class="smheading" align="center">IP Used</td>';
+	if (isset($is_admin) && $is_admin) echo '<td class="smheading" align="center">IP Used</td>';
   echo'</tr>';
 
 $sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.mapfile, INET_NTOA(p.ip) AS ip, m.servername, m.serverip FROM ".(isset($t_match) ? $t_match : "uts_match")." m, ".(isset($t_player) ? $t_player : "uts_player")." p, ".(isset($t_games) ? $t_games : "uts_games")." g
@@ -418,7 +418,7 @@ while ($r_recent = mysql_fetch_array($q_recent)) {
 		<td class="grey" align="center">'.$r_recent['gamename'].'</td>
 		<td class="grey" align="center">'.$r_mapfile.'</td>
 		<td nowrap class="grey" align="center"><a class="grey" href="./?p=sinfo&amp;serverip='.$r_serverip.'">'.$r_servername.'</a></td>';
-		if (isset($is_admin) and $is_admin) echo '<td class="grey" align="center">'. $r_recent['ip'].'</td>';
+		if (isset($is_admin) && $is_admin) echo '<td class="grey" align="center">'. $r_recent['ip'].'</td>';
 
 	  echo '</tr>';
 }
@@ -427,7 +427,7 @@ echo'
 </tbody></table>
 ';
 ///////// IP & NICK CHECKING - START (brajan 20050801)
-	if ((isset($is_admin) and $is_admin) || (in_array($_SERVER['REMOTE_ADDR'], $admin_ip)) ){
+	if ((isset($is_admin) && $is_admin) || (in_array($_SERVER['REMOTE_ADDR'], $admin_ip)) ){
 		if(isset($_POST['v_pid']))
 			$pid = $_POST['v_pid'];
 		elseif(isset($_GET['pid']))

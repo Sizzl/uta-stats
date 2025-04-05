@@ -69,6 +69,7 @@ if (isset($dbversion) && floatval($dbversion) > 5.6) {
 		FROM uts_player AS p, uts_games AS g WHERE p.gid = g.id GROUP BY `g`.`name` ORDER BY `gamename` ASC";  // 5.3sec
 }
 $q_gamesummary = mysql_query($sql_gamesummary) or die(mysql_error());
+$sumfrags = $sumkills = $sumsuicides = $sumteamkills = $summatchcount = $sumgametime = 0;
 while ($r_gamesummary = mysql_fetch_array($q_gamesummary)) {
 
 	$gid = $r_gamesummary['gid'];

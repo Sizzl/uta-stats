@@ -92,11 +92,11 @@ function adminselect(&$options)
 			$values[$valtmp3[0]] = $valtmp3[1];
 		}
 	}
-	if (isset($_REQUEST['submit']) and isset($_REQUEST['cur_var']))
+	if (isset($_REQUEST['submit']) && isset($_REQUEST['cur_var']))
 	{
 		$values[$_REQUEST['cur_var']] = $_REQUEST[$_REQUEST['cur_var']];
 		unset($_REQUEST[$_REQUEST['cur_var']]);
-		if (isset($options['vars'][$i - 1]['exitif']) and $options['vars'][$i - 1]['exitif'] == $values[$_REQUEST['cur_var']]) $i = $maxsteps;
+		if (isset($options['vars'][$i - 1]['exitif']) && $options['vars'][$i - 1]['exitif'] == $values[$_REQUEST['cur_var']]) $i = $maxsteps;
 	}
 	if ($i == $maxsteps) return($values);
 	echo '<table border="0" cellpadding="1" cellspacing="0" width="716">
@@ -104,7 +104,7 @@ function adminselect(&$options)
 			<tr><td class="heading">'.htmlentities($options['title']).'</td></tr>
 			<tr><td class="smheading">Step '.$step.' of '.$maxsteps.'</td></tr>
 			</tbody></table><br>';
-	if ($step != $maxsteps and !isset($options['vars'][$i])) die("Something went wrong :(");
+	if ($step != $maxsteps && !isset($options['vars'][$i])) die("Something went wrong :(");
 	
 	echo '<form action="'. $_SERVER['PHP_SELF'] .'" method="POST">';
 
@@ -116,7 +116,7 @@ function adminselect(&$options)
 
 	foreach($options['vars'] as $num => $var)
 	{
-		if ((!isset($values[$var['name']]) and $num != $i) or $num > $i) continue;
+		if ((!isset($values[$var['name']]) && $num != $i) or $num > $i) continue;
 		echo '<tr><td class="smheading" width="150">';
 		
 		if ($num == $i or !isset($var['caption']))
@@ -133,7 +133,7 @@ function adminselect(&$options)
 		echo '<td class="grey" width="400">';
 		if ($num != $i)
 		{
-			if (isset($var['extraoption']) and $values[$var['name']] == $var['extraoption'])
+			if (isset($var['extraoption']) && $values[$var['name']] == $var['extraoption'])
 			{
 				echo htmlentities($values[$var['name']]);
 			}
@@ -168,7 +168,7 @@ function adminselect(&$options)
 		}
 		else
 		{
-			if (isset($var['initialvalue']) and isset($values[$var['initialvalue']])) $values[$var['name']] = $values[$var['initialvalue']];
+			if (isset($var['initialvalue']) && isset($values[$var['initialvalue']])) $values[$var['name']] = $values[$var['initialvalue']];
 			echo '<input type="hidden" name="cur_var" value="'.$var['name'].'">';
 			switch($var['type'])
 			{
@@ -176,7 +176,7 @@ function adminselect(&$options)
 					echo '<select class="searchform" name="'. $var['name'] .'">';
 					if (isset($var['extraoption']))
 					{
-						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+						if (isset($var['exclude']) && $var['extraoption'] == $values[$var['exclude']])
 						{
 						}
 						else
@@ -189,8 +189,8 @@ function adminselect(&$options)
 					$q_game = mysql_query($sql_game) or die(mysql_error());
 					while ($r_game = mysql_fetch_array($q_game))
 					{
-						if (isset($var['exclude']) and $r_game['id'] == $values[$var['exclude']]) continue;
-						$selected = (isset($values[$var['name']]) and $r_game['id'] == $values[$var['name']]) ? 'selected' : '';
+						if (isset($var['exclude']) && $r_game['id'] == $values[$var['exclude']]) continue;
+						$selected = (isset($values[$var['name']]) && $r_game['id'] == $values[$var['name']]) ? 'selected' : '';
 						echo '<option '.$selected.' value="'.$r_game['id'].'">'. htmlentities($r_game['name'] .' ('. $r_game['gamename'] .')') .'</option>';
 					}
 					echo '</select>';
@@ -201,7 +201,7 @@ function adminselect(&$options)
 					echo '<select class="searchform" name="'. $var['name'] .'">';
 					if (isset($var['extraoption']))
 					{
-						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+						if (isset($var['exclude']) && $var['extraoption'] == $values[$var['exclude']])
 						{
 						}
 						else
@@ -231,8 +231,8 @@ function adminselect(&$options)
 					$q_server = mysql_query($sql_server) or die(mysql_error());
 					while ($r_server = mysql_fetch_array($q_server))
 					{
-						if (isset($var['exclude']) and $r_server['id'] == $values[$var['exclude']]) continue;
-						$selected = (isset($values[$var['name']]) and $r_server['id'] == $values[$var['name']]) ? 'selected' : '';
+						if (isset($var['exclude']) && $r_server['id'] == $values[$var['exclude']]) continue;
+						$selected = (isset($values[$var['name']]) && $r_server['id'] == $values[$var['name']]) ? 'selected' : '';
 						echo '<option '.$selected.' value="'.$r_server['id'].'">'. htmlentities($r_server['servername'] .' ('. $r_server['serverip'] .')',ENT_SUBSTITUTE,"cp1252").'</option>';
 					}
 					echo '</select>';
@@ -244,7 +244,7 @@ function adminselect(&$options)
 						echo '<select class="searchform" name="'. $var['name'] .'">';
 						if (isset($var['extraoption']))
 						{
-							if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+							if (isset($var['exclude']) && $var['extraoption'] == $values[$var['exclude']])
 							{
 							}
 							else
@@ -299,8 +299,8 @@ function adminselect(&$options)
 						$q_player = mysql_query($sql_player) or die(mysql_error());
 						while ($r_player = mysql_fetch_array($q_player))
 						{
-							if (isset($var['exclude']) and $r_player['id'] == $values[$var['exclude']]) continue;
-							$selected = (isset($values[$var['name']]) and $r_player['id'] == $values[$var['name']]) ? 'selected' : '';
+							if (isset($var['exclude']) && $r_player['id'] == $values[$var['exclude']]) continue;
+							$selected = (isset($values[$var['name']]) && $r_player['id'] == $values[$var['name']]) ? 'selected' : '';
 							echo '<option '.$selected.' value="'.$r_player['id'].'">'. htmlentities($r_player['name'],ENT_SUBSTITUTE,"cp1252") .'</option>';
 						}
 						echo '</select>';
@@ -316,7 +316,7 @@ function adminselect(&$options)
 					echo '<select class="searchform" name="'. $var['name'] .'">';
 					if (isset($var['extraoption']))
 					{
-						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+						if (isset($var['exclude']) && $var['extraoption'] == $values[$var['exclude']])
 						{
 						}
 						else
@@ -342,8 +342,8 @@ function adminselect(&$options)
 					$q_match = mysql_query($sql_match) or die(mysql_error());
 					while ($r_match = mysql_fetch_array($q_match))
 					{
-						if (isset($var['exclude']) and $r_match['id'] == $values[$var['exclude']]) continue;
-						$selected = (isset($values[$var['name']]) and $r_match['id'] == $values[$var['name']]) ? 'selected' : '';
+						if (isset($var['exclude']) && $r_match['id'] == $values[$var['exclude']]) continue;
+						$selected = (isset($values[$var['name']]) && $r_match['id'] == $values[$var['name']]) ? 'selected' : '';
 						echo '<option '.$selected.' value="'.$r_match['id'].'">'. htmlentities($r_match['id'].': '.mdate2($r_match['time']).' ('.un_ut($r_match['mapfile']).' on '.$r_match['serverip'].')',ENT_SUBSTITUTE,"cp1252").'</option>';
 					}
 					echo '</select>';
@@ -353,7 +353,7 @@ function adminselect(&$options)
 					echo '<select class="searchform" name="'. $var['name'] .'">';
 					if (isset($var['extraoption']))
 					{
-						if (isset($var['exclude']) and $var['extraoption'] == $values[$var['exclude']])
+						if (isset($var['exclude']) && $var['extraoption'] == $values[$var['exclude']])
 						{
 						}
 						else
@@ -365,7 +365,7 @@ function adminselect(&$options)
 					$sopts = explode('|', $var['options']);
 					foreach($sopts as $sval)
 					{
-						$selected = (isset($values[$var['name']]) and $sval == $values[$var['name']]) ? 'selected' : '';
+						$selected = (isset($values[$var['name']]) && $sval == $values[$var['name']]) ? 'selected' : '';
 						echo '<option '.$selected.' value="'.$sval.'">'. htmlentities($sval) .'</option>';
 					}
 					echo '</select>';

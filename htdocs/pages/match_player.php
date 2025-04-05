@@ -11,7 +11,7 @@ if (!$r_infos) {
 	exit;
 }
 if ($r_infos['banned'] == 'Y') {
-	if (isset($is_admin) and $is_admin) {
+	if (isset($is_admin) && $is_admin) {
 		echo "Warning: Banned player - Admin override<br>";
 	} else {
 		echo "Sorry, this player has been banned!";

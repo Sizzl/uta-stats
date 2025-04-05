@@ -176,7 +176,7 @@ foreach ($rank_years as $rank_year) {
 		$s_lastmatches = "SELECT m.id AS matchId FROM ".(isset($t_player) ? $t_player : "uts_player")." p 
 						INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." m ON p.matchid = m.id
 						WHERE m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' ".$where."
-						AND p.pid = '".$pid."' and p.gid = '".$gid."' ORDER BY m.id DESC LIMIT 0,2";
+						AND p.pid = '".$pid."' AND p.gid = '".$gid."' ORDER BY m.id DESC LIMIT 0,2";
 		$m_obj = mysql_query($s_lastmatches);
 		$matches = array();
 		while ($m_lms = mysql_fetch_array($m_obj))
@@ -202,7 +202,7 @@ foreach ($rank_years as $rank_year) {
 					SUM(m.ass_att=p.team) as ass_att, SUM(m.ass_att<>p.team) as ass_def,
 					SUM(p.gametime) AS gametime, COUNT(m.id) AS matches
 					FROM ".(isset($t_player) ? $t_player : "uts_player")." p inner join ".(isset($t_match) ? $t_match : "uts_match")." m on p.matchid = m.id
-					WHERE p.pid = '".$pid."' and p.gid = '".$gid."' AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' ".$where."  AND m.id <= '".$matchid."';");
+					WHERE p.pid = '".$pid."' AND p.gid = '".$gid."' AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."' ".$where."  AND m.id <= '".$matchid."';");
 			
 				$ass_att = $r_cnt['ass_att']; 
 				$ass_def = $r_cnt['ass_def'];
@@ -212,16 +212,16 @@ foreach ($rank_years as $rank_year) {
 				// Assault Objectives
 				$objsql = "SELECT COUNT(stats.id) as objs, SUM(o.rating) as ratedobjs, def_teamsize, att_teamsize
 					from ".(isset($t_smartass_objstats) ? $t_smartass_objstats : "uts_smartass_objstats")." stats 
-					inner join ".(isset($t_match) ? $t_match : "uts_match")." m on stats.matchid = m.id 
-					inner join ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." p on p.id = stats.pid 
+					INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." m ON stats.matchid = m.id 
+					INNER JOIN ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." p ON p.id = stats.pid 
 					INNER JOIN ".(isset($t_smartass_objs) ? $t_smartass_objs : "uts_smartass_objs")." o ON stats.objid = o.id
 					WHERE p.id = '".$pid."'
-						and m.gid = '".$gid."'
+					AND m.gid = '".$gid."'
 					AND m.time >= '".$rank_time_start."' AND m.time <= '".$rank_time_end."'
 					AND m.id <= '".$matchid."' ".$where."
-					and stats.def_teamsize >= 2 
-					and stats.att_teamsize >= 2
-					group by def_teamsize, att_teamsize Order by def_teamsize DESC, att_teamsize DESC";
+					AND stats.def_teamsize >= 2 
+					AND stats.att_teamsize >= 2
+					GROUP BY def_teamsize, att_teamsize ORDER BY def_teamsize DESC, att_teamsize DESC";
 					$q_obj = mysql_query($objsql);
 					
 					while ($r_obj = mysql_fetch_array($q_obj)) 

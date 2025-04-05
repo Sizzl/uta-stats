@@ -34,7 +34,7 @@ if (empty($filter) || !(preg_match("/(^mapfile$)|(^matchcount$)|(^pick90$)|(^pic
 	$filter = "mapfile";
 }
 
-if (empty($sort) or ($sort != 'ASC' and $sort != 'DESC')) $sort = ($filter == "mapfile") ? "ASC" : "DESC";
+if (empty($sort) or ($sort != 'ASC' && $sort != 'DESC')) $sort = ($filter == "mapfile") ? "ASC" : "DESC";
 
 // Firstly we need to work out First Last Next Prev pages
 

@@ -54,7 +54,7 @@ if (!$sql_crank) {
 echo'</tr>
 <tr>
 	<td class="smheading" align="left">Removing Kill Matrix Entries:</td>';
-	$q_match = mysql_query("SELECT matchid, playerid FROM uts_player WHERE pid = '".$pid."' and matchid = '".$matchid."'") or die(mysql_error());
+	$q_match = mysql_query("SELECT matchid, playerid FROM uts_player WHERE pid = '".$pid."' AND matchid = '".$matchid."'") or die(mysql_error());
 	while ($r_match = mysql_fetch_array($q_match)) {
 		mysql_query("DELETE FROM uts_killsmatrix WHERE matchid = '${r_match['matchid']}' AND (killer = '${r_match['playerid']}' OR victim = '${r_match['playerid']}')") or die(mysql_error());
 	}

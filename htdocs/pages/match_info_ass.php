@@ -26,7 +26,7 @@ if (!isset($mid2))
         if ($sql_assault2)
         {
 		$matchtime2 = $sql_assault2['time'];
-                $mid2sql = "SELECT `id` FROM `uts_match` WHERE `id` <> '".$mid."' AND `mapsleft` = '".$sql_assault2['mapsleft']."' AND `matchcode` = '".$sql_assault2['matchcode']."' and `mapfile` = '".$sql_assault2['mapfile']."';";
+                $mid2sql = "SELECT `id` FROM `uts_match` WHERE `id` <> '".$mid."' AND `mapsleft` = '".$sql_assault2['mapsleft']."' AND `matchcode` = '".$sql_assault2['matchcode']."' AND `mapfile` = '".$sql_assault2['mapfile']."';";
                 $assmatch = small_query($mid2sql);
                 if ($assmatch)
                 {
