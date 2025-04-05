@@ -626,7 +626,7 @@ foreach ($logfiles as $filename)
 			if (isset($rule['mutator']) && strlen($rule['mutator']) > 0)
 				if ($rule['mutator'] != '*' && stristr($qm_mutators, $rule['mutator']) === false) continue;
 			$gid = $rule['gid'];
-			$r_gid = small_query("SELECT gamename, name FROM uts_games WHERE gid = '".$gid."'"); // Check it's valid.
+			$r_gid = small_query("SELECT `gamename`, `name` FROM `uts_games` WHERE `id` = '".$gid."'"); // Check it's valid.
 			if ($r_gid)
 				$gamename = $r_gid['gamename'];
 			else
