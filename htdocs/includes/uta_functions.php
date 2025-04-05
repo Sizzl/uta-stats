@@ -23,7 +23,7 @@ function checkLoadavg()
 	if (file_exists("/proc/loadavg"))
 	{
 		$load = file_get_contents("/proc/loadavg");
-		list($load5, $load10, $load15) = explode(" ", $load, 3);
+		list($load1, $load5, $load15) = explode(" ", $load, 3);
 		if (round($load5)>=2) {
 			echo "<!-- Server Load: ".$load5." -->\r\n";
 			return true;
