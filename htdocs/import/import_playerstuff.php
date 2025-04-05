@@ -167,7 +167,7 @@
 	if (Null != $r_teamkills)
 		$r_frags = $r_frags - $r_teamkills;
 
-	if (iseet($q_acc) && isset($q_acc['col4']) && strlen($q_acc['col4']))
+	if (isset($q_acc) && isset($q_acc['col4']) && strlen($q_acc['col4']))
 		$r_acc = get_dp($q_acc['col4']);
 	else
 	{
