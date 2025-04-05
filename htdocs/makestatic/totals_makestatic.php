@@ -223,7 +223,7 @@ include('includes/weaponstats.php');
 weaponstats(0, 0);
 
 // --// Added option to enable/disable NGStats style Totals.
-if ($ShowNGStatsTotals)
+if (isset($ShowNGStatsTotals) && $ShowNGStatsTotals)
 {
 	echo'<br>
 	<table border="0" cellpadding="1" cellspacing="2" width="710">
