@@ -240,7 +240,6 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 	}
 	
 	$gametime = sec2min($gametime);
-	$gametime2 = sec2min($gametime2);
 	echo'
 	<table border="0" cellpadding="0" cellspacing="2" width="720">
 	  <tbody>

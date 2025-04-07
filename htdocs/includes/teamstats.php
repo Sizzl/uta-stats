@@ -86,7 +86,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 		$pname = $r_players['name'];
 		if (is_int($r_players['gamescore']))
 			$totals['gamescore'] += $r_players['gamescore'];
-		if ($extra && strlen($r_players[$extra]))
+		if (isset($extra) && strlen($r_players[$extra]))
 			$totals[$extra] += $r_players[$extra];
 		$totals['kills'] += $kills;
 		if (is_int($r_players['deaths']))
@@ -96,8 +96,8 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 			$totals['teamkills'] += $r_players['teamkills'];
 		$totals['eff'] += $eff;
 		$totals['acc'] += $acc;
-		$totals['ttl'] += $ttl;
-		$totals['ping'] += $r_players['avgping'];
+		$totals['ttl'] += intval($ttl);
+		$totals['ping'] += intval($r_players['avgping']);
 		$num++;
 
 		if ($r_players['banned'] == 'Y') {
@@ -145,7 +145,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 
 function teamstats_init_totals(&$totals, &$num) {
 	$totals['gamescore'] = 0;
-	if ($extra) $totals[$extra] = 0;
+	if (isset($extra)) $totals[$extra] = 0;
 	$totals['frags'] = 0;
 	$totals['kills'] = 0;
 	$totals['deaths'] = 0;
@@ -154,7 +154,7 @@ function teamstats_init_totals(&$totals, &$num) {
 	$totals['eff'] = 0;
 	$totals['acc'] = 0;
 	$totals['ttl'] = 0;
-        $totals['ping'] = 0;
+    $totals['ping'] = 0;
 	$num = 0;
 }
 
@@ -163,7 +163,7 @@ function teamstats_team_totals(&$totals, $num, $teams, $extra, $teamscore) {
 	$eff = get_dp($totals['eff'] / $num);
 	$acc = get_dp($totals['acc'] / $num);
 	$ttl = GetMinutes($totals['ttl'] / $num);
-        $ping = ceil($totals['ping']/$num);
+    $ping = ceil($totals['ping']/$num);
 
 	echo '<tr>';
 	echo '<td nowrap class="dark" align="center">Totals</td>';
@@ -172,14 +172,14 @@ function teamstats_team_totals(&$totals, $num, $teams, $extra, $teamscore) {
 	} else {
 		echo '<td class="darkgrey" align="center">'.$totals['gamescore'].'</td>';
 	}
-	if ($extra) echo '<td class="darkgrey" align="center">'.$totals[$extra].'</td>';
+	if (isset($extra)) echo '<td class="darkgrey" align="center">'.$totals[$extra].'</td>';
 
 	echo '<td class="darkgrey" align="center">'.$totals['frags'].'</td>';
 	echo '<td class="darkgrey" align="center">'.$totals['kills'].'</td>';
 	echo '<td class="darkgrey" align="center">'.$totals['deaths'].'</td>';
 	echo '<td class="darkgrey" align="center">'.$totals['suicides'].'</td>';
 
-	if ($teams) echo '<td class="darkgrey" align="center">'.$totals['teamkills'].'</td>';
+	if (isset($teams) && $teams) echo '<td class="darkgrey" align="center">'.$totals['teamkills'].'</td>';
 
 	echo '<td class="darkgrey" align="center">'.$eff.'</td>';
 	echo '<td class="darkgrey" align="center">'.$acc.'</td>';
