@@ -140,7 +140,7 @@ function str_rand($length = 8, $seeds = 'abcdefghijklmnopqrstuvwxyz0123456789')
     // Seed
     list($usec, $sec) = explode(' ', microtime());
     $seed = (float) $sec + ((float) $usec * 100000);
-    mt_srand($seed);
+    srand((int)$seed);
 
     // Generate
     for ($i = 0; $length > $i; $i++) {

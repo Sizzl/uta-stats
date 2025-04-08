@@ -9,10 +9,10 @@ function add_info($name, $value) {
 if (isset($_REQUEST['rememberkey'])) setcookie('uts_importkey', $_REQUEST['key'], time()+60*60*24*30*365);
 if (isset($_COOKIE['uts_importkey'])) $adminkey = $_COOKIE['uts_importkey'];
 global $rank_year;
-include_once ("includes/mysql-shim/lib/mysql.php");
-require ("includes/uta_functions.php");
-require ("includes/functions.php");
-require ("includes/config.php");
+include_once "includes/mysql-shim/lib/mysql.php";
+require "includes/uta_functions.php";
+require "includes/functions.php";
+require "includes/config.php";
 
 $compatible_actor_versions = array('beta 4.0', 'beta 4.1', 'beta 4.2', '0.4.0', '0.4.1', '0.4.2', '0.4.2a', '0.4.2b', '5.0');
 
@@ -815,7 +815,7 @@ foreach ($logfiles as $filename)
 
 			// Are they a Bot
 			$r_player1 = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'IsABot' AND col3 = '".$playerid."' ORDER BY id DESC LIMIT 0,1");
-			$playertype = $r_player1['col4'];
+			$playertype = isset($r_player1['col4']) ? $r_player1['col4'] : false;
 			// This player is a bot
 			if ($playertype == 'True' && $import_ignore_bots) {
 				$ignored_players[] = $playername;
@@ -829,7 +829,7 @@ foreach ($logfiles as $filename)
 
 			// Get players last team
 			$r_player3 = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'TeamChange' AND col3 = '".$playerid."' ORDER BY id DESC LIMIT 0,1");
-			$playerteam = $r_player3['col4'];
+			$playerteam = isset($r_player3['col4']) ? $r_player3['col4'] : 0;
 
 			$qc_kills = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'kills'AND col3 = '".$playerid."';");
 			$qc_teamkills = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'teamkills' AND col3 = '".$playerid."';");

@@ -402,7 +402,7 @@ CREATE TABLE IF NOT EXISTS `uts_player` (
   `insta` tinyint(1) NOT NULL default '0',
   `playerid` tinyint(3) NOT NULL default '0',
   `pid` int(10) unsigned NOT NULL default '0',
-  `team` tinyint(2) NOT NULL default '0',
+  `team` smallint(5) NOT NULL default '0',
   `isabot` tinyint(1) NOT NULL default '0',
   `country` char(2) NOT NULL default '',
   `ip` int(10) unsigned NOT NULL default '0',

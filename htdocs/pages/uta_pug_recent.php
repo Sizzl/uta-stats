@@ -114,15 +114,15 @@ echo'
 <div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>
 <table width="720" class="box" border="0" cellpadding="3" cellspacing="1">
   <tbody><tr>
-    <td class="heading" colspan="7" align="center">Unreal Tournament PUG Match List</td>
+    <td class="heading" colspan="5" align="center">Unreal Tournament PUG Match List</td>
   </tr>
   <tr>
     <td class="smheading" align="center" width="190">Date/Time</td>
     <td class="smheading" align="center" width="100">Match Type</td>
-    <td nowrap class="smheading" align="center">Teams</td>
+	<!-- <td class="smheading" align="center">Teams</td> -->
     <td class="smheading" align="center" width="70">Time</td>
     <td nowrap class="smheading" align="center" width="50">Score</td>
-    <td nowrap class="smheading" align="center" width="130">Server</td>
+    <td nowrap class="smheading" align="center" width="170">Server</td>
   </tr>';
 if (isset($dbversion) && floatval($dbversion) > 5.6) {
   $sql_recent = "SELECT ANY_VALUE(m.id) AS id, ANY_VALUE(m.time) AS time, ANY_VALUE(g.name) AS gamename, ANY_VALUE(m.serverinfo) AS serverinfo, ANY_VALUE(m.gametime) AS gametime, ANY_VALUE(m.matchmode) AS matchmode, m.teamname0, m.teamname1, m.matchcode FROM ".(isset($t_match) ? $t_match : "uts_match")." AS m, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE g.id = m.gid AND m.matchmode = 1 $where GROUP BY m.teamname0, m.teamname1, m.matchcode ORDER BY ANY_VALUE(m.time) DESC LIMIT $qpage,25";
@@ -152,7 +152,7 @@ while ($r_recent = mysql_fetch_array($q_recent)) {
 	  <tr>
 		<td nowrap class="dark" align="center"><a class="darkhuman" href="./?p=uta_match&amp;matchcode='.$r_recent['matchcode'].'">'.$r_time.'</a></td>
 		<td nowrap class="grey" align="center">'.$r_recent['gamename'].'</td>
-		<td nowrap class="grey" align="center"><a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname0']).'">'.htmlspecialchars($r_recent['teamname0']).'</a> vs. <a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname1']).'">'.htmlspecialchars($r_recent['teamname1']).'</a></td>
+		<!-- <td nowrap class="grey" align="center"><a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname0']).'">'.htmlspecialchars($r_recent['teamname0']).'</a> vs. <a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname1']).'">'.htmlspecialchars($r_recent['teamname1']).'</a></td> -->
 		<td class="grey" align="center">'.$total_time.'</td>
     	<td nowrap class="grey" align="center">'.$score0.' - '.$score1.'</td>    	
     	<td class="grey" align="center">'.$servername.'</td>
