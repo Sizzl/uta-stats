@@ -234,9 +234,9 @@ elseif ($rank_gametime >= 200 && $rank_gametime < 300) {
 // Select rank record
 // $r_rankp = small_query("SELECT id, time, rank, matches FROM uts_rank WHERE pid = '".$pid."' AND gid = '".$gid."' AND year = '".$rank_year."'");
 $r_rankp = small_query("SELECT `id`, `time`, `rank`, `matches` FROM `uts_rank` WHERE `pid` = '".$pid."' AND `gid` = '".$gid."' AND `year` = '".$rank_year."';");
-$rank_id = $r_rankp['id'];
+$rank_id = isset($r_rankp['id']) ? $r_rankp['id'] : null;
 
-if ($rank_id == NULL)
+if ($rank_id == null)
 {
 	// Add new rank record if one does not exist
 	mysql_query("INSERT INTO `uts_rank` SET `time` = '".$r_gametime."', `pid` = '".$pid."', `gid` = '".$gid."', `rank` = '0', `matches` = '0', `year` = '".$rank_year."';") or die("import_ranking INSERT; ".mysql_error());

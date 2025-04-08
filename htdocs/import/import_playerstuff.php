@@ -172,7 +172,7 @@
 	else
 	{
 		$q_acc = small_query("SELECT AVG(`eff`) AS `eff`, AVG(`accuracy`) AS `accuracy`, `pid` FROM `uts_player` WHERE `pid` = '".$playerid2pid[$playerid]."' ORDER BY `matchid` DESC LIMIT 0, 10;");
-		if (strlen($q_acc['accuracy']))
+		if (isset($q_acc) && isset($q_acc['accuracy']) && strlen($q_acc['accuracy']))
 			$r_acc = get_dp($q_acc['accuracy']);
 		else
 			$r_acc = 10;
