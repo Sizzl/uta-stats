@@ -5,15 +5,15 @@ include_once ("includes/uta_functions.php");
 include_once ("includes/functions.php");
 if (!isset($_GET['noheader']))
 {
-	if ($_SESSION["themelocation"]) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
+	if (isset($_SESSION['themelocation'])) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
 	{
-		if (file_exists($_SESSION["themelocation"]."header.php"))
-			include($_SESSION["themelocation"]."header.php");
+		if (file_exists($_SESSION['themelocation']."header.php"))
+			include $_SESSION['themelocation']."header.php";
 		else
-			include ("includes/header.php");
+			include "includes/header.php";
 	}
 	else
-		include ("includes/header.php");
+		include "includes/header.php";
 }
 $pagehandler = mks($_GET["p"]);
 
@@ -254,13 +254,12 @@ function utateam()
 {	
 	include("pages/uta_teamviewer.php");
 }
-if ($_SESSION["themelocation"]) // Themed footer --// 19/07/05 Timo: Added customisable footer
+if (isset($_SESSION['themelocation'])) // Themed footer --// 19/07/05 Timo: Added customisable footer
 {
-	if (file_exists($_SESSION["themelocation"]."footer.php"))
-		include($_SESSION["themelocation"]."footer.php");
+	if (file_exists($_SESSION['themelocation']."footer.php"))
+		include $_SESSION['themelocation']."footer.php";
 	else
-		include("includes/footer.php");
+		include "includes/footer.php";
 }
 else
-	include("includes/footer.php");
-?>
+	include "includes/footer.php";

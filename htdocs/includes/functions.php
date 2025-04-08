@@ -18,7 +18,7 @@ $charimages[] = "char12.jpg";
 $charimages[] = "char13.jpg";
 $charimages[] = "char14.jpg";
 
-srand(intval(round(microtime(True) * 10000,0)));
+srand((int)(microtime(True) * 10000));
 $charimg = $charimages[rand(0, count($charimages)-1)];
 
 // Two letter codes and their correspionding country names
@@ -26,18 +26,22 @@ require_once(dirname(__FILE__) .'/countries.php');
 
 // Addslashes if magic_quotes are off --// updated Feb 2022, temporary adjustment since the get_magic_quotes_gpc is deprecated
 function my_addslashes($data) {
+	/*
 	if (!false) {
 	   $data = addslashes($data);
 	}
+	*/
 	return $data;
 }
 
 function my_stripslashes($data) {
+	/*
 	if (!false) {
 	   $data = $data;
 	} else {
 	   $data = stripslashes($data);
 	}
+	*/
 	return $data;
 }
 
@@ -101,11 +105,13 @@ function my_fopen($filename, $mode, &$compression) {
 
 function my_fclose($fp, $compression) {
 	switch($compression) {
-		case 'bz2':		return(@bzclose($fp));
-		case 'zlib': 	return(@gzclose($fp));
-		default:			return(@fclose($fp));
+		case 'bz2': 
+			return @bzclose($fp);
+		case 'zlib':
+			return @gzclose($fp);
+		default:
+		return @fclose($fp);
 	}
-
 }
 
 
@@ -347,7 +353,7 @@ function RankImageOrText($pid, $name, $rank, $gid, $gamename, $mini = true, $for
 		$r_rank = small_query("SELECT `rank` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE `pid` = '".$pid."' AND `gid` = '".$gid."' AND `year` = '".$year."';");
 		if (!$r_rank) return('');
 		$points = get_dp($r_rank['rank']);
-		$r_no = small_query("SELECT (COUNT(*) + 1) AS `no` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE `gid` = '".$gid."' AND `year` = '".$year."' AND `rank` > '${points}9';");
+		$r_no = small_query("SELECT (COUNT(*) + 1) AS `no` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` WHERE `gid` = '".$gid."' AND `year` = '".$year."' AND `rank` > '{$points}9';");
 		$rank = $r_no['no'];
 	}
 
@@ -497,18 +503,15 @@ function backup_logfile($method, $filename, $backupfilename, $stripx00) {
 				return(backup_logfile('gzip', $filename, $backupfilename, $stripx00));
 			}
 			return('Succeeded (bz2)');
-			break;
 
 		case 'gzip':
 			if (!check_extension('zlib') or !compress_file('zlib', $filename, $backupfilename, $stripx00)) {
 				return(backup_logfile('yes', $filename, $backupfilename, $stripx00));
 			}
 			return('Succeeded (gzip)');
-			break;
 
 		case 'no':
 			return('NO (disabled in config)');
-			break;
 
 		default:
 			if ($stripx00) {

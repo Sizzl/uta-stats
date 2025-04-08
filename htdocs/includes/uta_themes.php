@@ -38,7 +38,7 @@ if (mysql_num_rows($themequery))
 		{
 			$_SESSION["themeid"] = $lasttheme;
 			$_SESSION["themename"] = $rs->themename;
-			$_SESSION["themelocation"] = $rs->themelocation;
+			$_SESSION['themelocation'] = $rs->themelocation;
 			$_SESSION["customsidebar"] = $rs->customsidebar;
 			$_SESSION["customchartbars"] = $rs->customchartbars;
 			$_SESSION["customsig"] = $rs->customsig;
@@ -71,7 +71,7 @@ if (mysql_num_rows($themequery))
 			
 			$_SESSION["themeid"] = $lasttheme;
 			$_SESSION["themename"] = $rs->themename;
-			$_SESSION["themelocation"] = $rs->themelocation;
+			$_SESSION['themelocation'] = $rs->themelocation;
 			$_SESSION["customsidebar"] = $rs->customsidebar;
 			$_SESSION["customchartbars"] = $rs->customchartbars;
 			$_SESSION["customsig"] = $rs->customsig;
@@ -88,11 +88,8 @@ $themeselection .= "
 </form>
 				\r\n";
 
-$theme = $_SESSION["themelocation"];
-if ($_SESSION["weaponimages"])
-	$themeimage = $theme;
-else
-	$themeimage = "";
+$theme = $_SESSION['themelocation'];
+$themeimage = isset($_SESSION["weaponimages"]) ? $theme : "";
 
 $footertext = 	  "		  <tr>
 			<td class=\"smheading\" align=\"center\">

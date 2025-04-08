@@ -42,7 +42,7 @@ while ($r_players = mysql_fetch_array($q_players)) {
 	echo '<tr>';
 	echo '<td class="dark" align="center" valign="top" width="150">';
 	echo '<a class="darkhuman" href="admin.php?action=pinfo&amp;pid='.$r_players['pid'].'">'.$r_players['name'].'</a></td>';
-	$sql_recent = "SELECT m.time AS time, m.id AS mid, INET_NTOA(p.ip) AS ip FROM uts_player p, uts_match m WHERE m.id = p.matchid AND p.pid = '${r_players['pid']}' AND p.ip BETWEEN INET_ATON('".$ip_from."') AND INET_ATON('".$ip_to."') ORDER BY m.time DESC LIMIT 0,5";
+	$sql_recent = "SELECT m.time AS time, m.id AS mid, INET_NTOA(p.ip) AS ip FROM uts_player p, uts_match m WHERE m.id = p.matchid AND p.pid = '".$r_players['pid']."' AND p.ip BETWEEN INET_ATON('".$ip_from."') AND INET_ATON('".$ip_to."') ORDER BY m.time DESC LIMIT 0,5";
 	echo '<td class="grey">';
 	echo '<table width="100%" border="0" cellspacing="0" cellpadding="2">';
 	$q_recent= mysql_query($sql_recent) or die(mysql_error());

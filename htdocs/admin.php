@@ -2,20 +2,20 @@
 if (isset($_REQUEST['rememberkey'])) setcookie('uts_adminkey', $_REQUEST['key'], time()+60*60*24*30*365);
 if (isset($_COOKIE['uts_adminkey'])) $adminkey = $_COOKIE['uts_adminkey'];
 if (isset($adminkey)) setcookie('uta_uts_Admin', 'utaTrue', time()+60*60*24*30*365);
-include_once ("includes/mysql-shim/lib/mysql.php");
-include ("includes/functions.php");
-include ("includes/config.php");
-include ("includes/functions_admin.php");
+include_once "includes/mysql-shim/lib/mysql.php";
+include "includes/functions.php";
+include "includes/config.php";
+include "includes/functions_admin.php";
 
-if ($_SESSION["themelocation"]) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
+if (isset($_SESSION['themelocation'])) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
 {
-        if (file_exists($_SESSION["themelocation"]."header.php"))
-                include($_SESSION["themelocation"]."header.php");
+        if (file_exists($_SESSION['themelocation']."header.php"))
+                include $_SESSION['themelocation']."header.php";
         else
-                include ("includes/header.php");
+                include "includes/header.php";
 }
 else
-        include ("includes/header.php");
+        include "includes/header.php";
 
 // Get key from web browser
 if (isset($_REQUEST['key'])) $adminkey = $_REQUEST['key'];
@@ -27,7 +27,7 @@ echo'<table border="0" cellpadding="1" cellspacing="2" width="720">
 	<td class="heading" align="center" colspan="2">UTStats Administration</td>
 </tr>';
 
-IF (empty($import_adminkey)) {
+if (empty($import_adminkey)) {
 	echo'<tr><td class="smheading" align="left" width="150">Error:</td>
 	<td class="grey" align="left">No key set in config.php</td>
 	</tr></table>';
@@ -36,14 +36,14 @@ IF (empty($import_adminkey)) {
 }
 
 
-IF (!empty($adminkey) && $adminkey != $import_adminkey) {
+if (!empty($adminkey) && $adminkey != $import_adminkey) {
 	echo'<tr><td class="smheading" align="left" width="150">Error:</td>
 	<td class="grey" align="left">Keys do not match</td>
 	</tr>';
 	$adminkey = '';
 }
 
-IF (empty($adminkey)) {
+if (empty($adminkey)) {
 	echo'<tr>
 		  <td class="smheading" align="left" width="150">Enter Admin key:</td>
 		  <td class="grey" align="left"><form NAME="adminkey" ACTION="admin.php">
@@ -66,14 +66,13 @@ if (!file_exists($fn) or !is_file($fn))
 	echo('Administrative page does not exist.<p>&nbsp;</p>(<a href="javascript:window.history.back();">Go back</a>)');
 else
 	require($fn);
-if ($_SESSION["themelocation"]) // Themed footer --// 19/07/05 Timo: Added customisable footer
+if (isset($_SESSION['themelocation'])) // Themed footer --// 19/07/05 Timo: Added customisable footer
 {
-        if (file_exists($_SESSION["themelocation"]."footer.php"))
-                include($_SESSION["themelocation"]."footer.php");
+        if (file_exists($_SESSION['themelocation']."footer.php"))
+                include($_SESSION['themelocation']."footer.php");
         else
                 include("includes/footer.php");
 }
 else
         include("includes/footer.php");
 
-?>

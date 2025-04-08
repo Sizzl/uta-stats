@@ -6,19 +6,17 @@ require ("includes/functions.php");
 
 if (!isset($pic_enable) or !$pic_enable) pic_error('err_disabled');
 // brajan 04082005
-$serv_path = ereg_replace("\\\\","/",__FILE__); 
+$serv_path = preg_replace("/\\\\/","/",__FILE__); 
 $serv_path = dirname($serv_path); 
 
 $debugvar = true;
 $outputheader = false;
 
-if ($_GET['output'])
-{
+if (isset($_GET['output'])) {
 	$debugvar = false;
 	$outputheader = true;
 }
-function scenedebug($strinput)
-{
+function scenedebug($strinput) {
 	global $debugvar,$outputheader;
 	if ($outputheader!=true)
 	{
@@ -33,7 +31,7 @@ function scenedebug($strinput)
 
 function pic_error($name) {
 	header("Content-type: image/png");
-	readfile("images/templates/${name}.png");
+	readfile("images/templates/{$name}.png");
 	exit;
 }
 function image_create($filename) {
@@ -120,10 +118,7 @@ if (!function_exists("gd_info")) {
 $gd_info = gd_info();
 if (!$gd_info['FreeType Support']) pic_error('err_no_ft');
 
-if ($_GET['mid'])
-	$matchid = intval($_GET['mid']);
-else
-	$matchid = 2852;
+$matchid = isset($_GET['mid']) ? intval($_GET['mid']) : 2852;
 
 $sql = "SELECT * FROM `uts_match` WHERE `id` = '".$matchid."'";
 
@@ -489,8 +484,8 @@ if (!$debugvar && $im) // no debug output & image exists! Add the text variables
 	}
 	$i = 0;
 
-
-	output_image($im,'jpg');
+	$type = 'jpg';
+	output_image($im,$type);
 }
 
 

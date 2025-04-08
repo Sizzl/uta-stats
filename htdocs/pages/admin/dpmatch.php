@@ -17,7 +17,7 @@ $i++;
 
 $results = adminselect($options);
 
- '".$matchid."' = $results['mid'];
+$matchid = $results['mid'];
 $pid = $results['pid'];
 
 echo'<br><table border="0" cellpadding="1" cellspacing="2" width="600">
@@ -46,7 +46,7 @@ if (!$sql_crank) {
 	$oldrank = $sql_crank['rank'];
 	$matchcount = $sql_crank['matches']-1;
 	
-	mysql_query("UPDATE uts_rank SET rank = $newrank, prevrank = $oldrank, matches = $matchcount WHERE id = $rid") or die(mysql_error());
+	mysql_query("UPDATE uts_rank SET rank = '".$newrank."', prevrank = '".$oldrank."', matches = '".$matchcount."' WHERE id = '".$rid."';") or die(mysql_error());
 	mysql_query("DELETE FROM uts_rank WHERE matches = 0") or die(mysql_error());
 	
 	echo'<td class="grey" align="left" width="400">Done</td>';
@@ -54,9 +54,9 @@ if (!$sql_crank) {
 echo'</tr>
 <tr>
 	<td class="smheading" align="left">Removing Kill Matrix Entries:</td>';
-	$q_match = mysql_query("SELECT matchid, playerid FROM uts_player WHERE pid = '".$pid."' AND matchid = '".$matchid."'") or die(mysql_error());
+	$q_match = mysql_query("SELECT matchid, playerid FROM uts_player WHERE pid = '".$pid."' AND matchid = '".$matchid."';") or die(mysql_error());
 	while ($r_match = mysql_fetch_array($q_match)) {
-		mysql_query("DELETE FROM uts_killsmatrix WHERE matchid = '${r_match['matchid']}' AND (killer = '${r_match['playerid']}' OR victim = '${r_match['playerid']}')") or die(mysql_error());
+		mysql_query("DELETE FROM uts_killsmatrix WHERE matchid = '".$r_match['matchid']."' AND (killer = '".$r_match['playerid']."' OR victim = '".$r_match['playerid']."');") or die(mysql_error());
 	}
 	echo'<td class="grey" align="left">Done</td>
 </tr>
@@ -90,7 +90,7 @@ mysql_query("DELETE FROM uts_weaponstats WHERE matchid IN ('".$matchid."','0') A
 
 $q_weaponstats = mysql_query("SELECT SUM(kills) AS kills, SUM(shots) AS shots, SUM(hits) as hits, SUM(damage) as damage, AVG(acc) AS acc FROM uts_weaponstats WHERE pid = '".$pid."'  GROUP BY weapon") or die(mysql_error());
 while ($r_weaponstats = mysql_fetch_array($q_weaponstats)) {
-	mysql_query("INSERT INTO uts_weaponstats SET matchid='0', pid='".$pid."', kills='${r_weaponstats['kills']}', shots='${r_weaponstats['shots']}', hits='${r_weaponstats['hits']}', damage='${r_weaponstats['damage']}', acc='${r_weaponstats['acc']}'") or die(mysql_error());
+	mysql_query("INSERT INTO uts_weaponstats SET matchid='0', pid='".$pid."', kills='".$r_weaponstats['kills']."', shots='".$r_weaponstats['shots']."', hits='".$r_weaponstats['hits']."', damage='".$r_weaponstats['damage']."', acc='".$r_weaponstats['acc']."';") or die(mysql_error());
 }
 	echo'<td class="grey" align="left" width="400">Done</td>
 </tr>
@@ -100,7 +100,7 @@ while ($r_weaponstats = mysql_fetch_array($q_weaponstats)) {
 
 	$q_weaponstats = mysql_query("SELECT weapon, SUM(kills) AS kills, SUM(shots) AS shots, SUM(hits) as hits, SUM(damage) as damage, AVG(acc) AS acc FROM uts_weaponstats WHERE matchid = '0'  GROUP BY weapon") or die(mysql_error());
 	while ($r_weaponstats = mysql_fetch_array($q_weaponstats)) {
-		mysql_query("INSERT INTO uts_weaponstats SET matchid='0', pid='0', weapon='${r_weaponstats['weapon']}', kills='${r_weaponstats['kills']}', shots='${r_weaponstats['shots']}', hits='${r_weaponstats['hits']}', damage='${r_weaponstats['damage']}', acc='${r_weaponstats['acc']}'") or die(mysql_error());
+		mysql_query("INSERT INTO uts_weaponstats SET matchid='0', pid='0', weapon='".$r_weaponstats['weapon']."', kills='".$r_weaponstats['kills']."', shots='".$r_weaponstats['shots']."', hits='".$r_weaponstats['hits']."', damage='".$r_weaponstats['damage']."', acc='".$r_weaponstats['acc']."';") or die(mysql_error());
 	}
 
 	echo'<td class="grey" align="left" width="400">Done</td>

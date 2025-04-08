@@ -1,7 +1,7 @@
 <?php 
 // Get game & type and add record conditions if necessary --// Timo 25/07/05
-$game = my_addslashes($_GET['game']);
-$type = my_addslashes($_GET['type']);
+$game = isset($_GET['game']) ? my_addslashes($_GET['game']) : "";
+$type = isset($_GET['type']) ? my_addslashes($_GET['type']) : "";
 
 $record_condition_gametypes = "";
 $record_condition_teamsize = "";
@@ -61,8 +61,10 @@ function uta_rz_FilterForm()
 
 	global $type, $asclasses, $game;
 	echo '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
-	echo '<input type="hidden" name="p" value="'.$_REQUEST['p'].'">';
-	echo '<input type="hidden" name="map" value="'.$_REQUEST['map'].'">';
+	if (isset($_REQUEST['p']))
+		echo '<input type="hidden" name="p" value="'.$_REQUEST['p'].'">';
+	if (isset($_REQUEST['map']))
+		echo '<input type="hidden" name="map" value="'.$_REQUEST['map'].'">';
 	echo '<table width="600" class="searchform" border="0" cellpadding="1" cellspacing="1">';
 	echo '<tr><td><strong>Filter:</strong></td>';
 	echo '<td>Type:</td>';
@@ -136,5 +138,3 @@ function uta_rz_FilterFormMini()
 	echo '</tr></table></form>';
 	// End search filters --// Timo.
 }
-
-?>

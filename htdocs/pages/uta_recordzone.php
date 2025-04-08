@@ -17,20 +17,15 @@ function SortPic($curr_field, $filter, $sort) {
 	return('&nbsp;<img src="'. $fname .'" border="0" width="11" height="9" alt="" title="('.strtolower($sort).'ending)">');
 }
 
-$mapsperpage=100;
+$mapsperpage = 100;
 
 // Get filter and set sorting
-$filter = my_addslashes($_GET['filter']);
-$sort = my_addslashes($_GET['sort']);
+$filter = isset($_GET['filter']) ? my_addslashes($_GET['filter']) : "mapfile";
+$sort = isset($_GET['sort']) ? my_addslashes($_GET['sort']) : "ASC";
 
 include_once("uta_recordzone_filters.php");
 
-if (empty($filter)) {
-	$filter = "mapfile";
-}
-
 if (empty($sort) or ($sort != 'ASC' && $sort != 'DESC')) $sort = ($filter == "mapfile") ? "ASC" : "DESC";
-
 
 // Firstly we need to work out First Last Next Prev pages
 $mcount = small_count("SELECT mapfile FROM ".(isset($t_match) ? $t_match : "uts_match")." GROUP BY mapfile HAVING mapfile like 'AS-%'");
@@ -38,34 +33,30 @@ $mcount = small_count("SELECT mapfile FROM ".(isset($t_match) ? $t_match : "uts_
 $ecount = $mcount/$mapsperpage;
 $ecount2 = number_format($ecount, 0, '.', '');
 
-IF($ecount > $ecount2) {
-	$ecount2 = $ecount2+1;
-}
+$ecount2 = ($ecount > $ecount2) ? $ecount2+1 : $ecount2;
 
 $fpage = 0;
-IF($ecount < 1) { $lpage = 0; }
-else { $lpage = $ecount2-1; }
+$lpage = ($ecount < 1) ? 0 : $ecount2-1;
 
-$cpage = $_GET["page"];
-IF ($cpage == "") { $cpage = "0"; }
+$cpage = isset($_GET['page']) ? $_GET['page'] : 0;
 $qpage = $cpage*$mapsperpage;
 
 $tfpage = $cpage+1;
 $tlpage = $lpage+1;
-
 $ppage = $cpage-1;
-$ppageurl = "<a class=\"pages\" href=\"./?p=utarecordzone&amp;type=$type&amp;game=$game&amp;filter=$filter&amp;sort=$sort&amp;page=$ppage\">[Previous]</a>";
-IF ($ppage < "0") { $ppageurl = "[Previous]"; }
+
+$ppageurl = "<a class=\"pages\" href=\"./?p=utarecordzone&amp;type=".$type."&amp;game=".$game."&amp;filter=".$filter."&amp;sort=".$sort."&amp;page=".$ppage."\">[Previous]</a>";
+if ($ppage < 0) { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
-$npageurl = "<a class=\"pages\" href=\"./?p=utarecordzone&amp;type=$type&amp;game=$game&amp;filter=$filter&amp;sort=$sort&amp;page=$npage\">[Next]</a>";
-IF ($npage >= "$ecount") { $npageurl = "[Next]"; }
+$npageurl = "<a class=\"pages\" href=\"./?p=utarecordzone&amp;type=".$type."&amp;game=".$game."&amp;filter=".$filter."&amp;sort=".$sort."&amp;page=".$npage."\">[Next]</a>";
+if ($npage >= $ecount) { $npageurl = "[Next]"; }
 
-$fpageurl = "<a class=\"pages\" href=\"./?p=utarecordzone&amp;type=$type&amp;game=$game&amp;filter=$filter&amp;sort=$sort&amp;page=$fpage\">[First]</a>";
-IF ($cpage == "0") { $fpageurl = "[First]"; }
+$fpageurl = "<a class=\"pages\" href=\"./?p=utarecordzone&amp;type=".$type."&amp;game=".$game."&amp;filter=".$filter."&amp;sort=".$sort."&amp;page=".$fpage."\">[First]</a>";
+if ($cpage == 0) { $fpageurl = "[First]"; }
 
-$lpageurl = "<a class=\"pages\" href=\"./?p=utarecordzone&amp;type=$type&amp;game=$game&amp;filter=$filter&amp;sort=$sort&amp;page=$lpage\">[Last]</a>";
-IF ($cpage == "$lpage") { $lpageurl = "[Last]"; }
+$lpageurl = "<a class=\"pages\" href=\"./?p=utarecordzone&amp;type=".$type."&amp;game=".$game."&amp;filter=".$filter."&amp;sort=".$sort."&amp;page=".$lpage."\">[Last]</a>";
+if ($cpage == $lpage) { $lpageurl = "[Last]"; }
 
 	uta_rz_FilterForm(); // Show Filter form
 
@@ -184,11 +175,11 @@ while ($r_maps = mysql_fetch_array($q_maps)) {
 						
 		echo '
 		<td nowrap class="grey" align="center">';
-		if ($matchteam)
+		if (isset($matchteam))
 			echo $matchteam.' &nbsp;(';
 
 		echo '<a class="grey" href="./?p=pinfo&amp;pid='.$playerid.'">'.FormatPlayerName($pcountry, $playerid, $playername).'</a>';
-		if ($matchteam)
+		if (isset($matchteam))
 			echo ')';
 		echo '</td>';
 		echo '
@@ -218,4 +209,3 @@ echo'
 <div><font color="#00ff00">ProAS:</font> Minimum Team Sizes: 3v3. Maximum Team Size Difference: 1. </div>
 <div><font color="#00ff00">iAS:</font>   Minimum Team Sizes: 3v3. Maximum Team Size Difference: 1. </div>
 <div>Records that dont fulfil these requirements are marked with (&sup1)</div>';
-?>

@@ -19,34 +19,33 @@ $mcount = $r_mcount['result'];
 $ecount = $mcount/25;
 $ecount2 = number_format($ecount, 0, '.', '');
 
-IF($ecount > $ecount2) {
+if ($ecount > $ecount2) {
 	$ecount2 = $ecount2+1;
 }
 
 $fpage = 0;
-IF($ecount < 1) { $lpage = 0; }
+if ($ecount < 1) { $lpage = 0; }
 else { $lpage = $ecount2-1; }
 
-$cpage = $_REQUEST["page"];
-IF ($cpage == "") { $cpage = "0"; }
+$cpage = isset($_REQUEST["page"]) ? (is_numeric($_REQUEST["page"]) ? intval($_REQUEST["page"]): 0) : 0;
 $qpage = $cpage*25;
 
 $tfpage = $cpage+1;
 $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
-$ppageurl = "<a class=\"pages\" href=\"./?p=recent&amp;year=$year&amp;month=$month&amp;day=$day&amp;gid=$gid&amp;page=$ppage\">[Previous]</a>";
-IF ($ppage < "0") { $ppageurl = "[Previous]"; }
+$ppageurl = "<a class=\"pages\" href=\"./?p=recent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$ppage."\">[Previous]</a>";
+if ($ppage < 0) { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
-$npageurl = "<a class=\"pages\" href=\"./?p=recent&amp;year=$year&amp;month=$month&amp;day=$day&amp;gid=$gid&amp;page=$npage\">[Next]</a>";
-IF ($npage >= "$ecount") { $npageurl = "[Next]"; }
+$npageurl = "<a class=\"pages\" href=\"./?p=recent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$npage."\">[Next]</a>";
+if ($npage >= $ecount) { $npageurl = "[Next]"; }
 
-$fpageurl = "<a class=\"pages\" href=\"./?p=recent&amp;year=$year&amp;month=$month&amp;day=$day&amp;gid=$gid&amp;page=$fpage\">[First]</a>";
-IF ($cpage == "0") { $fpageurl = "[First]"; }
+$fpageurl = "<a class=\"pages\" href=\"./?p=recent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$fpage."\">[First]</a>";
+if ($cpage == 0) { $fpageurl = "[First]"; }
 
-$lpageurl = "<a class=\"pages\" href=\"./?p=recent&amp;year=$year&amp;month=$month&amp;day=$day&amp;gid=$gid&amp;page=$lpage\">[Last]</a>";
-IF ($cpage == "$lpage") { $lpageurl = "[Last]"; }
+$lpageurl = "<a class=\"pages\" href=\"./?p=recent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$lpage."\">[Last]</a>";
+if ($cpage == $lpage) { $lpageurl = "[Last]"; }
 
 echo '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
 echo '<input type="hidden" name="p" value="'.$_REQUEST['p'].'">';
@@ -126,7 +125,7 @@ while ($r_recent = mysql_fetch_array($q_recent)) {
 		<td nowrap class="grey" align="center">'.$r_recent['gamename'].'</td>
 		<td nowrap class="grey" align="center">'.$r_mapfile.'</td>
 		<td class="grey" align="center">'.$r_gametime.'</td>
-		<td nowrap class="grey" align="center">.'".$r_servername."'.</td>
+		<td nowrap class="grey" align="center">.'.$r_servername.'.</td>
 	  </tr>';
 }
 

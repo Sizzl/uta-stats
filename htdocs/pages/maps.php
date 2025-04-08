@@ -26,8 +26,8 @@ function secToHR($seconds) {
 
 global $dbversion;
 // Get filter and set sorting
-$filter = my_addslashes($_GET['filter']);
-$sort = my_addslashes($_GET['sort']);
+$filter = isset($_GET['filter']) ? my_addslashes($_GET['filter']) : "mapfile";
+$sort = isset($_GET['sort']) ? my_addslashes($_GET['sort']) : "ASC";
 
 // if (empty($filter) || preg_match("/(\')|(;)|(\-)|(\>)|(!)|(\<)|(where)|(drop)|(select)|(from)|(if)/i",$filter)) {
 if (empty($filter) || !(preg_match("/(^mapfile$)|(^matchcount$)|(^pick90$)|(^pick60$)|(^pick30$)|(^lastmonth$)|(^lastweek$)|(^frags$)|(^matchscore$)|(^avggametime$)|(^gametime$)/i",$filter))) {
@@ -43,34 +43,30 @@ $mcount = small_count("SELECT mapfile FROM uts_match GROUP BY mapfile");
 $ecount = $mcount/32;
 $ecount2 = number_format($ecount, 0, '.', '');
 
-if ($ecount > $ecount2) {
-	$ecount2 = $ecount2+1;
-}
+$ecount2 = ($ecount > $ecount2) ? ($ecount2+1) : $ecount2;
 
 $fpage = 0;
-if ($ecount < 1) { $lpage = 0; }
-else { $lpage = $ecount2-1; }
+$lpage = ($ecount < 1) ? 0 : ($ecount2-1);
 
-$cpage = $_GET["page"];
-IF ($cpage == "") { $cpage = "0"; }
+$cpage = isset($_GET['page']) ? intval($_GET['page']) : 0;
 $qpage = $cpage*32;
 
 $tfpage = $cpage+1;
 $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
-$ppageurl = "<a class=\"pages\" href=\"./?p=maps&amp;filter=$filter&amp;sort=$sort&amp;page=$ppage\">[Previous]</a>";
-IF ($ppage < "0") { $ppageurl = "[Previous]"; }
+$ppageurl = "<a class=\"pages\" href=\"./?p=maps&amp;filter=".$filter."&amp;sort=".$sort."&amp;page=".$ppage."\">[Previous]</a>";
+if ($ppage < 0) { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
-$npageurl = "<a class=\"pages\" href=\"./?p=maps&amp;filter=$filter&amp;sort=$sort&amp;page=$npage\">[Next]</a>";
-IF ($npage >= "$ecount") { $npageurl = "[Next]"; }
+$npageurl = "<a class=\"pages\" href=\"./?p=maps&amp;filter=".$filter."&amp;sort=".$sort."&amp;page=$npage\">[Next]</a>";
+if ($npage >= $ecount) { $npageurl = "[Next]"; }
 
-$fpageurl = "<a class=\"pages\" href=\"./?p=maps&amp;filter=$filter&amp;sort=$sort&amp;page=$fpage\">[First]</a>";
-IF ($cpage == "0") { $fpageurl = "[First]"; }
+$fpageurl = "<a class=\"pages\" href=\"./?p=maps&amp;filter=".$filter."&amp;sort=".$sort."&amp;page=$fpage\">[First]</a>";
+if ($cpage == 0) { $fpageurl = "[First]"; }
 
-$lpageurl = "<a class=\"pages\" href=\"./?p=maps&amp;filter=$filter&amp;sort=$sort&amp;page=$lpage\">[Last]</a>";
-IF ($cpage == "$lpage") { $lpageurl = "[Last]"; }
+$lpageurl = "<a class=\"pages\" href=\"./?p=maps&amp;filter=".$filter."&amp;sort=".$sort."&amp;page=$lpage\">[Last]</a>";
+if ($cpage == $lpage) { $lpageurl = "[Last]"; }
 
 // $sql_maps = "SELECT mapfile, COUNT(id) AS matchcount, AVG(frags) AS frags, AVG(t0score+t1score+t2score+t3score) AS matchscore, SUM(gametime) AS gametime
 // FROM uts_match GROUP BY mapfile ORDER BY $filter $sort LIMIT $qpage,32";
@@ -85,9 +81,9 @@ if (isset($dbversion) && floatval($dbversion) > 5.6) {
     (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= last90time) AS pick90,
     (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= last60time) AS pick60,
     (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= last30time) AS pick30,
-    (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= $lastmonth) AS lastmonth,
-    (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= $lastweek) AS lastweek
-    FROM uts_match GROUP BY mapfile ORDER BY $filter $sort LIMIT $qpage,32";
+    (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= ".$lastmonth.") AS lastmonth,
+    (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= ".$lastweek.") AS lastweek
+    FROM uts_match GROUP BY mapfile ORDER BY ".$filter." ".$sort." LIMIT ".$qpage.",32;";
 } else {
   $sql_maps = "SELECT mapfile as mfile, mapfile, COUNT(id) AS matchcount, AVG(frags) AS frags,
     AVG(t0score+t1score+t2score+t3score) AS matchscore, SUM(gametime) AS gametime, AVG(gametime) AS avggametime,
@@ -97,9 +93,9 @@ if (isset($dbversion) && floatval($dbversion) > 5.6) {
     (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= last90time) AS pick90,
     (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= last60time) AS pick60,
     (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= last30time) AS pick30,
-    (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= $lastmonth) AS lastmonth,
-    (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= $lastweek) AS lastweek
-    FROM uts_match GROUP BY mapfile ORDER BY $filter $sort LIMIT $qpage,32";
+    (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= ".$lastmonth.") AS lastmonth,
+    (SELECT COUNT(id) FROM uts_match WHERE uts_match.mapfile = mfile AND uts_match.time >= ".$lastweek.") AS lastweek
+    FROM uts_match GROUP BY mapfile ORDER BY ".$filter." ".$sort." LIMIT ".$qpage.",32;";
 }
 // echo "<!-- ".$sql_maps." -->";
 echo' <div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: 

@@ -56,15 +56,15 @@
 
 		// Cycle through events and see what the player got
 
-		IF ($r_playerctf['col1'] == "flag_taken") { $flag_taken = $r_playerctf['flag_count']; }
-		IF ($r_playerctf['col1'] == "flag_dropped") { $flag_dropped = $r_playerctf['flag_count']; }
-		IF ($r_playerctf['col1'] == "flag_returned") { $flag_return = $r_playerctf['flag_count']; }
-		IF ($r_playerctf['col1'] == "flag_captured") { $flag_capture = $r_playerctf['flag_count']; }
-		IF ($r_playerctf['col1'] == "flag_cover" or $r_playerctf['col1'] == "Flag_cover") { $flag_cover = $r_playerctf['flag_count']; }
-		IF ($r_playerctf['col1'] == "flag_seal" or $r_playerctf['col1'] == "Flag_seal") { $flag_seal = $r_playerctf['flag_count']; }
-		IF ($r_playerctf['col1'] == "flag_assist" or $r_playerctf['col1'] == "Flag_assist") { $flag_assist = $r_playerctf['flag_count']; }
-		IF ($r_playerctf['col1'] == "flag_kill" or $r_playerctf['col1'] == "Flag_kill") { $flag_kill = $r_playerctf['flag_count']; }
-		IF ($r_playerctf['col1'] == "flag_pickedup" or $r_playerctf['col1'] == "flag_pickedup") { $flag_pickedup = $r_playerctf['flag_count']; }
+		if ($r_playerctf['col1'] == "flag_taken") { $flag_taken = $r_playerctf['flag_count']; }
+		if ($r_playerctf['col1'] == "flag_dropped") { $flag_dropped = $r_playerctf['flag_count']; }
+		if ($r_playerctf['col1'] == "flag_returned") { $flag_return = $r_playerctf['flag_count']; }
+		if ($r_playerctf['col1'] == "flag_captured") { $flag_capture = $r_playerctf['flag_count']; }
+		if ($r_playerctf['col1'] == "flag_cover" or $r_playerctf['col1'] == "Flag_cover") { $flag_cover = $r_playerctf['flag_count']; }
+		if ($r_playerctf['col1'] == "flag_seal" or $r_playerctf['col1'] == "Flag_seal") { $flag_seal = $r_playerctf['flag_count']; }
+		if ($r_playerctf['col1'] == "flag_assist" or $r_playerctf['col1'] == "Flag_assist") { $flag_assist = $r_playerctf['flag_count']; }
+		if ($r_playerctf['col1'] == "flag_kill" or $r_playerctf['col1'] == "Flag_kill") { $flag_kill = $r_playerctf['flag_count']; }
+		if ($r_playerctf['col1'] == "flag_pickedup" or $r_playerctf['col1'] == "flag_pickedup") { $flag_pickedup = $r_playerctf['flag_count']; }
 	}
 
 	$sql_playerflags = "	UPDATE 	uts_player

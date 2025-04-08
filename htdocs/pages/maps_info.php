@@ -2,7 +2,7 @@
 
 // include ("includes/uta_functions.php");
 if (!isset($_GET['map'])) {
-    break;
+    exit;
 }
 $map = $_GET['map'];
 $realmap = my_addslashes($_GET['map']);
@@ -18,9 +18,8 @@ $map_lastmatch = mdate($map_last['time']);
 // Map pic code
 $mappic = strtolower("images/maps/".$map.".jpg");
 
-if (!(file_exists($mappic)))
-{
-   $mappic = ("images/maps/blank.jpg");
+if (!(file_exists($mappic))) {
+   $mappic = "images/maps/blank.jpg";
 }
 
 echo'
@@ -87,27 +86,25 @@ $fpage = 0;
 if ($ecount < 1) { $lpage = 0; }
 else { $lpage = $ecount2-1; }
 
-$cpage = $_GET["page"];
+$cpage = isset($_GET['page']) ? (is_numeric($_GET['page']) ? intval($_GET['page']): 0) : 0;
 $qpage = $cpage*25;
-
-if ($cpage == "") { $cpage = "0"; }
 
 $tfpage = $cpage+1;
 $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
-$page = my_addslashes($_GET['p']);
-$ppageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$ppage\">[Previous]</a>";
+$page = isset($_GET['p']) ? my_addslashes($_GET['p']) : "";
+$ppageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=".$ppage."\">[Previous]</a>";
 if ($ppage < "0") { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
-$npageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$npage\">[Next]</a>";
+$npageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=".$npage."\">[Next]</a>";
 if ($npage >= "$ecount") { $npageurl = "[Next']"; }
 
-$fpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$fpage\">[First]</a>";
+$fpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=".$fpage."\">[First]</a>";
 if ($cpage == "0") { $fpageurl = "[First]"; }
 
-$lpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=$lpage\">[Last]</a>";
+$lpageurl = "<a class=\"pages\" href=\"./?p=".$page."&amp;map=".$map."&amp;page=".$lpage."\">[Last]</a>";
 if ($cpage == "$lpage") { $lpageurl = "[Last]"; }
 
 echo'

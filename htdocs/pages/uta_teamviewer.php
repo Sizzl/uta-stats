@@ -1,11 +1,10 @@
 <?php
-include_once ("includes/config.php");
+include_once "includes/config.php";
 // include_once ("includes/uta_functions.php");
-include_once ("uta_recordzone_filters.php");
+include_once "uta_recordzone_filters.php";
 global $dbversion, $htmlcp;
 
-if ($_GET['team'])
-	$teamname = addslashes($_GET['team']);
+$teamname = isset($_GET['team']) ? addslashes($_GET['team']) : false;
 
 function InvertSort($curr_field, $filter, $sort) {
 	if ($curr_field != $filter) return(($curr_field == "mapfile") ? "ASC" : "DESC");
@@ -99,7 +98,7 @@ uta_rz_FilterFormMini(); // Show Filter form
 				FROM uts_player
 				INNER JOIN uts_pinfo ON ( uts_player.pid = uts_pinfo.id )
 				INNER JOIN uts_match ON ( uts_player.matchid = uts_match.id )
-				WHERE uts_pinfo.name LIKE '%®' AND 
+				WHERE uts_pinfo.name LIKE '%ï¿½' AND 
 					uts_match.matchmode=1 AND (
 						(uts_match.`teamname0` = '".addslashes($teamname)."' AND uts_player.team=0) OR
 						(uts_match.`teamname1` = '".addslashes($teamname)."' AND uts_player.team=1)
@@ -111,7 +110,7 @@ uta_rz_FilterFormMini(); // Show Filter form
 				FROM uts_player
 				INNER JOIN uts_pinfo ON ( uts_player.pid = uts_pinfo.id )
 				INNER JOIN uts_match ON ( uts_player.matchid = uts_match.id )
-				WHERE uts_pinfo.name LIKE '%®' AND 
+				WHERE uts_pinfo.name LIKE '%ï¿½' AND 
 					uts_match.matchmode=1 AND (
 						(uts_match.`teamname0` = '".addslashes($teamname)."' AND uts_player.team=0) OR
 						(uts_match.`teamname1` = '".addslashes($teamname)."' AND uts_player.team=1)
@@ -135,7 +134,7 @@ uta_rz_FilterFormMini(); // Show Filter form
 			$players_sql = "SELECT 'broken_teamviewer' AS dohquery, uts_player.pid, uts_pinfo . * 
 					FROM uts_player
 					INNER JOIN uts_pinfo ON ( uts_player.pid = uts_pinfo.id ) 
-					WHERE uts_pinfo.name LIKE '%®' AND (";
+					WHERE uts_pinfo.name LIKE '%ï¿½' AND (";
 
  			for ($i=0;$i<count($players_matches);$i++)
 			{

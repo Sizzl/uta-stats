@@ -49,30 +49,28 @@ if ($ecount < 1) {
 else {
 	$lpage = $ecount2-1;
 }
-$cpage = $_REQUEST["page"];
-if($cpage == "") {
-	$cpage = "0";
-}
+$cpage = isset($_REQUEST["page"]) ? (is_numeric($_REQUEST["page"]) ? intval($_REQUEST["page"]): 0) : 0;
 $qpage = $cpage*25;
 $tfpage = $cpage+1;
 $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
-$ppageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=$year&amp;month=$month&amp;day=$day&amp;gid=$gid&amp;page=$ppage\">[Previous]</a>";
-	if($ppage < "0") { $ppageurl = "[Previous]"; }
+$ppageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$ppage."\">[Previous]</a>";
+	if($ppage < 0) { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
-$npageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=$year&amp;month=$month&amp;day=$day&amp;gid=$gid&amp;page=$npage\">[Next]</a>";
-	if($npage >= "$ecount") { $npageurl = "[Next]"; }
+$npageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$npage."\">[Next]</a>";
+	if($npage >= $ecount) { $npageurl = "[Next]"; }
 
-$fpageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=$year&amp;month=$month&amp;day=$day&amp;gid=$gid&amp;page=$fpage\">[First]</a>";
-	if($cpage == "0") { $fpageurl = "[First]"; }
+$fpageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$fpage."\">[First]</a>";
+	if($cpage == 0) { $fpageurl = "[First]"; }
 
-$lpageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=$year&amp;month=$month&amp;day=$day&amp;gid=$gid&amp;page=$lpage\">[Last]</a>";
-	if($cpage == "$lpage") { $lpageurl = "[Last]"; }
+$lpageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$lpage."\">[Last]</a>";
+	if($cpage == $lpage) { $lpageurl = "[Last]"; }
 
 echo '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
-echo '<input type="hidden" name="p" value="'.$_REQUEST['p'].'">';
+if (isset($_REQUEST['p']))
+	echo '<input type="hidden" name="p" value="'.$_REQUEST['p'].'">';
 echo '<table width="600" class="searchform" border="0" cellpadding="1" cellspacing="1">';
 echo '<tr><td><strong>Filter:</strong></td>';
 echo '<td><select class="searchform" name="year">';
@@ -134,7 +132,7 @@ if (isset($dbversion) && floatval($dbversion) > 5.6) {
 $q_recent = mysql_query($sql_recent) or die(mysql_error());
 while ($r_recent = mysql_fetch_array($q_recent)) {
 	  $r_time = mdate($r_recent['time']);
-	  $r_mapfile = un_ut($r_recent['mapfile']);
+	  $r_mapfile = isset($r_recent['mapfile']) ? un_ut($r_recent['mapfile']) : "";
 	  $r_gametime = GetMinutes($r_recent['gametime']);
 // TOTAL MATCH TIME AND SERVER
 		$sql_matchsummary = "SELECT id, gametime, servername, serverip, score0, score1 FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE matchmode = 1 AND matchcode='".$r_recent['matchcode']."' ORDER BY mapsequence";	  

@@ -199,7 +199,7 @@ $r_gsumm = zero_out(small_query($r_gsumq));
 
 $sql_firstblood = small_query("SELECT firstblood FROM uts_match WHERE id = $mid");
 
-IF ($sql_firstblood['firstblood'] == $pid) {
+if ($sql_firstblood['firstblood'] == $pid) {
 	$firstblood = "Yes";
 } else {
 	$firstblood = "No";

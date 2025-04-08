@@ -42,15 +42,15 @@ while ($r_bteam = mysql_fetch_array($q_bteam)) {
 	}
 echo'</td></tr></table><br>';
 
-IF ($wid == "") {
+if ($wid == "") {
 }
 
-IF ($stage >= "1") {
+if ($stage >= "1") {
    include("includes/clanbase.php");
    $warinfo = get_clans($wid);
 }
 
-IF ($stage == "1") {
+if ($stage == "1") {
 	$claninfo0 = get_players($warinfo[0][1]);
 	$claninfo1 = get_players($warinfo[1][1]);
 
@@ -78,10 +78,10 @@ IF ($stage == "1") {
 	</form>';
 }
 
-IF ($stage == "2") {
+if ($stage == "2") {
 	$redteam = $_GET["red"];
 
-	IF($redteam == $warinfo[0][1]) {
+	if ($redteam == $warinfo[0][1]) {
 		$redcid = $warinfo[0][1];
 		$redname = $warinfo[0][2];
 		$redinfo = get_players($warinfo[0][1]);

@@ -13,7 +13,7 @@ if (isset($_GET['year']) && strlen($_GET['year'])==4 && is_numeric($_GET['year']
 $r_gamename = small_query("SELECT name FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '".$gid."';");
 $gamename = $r_gamename['name'];
 
-if ($_GET['cfilter'] && strlen($_GET['cfilter'])==2)
+if (isset($_GET['cfilter']) && strlen($_GET['cfilter'])==2)
 {
 	// Timo 2021 - this is broken, needs fixing
 	$r_pcount = small_query("SELECT COUNT(*) AS pcount FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." LEFT JOIN ".(isset($t_player) ? $t_player : "uts_player")." ON ".(isset($t_rank) ? $t_rank : "uts_rank").".pid = ".(isset($t_player) ? $t_player : "uts_player").".id WHERE ".(isset($t_player) ? $t_player : "uts_player").".country = '".$_GET['cfilter']."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".gid = '".$gid."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".year = '".$rank_year."';");
@@ -31,16 +31,12 @@ $ecount2 = number_format($ecount, 0, '.', '');
 if ($ecount > $ecount2)
 	$ecount2 = $ecount2+1;
 
-
 $fpage = 0;
-if ($ecount < 1)
-	$lpage = 0;
-else
-	$lpage = $ecount2-1;
+$lpage = ($ecount < 1) ? 0 : $ecount2-1;
 
 $cpage = "0";
-if (isset($_GET["page"]))
-	$cpage = my_addslashes($_GET["page"]);
+if (isset($_GET['page']))
+	$cpage = my_addslashes($_GET['page']);
 
 if (!is_numeric($cpage))
 	$cpage = "0";
@@ -64,16 +60,14 @@ if ($cpage == "0") { $fpageurl = "[First]"; }
 $lpageurl = "<a class=\"pages\" href=\"./?p=ext_rank&amp;gid=".$gid."&amp;page=".$lpage.($rank_year > 0 ? "&amp;year=".$rank_year : "")."\">[Last]</a>";
 if ($cpage == "$lpage") { $lpageurl = "[Last]"; }
 
-if ($_GET['cfilter'] && strlen($_GET['cfilter'])==2)
-{
+if (isset($_GET['cfilter']) && strlen($_GET['cfilter'])==2) {
 	$ppageurl = str_replace("&amp;page=","&amp;cfilter=".$_GET['cfilter']."&amp;page=",$ppageurl);
 	$npageurl = str_replace("&amp;page=","&amp;cfilter=".$_GET['cfilter']."&amp;page=",$npageurl);
 	$fpageurl = str_replace("&amp;page=","&amp;cfilter=".$_GET['cfilter']."&amp;page=",$fpageurl);
 	$lpageurl = str_replace("&amp;page=","&amp;cfilter=".$_GET['cfilter']."&amp;page=",$lpageurl);
 }
 
-if (!isset($format) || (isset($format) && $format != "json"))
-{
+if (!isset($format) || (isset($format) && $format != "json")) {
 	echo "<!-- ".$ecount."/".$ecount2." - ".$pcount."/".$outerlimit." -->";
 
 	echo'
@@ -82,8 +76,7 @@ if (!isset($format) || (isset($format) && $format != "json"))
 	// 2006-09-07 brajan 
 	// if country filter selected display
 	// a link to switch back to all countries
-	if(!empty($_GET['cfilter']))
-	{ 
+	if(!empty($_GET['cfilter'])) { 
  	?>
  <table class="box" border="0" cellpadding="1" cellspacing="1" style="margin-bottom:25px">
 	 <tbody>
@@ -118,20 +111,17 @@ if (mysql_num_rows($q_ytest))
 	$where_year = " AND r.year = '".$rank_year."'";
 else
 	$where_year = "";
-if ($_GET['cfilter'])
-{
+if (isset($_GET['cfilter'])) {
 	if (strlen($_GET['cfilter'])==2)
 		$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y'".$where_year." ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
 }
 else
 	$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND `pi`.`banned` <> 'Y'".$where_year." ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
 $q_rplayer = mysql_query($sql_rplayer) or die(mysql_error());
-while ($r_rplayer = mysql_fetch_array($q_rplayer))
-{
+while ($r_rplayer = mysql_fetch_array($q_rplayer)) {
 
 	$ranking++;
-	if (!isset($format) || (isset($format) && $format != "json"))
-	{
+	if (!isset($format) || (isset($format) && $format != "json")) {
 		echo'
 	  <tr>
 		<td class="grey" align="center">'.$ranking.'</td>
@@ -139,7 +129,7 @@ while ($r_rplayer = mysql_fetch_array($q_rplayer))
 
 		// Modifications to rank by country --// Idea by brajan  20/07/05 : Timo.
 		echo '<a href="./?p='.$_GET['p'].'&gid='.$_GET['gid'];
-		if (!$_GET['cfilter'])
+		if (!isset($_GET['cfilter']))
 			echo '&cfilter='.$r_rplayer['country'];
 		if ($rank_year > 0)
 			echo '&year='.$rank_year;
@@ -164,14 +154,12 @@ while ($r_rplayer = mysql_fetch_array($q_rplayer))
 		echo "    }";
 	}
 }
-if (!isset($format) || (isset($format) && $format != "json"))
-{
+if (!isset($format) || (isset($format) && $format != "json")) {
 	echo'
 </tbody></table>
 <div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>';
 }
-else
-{
+else {
 	echo "\r\n  ]\r\n}";
 
 }

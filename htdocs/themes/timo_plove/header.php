@@ -75,7 +75,7 @@ echo'
 													<tr>
 														<td width="30" valign="top"><img src="'.$theme.'images/spacer.gif" width="30" height="1" alt=" " /></td>
 														<td alt="links" valign="top">';
-									if ($_SESSION["customsidebar"]=="1")
+									if (isset($_SESSION["customsidebar"]) && $_SESSION["customsidebar"]=="1")
 										include("sidebar.php");
 									else
 										include("./includes/sidebar.php");

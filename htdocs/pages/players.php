@@ -37,16 +37,16 @@ $pcount = $r_pcount['pcount'];
 $ecount = $pcount/50;
 $ecount2 = number_format($ecount, 0, '.', '');
 
-IF($ecount > $ecount2) {
+if ($ecount > $ecount2) {
 	$ecount2 = $ecount2+1;
 }
 
 $fpage = 0;
-IF($ecount < 1) { $lpage = 0; }
+if ($ecount < 1) { $lpage = 0; }
 else { $lpage = $ecount2-1; }
 
-$cpage = $_GET["page"];
-IF ($cpage == "") { $cpage = "0"; }
+$cpage = $_GET['page'];
+if ($cpage == "") { $cpage = "0"; }
 $qpage = $cpage*50;
 
 $tfpage = $cpage+1;

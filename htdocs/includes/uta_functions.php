@@ -1,6 +1,6 @@
 <?php
 
-if (isset($_GET["debug"]))
+if (isset($_GET['debug']))
 	$_SESSION['debug'] = true;
 
 // --// brajan / timo - 10/03/08
@@ -36,7 +36,7 @@ function checkLoadavg()
 
 function debugprint($stringinput,$stringtype,$linenumber)
 {
-	if ($_SESSION['debug'])
+	if (isset($_SESSION['debug']))
 		echo "<!-- Debug output [".$linenumber."]: ".$stringtype."- ".$stringinput." -->\r\n";
 }
 
@@ -60,9 +60,9 @@ function get_short_servername($servername)
 
 function GetHours($seconds)
 {
-	$timehours = intval($seconds / 3600);
-	$timemins = intval(($seconds / 60) % 60);
-	$timesecs = ($seconds % 60);
+	$timehours = (int)($seconds / 3600);
+	$timemins = (int)(($seconds / 60) % 60);
+	$timesecs = $seconds % 60;
 
 	$Reqlength = 2; //Amount of digits we need
 	if ($Reqlength-strlen($timehours) > 0) $timehours = str_repeat("0",($Reqlength-strlen($timehours))) . $timehours;

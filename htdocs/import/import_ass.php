@@ -26,7 +26,7 @@
 	$asswin = 0;
 
 	while ($r_asswin = mysql_fetch_array($q_asswin)) {
-			IF ($r_asswin['col0'] != NULL ) { $asswin = 1; }
+			if ($r_asswin['col0'] != NULL ) { $asswin = 1; }
 	}
 
 	$updateasswin = "UPDATE uts_match SET ass_win = ".$asswin." WHERE id = ".$matchid.";";

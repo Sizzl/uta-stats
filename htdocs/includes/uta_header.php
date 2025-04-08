@@ -23,4 +23,4 @@ if (isset($_COOKIE['uts_lastvisit'])) {
 	$s_lastvisit = time();
 }
 setcookie('uts_lastvisit', time(), time()+60*60*24*30*365);
-if ($_GET['theme']) setcookie("utaTheme",$_GET['theme'],time()+2419200,"/utstats/",".utassault.net",0);
+if (isset($_GET['theme'])) setcookie("utaTheme",$_GET['theme'],time()+2419200,"/utstats/",".utassault.net",0);

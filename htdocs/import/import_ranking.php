@@ -40,8 +40,11 @@ if (strpos($gamename, 'Assault') !== false)
 
 	$r_cnt = small_query($sql);
 
-	if (isset($results['debugpid']) && $results['debugpid'] == $pid)
+	if (isset($results['debugpid']) && $results['debugpid'] == $pid) {
+		if (isset($debug) === False)
+			$s_debug = "";
 		$s_debug = $s_debug."-----\r\n".$matchid."-1-r_cnt:\r\n".$sql."\r\n";
+	}
 
 	$ass_att = $r_cnt['ass_att']; 
 	$ass_def = $r_cnt['ass_def'];
@@ -241,7 +244,7 @@ if ($rank_id == NULL)
 	$rank_gametime = 0;
 	$rank_crank = 0;
 	$rank_matches = 0;
-} // end IF($rank_id == NULL)
+} // end if ($rank_id == NULL)
 else
 {
 	$rank_gametime = $r_rankp['time'];

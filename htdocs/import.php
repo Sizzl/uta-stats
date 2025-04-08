@@ -50,15 +50,15 @@ if ($html)
 {
 	if (!isset($_GET['noheader']))
 	{
-		if ($_SESSION["themelocation"]) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
+		if (isset($_SESSION['themelocation'])) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
 		{
-			if (file_exists($_SESSION["themelocation"]."header.php"))
-				include($_SESSION["themelocation"]."header.php");
+			if (file_exists($_SESSION['themelocation']."header.php"))
+				include $_SESSION['themelocation']."header.php";
 			else
-				include ("includes/header.php");
+				include "includes/header.php";
 		}
 		else
-			include ("includes/header.php");
+			include "includes/header.php";
 	}
 }
 if (isset($_GET['p']))
@@ -709,10 +709,10 @@ foreach ($logfiles as $filename)
 		$t3info = 0;
 
 		while ($r_tinfo = mysql_fetch_array($q_tinfo)) {
-		      IF ($r_tinfo['col4'] == "Red") { $t0info = 1; }
-		      IF ($r_tinfo['col4'] == "Blue") { $t1info = 1; }
-		      IF ($r_tinfo['col4'] == "Green") { $t2info = 1; }
-		      IF ($r_tinfo['col4'] == "Gold") { $t3info = 1; }
+		      if ($r_tinfo['col4'] == "Red") { $t0info = 1; }
+		      if ($r_tinfo['col4'] == "Blue") { $t1info = 1; }
+		      if ($r_tinfo['col4'] == "Green") { $t2info = 1; }
+		      if ($r_tinfo['col4'] == "Gold") { $t3info = 1; }
 		}
 
 		// Get Teamscores
@@ -1146,14 +1146,13 @@ if ($html) echo '</td></tr></table>';
 
 if ($html)
 {
-	if ($_SESSION["themelocation"]) // Themed footer --// 19/07/05 Timo: Added customisable footer
+	if (isset($_SESSION['themelocation'])) // Themed footer --// 19/07/05 Timo: Added customisable footer
 	{
-		if (file_exists($_SESSION["themelocation"]."footer.php"))
-			include($_SESSION["themelocation"]."footer.php");
+		if (file_exists($_SESSION['themelocation']."footer.php"))
+			include $_SESSION['themelocation']."footer.php";
 		else
-			include("includes/footer.php");
+			include "includes/footer.php";
 	}
 	else
-		include("includes/footer.php");
+		include "includes/footer.php";
 }
-?>

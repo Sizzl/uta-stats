@@ -105,7 +105,7 @@ echo'
 							<tr>
 								<td width="5"><img src="'.$theme.'images/spacer.gif" width="5" height="1" alt=" " /></td>
 								<td class="sidebar" valign="top"><br />';
-if ($_SESSION["customsidebar"]=="1" && file_exists("./".$theme."/sidebar.php"))
+if (isset($_SESSION["customsidebar"]) && $_SESSION["customsidebar"]=="1" && file_exists("./".$theme."/sidebar.php"))
 	include("./".$theme."/sidebar.php");
 else
 	include("./includes/sidebar.php");

@@ -179,7 +179,7 @@ echo'
 // Check If Green Team Were Used (CTF4 Compatibility)
 
 $greencheck = small_count("SELECT * FROM uts_player WHERE matchid = $mid AND team = 2");
-IF ($greencheck > 0) {
+if ($greencheck > 0) {
 
 	  echo'<tr>
 		<td class="hlheading" colspan="12" align="center">Team: Green</td>
@@ -269,7 +269,7 @@ IF ($greencheck > 0) {
 // Check If Gold Team Were Used (CTF4 Compatibility)
 
 $goldcheck = small_count("SELECT * FROM uts_player WHERE matchid = $mid AND team = 3");
-IF ($goldcheck > 0) {
+if ($goldcheck > 0) {
 
 	  echo'<tr>
 		<td class="hlheading" colspan="12" align="center">Team: Gold</td>

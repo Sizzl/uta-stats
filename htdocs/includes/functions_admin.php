@@ -424,15 +424,15 @@ function adminselect(&$options)
 
 	
 	echo '</form>';
-	if ($_SESSION["themelocation"]) // Themed footer --// 19/07/05 Timo: Added customisable footer
+	if (isset($_SESSION['themelocation'])) // Themed footer --// 19/07/05 Timo: Added customisable footer
 	{
-	        if (file_exists($_SESSION["themelocation"]."footer.php"))
-	                include($_SESSION["themelocation"]."footer.php");
+	        if (file_exists($_SESSION['themelocation']."footer.php"))
+	                include $_SESSION['themelocation']."footer.php";
 	        else
-	                include("includes/footer.php");
+	                include "includes/footer.php";
 	}
 	else
-	        include("includes/footer.php");
+	        include "includes/footer.php";
 	exit;
 }
 ?>

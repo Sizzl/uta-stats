@@ -56,7 +56,7 @@ echo'
 					<div class=date>&nbsp;</div>
 				</div>
 				<div class=posttext>';
-	if ($_SESSION["customsidebar"]=="1")
+	if (isset($_SESSION["customsidebar"]) && $_SESSION["customsidebar"]=="1")
 		include("sidebar.php");
 	else
 		include("./includes/sidebar.php");

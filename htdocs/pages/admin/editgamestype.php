@@ -82,7 +82,7 @@ if (isset($_REQUEST['submit'])) {
 		$q_nrank = mysql_query($sql_nrank) or die(mysql_error());
 		$num_ranks = 0;
 		while ($r_nrank = mysql_fetch_array($q_nrank)) {
-			mysql_query("INSERT INTO uts_rank SET time = '${r_nrank['time']}', pid = ${r_nrank['pid']}, gid = ${r_nrank['gid']}, rank = '${r_nrank['rank']}', prevrank = '${r_nrank['rank']}', matches = ${r_nrank['matches']}") or die(mysql_error());
+			mysql_query("INSERT INTO uts_rank SET time = '".$r_nrank['time']."', pid = '".$r_nrank['pid']."', gid = '".$r_nrank['gid']."', rank = '".$r_nrank['rank']."', prevrank = '".$r_nrank['rank']."', matches = '".$r_nrank['matches']."';") or die(mysql_error());
 			$num_ranks++;
 		}
 		echo'<td class="grey" align="left" width="400">Done (recalculated '.$num_ranks.' rankings)</td>

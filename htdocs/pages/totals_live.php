@@ -97,7 +97,7 @@ echo'
  while ($r_assgids = mysql_fetch_array($q_assgids)) {
  	$assgids[] = $r_assgids['id'];
  }
- $assquery = (count($assgids) > 0) ? 'SUM(IF (gid IN ('. implode(',', $assgids) .'), ass_obj, 0)) AS ass_obj' : '0 AS ass_obj';
+ $assquery = (count($assgids) > 0) ? 'SUM(if (gid IN ('. implode(',', $assgids) .'), ass_obj, 0)) AS ass_obj' : '0 AS ass_obj';
 
  $sql_cdatot = zero_out(small_query("SELECT SUM(dom_cp) AS dom_cp, $assquery, SUM(flag_taken) AS flag_taken,
  SUM(flag_pickedup) AS flag_pickedup, SUM(flag_dropped) AS flag_dropped, SUM(flag_assist) AS flag_assist, SUM(flag_cover) AS flag_cover,
@@ -248,7 +248,7 @@ if ($ShowNGStatsTotals)
 	$sql_chighdom_cp = small_query("SELECT p.pid, pi.name, p.country, SUM(dom_cp) AS dom_cp , SUM(gametime) AS sumgametime, COUNT(matchid) AS mcount FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND dom_cp > 0 GROUP BY pid HAVING sumgametime > 1800 ORDER BY dom_cp DESC LIMIT 0,1");
 	
 	$ass_obj_check = small_query("SELECT COUNT(id) AS idcount FROM uts_games WHERE gamename LIKE '%Assault%';") or die(mysql_error());
-	IF ($ass_obj_check['idcount'] > 0 ) {
+	if ($ass_obj_check['idcount'] > 0 ) {
 		$sql_chighass_obj = small_query("SELECT p.pid, pi.name, p.country, SUM(ass_obj) AS ass_obj , SUM(gametime) AS sumgametime, COUNT(matchid) AS mcount FROM uts_player AS p, uts_pinfo AS pi WHERE p.pid = pi.id AND pi.banned <> 'Y' AND ass_obj > 0 GROUP BY pid HAVING sumgametime > 1800 ORDER BY ass_obj DESC LIMIT 0,1");
 	} else {
 		$sql_chighass_obj = "";

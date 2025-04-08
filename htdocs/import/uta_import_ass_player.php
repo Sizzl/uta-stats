@@ -75,12 +75,12 @@
 	
 	while ($r_playerass = mysql_fetch_array($q_playerass)) {
 
-		IF ($r_playerass['col1'] == "ass_suicide_coop") { $ass_suicide_coop = $r_playerass['ass_events']; }
-		IF ($r_playerass['col1'] == "ass_teamchange") { $ass_teamchange = $r_playerass['ass_events']; }
-		IF ($r_playerass['col1'] == "ass_h_launch") { $ass_h_launch = $r_playerass['ass_events']; }
-		IF ($r_playerass['col1'] == "ass_r_launch") { $ass_r_launch = $r_playerass['ass_events']; }
-		IF ($r_playerass['col1'] == "ass_h_jump") { $ass_h_jump = $r_playerass['ass_events']; }
-		IF ($r_playerass['col1'] == "ass_assist") { $ass_assist = $r_playerass['ass_events']; }
+		if ($r_playerass['col1'] == "ass_suicide_coop") { $ass_suicide_coop = $r_playerass['ass_events']; }
+		if ($r_playerass['col1'] == "ass_teamchange") { $ass_teamchange = $r_playerass['ass_events']; }
+		if ($r_playerass['col1'] == "ass_h_launch") { $ass_h_launch = $r_playerass['ass_events']; }
+		if ($r_playerass['col1'] == "ass_r_launch") { $ass_r_launch = $r_playerass['ass_events']; }
+		if ($r_playerass['col1'] == "ass_h_jump") { $ass_h_jump = $r_playerass['ass_events']; }
+		if ($r_playerass['col1'] == "ass_assist") { $ass_assist = $r_playerass['ass_events']; }
 	}	
 
 	$ass_playerevents = "	UPDATE 	uts_player	SET			
@@ -104,8 +104,8 @@
 	
 	while ($r_playerass = mysql_fetch_array($q_playerass)) {
 
-		IF ($r_playerass['col1'] == "ass_h_launch") { $ass_h_launched = $r_playerass['ass_events']; }
-		IF ($r_playerass['col1'] == "ass_r_launch") { $ass_r_launched = $r_playerass['ass_events']; }
+		if ($r_playerass['col1'] == "ass_h_launch") { $ass_h_launched = $r_playerass['ass_events']; }
+		if ($r_playerass['col1'] == "ass_r_launch") { $ass_r_launched = $r_playerass['ass_events']; }
 	}
 	
 

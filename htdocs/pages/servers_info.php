@@ -11,12 +11,12 @@ $scount = small_count("SELECT id FROM uts_match WHERE serverip = '".$serverip."'
 $ecount = $scount/25;
 $ecount2 = number_format($ecount, 0, '.', '');
 
-IF($ecount > $ecount2) {
+if ($ecount > $ecount2) {
 	$ecount2 = $ecount2+1;
 }
 
 $fpage = 0;
-IF($ecount < 1) { $lpage = 0; }
+if ($ecount < 1) { $lpage = 0; }
 else { $lpage = $ecount2-1; }
 if (isset($_GET['page'])) {
 	$cpage = $_GET['page'];

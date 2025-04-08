@@ -84,7 +84,7 @@ echo'
   </TR>
   <TR> 
     <TD width="100%" align="center" valign="top">';
-if ($_SESSION["customsidebar"]=="1" && file_exists("./".$theme."/sidebar.php"))
+if (isset($_SESSION["customsidebar"]) && $_SESSION["customsidebar"]=="1" && file_exists("./".$theme."/sidebar.php"))
 	include("./".$theme."/sidebar.php");
 else
 	include("./includes/sidebar.php");

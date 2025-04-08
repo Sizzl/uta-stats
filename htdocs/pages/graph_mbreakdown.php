@@ -44,11 +44,10 @@ while ($r_gyears = mysql_fetch_array($q_gyears)) {
 	$year_sum += $r_gyears['res_count'];
 }
 
-
 echo'<table border="0" cellpadding="0" cellspacing="0">
   <tbody>
   <tr>
-    <td class="heading" align="center" colspan="39">Hourly and Monthly Activity '.$gtitle.'</td>
+    <td class="heading" align="center" colspan="39">Hourly and Monthly Activity '.($gtitle ?: '').'</td>
   </tr>
   <tr>
     <td class="dark" align="center" colspan="39" height="10"></td>
@@ -120,7 +119,7 @@ $total_years = intval(($year_last)-($year_first));
 echo'<table border="0" cellpadding="0" cellspacing="0">
   <tbody>
   <tr>
-    <td class="heading" align="center" colspan="'.intval(3+$total_years).'">Yearly Activity '.$gtitle.'</td>
+    <td class="heading" align="center" colspan="'.intval(3+$total_years).'">Yearly Activity '.($gtitle ?: '').'</td>
   </tr>
   <tr>
     <td class="dark" align="center" colspan="'.intval(3+$total_years).'" height="10"></td>

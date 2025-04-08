@@ -6,12 +6,12 @@ require ("includes/functions.php");
 
 if (!isset($pic_enable) or !$pic_enable) pic_error('err_disabled');
 // brajan 04082005
-$serv_path = ereg_replace("\\\\","/",__FILE__); 
+$serv_path = preg_replace("/\\\\/","/",__FILE__); 
 $serv_path = dirname($serv_path); 
 
 function pic_error($name) {
 	header("Content-type: image/png");
-	readfile("images/templates/${name}.png");
+	readfile("images/templates/".$name.".png");
 	exit;
 }
 
@@ -135,6 +135,8 @@ function replace_vars($text, &$searchrepl) {
 
 
 function get_values($date_from, $date_to, $pid, $gid, $prefix, &$searchrepl) {
+	$week_start = mktime(0,0,0,date('m'),date('d')-date('w')+1-7,date(' Y'));
+	$week_end = mktime(23,59,59,date('m'),date('d')-date('w'),date('Y' ));
 	$sql_time = (empty($date_from)) ? '' : "AND	m.time >= '".date("YmdHis", $week_start)."' and m.time <= '".date("YmdHis", $week_end);
 	$sql_gid = (empty($gid)) ? '' : "AND m.gid = '".$gid."'";
 	$sql_order = ($prefix != 'LM') ? '' : 'ORDER BY m.time DESC LIMIT 0,1';
@@ -199,7 +201,7 @@ function get_values($date_from, $date_to, $pid, $gid, $prefix, &$searchrepl) {
 			case 'GAMEDATE': $value = date("Y-m-d H:i", mtimestamp($value)); break;
 			case 'RANKMOVEMENT': $value = ($value >= 0) ? '+'.get_dp($value) : get_dp($value); break;
 		}
-		$searchrepl["%${prefix}_${name}%"] = $value;
+		$searchrepl["%".$prefix."_".$name."%"] = $value;
 	}
 }
 

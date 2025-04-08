@@ -81,12 +81,12 @@
 
 	while ($r_player7 = mysql_fetch_array($q_player7)) {
 		// Cycle through pickups and see what the player got
-		IF ($r_player7['col2'] == "Thigh Pads") { $pu_pads = $r_player7['pu_count']; }
-		IF ($r_player7['col2'] == "Body Armor") { $pu_armour = $r_player7['pu_count']; }
-		IF ($r_player7['col2'] == "Super Health Pack") { $pu_keg = $r_player7['pu_count']; }
-		IF ($r_player7['col2'] == "ShieldBelt") { $pu_belt = $r_player7['pu_count']; }
-		IF ($r_player7['col2'] == "Damage Amplifier") { $pu_amp = $r_player7['pu_count']; }
-		IF ($r_player7['col2'] == "Invisibility") { $pu_invis = $r_player7['pu_count']; }
+		if ($r_player7['col2'] == "Thigh Pads") { $pu_pads = $r_player7['pu_count']; }
+		if ($r_player7['col2'] == "Body Armor") { $pu_armour = $r_player7['pu_count']; }
+		if ($r_player7['col2'] == "Super Health Pack") { $pu_keg = $r_player7['pu_count']; }
+		if ($r_player7['col2'] == "ShieldBelt") { $pu_belt = $r_player7['pu_count']; }
+		if ($r_player7['col2'] == "Damage Amplifier") { $pu_amp = $r_player7['pu_count']; }
+		if ($r_player7['col2'] == "Invisibility") { $pu_invis = $r_player7['pu_count']; }
 	}
 
 	// Get ping information
@@ -176,8 +176,8 @@
 			$r_acc = get_dp($q_acc['accuracy']);
 		else
 			$r_acc = 10;
-		if (strlen($q_acc['eff']))
-			$r_efficiency = get_dp($q_efficiency['eff']);
+		if (isset($q_acc) && isset($q_acc['eff']) && strlen($q_acc['eff']))
+			$r_efficiency = get_dp($q_acc['eff']);
 		else
 			$r_efficiency = 40;
 	}
@@ -277,8 +277,8 @@
 										`ttl` = '".$r_ttl."',
 										`gamescore` = '".$r_score."';";
 
-	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff query; (f=".$r_frags.";sc=".$r_score."; s=\n".$sql_playerid.")\n".mysql_error()."\n");
-	$playerecordid = mysql_insert_id() or die("import_playerstuff insert; (f=".$r_frags.";sc=".$r_score."; s=\n".$sql_playerid.")\n".mysql_error()."\n");;
+	$q_playerid = mysql_query($sql_playerid) or die("import_playerstuff query; (pt=".$playerteam.";f=".$r_frags.";sc=".$r_score."; s=\n".$sql_playerid.")\n".mysql_error()."\n");
+	$playerecordid = mysql_insert_id() or die("import_playerstuff insert; (pt=".$playerteam.";f=".$r_frags.";sc=".$r_score."; s=\n".$sql_playerid.")\n".mysql_error()."\n");;
 
 
 ?>

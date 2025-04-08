@@ -417,7 +417,7 @@ foreach ($pids as &$pid)
 			$t_points += row('Penalty for playing < 300 minutes', get_dp($t_points), -0.15, 0);
 		}
 
-	// IF ($gametime >= 1440) {
+	// if ($gametime >= 1440) {
 	// 	$t_points += row('Bonus for playing > 24 hours', get_dp($t_points), 0.00, false);
 	// }
 

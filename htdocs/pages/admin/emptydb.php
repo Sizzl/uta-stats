@@ -21,7 +21,7 @@ $i++;
 $results = adminselect($options);
 
 
-IF ($results['sure'] == "Yes" && $results['really'] == "Yes") {
+if ($results['sure'] == "Yes" && $results['really'] == "Yes") {
 	echo'<br><table border="0" cellpadding="1" cellspacing="2" width="600">
 	<tr>
 		<td class="smheading" align="center" colspan="2">Empty Database</td>

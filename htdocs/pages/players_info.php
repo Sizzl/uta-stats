@@ -62,9 +62,9 @@ if (isset($_GET['pics'])) {
 		if	(!$options['enabled']) continue;
 		if ($options['gidrequired'] && empty($gid)) continue;
 		$disp = true;
-		$pinfourl = "http://${oururl}?p=pinfo&pid=$pid";
+		$pinfourl = "http://".$oururl."?p=pinfo&pid=".$pid;
 		$lgid = ($options['gidrequired']) ? $gid : 0;
-		$imgurl = "http://${oururl}pic.php/$num/$pid/$lgid/.".$options['output']['type'];
+		$imgurl = "http://".$oururl."pic.php/".$num."/".$pid."/".$lgid."/.".$options['output']['type'];
 		echo '<table class="box" border="0" cellspacing="2" cellpadding="1" align="center"><tr>';
 		echo '<td colspan="2" align="center"><img src="'. $imgurl .'" border="0" /></td>';
 		echo '</tr><tr>';
@@ -394,7 +394,7 @@ $sql_rank = "SELECT g.name AS gamename, r.rank, r.prevrank, r.matches, r.gid, r.
 		WHERE r.gid = g.id AND r.pid = '".$pid."'".$where_year.";";
 $q_rank = mysql_query($sql_rank) or die(mysql_error());
 while ($r_rank = mysql_fetch_array($q_rank)) {
-	$q_no = "SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE `year` = '".$rank_year."' AND `gid` = '${r_rank['gid']}' AND `rank` > '".get_dp($r_rank['rank'])."9';";
+	$q_no = "SELECT (COUNT(*) + 1) AS no FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE `year` = '".$rank_year."' AND `gid` = '".$r_rank['gid']."' AND `rank` > '".get_dp($r_rank['rank'])."9';";
 	$r_no = small_query($q_no);
 	echo'<tr>
 				<td class="grey" align="center">'.RankImageOrText($r_rank['pid'], $name, $r_no['no'], $r_rank['gid'], $r_rank['gamename'], false, '%IT%').'</td>

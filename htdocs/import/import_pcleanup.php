@@ -1,6 +1,6 @@
 <?php 
 $sql_tgame = small_query("SELECT teamgame FROM uts_match WHERE id = $matchid");
-IF($sql_tgame == "True") {
+if ($sql_tgame == "True") {
 	$rem_srecord = "DELETE FROM uts_player WHERE matchid = $matchid AND team > 3";
 	mysql_query($rem_srecord);
 }
@@ -17,7 +17,7 @@ while ($r_pname = mysql_fetch_array($q_pname)) {
 	// Check if player has more than 1 record
 	$q_ids = mysql_query("SELECT playerid FROM uts_player WHERE pid = '".$pid."' AND matchid = $matchid");
 	
-	IF (mysql_num_rows($q_ids) > 1) {
+	if (mysql_num_rows($q_ids) > 1) {
 		$numrecords = mysql_num_rows($q_ids);
 		echo $r_pname['name'] .' ';
 		// get all the ids this player had

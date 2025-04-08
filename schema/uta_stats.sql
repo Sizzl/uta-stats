@@ -158,6 +158,34 @@ CREATE TABLE IF NOT EXISTS `uts_ip2country` (
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `uts_killsdetail`
+--
+
+CREATE TABLE `uts_killsdetail` (
+  `matchid` int NOT NULL,
+  `victim` int NOT NULL,
+  `instigator` int NOT NULL,
+  `weapon` varchar(40) NOT NULL,
+  `hit_time` float NOT NULL,
+  `hit_time_final` float NOT NULL,
+  `damage` smallint NOT NULL,
+  `damage_hp` smallint NOT NULL,
+  `damage_capped` smallint NOT NULL,
+  `victim_health` smallint NOT NULL,
+  `victim_armour` int NOT NULL,
+  `frag` tinyint NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- INDEX for table `uts_killsdetail`
+--
+ALTER TABLE `uts_killsdetail`
+  ADD INDEX `matchid` (`matchid`);
+COMMIT;
+
+-- --------------------------------------------------------
+
 -- 
 -- Table structure for table `uts_killsmatrix`
 -- 
@@ -1772,15 +1800,17 @@ INSERT INTO `uts_weapons` VALUES (1, 'Translocator', 'trans.jpg', 1, 'N'),
 (15, 'None', 'blank.jpg', 15, 'Y'),
 (16, 'Chainsaw', 'chainsaw.jpg', 16, 'N'),
 (23, 'dummyweapon', '', 200, 'Y'),
-(24, 'Min0.00', '', 200, 'N'),
-(25, 'Snipe0.00', '', 200, 'N'),
+(24, 'Min0.00', 'minigun.jpg', 200, 'N'),
+(25, 'Snipe0.00', 'sniper.jpg', 200, 'N'),
 (26, 'INFUT_ADD_TurretWeaponM250', '', 200, 'N'),
-(27, 'Impac0.00', '', 200, 'N'),
-(28, 'Rocket0.00', '', 200, 'N'),
-(29, 'Flak0.00', '', 200, 'N'),
+(27, 'Impac0.00', 'impact.jpg', 200, 'N'),
+(28, 'Rocket0.00', 'rockets.jpg', 200, 'N'),
+(29, 'Flak0.00', 'flak.jpg', 200, 'N'),
 (30, 'info', '', 200, 'N'),
-(31, 'Prototype GES Super-Bio Rifle', '', 200, 'N'),
+(31, 'Prototype GES Super-Bio Rifle', 'bio.jpg', 200, 'N'),
 (32, 'NoWeaponNoFire', '', 200, 'N');
+(33, 'Double Enforcers', 'enforcer2.jpg', 4, 'N'),
+(34, 'GES BioRifle', 'bio.jpg', 5, 'N'),
 
 -- --------------------------------------------------------
 
