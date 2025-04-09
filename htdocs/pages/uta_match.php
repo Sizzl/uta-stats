@@ -98,8 +98,12 @@ $score1 ='0';
 		if ($p_sql['team'] < 0.5 ) {
 			$teamname = $team0a; 
 			$tr_color = "#4C0000";
-			} 
-		else{ 
+		}
+		elseif ($p_sql['team'] > 7 ) {
+			$teamname = "Spectators"; 
+			$tr_color = "#6C6C6C";
+		} 
+		else { 
 			$teamname = $team1a;
 			$tr_color = "#00005C";
 		}
@@ -159,8 +163,12 @@ $score1 ='0';
 		if ($p_sql['team'] < 0.5 ) {
 			$teamname = $team0a; 
 			$tr_color = "#4C0000";
-			} 
-		else{ 
+		}
+		elseif ($p_sql['team'] > 7 ) {
+			$teamname = "Spectators"; 
+			$tr_color = "#6C6C6C";
+		} 
+		else { 
 			$teamname = $team1a;
 			$tr_color = "#00005C";
 		}
