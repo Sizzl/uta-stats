@@ -326,6 +326,7 @@ echo '<br>';
 
 // Do graph stuff
 $bgwhere = "pid = '".$pid."'";
+$sn = isset($_SERVER['PATH_TRANSLATED']) ? $_SERVER['PATH_TRANSLATED'] : $_SERVER['SCRIPT_FILENAME'];
 include_once("pages/graph_utapbreakdown.php");
 
 
@@ -340,7 +341,7 @@ echo'<table border="0" cellpadding="1" cellspacing="1">
     <td class="smheading" align="center" width="80">Rank</td>
     <td class="smheading" align="center" width="50">Matches</td>
 	 <td class="smheading" align="center" width="50">Explain</td>';
-	 if ($pic_enable && basename($_SERVER['PATH_TRANSLATED']) != 'admin.php') echo '<td class="smheading" align="center" width="50">Pics</td>';
+	 if ($pic_enable && basename($sn) != 'admin.php') echo '<td class="smheading" align="center" width="50">Pics</td>';
 echo '</tr>';
 $q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
 if (mysql_num_rows($q_ytest))
@@ -357,7 +358,7 @@ while ($r_rank = mysql_fetch_array($q_rank)) {
 		<td class="grey" align="center">'.get_dp($r_rank['rank']) .' '. RankMovement($r_rank['rank'] - $r_rank['prevrank']) . '</td>
 		<td class="grey" align="center">'.$r_rank['matches'].'</td>';
 		echo '<td class="grey" align="center"><a class="grey" href="?p=pexplrank&amp;pid='.$pid.'&amp;gid='.$r_rank['gid'].'">(Click)</a></td>';
-	if ($pic_enable && basename($_SERVER['PATH_TRANSLATED']) != 'admin.php') echo '<td class="grey" align="center"><a class="grey"  href="?p=pinfo&amp;pid='.$pid.'&amp;gid='.$r_rank['gid'].'&amp;pics=1">(Click)</a></td>';
+	if ($pic_enable && basename($sn) != 'admin.php') echo '<td class="grey" align="center"><a class="grey"  href="?p=pinfo&amp;pid='.$pid.'&amp;gid='.$r_rank['gid'].'&amp;pics=1">(Click)</a></td>';
 	echo '</tr>';
 }
 

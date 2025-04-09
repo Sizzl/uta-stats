@@ -20,7 +20,7 @@ echo' </td>
     <td class="smheading" rowspan="2" align="center" width="50">Rating</td>
     <td class="smheading" rowspan="2" align="center" width="50">Taken</td>
     <td class="smheading" rowspan="2" align="center" width="65">Average Time</td>
-    <td class="smheading" colspan="3" align="center">'.$recordType.' Records '.$gameFilter.' '.$toggleFilter.'</td>
+    <td class="smheading" colspan="3" align="center">'.($recordType ?: '').' Records '.($gameFilter ?: '').' '.($toggleFilter ?: '').'</td>
   </tr>
   <tr>
   	<td class="smheading" align="center" width="60">Time</td>

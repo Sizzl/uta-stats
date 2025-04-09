@@ -43,16 +43,18 @@ while ($r_gyears = mysql_fetch_array($q_gyears)) {
 		
 		$year_sum = $year_sum + $r_gyears['res_count'];
 }
-if (strlen($gtitle)==0) {
+if (isset($gtitle) && strlen($gtitle)==0) {
 	if ($year_first == $year_last)
 		$gtitle = "(".$year_last.")";
 	else
 		$gtitle = "(".$year_first." - ".$year_last.")";
+} else {
+	$gtitle = "";
 }
 echo'<table class="box" border="0" cellpadding="0" cellspacing="0"'.(isset($t_width) ? " width=\"".$t_width."\"" : "").'>
   <tbody>
   <tr>
-    <td class="heading" align="center" colspan="39">Hourly and Monthly Activity '.$gtitle.'</td>
+    <td class="heading" align="center" colspan="39">Hourly and Monthly Activity '.($gtitle ?: '').'</td>
   </tr>
   <tr>
     <td class="dark" align="center" colspan="39" height="10"></td>
@@ -125,7 +127,7 @@ if ($total_years > 1)
 	echo'<table border="0" cellpadding="0" cellspacing="0">
   <tbody>
   <tr>
-    <td class="heading" align="center" colspan="'.intval(3+$total_years).'">Yearly Activity '.$gtitle.'</td>
+    <td class="heading" align="center" colspan="'.intval(3+$total_years).'">Yearly Activity '.($gtitle ?: '').'</td>
   </tr>
   <tr>
     <td class="dark" align="center" colspan="'.intval(3+$total_years).'" height="10"></td>

@@ -1,8 +1,8 @@
 <?php 
-include_once ("includes/mysql-shim/lib/mysql.php");
-include_once ("includes/config.php");
-include_once ("includes/uta_functions.php");
-include_once ("includes/functions.php");
+include_once "includes/mysql-shim/lib/mysql.php";
+include_once "includes/config.php";
+include_once "includes/uta_functions.php";
+include_once "includes/functions.php";
 if (!isset($_GET['noheader']))
 {
 	if (isset($_SESSION['themelocation'])) // Themed header --// 19/07/05 Timo: Added customisable header (& sidebar !)
@@ -15,7 +15,7 @@ if (!isset($_GET['noheader']))
 	else
 		include "includes/header.php";
 }
-$pagehandler = mks($_GET["p"]);
+$pagehandler = isset($_GET['p']) ? mks($_GET['p']) : "";
 
 if (checkLoadavg()==true)
 	$pagehandler = "busy";

@@ -67,7 +67,7 @@ echo'
 				<td width="19" valign="top"><img src="'.$theme.'images/spacer.gif" width="19" height="1" alt=" " /></td>
 				<td width="103" valign="top"><a href="/"><img src="'.$theme.'images/sb_topu.gif" width="103" height="70" border="0" alt="UTAssault.net Home" /></a></td>
 				<td class="txtbigtitle" valign="middle">
-				<p align="center">&nbsp; &nbsp; Welcome to PUG Stats - <a class="txtbigtitle" href="irc://bacon.utassault.net/utapug" target="_blank"></a>#utapug<br />
+				<p align="center">&nbsp; &nbsp; Welcome to PUG Stats - <a class="txtbigtitle" href="https://utassault.net/discord" target="_blank">#utapug</a><br />
 				<span class="rangtext">[Stats last updated : '.date("d/m/Y @ H:i:s",$lastupdate).']</span></p>
 				</td>
 			</tr>

@@ -69,9 +69,9 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 			</tr>';
 		}
 
-		$eff = get_dp($r_players['eff']);
-		$acc = get_dp($r_players['accuracy']);
-		$ttl = GetMinutes($r_players['ttl']);
+		$eff = isset($r_players['eff']) ? get_dp($r_players['eff']) : 0;
+		$acc = isset($r_players['accuracy']) ? get_dp($r_players['accuracy']) : 0;
+		$ttl = isset($r_players['ttl']) ? GetMinutes($r_players['ttl']) : 0;
 		$ping = $r_players['avgping'];
 		if (strlen($r_players['suicides']))
 			$suis = $r_players['suicides'];
@@ -86,8 +86,11 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 		$pname = $r_players['name'];
 		if (is_int($r_players['gamescore']))
 			$totals['gamescore'] += $r_players['gamescore'];
-		if (isset($extra) && strlen($r_players[$extra]))
-			$totals[$extra] += $r_players[$extra];
+		if (isset($extra) && isset($r_players[$extra]) && strlen($r_players[$extra]))
+			if (isset($totals[$extra]))
+				$totals[$extra] += intval($r_players[$extra]);
+			else
+				$totals[$extra] = intval($r_players[$extra]);
 		$totals['kills'] += $kills;
 		if (is_int($r_players['deaths']))
 			$totals['deaths'] += $r_players['deaths'];
@@ -160,10 +163,10 @@ function teamstats_init_totals(&$totals, &$num) {
 
 function teamstats_team_totals(&$totals, $num, $teams, $extra, $teamscore) {
 	if ($num == 0) $num = 1;
-	$eff = get_dp($totals['eff'] / $num);
-	$acc = get_dp($totals['acc'] / $num);
-	$ttl = GetMinutes($totals['ttl'] / $num);
-    $ping = ceil($totals['ping']/$num);
+	$eff = isset($totals['eff']) ? get_dp($totals['eff'] / $num) : 0;
+	$acc = isset($totals['accuracy']) ? get_dp($totals['accuracy'] / $num) : 0;
+	$ttl = isset($totals['ttl']) ? GetMinutes($totals['ttl'] / $num) : 0;
+    $ping = isset($totals['ping']) ? ceil($totals['ping']/$num) : 0;
 
 	echo '<tr>';
 	echo '<td nowrap class="dark" align="center">Totals</td>';
