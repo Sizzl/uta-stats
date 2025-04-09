@@ -829,7 +829,7 @@ foreach ($logfiles as $filename)
 
 			// Get players last team
 			$r_player3 = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'player' AND col2 = 'TeamChange' AND col3 = '".$playerid."' ORDER BY id DESC LIMIT 0,1");
-			$playerteam = isset($r_player3['col4']) ? $r_player3['col4'] : 0;
+			$playerteam = isset($r_player3['col4']) ? $r_player3['col4'] : 255;
 
 			$qc_kills = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'kills'AND col3 = '".$playerid."';");
 			$qc_teamkills = small_query("SELECT col4 FROM uts_temp_".$uid." WHERE col1 = 'stat_player' AND col2 = 'teamkills' AND col3 = '".$playerid."';");
@@ -846,9 +846,9 @@ foreach ($logfiles as $filename)
 			else
 				$timeonserver = 0; 
 
-			if (isset($qc_kills) && isset($qc_kills['col4']) && isset($qc_deaths) && isset($qc_deaths['col4']) && isset($qc_teamkills) && isset($qc_teamkills['col4']) && isset($qc_objs) && isset($qc_objs['assobjcount']) && $qc_kills['col4'] == 0 && $qc_deaths['col4'] == 0 && $qc_teamkills['col4'] == 0 && $qc_objs['assobjcount'] <= 0 && $timeonserver < 30)
+			if (($playerteam > 7 || $playerteam) < 0 || (isset($qc_kills) && isset($qc_kills['col4']) && isset($qc_deaths) && isset($qc_deaths['col4']) && isset($qc_teamkills) && isset($qc_teamkills['col4']) && isset($qc_objs) && isset($qc_objs['assobjcount']) && $qc_kills['col4'] == 0 && $qc_deaths['col4'] == 0 && $qc_teamkills['col4'] == 0 && $qc_objs['assobjcount'] <= 0 && $timeonserver < 30))
 			{
-				if ($timeonserver < 10 || $servergametime > 60) 	
+				if ($timeonserver < 10 || $servergametime > 60 || $playerteam > 7 || $playerteam < 0) 	
 				{			
 					$ignored_players[] = $playername;
 					continue;

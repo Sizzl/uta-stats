@@ -6,6 +6,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 	if (!$r_info) die("Match not found");
 	$teams = ($r_info['teamgame'] == 'True') ? true : false;
 	$teamscore[-1] = 0;
+	$teamscore[255] = 0;
 	$teamscore[0] = $r_info['t0score'];
 	$teamscore[1] = $r_info['t1score'];
 	$teamscore[2] = $r_info['t2score'];
@@ -44,6 +45,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 				case 1:	$teamname = 'Blue'; break;
 				case 2:	$teamname = 'Green'; break;
 				case 3:	$teamname = 'Gold'; break;
+				case 255: $teamname = 'Spectators'; break;
 			}
 			echo'<tr><td class="hlheading" colspan="'.$cols.'" align="center">Team: '.$teamname.'</td></tr>';
 			$header = true;
