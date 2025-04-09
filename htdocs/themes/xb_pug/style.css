@@ -13,6 +13,7 @@ a:hover {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 10pt
 .text {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 10pt; COLOR: #efefef}
 .text2 {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 7pt; COLOR: #efefef}
 .txtbigtitle {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 18pt; COLOR: #eaeaea; FONT-WEIGHT: bold}
+a.txtbigtitle:hover {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 18pt; COLOR: #ffffff; TEXT-DECORATION: none; FONT-WEIGHT: bold}
 .txttitle {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 14pt; COLOR: #eaeaea; FONT-WEIGHT: bold}
 .rangtext {FONT-FAMILY: Verdana,Geneva,Arial,Helvetica,sans-serif; FONT-SIZE: 7pt; COLOR: #808080}
 
@@ -144,5 +145,5 @@ a.epicinfo:hover {FONT-FAMILY: Verdana, Arial, Helvetica; FONT-SIZE: 8pt; COLOR:
 	left:0px;
 	background-color:#9D9D94
 }
-#loader_bg {background-color:#EBEBE4;position:relative;top:8px;left:8px;h  eight:7px;width:113px;font-size:1px}
-img#pic { border-size: 3px; border-color: #000000; border-style:double; }
+#loader_bg {background-color:#EBEBE4;position:relative;top:8px;left:8px;height:7px;width:113px;font-size:1px}
+img#pic { border: 3px; border-color: #000000; border-style:double; }

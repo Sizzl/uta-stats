@@ -116,24 +116,6 @@ td {
 
 }
 
-
-
-
-
-// formheader
-
-formheader {
-
-
-
-
-
-}
-
-
-
-
-
 .formtitle {
 
 	font: 18px Verdana, Arial, Helvetica, sans-serif;
@@ -144,8 +126,6 @@ formheader {
 
 }
 
-
-
 .formgo {
 
         font-weight: bold;
@@ -153,7 +133,6 @@ formheader {
        padding: 5px;
 
 }
-
 
 
 .inputheader {
