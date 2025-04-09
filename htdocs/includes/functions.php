@@ -261,7 +261,7 @@ function GetItemInfo ($itemname, $itemchunks)
 function GetMinutes($seconds)
 {
 	// CRATOS: Ceil!
-	$seconds = ceil($seconds);
+	$seconds = is_int($seconds) ? ceil($seconds) : 0;
 	
 	$timemins = intval($seconds / 60);
 	$timesecs = ($seconds % 60);
@@ -554,7 +554,7 @@ function purge_backups($dir, $maxage) {
 
 function file_size_info($filesize) {
 	$bytes = array('KB', 'KB', 'MB', 'GB', 'TB'); # values are always displayed
-	if ($filesize < 1024) $filesize = 1; # in at least kilobytes.
+	$filesize = is_int($filesize) ? (($filesize < 1024) ? 1 : $filesize) : 1; # in at least kilobytes.
 	for ($i = 0; $filesize > 1024; $i++) $filesize /= 1024;
 	$file_size_info['size'] = ceil($filesize);
 	$file_size_info['type'] = $bytes[$i];
