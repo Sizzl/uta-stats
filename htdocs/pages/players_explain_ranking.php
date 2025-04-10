@@ -1,14 +1,12 @@
 <?php 
-include_once ("includes/config.php");
-include_once ("includes/uta_functions.php");
-function row($name = NULL, $amount = 0, $multiplier = 0, $multiplier_value = 600, $amount_rated = -1) {
-	static $i = 0;
+include_once "includes/config.php";
+include_once "includes/uta_functions.php";
+function row($name = NULL, $amount = 0, $multiplier = 0, $multiplier_value = 600, $amount_rated = -1, $i = 0) {
 	if (empty($name)) {
 		echo '<tr><td colspan="4" height="3"></td></tr>';
 		$i = 0;
 		return(0);
 	}
-	$i++;
 	$class = ($i%2) ? 'grey' : 'grey2';
 	if ($multiplier_value > 0) $multiplier *= $multiplier_value;
 	if ($amount_rated > -1)
@@ -29,7 +27,7 @@ function row($name = NULL, $amount = 0, $multiplier = 0, $multiplier_value = 600
 	return($points);
 }
 
-function rowtotal($title, $sum) {
+function rowtotal($title, $sum, $i) {
 	
 	$class = ($i%2) ? 'grey' : 'grey2';
 	echo '<tr>	<td class="dark">'. $title .'</td>
@@ -206,7 +204,8 @@ foreach ($pids as &$pid)
 	</tr>';
 
 		$t_points = 0;
-		row();	
+		row();
+		$i = 1;
 
 		if (strpos($real_gamename, 'Assault') !== false) {
 		
@@ -237,144 +236,149 @@ foreach ($pids as &$pid)
 			$q_obj = mysql_query($objsql);
 			while ($r_obj = mysql_fetch_array($q_obj)) 
 			{
+				$i++;
 				if ($alt > 5)
 				{
-					$t_points += row('Assault Objectives '.$r_obj[att_teamsize].'v'.$r_obj[def_teamsize], $r_obj[objs], ($r_obj[def_teamsize]*2 - $r_obj[att_teamsize])*10.0/6.0, $mv, $r_obj[ratedobjs]);
+					$t_points += row('Assault Objectives '.$r_obj['att_teamsize'].'v'.$r_obj['def_teamsize'], $r_obj['objs'], ($r_obj['def_teamsize']*2 - $r_obj['att_teamsize'])*10.0/6.0, $mv, $r_obj['ratedobjs'], $i);
 				}
 				else
-					$t_points += row('Assault Objectives '.$r_obj[att_teamsize].'v'.$r_obj[def_teamsize], $r_obj[objs], ($r_obj[def_teamsize]*2 - $r_obj[att_teamsize])*10.0/6.0, $mv, $r_obj[ratedobjs]);
+					$t_points += row('Assault Objectives '.$r_obj['att_teamsize'].'v'.$r_obj['def_teamsize'], $r_obj['objs'], ($r_obj['def_teamsize']*2 - $r_obj['att_teamsize'])*10.0/6.0, $mv, $r_obj['ratedobjs'], $i);
 			}
 			if ($alt > 4)
-				$t_points += row('Assault Objective Assists', $r_cnt['ass_assist'], 2, 500);		
+				$t_points += row('Assault Objective Assists', $r_cnt['ass_assist'], 2, 500, -1, $i++);		
 			else
-				$t_points += row('Assault Objective Assists', $r_cnt['ass_assist'], 2);		
+				$t_points += row('Assault Objective Assists', $r_cnt['ass_assist'], 2, 600, -1, $i++);		
 	
 			row();
-		
+			
 			// Assault Events
 			if ($alt == 1)
 			{
-				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 2, $mv);
-				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0.5, $mv);
-				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 2, $mv);
-				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0.5, $mv);
+				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 2, $mv, -1, $i++);
+				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0.5, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 2, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0.5, $mv, -1, $i++);
 			}
 			elseif ($alt == 2)
 			{
-				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 1, $mv);
-				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0.5, $mv);
-				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 1, $mv);
-				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0.5, $mv);
+				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 1, $mv, -1, $i++);
+				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0.5, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 1, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0.5, $mv, -1, $i++);
 			}
 			elseif ($alt == 3)
 			{
-				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 2, $mv);
-				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0, $mv);
-				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 2, $mv);
-				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0, $mv);
+				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 2, $mv, -1, $i++);
+				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 2, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0, $mv, -1, $i++);
 			}
 			elseif ($alt >= 4)
 			{
-				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 1.5, $mv);
-				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0, $mv);
-				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 2, $mv);
-				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0, $mv);
+				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 1.5, $mv, -1, $i++);
+				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 2, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0, $mv, -1, $i++);
 			}
 			else
 
 			{
-				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 3, $mv);
-				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0.5, $mv);
-				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 3, $mv);
-				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0.5, $mv);
+				$t_points += row('Assault Hammerlaunch', $r_cnt['ass_h_launch'], 3, $mv, -1, $i++);
+				$t_points += row('Assault Hammerlaunched', $r_cnt['ass_h_launched'], 0.5, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunch', $r_cnt['ass_r_launch'], 3, $mv, -1, $i++);
+				$t_points += row('Assault Rocketlaunched', $r_cnt['ass_r_launched'], 0.5, $mv, -1, $i++);
 			}
 			row();
-	
+			$i++;
 			// Penalty Assault Attacking events
 			$assault_sum = $t_points-$t_points_prev;
-			rowtotal('Assault Events Total',intval($assault_sum));
+			rowtotal('Assault Events Total',intval($assault_sum),$i++);
 			if ($ratio_att > 50)
 			{
 				$penaltyfactor = ($ass_att + $ass_def) / (2 * $ass_att) - 1; 
 				if ($penaltyfactor <= 0)
-					$t_points += row('Assault Penalty for '.intval($ratio_att).'% attacking', $assault_sum, get_dp($penaltyfactor), 0);
+					$t_points += row('Assault Penalty for '.intval($ratio_att).'% attacking', $assault_sum, get_dp($penaltyfactor), 0, -1, $i++);
 			}
 			else 
 			{
-				row('Assault Penalty for '.intval($ratio_att).'% attacking', 0, 0, 0);
+				row('Assault Penalty for '.intval($ratio_att).'% attacking', 0, 0, 0, -1, $i++);
 			}	
-			
+			$i++;
 			row();	
+			$i++;
 			row();	
 	
 			// Frag Events
 			$t_points_prev = $t_points;	
-			$t_points += row('Frags', $r_cnt['frags'], 0.5, $mv);
-			$t_points += row('Deaths', $r_cnt['deaths'], -1.0/6.0, $mv);
+			$t_points += row('Frags', $r_cnt['frags'], 0.5, $mv, -1, $i++);
+			$t_points += row('Deaths', $r_cnt['deaths'], -1.0/6.0, $mv, -1, $i++);
 			// $t_points += row('Suicides', $r_cnt['suicides'], -0.25 , $mv);
-			$t_points += row('Suicides', $r_cnt['suicides'], 0 , $mv);
-			$t_points += row('Teamkills', $r_cnt['teamkills'], -2, $mv);		
+			$t_points += row('Suicides', $r_cnt['suicides'], 0 , $mv, -1, $i++);
+			$t_points += row('Teamkills', $r_cnt['teamkills'], -2, $mv, -1, $i++);		
 	
 			row();
-			$t_points += row('Double Kills', $r_cnt['spree_double'], 0.5, $mv);
-			$t_points += row('Multi Kills', $r_cnt['spree_multi'], 1, $mv);
-			$t_points += row('Ultra Kills', $r_cnt['spree_ultra'], 2, $mv);
-			$t_points += row('Monster Kills', $r_cnt['spree_monster'], 4, $mv);
+			$i++;
+			$t_points += row('Double Kills', $r_cnt['spree_double'], 0.5, $mv, -1, $i++);
+			$t_points += row('Multi Kills', $r_cnt['spree_multi'], 1, $mv, -1, $i++);
+			$t_points += row('Ultra Kills', $r_cnt['spree_ultra'], 2, $mv, -1, $i++);
+			$t_points += row('Monster Kills', $r_cnt['spree_monster'], 4, $mv, -1, $i++);
 			row();
-			$t_points += row('Killing Sprees', $r_cnt['spree_kill'], 0.5, $mv);
-			$t_points += row('Rampages', $r_cnt['spree_rampage'], 1.0, $mv);
-			$t_points += row('Dominatings', $r_cnt['spree_dom'], 1.5, $mv);
-			$t_points += row('Unstoppables', $r_cnt['spree_uns'], 2, $mv);
-			$t_points += row('Godlikes', $r_cnt['spree_god'], 3, $mv);	
-			row();	
+			$i++;
+			$t_points += row('Killing Sprees', $r_cnt['spree_kill'], 0.5, $mv, -1, $i++);
+			$t_points += row('Rampages', $r_cnt['spree_rampage'], 1.0, $mv, -1, $i++);
+			$t_points += row('Dominatings', $r_cnt['spree_dom'], 1.5, $mv, -1, $i++);
+			$t_points += row('Unstoppables', $r_cnt['spree_uns'], 2, $mv, -1, $i++);
+			$t_points += row('Godlikes', $r_cnt['spree_god'], 3, $mv, -1, $i++);	
+			row();
+			$i++;
 	
 			$frags_sum = $t_points - $t_points_prev;
-			rowtotal('Frag Events Total',intval($frags_sum));
+			rowtotal('Frag Events Total',intval($frags_sum),$i);
 			if ($ratio_def > 50)
 			{
 				$penaltyfactor = ($ass_att + $ass_def) / (2 * $ass_def) - 1; 
 				if ($penaltyfactor <= 0)
-					$t_points += row('Frags Penalty for '.intval($ratio_def).'% defending', $frags_sum, get_dp($penaltyfactor), 0);				
+					$t_points += row('Frags Penalty for '.intval($ratio_def).'% defending', $frags_sum, get_dp($penaltyfactor), 0, -1, $i++);				
 			}
 			else 
 			{
-				row('Frags Penalty for '.intval($ratio_def).'% defending', 0, 0, 0);
+				row('Frags Penalty for '.intval($ratio_def).'% defending', 0, 0, 0 -1, $i++);
 			}		
 		}
 		else // Not AS
 		{
-			$t_points += row('Frags', $r_cnt['frags'], 0.5, $mv);
-			$t_points += row('Deaths', $r_cnt['deaths'], -0.25, $mv);
-			$t_points += row('Suicides', $r_cnt['suicides'], -0.25 , $mv);
-			$t_points += row('Teamkills', $r_cnt['teamkills'], -2, $mv);
+			$t_points += row('Frags', $r_cnt['frags'], 0.5, $mv -1, $i++);
+			$t_points += row('Deaths', $r_cnt['deaths'], -0.25, $mv -1, $i++);
+			$t_points += row('Suicides', $r_cnt['suicides'], -0.25 , $mv -1, $i++);
+			$t_points += row('Teamkills', $r_cnt['teamkills'], -2, $mv -1, $i++);
 			row();
-			$t_points += row('Flag Takes', $r_cnt['flag_taken'], 1, $mv);
-			$t_points += row('Flag Pickups', $r_cnt['flag_pickedup'], 1, $mv);
-			$t_points += row('Flag Returns', $r_cnt['flag_return'], 1, $mv);
-			$t_points += row('Flag Captures', $r_cnt['flag_capture'], 10, $mv);
-			$t_points += row('Flag Covers', $r_cnt['flag_cover'], 3, $mv);
-			$t_points += row('Flag Seals', $r_cnt['flag_seal'], 2, $mv);
-			$t_points += row('Flag Assists', $r_cnt['flag_assist'], 5, $mv);
-			$t_points += row('Flag Kills', $r_cnt['flag_kill'], 2, $mv);
+			$t_points += row('Flag Takes', $r_cnt['flag_taken'], 1, $mv -1, $i++);
+			$t_points += row('Flag Pickups', $r_cnt['flag_pickedup'], 1, $mv -1, $i++);
+			$t_points += row('Flag Returns', $r_cnt['flag_return'], 1, $mv -1, $i++);
+			$t_points += row('Flag Captures', $r_cnt['flag_capture'], 10, $mv -1, $i++);
+			$t_points += row('Flag Covers', $r_cnt['flag_cover'], 3, $mv -1, $i++);
+			$t_points += row('Flag Seals', $r_cnt['flag_seal'], 2, $mv -1, $i++);
+			$t_points += row('Flag Assists', $r_cnt['flag_assist'], 5, $mv -1, $i++);
+			$t_points += row('Flag Kills', $r_cnt['flag_kill'], 2, $mv -1, $i++);
 			row();
-			$t_points += row('Controlpoint Captures', $r_cnt['dom_cp'], 10, $mv);	
+			$t_points += row('Controlpoint Captures', $r_cnt['dom_cp'], 10, $mv -1, $i++);	
 			if (strpos($real_gamename, 'JailBreak') !== false) {
-				$t_points += row('Team Releases', $r_cnt['ass_obj'], 1.5, $mv);
+				$t_points += row('Team Releases', $r_cnt['ass_obj'], 1.5, $mv -1, $i++);
 			} else {
-				$t_points += row('Team Releases', 0, 1.5, $mv);
+				$t_points += row('Team Releases', 0, 1.5, $mv -1, $i++);
 			} 
 		
 			row();
-			$t_points += row('Double Kills', $r_cnt['spree_double'], 1, $mv);
-			$t_points += row('Multi Kills', $r_cnt['spree_multi'], 1, $mv);
-			$t_points += row('Ultra Kills', $r_cnt['spree_ultra'], 1.5, $mv);
-			$t_points += row('Monster Kills', $r_cnt['spree_monster'], 2, $mv);
+			$t_points += row('Double Kills', $r_cnt['spree_double'], 1, $mv -1, $i++);
+			$t_points += row('Multi Kills', $r_cnt['spree_multi'], 1, $mv -1, $i++);
+			$t_points += row('Ultra Kills', $r_cnt['spree_ultra'], 1.5, $mv -1, $i++);
+			$t_points += row('Monster Kills', $r_cnt['spree_monster'], 2, $mv -1, $i++);
 			row();
-			$t_points += row('Killing Sprees', $r_cnt['spree_kill'], 1, $mv);
-			$t_points += row('Rampages', $r_cnt['spree_rampage'], 1, $mv);
-			$t_points += row('Dominatings', $r_cnt['spree_dom'], 1.5, $mv);
-			$t_points += row('Unstoppables', $r_cnt['spree_uns'], 2, $mv);
-			$t_points += row('Godlikes', $r_cnt['spree_god'], 3, $mv);
+			$t_points += row('Killing Sprees', $r_cnt['spree_kill'], 1, $mv -1, $i++);
+			$t_points += row('Rampages', $r_cnt['spree_rampage'], 1, $mv -1, $i++);
+			$t_points += row('Dominatings', $r_cnt['spree_dom'], 1.5, $mv -1, $i++);
+			$t_points += row('Unstoppables', $r_cnt['spree_uns'], 2, $mv -1, $i++);
+			$t_points += row('Godlikes', $r_cnt['spree_god'], 3, $mv -1, $i++);
 		}	
 
 		row();	
@@ -399,22 +403,22 @@ foreach ($pids as &$pid)
 		</tr>';
 		
 		if ($gametime < 10) {
-			$t_points += row('Penalty for playing < 10 minutes', get_dp($t_points), -0.95, 0);
+			$t_points += row('Penalty for playing < 10 minutes', get_dp($t_points), -0.95, 0, -1, $i++);
 		}
 		elseif ($gametime >= 10 && $gametime < 30) {
-			$t_points += row('Penalty for playing < 30 minutes', get_dp($t_points), -0.90, 0);
+			$t_points += row('Penalty for playing < 30 minutes', get_dp($t_points), -0.90, 0 -1, $i++);
 		}
 		elseif ($gametime >= 30 && $gametime < 50) {
-			$t_points += row('Penalty for playing < 50 minutes', get_dp($t_points), -0.80, 0);
+			$t_points += row('Penalty for playing < 50 minutes', get_dp($t_points), -0.80, 0 -1, $i++);
 		}
 		elseif ($gametime >= 50 && $gametime < 100) {
-			$t_points += row('Penalty for playing < 100 minutes', get_dp($t_points), -0.5, 0);
+			$t_points += row('Penalty for playing < 100 minutes', get_dp($t_points), -0.5, 0 -1, $i++);
 		}
 		elseif ($gametime >= 100 && $gametime < 200) {
-			$t_points += row('Penalty for playing < 200 minutes', get_dp($t_points), -0.3, 0);
+			$t_points += row('Penalty for playing < 200 minutes', get_dp($t_points), -0.3, 0 -1, $i++);
 		}
 		elseif ($gametime >= 200 && $gametime < 300) {
-			$t_points += row('Penalty for playing < 300 minutes', get_dp($t_points), -0.15, 0);
+			$t_points += row('Penalty for playing < 300 minutes', get_dp($t_points), -0.15, 0 -1, $i++);
 		}
 
 	// if ($gametime >= 1440) {
