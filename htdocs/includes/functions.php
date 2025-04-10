@@ -261,10 +261,16 @@ function GetItemInfo ($itemname, $itemchunks)
 function GetMinutes($seconds)
 {
 	// CRATOS: Ceil!
-	$seconds = is_int($seconds) ? ceil($seconds) : 0;
-	
-	$timemins = intval($seconds / 60);
-	$timesecs = ($seconds % 60);
+	try {
+		$seconds = ceil($seconds);
+		$timemins = $seconds / 60;
+		$timesecs = $seconds % 60;
+	} 
+	catch(Exception $e) {
+		$seconds = 0;
+		$timemins = 0;
+		$timesecs = 0;
+	}
 
 	$Reqlength = 2; //Amount of digits we need
 	if ($Reqlength-strlen($timemins) > 0) $timemins = str_repeat("0",($Reqlength-strlen($timemins))) . $timemins;
