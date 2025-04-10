@@ -263,8 +263,8 @@ function GetMinutes($seconds)
 	// CRATOS: Ceil!
 	try {
 		$seconds = ceil($seconds);
-		$timemins = $seconds / 60;
-		$timesecs = $seconds % 60;
+		$timemins = (int)($seconds / 60);
+		$timesecs = (int)($seconds % 60);
 	} 
 	catch(Exception $e) {
 		$seconds = 0;
