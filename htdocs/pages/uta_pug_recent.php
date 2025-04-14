@@ -176,7 +176,7 @@ while ($r_recent = mysql_fetch_array($q_recent)) {
 		echo "      \"score_red\":".$score0.",\r\n";
 		echo "      \"score_blue\":".$score1.",\r\n";
 		echo "      \"server_name\":\"".$servername."\",\r\n";
-		echo "      \"server_ip\":\"".$r_matchsummary['serverip']."\"\r\n";
+		echo "      \"server_ip\":\"".$serverip."\"\r\n";
 		echo "    }";
 	}
 }

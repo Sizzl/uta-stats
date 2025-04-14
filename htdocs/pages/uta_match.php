@@ -73,14 +73,14 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 } else {
 	header('Content-Type: application/json; charset=windows-1252');
 	echo "{\r\n";
-	echo "  \"matchid\":\"".$matchcode."\",\r\n";
-	echo "  \"time_start\":\"".$starttime."\",\r\n";
-	echo "  \"time_end\":\"".$endtime."\",\r\n";
-	echo "  \"duration\":\"".$total_time."\",\r\n";
-	echo "  \"score_red\":".$score0.",\r\n";
-	echo "  \"score_blue\":".$score1.",\r\n";
-	echo "  \"server_name\":\"".$servername."\"\r\n";
-	echo "  \"server_ip\":\"".$serverip."\"\r\n";
+	echo "  \"matchid\": \"".$matchcode."\",\r\n";
+	echo "  \"time_start\": ".$starttime.",\r\n";
+	echo "  \"time_end\": ".$endtime.",\r\n";
+	echo "  \"duration\": \"".$total_time."\",\r\n";
+	echo "  \"score_red\": ".$score0.",\r\n";
+	echo "  \"score_blue\": ".$score1.",\r\n";
+	echo "  \"server_name\": \"".$servername."\"\r\n";
+	echo "  \"server_ip\": \"".$serverip."\"\r\n";
 	echo "  \"match_summary\" : [";
 }
 // brajan 2006-09-15
@@ -147,16 +147,17 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 			echo ",";
 		}
 		echo "\r\n    {\r\n";
-		echo "      \"pid\":".$p_sql['pid'].",\r\n";
-		echo "      \"playername\":\"".$p_sql['pname']."\",\r\n";
-		echo "      \"country\":\"".$p_sql['pcountry']."\",\r\n";
-		echo "      \"team\":\"".$teamname."\",\r\n";
-		echo "      \"maps\":".$p_sql['maps'].",\r\n";
-		echo "      \"ping\":".$p_sql['ping'].",\r\n";
-		echo "      \"objectives\":".$p_sql['matchcode'].",\r\n";
-		echo "      \"assists\":".$p_sql['ass_assist'].",\r\n";
-		echo "      \"kills\":".$p_sql['kills'].",\r\n";
-		echo "      \"deaths\":".$p_sql['deaths']."\r\n";
+		echo "      \"pid\": ".$p_sql['pid'].",\r\n";
+		echo "      \"playername\": \"".$p_sql['pname']."\",\r\n";
+		echo "      \"country\": \"".$p_sql['pcountry']."\",\r\n";
+		echo "      \"team\": \"".$teamname."\",\r\n";
+		echo "      \"maps\": ".intval($p_sql['maps']/2).",\r\n";
+		echo "      \"ping\": ".intval($p_sql['ping']).",\r\n";
+		echo "      \"objectives\": ".$p_sql['objs'].",\r\n";
+		echo "      \"assists\": ".$p_sql['ass_assist'].",\r\n";
+		echo "      \"kills\": ".$p_sql['kills'].",\r\n";
+		echo "      \"deaths\": ".$p_sql['deaths'].",\r\n";
+		echo "      \"eff\": ".intval(round($effi, 0))."\r\n";
 		echo "    }";
 	}
 }
