@@ -9,6 +9,6 @@ $pagehandler = "utapugrecent";
 if (checkLoadavg()==true)
 	echo "{}";
 else 
-	include "../pages/uta_match.php";
+	include "../../pages/uta_match.php";
 
 ?>
