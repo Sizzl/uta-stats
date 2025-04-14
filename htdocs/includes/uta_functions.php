@@ -60,9 +60,9 @@ function get_short_servername($servername)
 
 function GetHours($seconds)
 {
-	$timehours = (int)($seconds / 3600);
-	$timemins = (int)(($seconds / 60) % 60);
-	$timesecs = (int)($seconds % 60);
+	$timehours = $seconds / 3600;
+	$timemins = ($seconds / 60) % 60;
+	$timesecs = $seconds % 60;
 
 	$Reqlength = 2; //Amount of digits we need
 	if ($Reqlength-strlen($timehours) > 0) $timehours = str_repeat("0",($Reqlength-strlen($timehours))) . $timehours;
