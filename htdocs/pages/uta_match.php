@@ -113,14 +113,17 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 	if ($p_sql['team'] < 0.5 ) {
 		$teamname = $team0a; 
 		$tr_color = "#4C0000";
+		$gameteam = "Red";
 	}
 	elseif ($p_sql['team'] > 7 ) {
 		$teamname = "Spectators"; 
 		$tr_color = "#6C6C6C";
+		$gameteam = $teamname;
 	} 
 	else { 
 		$teamname = $team1a;
 		$tr_color = "#00005C";
+		$gameteam = "Blue";
 	}
 	if ($p_sql['kills']+$p_sql['deaths']==0)
 		$effi = '0';
@@ -148,9 +151,11 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 		}
 		echo "\r\n    {\r\n";
 		echo "      \"pid\": ".$p_sql['pid'].",\r\n";
-		echo "      \"playername\": \"".$p_sql['pname']."\",\r\n";
+		echo "      \"playername\": \"".preg_replace('/[\x{0}-\x{1F}]|[\x{22}]/i','',$p_sql['pname'])."\",\r\n";
 		echo "      \"country\": \"".$p_sql['pcountry']."\",\r\n";
-		echo "      \"team\": \"".$teamname."\",\r\n";
+		echo "      \"teamcode\": ".$p_sql['team'].",\r\n";
+		echo "      \"team\": \"".$gameteam."\",\r\n";
+		echo "      \"teamname\": \"".preg_replace('/[\x{0}-\x{1F}]|[\x{22}]/i','',$teamname)."\",\r\n";
 		echo "      \"maps\": ".intval($p_sql['maps']/2).",\r\n";
 		echo "      \"ping\": ".intval($p_sql['ping']).",\r\n";
 		echo "      \"objectives\": ".$p_sql['objs'].",\r\n";
