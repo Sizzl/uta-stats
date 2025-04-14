@@ -153,7 +153,7 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 		echo "      \"pid\": ".$p_sql['pid'].",\r\n";
 		echo "      \"playername\": \"".preg_replace('/[\x{0}-\x{1F}]|[\x{22}]/i','',$p_sql['pname'])."\",\r\n";
 		echo "      \"country\": \"".$p_sql['pcountry']."\",\r\n";
-		echo "      \"teamcode\": ".$p_sql['team'].",\r\n";
+		echo "      \"teamcode\": ".intval($p_sql['team']).",\r\n";
 		echo "      \"team\": \"".$gameteam."\",\r\n";
 		echo "      \"teamname\": \"".preg_replace('/[\x{0}-\x{1F}]|[\x{22}]/i','',$teamname)."\",\r\n";
 		echo "      \"maps\": ".intval($p_sql['maps']/2).",\r\n";
