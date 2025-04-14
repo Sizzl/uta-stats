@@ -1,4 +1,3 @@
-<!-- <div style="color:red; font-weight:bold" class="heading">EXPERIMENTAL</div><br><br> -->
 <?php 
 global $t_match, $t_pinfo, $t_player, $t_games, $dbversion; // fetch table globals.
 error_reporting(E_ALL^E_NOTICE);
@@ -125,7 +124,7 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 	</tr>';
 } else {
 	header('Content-Type: application/json; charset=windows-1252');
-	echo "{\r\n  \"matches\" : [";
+	echo "{\r\n  \"page\":".($page+1).",\r\n  \"total_pages\":".($lpage).",\r\n  \"matches\" : [";
 }
 if (isset($dbversion) && floatval($dbversion) > 5.6) {
   $sql_recent = "SELECT ANY_VALUE(m.id) AS id, ANY_VALUE(m.time) AS time, ANY_VALUE(g.name) AS gamename, ANY_VALUE(m.serverinfo) AS serverinfo, ANY_VALUE(m.gametime) AS gametime, ANY_VALUE(m.matchmode) AS matchmode, m.teamname0, m.teamname1, m.matchcode FROM ".(isset($t_match) ? $t_match : "uts_match")." AS m, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE g.id = m.gid AND m.matchmode = 1 $where GROUP BY m.teamname0, m.teamname1, m.matchcode ORDER BY ANY_VALUE(m.time) DESC LIMIT $qpage,25";
@@ -170,11 +169,14 @@ while ($r_recent = mysql_fetch_array($q_recent)) {
 		echo "\r\n    {\r\n";
 		echo "      \"matchid\":\"".$r_recent['matchcode']."\",\r\n";
 		echo "      \"gametype\":\"".$r_recent['gamename']."\",\r\n";
-		echo "      \"timestamp\":\"".$r_time."\",\r\n";
-		echo "      \"duration\":".$total_time.",\r\n";
-		echo "      \"score_red\":\"".$score0."\",\r\n";
-		echo "      \"score_blue\":\"".$score1."\",\r\n";
-		echo "      \"server_name\":\"".$servername."\"\r\n";
+		echo "      \"timestamp\":\"".$r_recent['time']."\",\r\n";
+		echo "      \"datetime\":\"".$r_time."\",\r\n";
+		echo "      \"gametime\":\"".$r_recent['gametime']."\",\r\n";
+		echo "      \"duration\":\"".$total_time."\",\r\n";
+		echo "      \"score_red\":".$score0.",\r\n";
+		echo "      \"score_blue\":".$score1.",\r\n";
+		echo "      \"server_name\":\"".$servername."\",\r\n";
+		echo "      \"server_ip\":\"".$r_matchsummary['serverip']."\"\r\n";
 		echo "    }";
 	}
 }

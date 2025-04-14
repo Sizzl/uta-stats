@@ -54,7 +54,7 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 	echo'
 	<tr class="smheading" style="height:20px">';
 	echo'
-		<td  align="center" rowspan="2"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=pname">Player</a></td>		
+		<td align="center" rowspan="2"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=pname">Player</a></td>		
 		<td align="center" rowspan="2"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=objs">Objs</a></td>
 		<td align="center"rowspan="2"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=ass_assist">Assists</a></td>
 		<td align="center" colspan="2">Hammerlaunches</td>
@@ -70,14 +70,29 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 		<td align="center"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=ass_r_launch">Launcher</a></td>
 		<td align="center"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=ass_r_launched">Pass.</a></td>
 	</tr>';
+} else {
+	header('Content-Type: application/json; charset=windows-1252');
+	echo "{\r\n";
+	echo "  \"matchid\":\"".$matchcode."\",\r\n";
+	echo "  \"time_start\":\"".$starttime."\",\r\n";
+	echo "  \"time_end\":\"".$endtime."\",\r\n";
+	echo "  \"duration\":\"".$total_time."\",\r\n";
+	echo "  \"score_red\":".$score0.",\r\n";
+	echo "  \"score_blue\":".$score1.",\r\n";
+	echo "  \"server_name\":\"".$servername."\"\r\n";
+	echo "  \"server_ip\":\"".$serverip."\"\r\n";
+	echo "  \"match_summary\" : [";
 }
 // brajan 2006-09-15
 // Added sorting
 // protect against mysql injections using $_GET['sort'] variable
-// If $_GET['sort'] is empty or not allowed, "objs" will be used as default 
-$sort_allowed = array("pname", "objs", "ass_assist", "kills", "ass_h_launch", "ass_h_launched", "ass_r_launch", "ass_r_launched", "deaths", "maps", "ping", "ass_h_jump");
-$sort_by = ( (!empty($_GET['sort'])) && (in_array($_GET['sort'], $sort_allowed)) ) ? $_GET['sort'] : 'objs';
-
+// If $_GET['sort'] is empty or not allowed, "objs" will be used as default
+if (isset($format) && $format == "json") {
+	$sort_by = "team ASC, pname";
+} else {
+	$sort_allowed = array("team", "pname", "objs", "ass_assist", "kills", "ass_h_launch", "ass_h_launched", "ass_r_launch", "ass_r_launched", "deaths", "maps", "ping", "ass_h_jump");
+	$sort_by = ( (!empty($_GET['sort'])) && (in_array($_GET['sort'], $sort_allowed)) ) ? $_GET['sort'] : 'objs';
+}
 $sql =  "SELECT 'broken_match_1' AS dohquery, sum(".(isset($t_player) ? $t_player : "uts_player").".frags) as frags, 
 		(sum(".(isset($t_player) ? $t_player : "uts_player").".kills)-sum(".(isset($t_player) ? $t_player : "uts_player").".teamkills)) as kills, sum(".(isset($t_player) ? $t_player : "uts_player").".deaths) as deaths, avg(".(isset($t_player) ? $t_player : "uts_player").".avgping) as ping, 
 		count(".(isset($t_player) ? $t_player : "uts_player").".matchid) as maps, avg(".(isset($t_player) ? $t_player : "uts_player").".team) as team,
@@ -90,9 +105,11 @@ $sql =  "SELECT 'broken_match_1' AS dohquery, sum(".(isset($t_player) ? $t_playe
 		group by ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country 
 		ORDER BY ".$sort_by." DESC";
 					
-$q_sql = mysql_query($sql) or die("m1:".mysql_error());	
+$q_sql = mysql_query($sql) or die("m1:".mysql_error());
+$playercount = 0;
 while ($p_sql = mysql_fetch_assoc($q_sql)) 
 {	
+	$playercount++;
 	if ($p_sql['team'] < 0.5 ) {
 		$teamname = $team0a; 
 		$tr_color = "#4C0000";
@@ -110,7 +127,7 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 	else
 		$effi = (!empty($p_sql['kills'])) ? (float) $p_sql['kills'] / ($p_sql['kills'] + $p_sql['deaths']) * 100 : '0'; // match effi // brajan 2007-05-28
 	if (!isset($format) || (isset($format) && $format != "json")) {
-		echo'<tr class="grey" style="background-color:'.$tr_color.'; height:20px; vertical-align:middle">';
+		echo '<tr class="grey" style="background-color:'.$tr_color.'; height:20px; vertical-align:middle">';
 		echo '<td nowrap align="left"><b>'.FormatPlayerName($p_sql['pcountry'], $p_sql['pid'], $p_sql['pname']).'</b></td>';
 		echo '<td nowrap align="center">'.$p_sql['objs'].'</td>';
 		echo '<td nowrap align="center">'.$p_sql['ass_assist'].'</td>';
@@ -125,6 +142,22 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 		echo '<td nowrap align="center">'.intval($p_sql['maps'] / 2).'</td>';
 		echo '<td nowrap align="center">'.intval($p_sql['ping']).'</td>';
 		echo'</tr>';
+	} else {
+		if ($playercount > 1) {
+			echo ",";
+		}
+		echo "\r\n    {\r\n";
+		echo "      \"pid\":".$p_sql['pid'].",\r\n";
+		echo "      \"playername\":\"".$p_sql['pname']."\",\r\n";
+		echo "      \"country\":\"".$p_sql['pcountry']."\",\r\n";
+		echo "      \"team\":\"".$teamname."\",\r\n";
+		echo "      \"maps\":".$p_sql['maps'].",\r\n";
+		echo "      \"ping\":".$p_sql['ping'].",\r\n";
+		echo "      \"objectives\":".$p_sql['matchcode'].",\r\n";
+		echo "      \"assists\":".$p_sql['ass_assist'].",\r\n";
+		echo "      \"kills\":".$p_sql['kills'].",\r\n";
+		echo "      \"deaths\":".$p_sql['deaths']."\r\n";
+		echo "    }";
 	}
 }
 
@@ -197,7 +230,10 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 	echo'</td>';
 	echo'</tr></tbody></table>';
 	echo'<br/></tbody></table><br><hr>';
+} else {
+	echo "\r\n  ]\r\n";
 }
+
 	
 // MATCHSTATS - END
 	
@@ -270,5 +306,7 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 } // end while
 if (!isset($format) || (isset($format) && $format != "json")) {
 	echo "<span class=\"text2\">&sup1; = Player scored &quot;First Blood&quot;</span>";
+} else {
+	echo "}";
 }
 // MAPS INFO - END
