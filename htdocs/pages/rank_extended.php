@@ -3,7 +3,7 @@ global $t_rank, $t_match, $t_pinfo, $t_player, $t_games, $dbversion; // fetch ta
 global $htmlcp;
 $outerlimit = 25; // Added adjustable record limit --// Timo 20/07/05
 
-$gid = my_addslashes($_GET['gid']);
+$gid = isset($_GET['gid']) ? my_addslashes($_GET['gid']) : 0;
 
 // Adding year filters --// Timo 13/02/21
 $rank_year = 0;
@@ -13,14 +13,12 @@ if (isset($_GET['year']) && strlen($_GET['year'])==4 && is_numeric($_GET['year']
 $r_gamename = small_query("SELECT name FROM ".(isset($t_games) ? $t_games : "uts_games")." WHERE id = '".$gid."';");
 $gamename = $r_gamename['name'];
 
-if (isset($_GET['cfilter']) && strlen($_GET['cfilter'])==2)
-{
+if (isset($_GET['cfilter']) && strlen($_GET['cfilter'])==2) {
 	// Timo 2021 - this is broken, needs fixing
 	$r_pcount = small_query("SELECT COUNT(*) AS pcount FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." LEFT JOIN ".(isset($t_player) ? $t_player : "uts_player")." ON ".(isset($t_rank) ? $t_rank : "uts_rank").".pid = ".(isset($t_player) ? $t_player : "uts_player").".id WHERE ".(isset($t_player) ? $t_player : "uts_player").".country = '".$_GET['cfilter']."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".gid = '".$gid."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".year = '".$rank_year."';");
 	$pcount = $r_pcount['pcount'];
 }
-else
-{
+else {
 	$r_pcount = small_query("SELECT COUNT(*) as pcount FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE gid= '".$gid."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".year = '".$rank_year."';");
 	$pcount = $r_pcount['pcount'];
 }

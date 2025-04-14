@@ -1,8 +1,6 @@
 <!-- <div style="color:red; font-weight:bold" class="heading">EXPERIMENTAL</div><br><br> -->
 <?php 
 global $t_match, $t_pinfo, $t_player, $t_games, $dbversion; // fetch table globals.
-// include ("includes/uta_functions.php");
-
 error_reporting(E_ALL^E_NOTICE);
 // Firstly we need to work out First Last Next Prev pages
 $where = ' ';
@@ -56,108 +54,133 @@ $tlpage = $lpage+1;
 
 $ppage = $cpage-1;
 $ppageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$ppage."\">[Previous]</a>";
-	if($ppage < 0) { $ppageurl = "[Previous]"; }
+if($ppage < 0) { $ppageurl = "[Previous]"; }
 
 $npage = $cpage+1;
 $npageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$npage."\">[Next]</a>";
-	if($npage >= $ecount) { $npageurl = "[Next]"; }
+if($npage >= $ecount) { $npageurl = "[Next]"; }
 
 $fpageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$fpage."\">[First]</a>";
-	if($cpage == 0) { $fpageurl = "[First]"; }
+if($cpage == 0) { $fpageurl = "[First]"; }
 
 $lpageurl = "<a class=\"pages\" href=\"./?p=utapugrecent&amp;year=".$year."&amp;month=".$month."&amp;day=".$day."&amp;gid=".$gid."&amp;page=".$lpage."\">[Last]</a>";
-	if($cpage == $lpage) { $lpageurl = "[Last]"; }
+if($cpage == $lpage) { $lpageurl = "[Last]"; }
 
-echo '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
-if (isset($_REQUEST['p']))
-	echo '<input type="hidden" name="p" value="'.$_REQUEST['p'].'">';
-echo '<table width="600" class="searchform" border="0" cellpadding="1" cellspacing="1">';
-echo '<tr><td><strong>Filter:</strong></td>';
-echo '<td><select class="searchform" name="year">';
-echo '<option value="0">*</option>';
+if (!isset($format) || (isset($format) && $format != "json")) {
+	echo '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
+	if (isset($_REQUEST['p']))
+		echo '<input type="hidden" name="p" value="'.$_REQUEST['p'].'">';
+	echo '<table width="600" class="searchform" border="0" cellpadding="1" cellspacing="1">';
+	echo '<tr><td><strong>Filter:</strong></td>';
+	echo '<td><select class="searchform" name="year">';
+	echo '<option value="0">*</option>';
 	for($i = date('Y');$i >= date("Y") - 5; $i--) {
 		$selected = ($year == $i) ? 'selected' : '';
 		echo '<option '.$selected.' value="'.$i.'">'.$i.'</option>';
 	}
-echo '</select>';
-echo '&nbsp;';
-echo '<select class="searchform" name="month">';
-echo '<option value="0">*</option>';
-$monthname = array('', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+	echo '</select>';
+	echo '&nbsp;';
+	echo '<select class="searchform" name="month">';
+	echo '<option value="0">*</option>';
+	$monthname = array('', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	for($i = 1;$i <= 12; $i++) {
 		$selected = ($month == $i) ? 'selected' : '';
 		echo '<option '.$selected.' value="'.$i.'">'.$monthname[$i].'</option>';
 	}
-echo '</select>';
-echo '&nbsp;';
-echo '<select class="searchform" name="day">';
-echo '<option value="0">*</option>';
+	echo '</select>';
+	echo '&nbsp;';
+	echo '<select class="searchform" name="day">';
+	echo '<option value="0">*</option>';
 	for($i = 1;$i <= 31; $i++) {
 		$selected = ($day == $i) ? 'selected' : '';
 		echo '<option '.$selected.' value="'.$i.'">'.$i.'</option>';
 	}
-echo '</select></td>';
-echo '<td>Gametype:</td>';
-echo '<td><select class="searchform" name="gid">';
-echo '<option value="0">*</option>';
-//$sql_game = "SELECT DISTINCT(p.gid), g.name FROM ".(isset($t_player) ? $t_player : "uts_player")." AS p, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE p.gid = g.id ORDER BY g.name ASC";
-$sql_game = "SELECT g.id as gid, g.name FROM ".(isset($t_games) ? $t_games : "uts_games")." AS g ORDER BY g.name ASC";
-$q_game = mysql_query($sql_game) or die(mysql_error());
+	echo '</select></td>';
+	echo '<td>Gametype:</td>';
+	echo '<td><select class="searchform" name="gid">';
+	echo '<option value="0">*</option>';
+	//$sql_game = "SELECT DISTINCT(p.gid), g.name FROM ".(isset($t_player) ? $t_player : "uts_player")." AS p, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE p.gid = g.id ORDER BY g.name ASC";
+	$sql_game = "SELECT g.id as gid, g.name FROM ".(isset($t_games) ? $t_games : "uts_games")." AS g ORDER BY g.name ASC";
+	$q_game = mysql_query($sql_game) or die(mysql_error());
 	while ($r_game = mysql_fetch_array($q_game)) {
 		$selected = ($r_game['gid'] == $gid) ? 'selected' : '';
 		echo '<option '.$selected.' value="'.$r_game['gid'].'">'. $r_game['name'] .'</option>';
 	}
-echo '</select></td>';
-echo '<td><input class="searchform" type="Submit" name="filter" value="Apply"></td>';
-echo'</tr></table></form><br>';
-echo'
-<div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>
-<table width="720" class="box" border="0" cellpadding="3" cellspacing="1">
-  <tbody><tr>
-    <td class="heading" colspan="5" align="center">Unreal Tournament PUG Match List</td>
-  </tr>
-  <tr>
-    <td class="smheading" align="center" width="190">Date/Time</td>
-    <td class="smheading" align="center" width="100">Match Type</td>
-	<!-- <td class="smheading" align="center">Teams</td> -->
-    <td class="smheading" align="center" width="70">Time</td>
-    <td nowrap class="smheading" align="center" width="50">Score</td>
-    <td nowrap class="smheading" align="center" width="170">Server</td>
-  </tr>';
+	echo '</select></td>';
+	echo '<td><input class="searchform" type="Submit" name="filter" value="Apply"></td>';
+	echo'</tr></table></form><br>';
+	echo'
+	<div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>
+	<table width="720" class="box" border="0" cellpadding="3" cellspacing="1">
+	<tbody><tr>
+		<td class="heading" colspan="5" align="center">Unreal Tournament PUG Match List</td>
+	</tr>
+	<tr>
+		<td class="smheading" align="center" width="190">Date/Time</td>
+		<td class="smheading" align="center" width="100">Match Type</td>
+		<!-- <td class="smheading" align="center">Teams</td> -->
+		<td class="smheading" align="center" width="70">Time</td>
+		<td nowrap class="smheading" align="center" width="50">Score</td>
+		<td nowrap class="smheading" align="center" width="170">Server</td>
+	</tr>';
+} else {
+	header('Content-Type: application/json; charset=windows-1252');
+	echo "{\r\n  \"matches\" : [";
+}
 if (isset($dbversion) && floatval($dbversion) > 5.6) {
   $sql_recent = "SELECT ANY_VALUE(m.id) AS id, ANY_VALUE(m.time) AS time, ANY_VALUE(g.name) AS gamename, ANY_VALUE(m.serverinfo) AS serverinfo, ANY_VALUE(m.gametime) AS gametime, ANY_VALUE(m.matchmode) AS matchmode, m.teamname0, m.teamname1, m.matchcode FROM ".(isset($t_match) ? $t_match : "uts_match")." AS m, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE g.id = m.gid AND m.matchmode = 1 $where GROUP BY m.teamname0, m.teamname1, m.matchcode ORDER BY ANY_VALUE(m.time) DESC LIMIT $qpage,25";
 } else {
   $sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.serverinfo, m.gametime, m.matchmode, m.teamname0, m.teamname1, m.matchcode FROM ".(isset($t_match) ? $t_match : "uts_match")." AS m, ".(isset($t_games) ? $t_games : "uts_games")." AS g WHERE g.id = m.gid AND m.matchmode = 1 $where GROUP BY m.teamname0, m.teamname1, m.matchcode ORDER BY m.time DESC LIMIT $qpage,25";
 }
 $q_recent = mysql_query($sql_recent) or die(mysql_error());
+$gcounter = 0;
 while ($r_recent = mysql_fetch_array($q_recent)) {
-	  $r_time = mdate($r_recent['time']);
-	  $r_mapfile = isset($r_recent['mapfile']) ? un_ut($r_recent['mapfile']) : "";
-	  $r_gametime = GetMinutes($r_recent['gametime']);
-// TOTAL MATCH TIME AND SERVER
-		$sql_matchsummary = "SELECT id, gametime, servername, serverip, score0, score1 FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE matchmode = 1 AND matchcode='".$r_recent['matchcode']."' ORDER BY mapsequence";	  
-		$q_matchsummary = mysql_query($sql_matchsummary) or die(mysql_error());
-		$total_time = 0;
-			while ($r_matchsummary = mysql_fetch_array($q_matchsummary)) {
-				$total_time = $total_time + $r_matchsummary['gametime'];
-				$servername = $r_matchsummary['servername'];
-			  	$serverip = $r_matchsummary['serverip'];
-			  	$score0 = $r_matchsummary['score0'];
-			  	$score1 = $r_matchsummary['score1'];
-			}
+	$gcounter++;
+	$r_time = mdate($r_recent['time']);
+	$r_mapfile = isset($r_recent['mapfile']) ? un_ut($r_recent['mapfile']) : "";
+	$r_gametime = GetMinutes($r_recent['gametime']);
+	// TOTAL MATCH TIME AND SERVER
+	$sql_matchsummary = "SELECT id, gametime, servername, serverip, score0, score1 FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE matchmode = 1 AND matchcode='".$r_recent['matchcode']."' ORDER BY mapsequence";	  
+	$q_matchsummary = mysql_query($sql_matchsummary) or die(mysql_error());
+	$total_time = 0;
+	while ($r_matchsummary = mysql_fetch_array($q_matchsummary)) {
+		$total_time = $total_time + $r_matchsummary['gametime'];
+		$servername = $r_matchsummary['servername'];
+		$serverip = $r_matchsummary['serverip'];
+		$score0 = $r_matchsummary['score0'];
+		$score1 = $r_matchsummary['score1'];
+	}
 	$servername = get_short_servername($servername);
 	$total_time = GetHours($total_time);
 	//if($score0 == '-1' || $score1 == '-1') { continue; }
-	echo'
-	  <tr>
-		<td nowrap class="dark" align="center"><a class="darkhuman" href="./?p=uta_match&amp;matchcode='.$r_recent['matchcode'].'">'.$r_time.'</a></td>
-		<td nowrap class="grey" align="center">'.$r_recent['gamename'].'</td>
-		<!-- <td nowrap class="grey" align="center"><a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname0']).'">'.htmlspecialchars($r_recent['teamname0']).'</a> vs. <a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname1']).'">'.htmlspecialchars($r_recent['teamname1']).'</a></td> -->
-		<td class="grey" align="center">'.$total_time.'</td>
-    	<td nowrap class="grey" align="center">'.$score0.' - '.$score1.'</td>    	
-    	<td class="grey" align="center">'.$servername.'</td>
-	  </tr>';
-		//<td nowrap class="grey" align="center"><a class="grey" href="./?p=sinfo&serverip='.$serverip.'">'.$servername.'</a></td>
+	if (!isset($format) || (isset($format) && $format != "json")) {
+		echo'
+		<tr>
+			<td nowrap class="dark" align="center"><a class="darkhuman" href="./?p=uta_match&amp;matchcode='.$r_recent['matchcode'].'">'.$r_time.'</a></td>
+			<td nowrap class="grey" align="center">'.$r_recent['gamename'].'</td>
+			<!-- <td nowrap class="grey" align="center"><a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname0']).'">'.htmlspecialchars($r_recent['teamname0']).'</a> vs. <a class="grey" href="./?p=utateams&amp;team='.urlencode($r_recent['teamname1']).'">'.htmlspecialchars($r_recent['teamname1']).'</a></td> -->
+			<td class="grey" align="center">'.$total_time.'</td>
+			<td nowrap class="grey" align="center">'.$score0.' - '.$score1.'</td>    	
+			<td class="grey" align="center">'.$servername.'</td>
+		</tr>';
+			//<td nowrap class="grey" align="center"><a class="grey" href="./?p=sinfo&serverip='.$serverip.'">'.$servername.'</a></td>
+	} else {
+		if ($gcounter > 1)
+			echo ",";
+		echo "\r\n    {\r\n";
+		echo "      \"matchid\":\"".$r_recent['matchcode']."\",\r\n";
+		echo "      \"gametype\":\"".$r_recent['gamename']."\",\r\n";
+		echo "      \"timestamp\":\"".$r_time."\",\r\n";
+		echo "      \"duration\":".$total_time.",\r\n";
+		echo "      \"score_red\":\"".$score0."\",\r\n";
+		echo "      \"score_blue\":\"".$score1."\",\r\n";
+		echo "      \"server_name\":\"".$servername."\"\r\n";
+		echo "    }";
+	}
 }
-echo'</tbody></table><div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>';
-?>
+
+if (!isset($format) || (isset($format) && $format != "json")) {
+	echo'</tbody></table><div class="pages"><b>Page ['.$tfpage.'/'.$tlpage.'] Selection: '.$fpageurl.' / '.$ppageurl.' / '.$npageurl.' / '.$lpageurl.'</b></div>';
+} else {
+	echo "\r\n  ]\r\n}";
+}

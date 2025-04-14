@@ -60,7 +60,7 @@ function get_short_servername($servername)
 
 function GetHours($seconds)
 {
-	$timehours = $seconds / 3600;
+	$timehours = (int)($seconds / 3600);
 	$timemins = ($seconds / 60) % 60;
 	$timesecs = $seconds % 60;
 
