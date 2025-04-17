@@ -154,8 +154,8 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 		}
 		echo "\r\n    {\r\n";
 		echo "      \"pid\": ".intval($p_sql['pid']).",\r\n";
-		echo "      \"fid\": ".isset($p_sql['fid']) ? intval($p_sql['fid']) : intval(0).",\r\n";
-		echo "      \"did\": ".isset($p_sql['fid']) ? intval($p_sql['fid']) : intval(0).",\r\n";
+		echo "      \"fid\": ".(isset($p_sql['fid']) ? intval($p_sql['fid']) : intval(0)).",\r\n";
+		echo "      \"did\": ".(isset($p_sql['did']) ? intval($p_sql['did']) : intval(0)).",\r\n";
 		echo "      \"playername\": \"".preg_replace('/[\x{0}-\x{1F}]|[\x{22}]/i','',$p_sql['pname'])."\",\r\n";
 		echo "      \"country\": \"".$p_sql['pcountry']."\",\r\n";
 		echo "      \"teamcode\": ".intval($p_sql['team']).",\r\n";
