@@ -93,16 +93,19 @@ if (isset($format) && $format == "json") {
 	$sort_allowed = array("team", "pname", "objs", "ass_assist", "kills", "ass_h_launch", "ass_h_launched", "ass_r_launch", "ass_r_launched", "deaths", "maps", "ping", "ass_h_jump");
 	$sort_by = ( (!empty($_GET['sort'])) && (in_array($_GET['sort'], $sort_allowed)) ) ? $_GET['sort'] : 'objs';
 }
-$sql =  "SELECT 'broken_match_1' AS dohquery, sum(".(isset($t_player) ? $t_player : "uts_player").".frags) as frags, 
-		(sum(".(isset($t_player) ? $t_player : "uts_player").".kills)-sum(".(isset($t_player) ? $t_player : "uts_player").".teamkills)) as kills, sum(".(isset($t_player) ? $t_player : "uts_player").".deaths) as deaths, avg(".(isset($t_player) ? $t_player : "uts_player").".avgping) as ping, 
-		count(".(isset($t_player) ? $t_player : "uts_player").".matchid) as maps, avg(".(isset($t_player) ? $t_player : "uts_player").".team) as team,
-		sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_launch) as ass_h_launch, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_r_launch) as ass_r_launch,
-		sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_launched) as ass_h_launched, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_r_launched) as ass_r_launched,
-		sum(".(isset($t_player) ? $t_player : "uts_player").".ass_assist) as ass_assist, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_jump) as ass_h_jump, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_obj) as objs,
-		".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id as pid, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name as pname, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country as pcountry
-		from ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." inner join ".(isset($t_player) ? $t_player : "uts_player")." on ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id = ".(isset($t_player) ? $t_player : "uts_player").".pid
-		inner join ".(isset($t_match) ? $t_match : "uts_match")." on ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id AND ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
-		group by ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country 
+$d_sql = mysql_query("SELECT table_name FROM information_schema.tables WHERE table_name like '%discord_players%';");
+$dsql_fields = mysql_num_rows($d_sql) > 0 ? ", uts_discord_players.fid AS fid, uts_discord_players.did AS did" : ", 0 AS fid, 0 AS did"; 
+$dsql_join = mysql_num_rows($d_sql) > 0 ? "LEFT JOIN uts_discord_players ON ".(isset($t_player) ? $t_player : "uts_player").".pid = uts_discord_players.pid " : "";
+$sql =  "SELECT 'broken_match_1' AS dohquery, sum(".(isset($t_player) ? $t_player : "uts_player").".frags) AS frags, 
+		(sum(".(isset($t_player) ? $t_player : "uts_player").".kills)-sum(".(isset($t_player) ? $t_player : "uts_player").".teamkills)) AS kills, sum(".(isset($t_player) ? $t_player : "uts_player").".deaths) as deaths, avg(".(isset($t_player) ? $t_player : "uts_player").".avgping) as ping, 
+		count(".(isset($t_player) ? $t_player : "uts_player").".matchid) AS maps, avg(".(isset($t_player) ? $t_player : "uts_player").".team) AS team,
+		sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_launch) AS ass_h_launch, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_r_launch) AS ass_r_launch,
+		sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_launched) AS ass_h_launched, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_r_launched) AS ass_r_launched,
+		sum(".(isset($t_player) ? $t_player : "uts_player").".ass_assist) AS ass_assist, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_h_jump) AS ass_h_jump, sum(".(isset($t_player) ? $t_player : "uts_player").".ass_obj) AS objs,
+		".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id AS pid, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name AS pname, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country AS pcountry ".$dsql_fields."
+		FROM ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")." INNER JOIN ".(isset($t_player) ? $t_player : "uts_player")." ON ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id = ".(isset($t_player) ? $t_player : "uts_player").".pid
+		".$dsql_join."INNER JOIN ".(isset($t_match) ? $t_match : "uts_match")." ON ".(isset($t_player) ? $t_player : "uts_player").".matchid = ".(isset($t_match) ? $t_match : "uts_match").".id AND ".(isset($t_match) ? $t_match : "uts_match").".matchmode = 1 AND ".(isset($t_match) ? $t_match : "uts_match").".matchcode = '".$matchcode."'	
+		GROUP BY ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".id, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".name, ".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo").".country 
 		ORDER BY ".$sort_by." DESC";
 					
 $q_sql = mysql_query($sql) or die("m1:".mysql_error());
@@ -150,7 +153,9 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 			echo ",";
 		}
 		echo "\r\n    {\r\n";
-		echo "      \"pid\": ".$p_sql['pid'].",\r\n";
+		echo "      \"pid\": ".intval($p_sql['pid']).",\r\n";
+		echo "      \"fid\": ".isset($p_sql['fid']) ? intval($p_sql['fid']) : intval(0).",\r\n";
+		echo "      \"did\": ".isset($p_sql['fid']) ? intval($p_sql['fid']) : intval(0).",\r\n";
 		echo "      \"playername\": \"".preg_replace('/[\x{0}-\x{1F}]|[\x{22}]/i','',$p_sql['pname'])."\",\r\n";
 		echo "      \"country\": \"".$p_sql['pcountry']."\",\r\n";
 		echo "      \"teamcode\": ".intval($p_sql['team']).",\r\n";
