@@ -605,7 +605,7 @@ foreach ($logfiles as $filename)
 		if (!isset($overriderules))
 		{
 			$overriderules = array();
-			$sql_overriderules = "SELECT `id`, `serverip`, `gamename`, `mutator`, `gid` FROM `uts_gamestype` ORDER BY `id` ASC;";
+			$sql_overriderules = "SELECT `id`, `serverip`, `gamename`, `mutator`, `gid` FROM `uts_gamestype` ORDER BY `pri` ASC, `id` ASC;";
 			$q_overriderules = mysql_query($sql_overriderules);
 			while ($r_overriderules = mysql_fetch_array($q_overriderules))
 			{
@@ -616,7 +616,7 @@ foreach ($logfiles as $filename)
 			}
 		}
 
-		// Check if one of our overriderules applies to this match
+		// Check if one of our overriderules applies to this match. The first rule to fully match (ordered by `pri`ority) will be used.
 		foreach($overriderules as $rule)
 		{
 			if (isset($rule['serverip']) && strlen($rule['serverip']) > 0)
