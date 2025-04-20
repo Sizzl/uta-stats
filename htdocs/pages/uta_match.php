@@ -93,9 +93,13 @@ if (isset($format) && $format == "json") {
 	$sort_allowed = array("team", "pname", "objs", "ass_assist", "kills", "ass_h_launch", "ass_h_launched", "ass_r_launch", "ass_r_launched", "deaths", "maps", "ping", "ass_h_jump");
 	$sort_by = ( (!empty($_GET['sort'])) && (in_array($_GET['sort'], $sort_allowed)) ) ? $_GET['sort'] : 'objs';
 }
-$d_sql = mysql_query("SELECT table_name FROM information_schema.tables WHERE table_name like '%discord_players%';");
-$dsql_fields = mysql_num_rows($d_sql) > 0 ? ", uts_discord_players.fid AS fid, uts_discord_players.did AS did" : ", 0 AS fid, 0 AS did"; 
-$dsql_join = mysql_num_rows($d_sql) > 0 ? "LEFT JOIN uts_discord_players ON ".(isset($t_player) ? $t_player : "uts_player").".pid = uts_discord_players.pid " : "";
+$d_sql = mysql_query("SELECT table_name FROM information_schema.tables WHERE table_name like '%".(isset($t_discord_players) ? $t_discord_players : "discord_players")."%';");
+$dsql_join = mysql_num_rows($d_sql) > 0 ? "LEFT JOIN ".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players")." ON ".(isset($t_player) ? $t_player : "uts_player").".pid = ".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players").".pid " : "";
+if (isset($dbversion) && floatval($dbversion) > 5.6) {
+	$dsql_fields = mysql_num_rows($d_sql) > 0 ? ", ANY_VALUE(".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players").".fid) AS fid, ANY_VALUE(".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players").".did) AS did" : ", 0 AS fid, 0 AS did"; 
+} else {
+	$dsql_fields = mysql_num_rows($d_sql) > 0 ? ", ".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players").".fid AS fid, ".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players").".did AS did" : ", 0 AS fid, 0 AS did"; 
+}
 $sql =  "SELECT 'broken_match_1' AS dohquery, sum(".(isset($t_player) ? $t_player : "uts_player").".frags) AS frags, 
 		(sum(".(isset($t_player) ? $t_player : "uts_player").".kills)-sum(".(isset($t_player) ? $t_player : "uts_player").".teamkills)) AS kills, sum(".(isset($t_player) ? $t_player : "uts_player").".deaths) as deaths, avg(".(isset($t_player) ? $t_player : "uts_player").".avgping) as ping, 
 		count(".(isset($t_player) ? $t_player : "uts_player").".matchid) AS maps, avg(".(isset($t_player) ? $t_player : "uts_player").".team) AS team,

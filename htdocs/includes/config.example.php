@@ -42,12 +42,12 @@ $asclasses[] = array("id"=>"2",
 $asclasses[] = array("id"=>"3",
 	"short"=>"iAS","desc"=>"InstaGIB Assault","mutators"=>"InstaGIB Assault",
 	"insta"=>"1","teamsize"=>"4","min_teamsize_rec"=>"3","friendlyfirescale"=>"0");
- $asclasses[] = array("id"=>"4",
+$asclasses[] = array("id"=>"4",
  	"short"=>"2v2AS","desc"=>"2vs2 Assault","mutators"=>"Impact Hammer Launch Protection","insta"=>"0","teamsize"=>"2","friendlyfirescale"=>"0");
 // $asclasses[] = array("id"=>"6","short"=>"turboAS","desc"=>"turbo Assault","mutators"=>"","insta"=>"0","teamsize"=>"5","friendlyfirescale"=>"0");
 
 // New IP 2 Country table Config --// 20/07/05 Timo: Variable for table name of IP->Country data
-  $iptc = array("table"=>"ipToCountry2",
+$iptc = array("table"=>"ipToCountry2",
 		"cfield"=>"lower(country_code2)",
 		"tfield"=>"ip_to",
 		"ffield"=>"ip_from",
@@ -110,6 +110,10 @@ $t_weaponstats = $t_prefix."weaponstats";
 
 // The key needed to run the import script
 $import_adminkey = 'adminkey';
+
+// The secrets needed to import/export data via API (this must be passed via an X-API-Secret header)
+$import_apikey = 'apisecret';
+$export_apikey = ''; // if the export key is empty or not set, GETs will be open to all
 
 // When runnning from the command-line (cron jobs):
 // The absolute path to UTStats's home directory.
