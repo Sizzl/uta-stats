@@ -246,7 +246,7 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 	echo'</tr></tbody></table>';
 	echo'<br/></tbody></table><br><hr>';
 } else {
-	echo "\r\n  ]\r\n";
+	echo "\r\n  ],\r\n  \"maps\": [\r\n";
 }
 
 	
@@ -310,11 +310,32 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 		<tr><td class="hlheading" colspan="15" align="center"><a href="?p=match&mid='.$mid.'&o=minfo&map='. str_replace(".unr", "", $p_assault['mapfile']).'">'.$p_assault['mapname'].'</a>'.$warmup.'</td></tr>
 		<tr'.$bcg.'><td align="center"><br />';
 		uta_ass_objectiveinfo($mid, $ass_att);
-			echo '<br />';
+		echo '<br />';
 		teamstats($mid, 'Match Summary - '.$ass_att.' Team Attacking', 'ass_obj', 'Ass Obj','gamescore DESC', $firstblood);
 		echo '<br /></td></tr>
 		<tr><td class="'.$winclass.'" style="font-size: 10pt;" colspan="15" align="center">'.$asswin.'</td></tr>
 		</tbody></table><br><hr>';
+	} else {
+		if ($i > 0) {
+			echo ",\r\n";
+		}
+		echo "    {\r\n";
+		echo "      \"mid\":".$mid.",\r\n";
+		echo "      \"asid\":\"".$ass_id."\",\r\n";
+		echo "      \"map\":\"".str_replace(".unr", "", $p_assault['mapfile'])."\",\r\n";
+		echo "      \"map_name\":\"".$p_assault['mapname']."\",\r\n";
+		if (strlen($warmup) > 0) {
+			echo "      \"round\": 1\r\n";
+			echo "      \"is_warmup\":".true.",\r\n";
+		} else {
+			echo "      \"round\": ".(($i%2)+1)."\r\n";
+			echo "      \"is_warmup\":".false.",\r\n";
+		}
+		echo "      \"attacking_team_name\":\"".$ass_att."\",\r\n";
+		echo "      \"defending_team_name\":\"".$ass_att2."\",\r\n";
+		echo "      \"winning_team_name\":\"".($p_assault['ass_win'] == $p_assault['ass_att'] ? $ass_att : $ass_att2)."\",\r\n";
+		echo "      \"completed_time\":\"".sec2min($gametime)."\"\r\n";
+		echo "    }";
 	}
 	$i++;
 	$content = explode('<br />', $p_assault['serverinfo']);
@@ -322,6 +343,6 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 if (!isset($format) || (isset($format) && $format != "json")) {
 	echo "<span class=\"text2\">&sup1; = Player scored &quot;First Blood&quot;</span>";
 } else {
-	echo "}";
+	echo "  ]\r\n}";
 }
 // MAPS INFO - END
