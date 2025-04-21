@@ -320,21 +320,21 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 			echo ",\r\n";
 		}
 		echo "    {\r\n";
-		echo "      \"mid\":".$mid.",\r\n";
-		echo "      \"asid\":\"".$ass_id."\",\r\n";
-		echo "      \"map\":\"".str_replace(".unr", "", $p_assault['mapfile'])."\",\r\n";
-		echo "      \"map_name\":\"".$p_assault['mapname']."\",\r\n";
+		echo "      \"mid\": ".$mid.",\r\n";
+		echo "      \"asid\": \"".$ass_id."\",\r\n";
+		echo "      \"map\": \"".str_replace(".unr", "", $p_assault['mapfile'])."\",\r\n";
+		echo "      \"map_name\": \"".$p_assault['mapname']."\",\r\n";
 		if (strlen($warmup) > 0) {
 			echo "      \"round\": 1\r\n";
-			echo "      \"is_warmup\":".true.",\r\n";
+			echo "      \"is_warmup\": true,\r\n";
 		} else {
-			echo "      \"round\": ".(($i%2)+1)."\r\n";
-			echo "      \"is_warmup\":".false.",\r\n";
+			echo "      \"round\": ".(($i%2) == 1 ? 1 : 2)."\r\n";
+			echo "      \"is_warmup\": false,\r\n";
 		}
-		echo "      \"attacking_team_name\":\"".$ass_att."\",\r\n";
-		echo "      \"defending_team_name\":\"".$ass_att2."\",\r\n";
-		echo "      \"winning_team_name\":\"".($p_assault['ass_win'] == $p_assault['ass_att'] ? $ass_att : $ass_att2)."\",\r\n";
-		echo "      \"completed_time\":\"".sec2min($gametime)."\"\r\n";
+		echo "      \"attacking_team_name\": \"".$ass_att."\",\r\n";
+		echo "      \"defending_team_name\": \"".$ass_att2."\",\r\n";
+		echo "      \"winning_team_name\": \"".($p_assault['ass_win'] == $p_assault['ass_att'] ? $ass_att : $ass_att2)."\",\r\n";
+		echo "      \"completed_time\": \"".$gametime."\"\r\n";
 		echo "    }";
 	}
 	$i++;
@@ -343,6 +343,6 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 if (!isset($format) || (isset($format) && $format != "json")) {
 	echo "<span class=\"text2\">&sup1; = Player scored &quot;First Blood&quot;</span>";
 } else {
-	echo "  ]\r\n}";
+	echo "\r\n  ]\r\n}";
 }
 // MAPS INFO - END
