@@ -79,8 +79,8 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 	echo "  \"duration\": \"".$total_time."\",\r\n";
 	echo "  \"score_red\": ".$score0.",\r\n";
 	echo "  \"score_blue\": ".$score1.",\r\n";
-	echo "  \"server_name\": \"".$servername."\"\r\n";
-	echo "  \"server_ip\": \"".$serverip."\"\r\n";
+	echo "  \"server_name\": \"".$servername."\",\r\n";
+	echo "  \"server_ip\": \"".$serverip."\",\r\n";
 	echo "  \"match_summary\" : [";
 }
 // brajan 2006-09-15
@@ -325,10 +325,10 @@ while ($p_assault = mysql_fetch_assoc($q_assault)) {
 		echo "      \"map\": \"".str_replace(".unr", "", $p_assault['mapfile'])."\",\r\n";
 		echo "      \"map_name\": \"".$p_assault['mapname']."\",\r\n";
 		if (strlen($warmup) > 0) {
-			echo "      \"round\": 1\r\n";
+			echo "      \"round\": 1,\r\n";
 			echo "      \"is_warmup\": true,\r\n";
 		} else {
-			echo "      \"round\": ".(($i%2) == 1 ? 1 : 2)."\r\n";
+			echo "      \"round\": ".(($i%2) == 1 ? 1 : 2).",\r\n";
 			echo "      \"is_warmup\": false,\r\n";
 		}
 		echo "      \"attacking_team_name\": \"".$ass_att."\",\r\n";
