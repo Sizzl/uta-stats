@@ -51,3 +51,4 @@ Bin
 obj
 Obj
 /support/db/
+*.copytemp
