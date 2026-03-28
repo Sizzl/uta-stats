@@ -624,7 +624,22 @@ foreach ($logfiles as $filename)
 			if (isset($rule['gamename']) && strlen($rule['gamename']) > 0)
 				if ($rule['gamename'] != '*' && $rule['gamename'] != $gamename) continue;
 			if (isset($rule['mutator']) && strlen($rule['mutator']) > 0)
-				if ($rule['mutator'] != '*' && stristr($qm_mutators, $rule['mutator']) === false) continue;
+			{
+				if (stristr($rule['mutator'], ','))
+				{
+					$all_mutators = explode(',',$rule['mutator']);
+					$req_matches = count($all_mutators);
+					$act_matches = 0;
+					for ($i = 0; $i < $req_matches; $i++)
+					{
+						if (stristr($qm_mutators, trim($all_mutators[$i])))
+							$act_matches++;
+					}
+					if ($act_matches < $req_matches)
+						continue;
+				}
+				elseif ($rule['mutator'] != '*' && stristr($qm_mutators, $rule['mutator']) === false) continue;
+			}
 			$gid = $rule['gid'];
 			$r_gid = small_query("SELECT `gamename`, `name` FROM `uts_games` WHERE `id` = '".$gid."'"); // Check it's valid.
 			if ($r_gid)
