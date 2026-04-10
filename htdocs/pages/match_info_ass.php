@@ -14,30 +14,25 @@ $matchtime = $sql_assault['time'];
 
 // Get information about the other match
 $sql_assault2 = small_query("SELECT `id`, `gametime`, `ass_win`, `time` FROM `uts_match` WHERE `assaultid` = '".$ass_id."' AND `id` != '".$mid."' LIMIT 0,1");
-if ($sql_assault2)
-{
+if ($sql_assault2) {
 	$mid2 = $sql_assault2['id'];
 	$matchtime2 = $sql_assault2['time'];
 }
-if (!isset($mid2))
-{
-        // Use alternative way to find an associated round. If this is a "warm-up" map, there won't be one.
-        $sql_assault2 = small_query("SELECT `matchcode`, `mapfile`, `mapsleft`, `time` FROM `uts_match` WHERE `id` = '".$mid."';");
-        if ($sql_assault2)
-        {
+if (!isset($mid2)) {
+	// Use alternative way to find an associated round. If this is a "warm-up" map, there won't be one.
+	$sql_assault2 = small_query("SELECT `matchcode`, `mapfile`, `mapsleft`, `time` FROM `uts_match` WHERE `id` = '".$mid."';");
+	if ($sql_assault2) {
 		$matchtime2 = $sql_assault2['time'];
-                $mid2sql = "SELECT `id` FROM `uts_match` WHERE `id` <> '".$mid."' AND `mapsleft` = '".$sql_assault2['mapsleft']."' AND `matchcode` = '".$sql_assault2['matchcode']."' AND `mapfile` = '".$sql_assault2['mapfile']."';";
-                $assmatch = small_query($mid2sql);
-                if ($assmatch)
-                {
-                        $mid2 = $assmatch['id'];
-                }
-        }
+		$mid2sql = "SELECT `id` FROM `uts_match` WHERE `id` <> '".$mid."' AND `mapsleft` = '".$sql_assault2['mapsleft']."' AND `matchcode` = '".$sql_assault2['matchcode']."' AND `mapfile` = '".$sql_assault2['mapfile']."';";
+		$assmatch = small_query($mid2sql);
+		if ($assmatch)
+		{
+			$mid2 = $assmatch['id'];
+		}
+	}
 }
-if (isset($mid2))
-{
-	if (isset($matchtime2) && $matchtime2 < $matchtime)
-	{
+if (isset($mid2)) {
+	if (isset($matchtime2) && $matchtime2 < $matchtime) {
 		// Swap the matches around to be in chronological order
 		$midX = $mid2;
 		$mid2 = $mid;
@@ -46,40 +41,41 @@ if (isset($mid2))
 	}
 	$matchinfo = server_stats($mid,false,$mid2); // return both rounds
 }
-else
+else {
 	$matchinfo = server_stats($mid); // return only this round
+}
 
 // Work out who was attacking which match
 $ass_att = $sql_assault['ass_att'];
-if ($ass_att == 0)
-{
+if ($ass_att == 0) {
 	$ass_att = "Red";
 	$ass_att2 = "Blue";
 }
-else
-{
+else {
 	$ass_att = "Blue";
 	$ass_att2 = "Red";
 }
 
 // Work out the end result for each match
-$asswin = $sql_assault['ass_win'];
-$asswin2 = $sql_assault2['ass_win'];
-if ($asswin == 0)
-{
+$asswin = $asswin2 = -1;
+
+if (isset($sql_assault['ass_win'])) {
+	$asswin = $sql_assault['ass_win'];
+}
+if (isset($sql_assault2['ass_win'])) {
+	$asswin2 = $sql_assault2['ass_win'];
+}
+if ($asswin == 0) {
 	$asswin = "$ass_att2 Successfully Defended";
 }
-else
-{
+else {
 	$asswin = "$ass_att Successfully Attacked";
 }
 
-if ($asswin2 == 0)
-{
+if ($asswin2 == 0) {
 	$asswin2 = "$ass_att Successfully Defended";
 }
-else
-{
+else {
 	$asswin2 = "$ass_att2 Successfully Attacked";
 }
 
@@ -106,8 +102,7 @@ echo'
 
 // The Other Game (if it happened)
 
-if (isset($mid2))
-{
+if (isset($mid2)) {
 	
 // ******************************************************************************************************
 // Cratos

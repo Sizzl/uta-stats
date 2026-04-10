@@ -2,12 +2,14 @@
 $r_info = small_query("SELECT teamgame, t0score, t1score, t2score, t3score FROM uts_match WHERE id = '".$mid."'");
 if (!$r_info) die("Match not found");
 $teamgame = ($r_info['teamgame'] == 'True') ? true : false;
-
-$GLOBALS['gid'] = $gid;
-$_GLOBALS['gid'] = $gid;
-$GLOBALS['gamename'] = $gamename;
-$_GLOBALS['gamename'] = $gamename;
-
+if (isset($gid)) {
+	$GLOBALS['gid'] = $gid;
+	$_GLOBALS['gid'] = $gid;
+}
+if (isset($gamename)) {
+	$GLOBALS['gamename'] = $gamename;
+	$_GLOBALS['gamename'] = $gamename;
+}
 include_once ("pages/match_info_server.php");
 include('includes/teamstats.php');
 switch($real_gamename) {
