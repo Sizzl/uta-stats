@@ -70,7 +70,7 @@ foreach($players as $player) {
 
 
 	echo '<td class="darkhuman" align="center" onmouseover="overlib(\''. 
-			str_replace('"', '\\\'', QuoteHintText(FormatPlayerName($player['country'], $player['pid'], $player['name'], $gid, $gamename))) .'\');" onmouseout="nd();">
+			str_replace('"', '\\\'', QuoteHintText(FormatPlayerName((isset($player['country']) ? $player['country'] : "zz-zz"), $player['pid'], $player['name'], $gid, $gamename))) .'\');" onmouseout="nd();">
 			<a class="darkhuman" href="?p=matchp&amp;mid='. $mid .'&amp;pid='. urlencode($player['pid']). '">'.
 			PrintVertical($player['name']) .
 			'</a></td>';
@@ -102,7 +102,7 @@ foreach($players as $kid => $killer) {
 	if ($first) echo'<td class="dark" rowspan="'. count($players) .'" align="center" width="20"><strong>K<br>i<br>l<br>l<br>e<br>r</strong></td>';
 	echo '<td nowrap class="darkhuman" align="left" style="width: 150px;">';
 	echo '<a class="darkhuman" href="?p=matchp&amp;mid='. $mid .'&amp;pid='. urlencode($killer['pid']). '">'.
-			FormatPlayerName($killer['country'], $killer['pid'], $killer['name'], $gid, $gamename) .'&nbsp;</a></td>';
+			FormatPlayerName((isset($killer['country']) ? $killer['country'] : "zz-zz"), $killer['pid'], $killer['name'], $gid, $gamename) .'&nbsp;</a></td>';
 	if ($teamgame) {
 		switch($killer['team']) {
 			case 0: $teamcolor = 'redteam'; break;

@@ -50,8 +50,8 @@ else
 {
 	$pids = explode(",",$pid,25);
 }
-$gid = isset($gid) ? addslashes($gid) : addslashes($_GET['gid']);
-$mode = isset($mode) ? addslashes($mode) : addslashes($_GET['mode']);
+$gid = isset($gid) ? addslashes($gid) : (isset($_GET['gid']) ? addslashes($_GET['gid']) : "");
+$mode = isset($mode) ? addslashes($mode) : (isset($_GET['mode']) ? addslashes($_GET['mode']) : "");
 $alt = 0;
 if (isset($_GET['new']))
 	$alt = intval($_GET['new']);

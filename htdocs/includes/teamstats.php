@@ -73,7 +73,7 @@ function teamstats($mid, $title, $extra = NULL, $extratitle = NULL, $order = 'ga
 
 		$eff = isset($r_players['eff']) ? get_dp($r_players['eff']) : 0;
 		$acc = isset($r_players['accuracy']) ? get_dp($r_players['accuracy']) : 0;
-		$ttl = isset($r_players['ttl']) ? GetMinutes($r_players['ttl']) : 0;
+		$ttl = isset($r_players['ttl']) ? GetMinutes(floatval($r_players['ttl'])) : 0;
 		$ping = $r_players['avgping'];
 		if (strlen($r_players['suicides']))
 			$suis = $r_players['suicides'];
@@ -167,7 +167,7 @@ function teamstats_team_totals(&$totals, $num, $teams, $extra, $teamscore) {
 	if ($num == 0) $num = 1;
 	$eff = isset($totals['eff']) ? get_dp($totals['eff'] / $num) : 0;
 	$acc = isset($totals['accuracy']) ? get_dp($totals['accuracy'] / $num) : 0;
-	$ttl = isset($totals['ttl']) ? GetMinutes($totals['ttl'] / $num) : 0;
+	$ttl = isset($totals['ttl']) ? GetMinutes(floatval($totals['ttl']) / $num) : 0;
     $ping = isset($totals['ping']) ? ceil($totals['ping']/$num) : 0;
 
 	echo '<tr>';

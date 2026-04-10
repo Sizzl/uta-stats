@@ -160,10 +160,10 @@ echo '
   </tr>
   <tr>
     <td class="dark" align="center" width="150">First Blood</td>
-    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood['country'], $sql_firstblood['firstblood'], $sql_firstblood['name'], $gid, $gamename,true,null,$rank_year).'</td>';
+    <td class="grey" align="center" width="150">'.FormatPlayerName((isset($sql_firstblood['country']) ? $sql_firstblood['country'] : "zz-zz"), $sql_firstblood['firstblood'], $sql_firstblood['name'], $gid, $gamename,true,null,$rank_year).'</td>';
 if (isset($mid2))
 	echo '    <td class="dark" align="center" width="150">First Blood</td>
-    <td class="grey" align="center" width="150">'.FormatPlayerName($sql_firstblood2['country'], $sql_firstblood2['firstblood'], $sql_firstblood2['name'], $gid, $gamename,true,null,$rank_year).'</td>';
+    <td class="grey" align="center" width="150">'.FormatPlayerName((isset($sql_firstblood2['country']) ? $sql_firstblood2['country'] : "zz-zz"), $sql_firstblood2['firstblood'], $sql_firstblood2['name'], $gid, $gamename,true,null,$rank_year).'</td>';
 echo '
   </tr>
   <tr>

@@ -54,7 +54,7 @@ while ($r_multis = zero_out(mysql_fetch_array($q_multis))) {
 
   echo'
   <tr>
-	<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_multis['pid'].'">'.FormatPlayerName($r_multis['country'], $r_multis['pid'], $r_pname, $gid, $gamename).'</a></td>
+	<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_multis['pid'].'">'.FormatPlayerName((isset($r_multis['country']) ? $r_multis['country'] : "zz-zz"), $r_multis['pid'], $r_pname, $gid, $gamename).'</a></td>
 	<td class="'.$class.'" align="center">'.$r_multis['spree_double'].'</td>
 	<td class="'.$class.'" align="center">'.$r_multis['spree_multi'].'</td>
 	<td class="'.$class.'" align="center">'.$r_multis['spree_ultra'].'</td>
@@ -130,7 +130,7 @@ echo'
     <td class="heading" colspan="2" align="center">First Blood</td>
   </tr>
   <tr>
-    <td class="grey2" align="center" width="150">'.FormatPlayerName($sql_firstblood['country'], $sql_firstblood['firstblood'], $sql_firstblood['name'], $gid, $gamename).'</td>
+    <td class="grey2" align="center" width="150">'.FormatPlayerName((isset($sql_firstblood['country']) ? $sql_firstblood['country'] : "zz-zz"), $sql_firstblood['firstblood'], $sql_firstblood['name'], $gid, $gamename).'</td>
   </tr>
 </tbody></table>';
 ?>

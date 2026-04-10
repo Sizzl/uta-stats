@@ -40,7 +40,7 @@ while ($r_msred = zero_out(mysql_fetch_array($q_msred))) {
 
 	echo'<tr>';
 	if ($r_msred['banned'] != 'Y') {
-		echo '<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_msred['pid'].'">'.FormatPlayerName($r_msred['country'], $r_msred['pid'], $redpname, $gid, $gamename, true, $r_msred['rank']).'</a></td>';
+		echo '<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_msred['pid'].'">'.FormatPlayerName((isset($r_msred['country']) ? $r_msred['country'] : "zz-zz"), $r_msred['pid'], $redpname, $gid, $gamename, true, $r_msred['rank']).'</a></td>';
 	} else {
 		$r_msred ['gamescore'] = '-';
 		$r_msred ['flag_taken'] = '-';
@@ -52,7 +52,7 @@ while ($r_msred = zero_out(mysql_fetch_array($q_msred))) {
 		$r_msred ['flag_capture'] = '-';
 		$r_msred ['flag_kill'] = '-';
 		$r_msred ['flag_return'] = '-';
-		echo '<td nowrap class="darkhuman" align="left"><span style="text-decoration: line-through;">'.FormatPlayerName($r_msred['country'], $r_msred['pid'], $redpname, $gid, $gamename, true, $r_msred['rank']).'</span></td>';
+		echo '<td nowrap class="darkhuman" align="left"><span style="text-decoration: line-through;">'.FormatPlayerName((isset($r_msred['country']) ? $r_msred['country'] : "zz-zz"), $r_msred['pid'], $redpname, $gid, $gamename, true, $r_msred['rank']).'</span></td>';
 	}
 
 	echo '
@@ -126,7 +126,7 @@ while ($r_msblue = zero_out(mysql_fetch_array($q_msblue))) {
 
 	echo'<tr>';
 	if ($r_msblue['banned'] != 'Y') {
-		echo '<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_msblue['pid'].'">'.FormatPlayerName($r_msblue['country'], $r_msblue['pid'], $bluepname, $gid, $gamename, true, $r_msblue['rank']).'</a></td>';
+		echo '<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_msblue['pid'].'">'.FormatPlayerName((isset($r_msblue['country']) ? $r_msblue['country'] : "zz-zz"), $r_msblue['pid'], $bluepname, $gid, $gamename, true, $r_msblue['rank']).'</a></td>';
 	} else {
 		$r_msblue ['gamescore'] = '-';
 		$r_msblue ['flag_taken'] = '-';
@@ -138,7 +138,7 @@ while ($r_msblue = zero_out(mysql_fetch_array($q_msblue))) {
 		$r_msblue ['flag_capture'] = '-';
 		$r_msblue ['flag_kill'] = '-';
 		$r_msblue ['flag_return'] = '-';
-		echo '<td nowrap class="darkhuman" align="left"><span style="text-decoration: line-through;">'.FormatPlayerName($r_msblue['country'], $r_msblue['pid'], $bluepname, $gid, $gamename, true, $r_msblue['rank']).'</span></td>';
+		echo '<td nowrap class="darkhuman" align="left"><span style="text-decoration: line-through;">'.FormatPlayerName((isset($r_msblue['country']) ? $r_msblue['country'] : "zz-zz"), $r_msblue['pid'], $bluepname, $gid, $gamename, true, $r_msblue['rank']).'</span></td>';
 	}
 
 	echo '
@@ -215,7 +215,7 @@ if ($greencheck > 0) {
 
 		echo'<tr>';
 		if ($r_msgreen['banned'] != 'Y') {
-			echo '<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_msgreen['pid'].'">'.FormatPlayerName($r_msgreen['country'], $r_msgreen['pid'], $greenpname, $gid, $gamename, true, $r_msgreen['rank']).'</a></td>';
+			echo '<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_msgreen['pid'].'">'.FormatPlayerName((isset($r_msgreen['country']) ? $r_msgreen['country'] : "zz-zz"), $r_msgreen['pid'], $greenpname, $gid, $gamename, true, $r_msgreen['rank']).'</a></td>';
 		} else {
 			$r_msgreen ['gamescore'] = '-';
 			$r_msgreen ['flag_taken'] = '-';
@@ -227,7 +227,7 @@ if ($greencheck > 0) {
 			$r_msgreen ['flag_capture'] = '-';
 			$r_msgreen ['flag_kill'] = '-';
 			$r_msgreen ['flag_return'] = '-';
-			echo '<td nowrap class="darkhuman" align="left"><span style="text-decoration: line-through;">'.FormatPlayerName($r_msgreen['country'], $r_msgreen['pid'], $greenpname, $gid, $gamename, true, $r_msgreen['rank']).'</span></td>';
+			echo '<td nowrap class="darkhuman" align="left"><span style="text-decoration: line-through;">'.FormatPlayerName((isset($r_msgreen['country']) ? $r_msgreen['country'] : "zz-zz"), $r_msgreen['pid'], $greenpname, $gid, $gamename, true, $r_msgreen['rank']).'</span></td>';
 		}
 
 		echo '
@@ -305,7 +305,7 @@ if ($goldcheck > 0) {
 
 		echo'<tr>';
 		if ($r_msgold['banned'] != 'Y') {
-			echo '<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_msgold['pid'].'">'.FormatPlayerName($r_msgold['country'], $r_msgold['pid'], $goldpname, $gid, $gamename, true, $r_msgold['rank']).'</a></td>';
+			echo '<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_msgold['pid'].'">'.FormatPlayerName((isset($r_msgold['country']) ? $r_msgold['country'] : "zz-zz"), $r_msgold['pid'], $goldpname, $gid, $gamename, true, $r_msgold['rank']).'</a></td>';
 		} else {
 			$r_msgold ['gamescore'] = '-';
 			$r_msgold ['flag_taken'] = '-';
@@ -317,7 +317,7 @@ if ($goldcheck > 0) {
 			$r_msgold ['flag_capture'] = '-';
 			$r_msgold ['flag_kill'] = '-';
 			$r_msgold ['flag_return'] = '-';
-			echo '<td nowrap class="darkhuman" align="left"><span style="text-decoration: line-through;">'.FormatPlayerName($r_msgold['country'], $r_msgold['pid'], $goldpname, $gid, $gamename, true, $r_msgold['rank']).'</span></td>';
+			echo '<td nowrap class="darkhuman" align="left"><span style="text-decoration: line-through;">'.FormatPlayerName((isset($r_msgold['country']) ? $r_msgold['country'] : "zz-zz"), $r_msgold['pid'], $goldpname, $gid, $gamename, true, $r_msgold['rank']).'</span></td>';
 		}
 
 		echo '

@@ -39,7 +39,7 @@ if (isset($_GET['togglewatch'])) {
 		echo htmlentities($playername,ENT_SUBSTITUTE,$htmlcp) ." has been removed from your watchlist";
 	}
 	echo "<br>";
-	$target = $PHP_SELF .'?p=pinfo&amp;pid='. $pid;
+	$target = htmlspecialchars($_SERVER["PHP_SELF"]) .'?p=pinfo&amp;pid='. $pid;
 	echo 'You will be taken back to the <a href="'. $target .'">'. htmlentities($playername,ENT_SUBSTITUTE,$htmlcp) .'\'s page</a> in a moment.';
 	echo '<meta http-equiv="refresh" content="2;URL='. $target .'">';
 	return;
