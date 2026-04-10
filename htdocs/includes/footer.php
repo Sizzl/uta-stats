@@ -4,7 +4,7 @@ echo'<br /><br /><br />
 
 // Please leave this bit in, its the least you can do with all the work we have done :)
 
-		  echo $footertext;
+		  echo (isset($footertext) ? $footertext : '');
 		  echo'
 </center>
 </td></tr></tbody></table>

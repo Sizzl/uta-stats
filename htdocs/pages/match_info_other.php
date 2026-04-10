@@ -107,7 +107,7 @@ if (strpos($gamename, '(insta)') === false) {
 
 		echo'
 		<tr>
-			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName($r_pickups['country'], $r_pickups['pid'], $r_pname, $gid, $gamename).'</a></td>
+			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName((isset($r_pickups['country']) ? $r_pickups['country'] : "zz-zz"), $r_pickups['pid'], $r_pname, $gid, $gamename).'</a></td>
 			<td class="'.$class.'" align="center">'.$r_pickups['pu_pads'].'</td>
 			<td class="'.$class.'" align="center">'.$r_pickups['pu_armour'].'</td>
 			<td class="'.$class.'" align="center">'.$r_pickups['pu_keg'].'</td>

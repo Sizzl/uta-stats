@@ -77,7 +77,7 @@ while ($r_pickups = zero_out(mysql_fetch_array($q_pickups))) {
 	  $myurl = urlencode($r_pname);
 	  echo'
 	  <tr>
-		<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName($r_pickups['country'], $r_pickups['pid'], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
+		<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName((isset($r_pickups['country']) ? $r_pickups['country'] : "zz-zz"), $r_pickups['pid'], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
 		<td class="'.$class.'" align="center">'.$r_pickups['pu_pads'].'</td>
 		<td class="'.$class.'" align="center">'.$r_pickups['pu_armour'].'</td>
 		<td class="'.$class.'" align="center">'.$r_pickups['pu_keg'].'</td>
@@ -126,7 +126,7 @@ if (isset($mid2)) {
 
 		  echo'
 		  <tr>
-			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName($r_pickups['country'], $r_pickups['pid'], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
+			<td nowrap class="darkhuman" align="left"><a class="darkhuman" href="./?p=matchp&amp;mid='.$mid.'&amp;pid='.$r_pickups['pid'].'">'.FormatPlayerName((isset($r_pickups['country']) ? $r_pickups['country'] : "zz-zz"), $r_pickups['pid'], $r_pname, $gid, $gamename,true,null,$rank_year).'</a></td>
 			<td class="'.$class.'" align="center">'.$r_pickups['pu_pads'].'</td>
 			<td class="'.$class.'" align="center">'.$r_pickups['pu_armour'].'</td>
 			<td class="'.$class.'" align="center">'.$r_pickups['pu_keg'].'</td>

@@ -177,7 +177,7 @@ function teamstats_team_totals(&$totals, $num, $teams, $extra, $teamscore) {
 	} else {
 		echo '<td class="darkgrey" align="center">'.$totals['gamescore'].'</td>';
 	}
-	if (isset($extra)) echo '<td class="darkgrey" align="center">'.$totals[$extra].'</td>';
+	if (isset($extra)) echo '<td class="darkgrey" align="center">'.(isset($totals[$extra]) ? $totals[$extra] : "").'</td>';
 
 	echo '<td class="darkgrey" align="center">'.$totals['frags'].'</td>';
 	echo '<td class="darkgrey" align="center">'.$totals['kills'].'</td>';

@@ -209,15 +209,15 @@ if ($sql_firstblood['firstblood'] == $pid) {
   echo'
   <tr>
 	<td class="grey" align="center">'.$firstblood.'</td>
-	<td class="grey" align="center">'.$r_gsumm['spree_double'].'</td>
-	<td class="grey" align="center">'.$r_gsumm['spree_multi'].'</td>
-	<td class="grey" align="center">'.$r_gsumm['spree_ultra'].'</td>
-	<td class="grey" align="center">'.$r_gsumm['spree_monster'].'</td>
-	<td class="grey" align="center">'.$r_gsumm['spree_kill'].'</td>
-	<td class="grey" align="center">'.$r_gsumm['spree_rampage'].'</td>
-	<td class="grey" align="center">'.$r_gsumm['spree_dom'].'</td>
-	<td class="grey" align="center">'.$r_gsumm['spree_uns'].'</td>
-	<td class="grey" align="center">'.$r_gsumm['spree_god'].'</td>
+	<td class="grey" align="center">'.(isset($r_gsumm['spree_double']) ? $r_gsumm['spree_double'] : 0).'</td>
+	<td class="grey" align="center">'.(isset($r_gsumm['spree_multi']) ? $r_gsumm['spree_multi'] : 0).'</td>
+	<td class="grey" align="center">'.(isset($r_gsumm['spree_ultra']) ? $r_gsumm['spree_ultra'] : 0).'</td>
+	<td class="grey" align="center">'.(isset($r_gsumm['spree_monster']) ? $r_gsumm['spree_monster'] : 0).'</td>
+	<td class="grey" align="center">'.(isset($r_gsumm['spree_kill']) ? $r_gsumm['spree_kill'] : 0).'</td>
+	<td class="grey" align="center">'.(isset($r_gsumm['spree_rampage']) ? $r_gsumm['spree_rampage'] : 0).'</td>
+	<td class="grey" align="center">'.(isset($r_gsumm['spree_dom']) ? $r_gsumm['spree_dom'] : 0).'</td>
+	<td class="grey" align="center">'.(isset($r_gsumm['spree_uns']) ? $r_gsumm['spree_uns'] : 0).'</td>
+	<td class="grey" align="center">'.(isset($r_gsumm['spree_god']) ? $r_gsumm['spree_god'] : 0).'</td>
   </tr>
   </tbody></table>
 <br>';
