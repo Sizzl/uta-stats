@@ -185,7 +185,7 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 }
 
 // Team Summary
-if (!isset($format) || (isset($format) && $format != "json") && isset($gameinfo)) {
+if ((!isset($format) || (isset($format) && $format != "json")) && isset($gameinfo)) {
 	echo'<tr class="grey"><td align="center" colspan="12">Match Team Totals</td></tr>';
 }
 if (isset($dbversion) && floatval($dbversion) > 5.6) {
