@@ -76,7 +76,7 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 	<table border="0" cellpadding="3" cellspacing="3" width="720" style="background-color:#0F1D2F">
 	<tbody><tr class="lggrey"><td align="center"><br/>
 	<table border="0" cellpadding="0" cellspacing="2" width="690">
-	<tbody><tr><td>Invalid match code.';
+	<tbody><tr><td align="center">Invalid match code.';
 	}
 } else {
 	header('Content-Type: application/json; charset=windows-1252');
@@ -185,7 +185,7 @@ while ($p_sql = mysql_fetch_assoc($q_sql))
 }
 
 // Team Summary
-if (!isset($format) || (isset($format) && $format != "json")) {
+if (!isset($format) || (isset($format) && $format != "json") && isset($gameinfo)) {
 	echo'<tr class="grey"><td align="center" colspan="12">Match Team Totals</td></tr>';
 }
 if (isset($dbversion) && floatval($dbversion) > 5.6) {
