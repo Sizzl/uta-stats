@@ -30,7 +30,8 @@ while ($r_matchsummary = mysql_fetch_array($q_matchsummary)) {
 $server_info = preg_split('/\n | \r/', $serverinfo, -1, PREG_SPLIT_NO_EMPTY);
 // SERVER INFO
 if (!isset($format) || (isset($format) && $format != "json")) {
-	echo'
+	if (isset($gameinfo)) {
+		echo'
 	<table border="0" cellpadding="3" cellspacing="3" width="720" style="background-color:#0F1D2F">
 	<tbody>
 	<tr><td align="center"><a href="unreal://'.$serverip.'">'. $servername.' - '.$serverip.'</a></td></tr>
@@ -43,17 +44,17 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 	// SERVER INFO - END
 	// MATCHSTATS - START - Cratos 2006-03-26
 	// SORTING - Added Brajan 2006-09-15
-	echo'<br />
+		echo'<br />
 	<table border="0" cellpadding="0" cellspacing="2" width="720">
 	<tbody>
 	<tr><td class="hlheading" colspan="15" align="center">UTA Player Match Summary</td></tr>';		
-	echo'
+		echo'
 	<tr class="lggrey"><td align="center"><br/>
 	<table border="0" cellpadding="0" cellspacing="2" width="690">
 	<tbody>';
-	echo'
+		echo'
 	<tr class="smheading" style="height:20px">';
-	echo'
+		echo'
 		<td align="center" rowspan="2"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=pname">Player</a></td>		
 		<td align="center" rowspan="2"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=objs">Objs</a></td>
 		<td align="center"rowspan="2"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=ass_assist">Assists</a></td>
@@ -70,6 +71,13 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 		<td align="center"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=ass_r_launch">Launcher</a></td>
 		<td align="center"><a href="?p=uta_match&matchcode='.$matchcode.'&sort=ass_r_launched">Pass.</a></td>
 	</tr>';
+	} else {
+		echo'
+	<table border="0" cellpadding="3" cellspacing="3" width="720" style="background-color:#0F1D2F">
+	<tbody><tr class="lggrey"><td align="center"><br/>
+	<table border="0" cellpadding="0" cellspacing="2" width="690">
+	<tbody><tr><td>Invalid match code.';
+	}
 } else {
 	header('Content-Type: application/json; charset=windows-1252');
 	echo "{\r\n";
