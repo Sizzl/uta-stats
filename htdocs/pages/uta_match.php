@@ -7,7 +7,7 @@ global $t_match, $t_pinfo, $t_player, $t_games, $dbversion; // fetch table globa
 // FINAL SCORE brajan 26082005
 $score0 ='0';
 $score1 ='0';
-$sql_matchsummary = "SELECT * FROM ".(isset($t_match) ? $t_match : "uts_match")." WHERE matchmode = 1 AND matchcode='".$matchcode."' ORDER BY mapsequence";	  
+$sql_matchsummary = "SELECT `".(isset($t_match) ? $t_match : "uts_match")."`.*, `".(isset($t_games) ? $t_games : "uts_games")."`.* FROM `".(isset($t_match) ? $t_match : "uts_match")."` INNER JOIN `".(isset($t_games) ? $t_games : "uts_games")."` ON (`".(isset($t_games) ? $t_games : "uts_games")."`.`id` = `".(isset($t_match) ? $t_match : "uts_match")."`.`gid`) WHERE matchmode = 1 AND matchcode='".$matchcode."' ORDER BY mapsequence";
 $q_matchsummary = mysql_query($sql_matchsummary) or die("sum:".mysql_error());
 $total_time = 0;
 $starttime = $endtime = 0;
@@ -22,6 +22,9 @@ while ($r_matchsummary = mysql_fetch_array($q_matchsummary)) {
 	$servername = $r_matchsummary['servername'];
 	$serverinfo = $r_matchsummary['serverinfo'];
 	$gameinfo = $r_matchsummary['gameinfo'];
+	$gameid = $r_matchsummary['gid'];
+	$gamename = $r_matchsummary['gamename'];
+	$gameshort = $r_matchsummary['name'];
 	$team1a = htmlspecialchars($r_matchsummary['teamname1']);
 	$team1 = "<a class=\"heading\" href=\"./?p=utateams&amp;team=".urlencode($r_matchsummary['teamname1'])."\">".$team1a."</a>";
 	$team0a = htmlspecialchars($r_matchsummary['teamname0']);
@@ -34,7 +37,7 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 		echo'
 	<table border="0" cellpadding="3" cellspacing="3" width="720" style="background-color:#0F1D2F">
 	<tbody>
-	<tr><td align="center"><a href="unreal://'.$serverip.'">'. $servername.' - '.$serverip.'</a></td></tr>
+	<tr><td align="center" class="heading"><strong>'.$gamename.'</strong><br /><a href="unreal://'.$serverip.'">'. $servername.' - '.$serverip.'</a></td></tr>
 	<tr><td align="center" class="grey">'.$gameinfo.'</td></tr>
 	<tr><td align="center" class="heading"><strong> '.$team0.' '.$score0.' - '.$score1.'  '.$team1.' </strong></td></tr>
 	<tr><td align="center" class="grey"><p>'.mdate($starttime).' - '.mdate($endtime).'</p>
@@ -82,6 +85,9 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 	header('Content-Type: application/json; charset=windows-1252');
 	echo "{\r\n";
 	echo "  \"matchid\": \"".$matchcode."\",\r\n";
+	echo "  \"gameid\": \"".$gameid."\",\r\n";
+	echo "  \"gamename\": \"".$gamename."\",\r\n";
+	echo "  \"gameshort\": \"".$gameshort."\",\r\n";
 	echo "  \"time_start\": ".$starttime.",\r\n";
 	echo "  \"time_end\": ".$endtime.",\r\n";
 	echo "  \"duration\": \"".$total_time."\",\r\n";

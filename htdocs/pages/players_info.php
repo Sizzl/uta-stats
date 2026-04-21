@@ -442,10 +442,10 @@ echo '
 
 echo'<br><table class="box" border="0" cellpadding="2" cellspacing="1">
   <tbody><tr>
-    <td class="heading" colspan="6" align="center">Last 50 maps played'.($rank_year > 0 ? " in ".$rank_year : "" ).'</td>
+    <td class="heading" colspan="6" align="center">Last 150 maps played'.($rank_year > 0 ? " in ".$rank_year : "" ).'</td>
   </tr>
   <tr>
-    <td class="smheading" align="center" width="70">Match ID</td>
+    <td class="smheading" align="center" width="70">Game ID</td>
     <td class="smheading" align="center" width="190">Date/Time</td>  
     <td class="smheading" align="center" width="100">Match Type</td>
     <td class="smheading" align="center" width="150">Map</td>
@@ -453,12 +453,13 @@ echo'<br><table class="box" border="0" cellpadding="2" cellspacing="1">
 	if (isset($is_admin) && $is_admin) echo '<td class="smheading" align="center">IP Used</td>';
   echo'</tr>';
 
-$sql_recent = "SELECT m.id, m.time, g.name AS gamename, m.mapfile, INET_NTOA(p.ip) AS ip, m.servername, m.serverip 
+$sql_recent = "SELECT m.id, m.matchcode, m.time, g.name AS gamename, m.mapfile, INET_NTOA(p.ip) AS ip, m.servername, m.serverip 
 		FROM ".(isset($t_match) ? $t_match : "uts_match")." m,
 		".(isset($t_player) ? $t_player : "uts_player")." p,
 		".(isset($t_games) ? $t_games : "uts_games")." g
 		WHERE p.pid = '".$pid."' AND m.id = p.matchid AND m.gid = g.id ".($rank_year > 0 ? "AND m.time >= '".$rank_year."0101000000' AND m.time <= '".$rank_year."1231235959'": "")." 
-		ORDER BY time DESC LIMIT 0,50";
+		ORDER BY time DESC LIMIT 0,150";
+$matchcode = "";
 $q_recent = mysql_query($sql_recent) or die(mysql_error());
 while ($r_recent = mysql_fetch_array($q_recent)) {
 
@@ -466,7 +467,10 @@ while ($r_recent = mysql_fetch_array($q_recent)) {
 	  $r_mapfile = un_ut($r_recent['mapfile']);
 	  $r_servername =  get_short_servername($r_recent['servername']);
 	  $r_serverip = $r_recent['serverip'];
-
+	  if ($matchcode != $r_recent['matchcode']) {
+			$matchcode = $r_recent['matchcode'];
+			echo'<tr><td colspan="6" class="dark" align="center"><b>Match Code: <a class="grey" href="./?p=uta_match&amp;matchcode='.$matchcode.'">'.$matchcode.'</a></b></td></tr>';
+	  }
 	  echo'
 	  <tr>
 		<td class="dark" align="center"><a class="darkid" href="./?p=match&amp;mid='.$r_recent['id'].'">'.$r_recent['id'].'</a></td>
