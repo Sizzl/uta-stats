@@ -4,6 +4,7 @@ global $htmlcp;
 $outerlimit = 25; // Added adjustable record limit --// Timo 20/07/05
 
 $gid = isset($_GET['gid']) ? my_addslashes($_GET['gid']) : 0;
+$gid_filter = ($gid > 0 ? "`r`.`gid` = '".$gid."' AND " : "");
 
 // Adding year filters --// Timo 13/02/21
 $rank_year = 0;
@@ -22,7 +23,6 @@ else {
 	$r_pcount = small_query("SELECT COUNT(*) as pcount FROM ".(isset($t_rank) ? $t_rank : "uts_rank")." WHERE gid= '".$gid."' AND ".(isset($t_rank) ? $t_rank : "uts_rank").".year = '".$rank_year."';");
 	$pcount = $r_pcount['pcount'];
 }
-
 
 $ecount = $pcount/$outerlimit;
 $ecount2 = number_format($ecount, 0, '.', '');
@@ -102,7 +102,8 @@ if (!isset($format) || (isset($format) && $format != "json")) {
 	$outerlimit=5000;
 	$qpage=0;
 	header('Content-Type: application/json; charset=windows-1252');
-	echo "{\r\n  \"rankings\" : [";
+	echo ($gid > 0 ? "{\r\n  \"rankings\" : [" : "{\r\n  \"players\" : [");
+
 }
 $q_ytest = mysql_query("SHOW COLUMNS FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` LIKE 'year';");
 if (mysql_num_rows($q_ytest))
@@ -113,8 +114,12 @@ if (isset($_GET['cfilter'])) {
 	if (strlen($_GET['cfilter'])==2)
 		$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND pi.country = '".$_GET['cfilter']."' AND pi.banned <> 'Y'".$where_year." ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
 }
-else
-	$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`pid` FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` WHERE `r`.`pid` = `pi`.`id` AND `r`.`gid` = '".$gid."' AND `pi`.`banned` <> 'Y'".$where_year." ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
+else {
+	$d_sql = mysql_query("SELECT table_name FROM information_schema.tables WHERE table_name like '%".(isset($t_discord_players) ? $t_discord_players : "discord_players")."%';");
+	$dsql_join = mysql_num_rows($d_sql) > 0 ? "LEFT JOIN ".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players")." ON (`pi`.`id` = `".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players")."`.`pid`) " : "";
+	$dsql_fields = mysql_num_rows($d_sql) > 0 ? ", ".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players").".fid AS fid, ".(isset($t_discord_players) ? $t_discord_players : "uts_discord_players").".did AS did" : ", 0 AS fid, 0 AS did"; 
+	$sql_rplayer = "SELECT `pi`.`name`, `pi`.`country`, `r`.`rank`, `r`.`prevrank`, `r`.`matches`, `r`.`gid`, `r`.`pid`".$dsql_fields." FROM `".(isset($t_rank) ? $t_rank : "uts_rank")."` AS `r`, `".(isset($t_pinfo) ? $t_pinfo : "uts_pinfo")."` AS `pi` ".$dsql_join."WHERE `r`.`pid` = `pi`.`id` AND ".$gid_filter."`pi`.`banned` <> 'Y'".$where_year." ORDER BY `rank` DESC LIMIT ".$qpage.",".$outerlimit.";";
+}
 $q_rplayer = mysql_query($sql_rplayer) or die(mysql_error());
 while ($r_rplayer = mysql_fetch_array($q_rplayer)) {
 
@@ -142,7 +147,10 @@ while ($r_rplayer = mysql_fetch_array($q_rplayer)) {
 		if ($ranking > 1)
 			echo ",";
 		echo "\r\n    {\r\n";
-		echo "      \"playerid\":\"".$r_rplayer['pid']."\",\r\n";
+		echo "      \"playerid\":".$r_rplayer['pid'].",\r\n";
+		echo "      \"fid\":".(isset($r_rplayer['fid']) ? $r_rplayer['fid'] : 0).",\r\n";
+		echo "      \"discordid\":".(isset($r_rplayer['did']) ? $r_rplayer['did'] : 0).",\r\n";
+		echo "      \"gameid\":".(isset($r_rplayer['gid']) ? $r_rplayer['gid'] : 0).",\r\n";
 		echo "      \"playername\":\"".preg_replace('/[\x{0}-\x{1F}]|[\x{22}]/i','',$r_rplayer['name'])."\",\r\n";
 		echo "      \"country\":\"".$r_rplayer['country']."\",\r\n";
 		echo "      \"position\":".$ranking.",\r\n";

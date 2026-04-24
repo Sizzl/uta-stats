@@ -36,7 +36,9 @@ switch ($pagehandler)
 	case "utapugeventloveday": utapugevents(); break;
 
 	case "utarecent": utarecent(); break;	// list of recent league games, 30 in date order
-	case "uta_match": uta_match(); break;	// list of recent league games, 30 in date order
+	case "uta_match": uta_match(); break;	// list of recent matches
+	case "utamatch": uta_match(); break;	// list of recent matches
+	case "utadiscord": utadiscord(); break;	// Discord players
 	case "utarecordzone": utarecordzone(); break;	// UTA Recordzone
 	case "utateam": utateam(); break;		// UTA Team viewer
 	case "utateams": utateam(); break;		// UTA Team viewer
@@ -245,6 +247,11 @@ function busy()
 	include("pages/busy.php");
 }
 
+function utadiscord()
+{	
+	include("pages/uta_players_discord.php");
+}
+
 function utarecordzone()
 {	
 	include("pages/uta_recordzone.php");
@@ -254,6 +261,7 @@ function utateam()
 {	
 	include("pages/uta_teamviewer.php");
 }
+
 if (isset($_SESSION['themelocation'])) // Themed footer --// 19/07/05 Timo: Added customisable footer
 {
 	if (file_exists($_SESSION['themelocation']."footer.php"))
